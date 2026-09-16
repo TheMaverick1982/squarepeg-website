@@ -39,11 +39,6 @@
       "permanent": true
     },
     {
-      "source": "/private-events",
-      "destination": "/large-party-reservations/",
-      "permanent": true
-    },
-    {
       "source": "/tuesday-charity-night",
       "destination": "/fundraisers/",
       "permanent": true
@@ -59,18 +54,8 @@
       "permanent": true
     },
     {
-      "source": "/promotions",
-      "destination": "/deals/",
-      "permanent": true
-    },
-    {
       "source": "/reward-program",
       "destination": "/deals/",
-      "permanent": true
-    },
-    {
-      "source": "/entertainment",
-      "destination": "/",
       "permanent": true
     },
     {
@@ -154,6 +139,22 @@
         {
           "key": "Permissions-Policy",
           "value": "geolocation=(self), camera=(), microphone=()"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin-allow-popups"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
         },
         {
           "key": "X-Robots-Tag",

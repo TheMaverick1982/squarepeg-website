@@ -1,5 +1,5 @@
 # Square Peg Pizzeria redirects (Netlify format). All permanent (301).
-# Pages that exist on the new site (/about, /contact, /food-truck, /locations, /roll-the-dice, /sms-terms) keep their URLs; no redirect needed.
+# Pages that exist on the new site (/about, /contact, /entertainment, /food-truck, /locations, /private-events, /promotions, /roll-the-dice, /sms-terms) keep their URLs; no redirect needed.
 
 /events-catering             /catering/                                                   301
 /catering-0                  /catering/                                                   301
@@ -8,13 +8,10 @@
 /catering-booking            /catering/                                                   301
 /catering-form-test          /catering/                                                   301
 /party-requests              /large-party-reservations/                                   301
-/private-events              /large-party-reservations/                                   301
 /tuesday-charity-night       /fundraisers/                                                301
 /tuesday-charity-signup      /fundraisers/#apply                                          301
 /monthly-deals               /deals/                                                      301
-/promotions                  /deals/                                                      301
 /reward-program              /deals/                                                      301
-/entertainment               /                                                            301
 /gallery                     /about/                                                      301
 /privacy-policy              /privacy/                                                    301
 /terms                       /privacy/                                                    301

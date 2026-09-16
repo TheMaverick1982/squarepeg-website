@@ -1,0 +1,42 @@
+<!--
+  Square Peg Connect: embed support for squarepegpizzeria.com
+  ------------------------------------------------------------
+  Paste this just before </body> in the Connect app's index.html (repo: Square-Peg-Connect).
+  Only runs when a public form is shown inside another site (iframe) with ?embed=1:
+    • hides the big logo header (the website already has its own heading)
+    • removes the full-screen white area and the card border
+    • tells the website the form's real height on every step, so there's never
+      extra white space or an inner scrollbar
+  Opening the form directly (not embedded) is unchanged.
+-->
+<script>
+(function () {
+  if (window.self === window.top) return;
+  var embed = /[?&]embed=1/.test(location.search);
+  var css = document.createElement('style');
+  css.textContent =
+    '.sp-embed #root .min-h-screen{min-height:0!important;padding-top:4px!important;padding-bottom:4px!important}' +
+    '.sp-embed #root .min-h-screen>.mb-8{display:none!important}' +
+    '.sp-embed #root .min-h-screen>.shadow{box-shadow:none!important;border:0!important}';
+  document.head.appendChild(css);
+  if (embed) document.documentElement.classList.add('sp-embed');
+
+  var last = 0;
+  function post() {
+    var wrap = document.querySelector('#root .min-h-screen');
+    var el = wrap && wrap.lastElementChild;
+    var h = el
+      ? Math.ceil(el.getBoundingClientRect().bottom + window.scrollY + (embed ? 8 : 48))
+      : document.documentElement.scrollHeight;
+    if (Math.abs(h - last) > 2) {
+      last = h;
+      window.parent.postMessage({ type: 'sp-embed-height', height: h, path: location.pathname }, '*');
+    }
+  }
+  new ResizeObserver(post).observe(document.body);
+  new MutationObserver(post).observe(document.body, { subtree: true, childList: true, attributes: true });
+  window.addEventListener('load', post);
+  setInterval(post, 1000);
+  post();
+})();
+</script>

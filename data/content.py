@@ -20,7 +20,11 @@ SITE = {
     "email": "info@squarepegpizzeria.com",
     "app_link": "https://onelink.to/squarepeg-app",
     "loyalty_signin": "https://squarepegpizzeria.comosense.net/auth/signin",
-    "careers": "https://jobs.squarepegpizzeria.com/careers",
+    "careers": "/careers/",
+    "careers_external": "https://jobs.squarepegpizzeria.com/careers",
+    "careers_embed_src": "https://www.joinwingman.app/careers/square-peg-pizzeria?embed=1",
+    # Where "See upcoming class dates" goes (Instagram or an online calendar). Blank = Entertainment page.
+    "events_calendar_url": "",
     "facebook": "https://www.facebook.com/squarepegpizzeria/",
     "instagram": "",  # add when confirmed, e.g. https://www.instagram.com/squarepegpizzeria/
     "catering_phone": "(860) 286-0415",  # TODO confirm the best catering line
@@ -204,7 +208,7 @@ FUNDRAISER_FAQ = [
 
 CATERING_FAQ = [
     ("How far ahead should I book catering?", "The earlier the better, especially October through December. Send the form with your date and headcount and we’ll confirm availability."),
-    ("Can you cater at every location?", "Yes. Catering is available from all Square Peg locations. Choose the one closest to your event."),
+    ("Can you cater at every location?", "Yes. Catering is available from all Square Peg locations. Choose the one closest to you, and your order will be ready for pickup there."),
     ("Do you have gluten-free or dairy-free options?", "Yes. We offer a 12″ gluten-free crust and vegan cheese. Tell us in the notes and we’ll plan for it."),
     ("Can the food truck come to our event?", "Yes. Book the Square Peg food truck for parties, schools, corporate events and fundraisers using the same form. Choose “Food truck” as the event type."),
 ]
@@ -234,17 +238,18 @@ DICE = {
 
 # ---------------------------------------------------------------------------
 # Embedded forms from Square Peg Connect (connect.squarepegpizzeria.com).
-# "height" is how tall the frame is on phones/tablets and on desktop (px). The forms are
-# multi-step, so these are set to fit the tallest step without an inner scrollbar.
+# Once Connect has the embed snippet (CONNECT_EMBED_SNIPPET.html), each form reports its own
+# height and resizes itself on every step, with no logo and no extra white space.
+# Until then: "crop" hides Connect's logo header, and "mobile"/"desktop" are fixed frame
+# heights (px) that fit the tallest step.
 EMBEDS = {
     "catering": {"src": "https://connect.squarepegpizzeria.com/public/catering",
-                 "title": "Square Peg catering request form", "mobile": 1500, "desktop": 1470},
+                 "title": "Square Peg catering request form", "crop": 196, "mobile": 1230, "desktop": 1210},
     "large_party": {"src": "https://connect.squarepegpizzeria.com/public/large-reservations",
-                    "title": "Square Peg large reservation request form", "mobile": 930, "desktop": 900},
+                    "title": "Square Peg large reservation request form", "crop": 196, "mobile": 680, "desktop": 660},
     "fundraiser": {"src": "https://connect.squarepegpizzeria.com/public/fundraisers",
-                   "title": "Square Peg Tuesday fundraiser request form", "mobile": 900, "desktop": 880},
+                   "title": "Square Peg Tuesday fundraiser request form", "crop": 196, "mobile": 680, "desktop": 660},
 }
-# Food truck requests go through the catering form.
 EMBEDS["food_truck"] = EMBEDS["catering"]
 
 LARGE_PARTY_FAQ = [
@@ -260,3 +265,42 @@ CONTACT_TOPICS = [
     "General question", "Feedback about a visit", "Catering", "Large party reservation", "Food truck",
     "Fundraiser", "Gift cards", "Rewards / app help", "Jobs", "Media or partnership",
 ]
+
+# ---------------------------------------------------------------------------
+# Weekly entertainment (from squarepegpizzeria.com/entertainment). Day, event, time.
+ENTERTAINMENT = {
+    "plainville-ct": [("Mon", "Bingo", "6–8pm"), ("Wed", "Trivia", "6:30–8:30pm"), ("Fri", "DJ", "7–10pm")],
+    "shelton-ct": [("Tue", "Bingo", "6–8pm")],
+    "east-hartford-ct": [("Thu", "Bingo", "6:30–8:30pm"), ("Sat", "Bingo", "6:30–8:30pm")],
+    "glastonbury-ct": [("Wed", "What Trivia", "6:30–9pm")],
+    "preston-ct": [("Thu", "Trivia", "7–9pm"), ("Sun", "Bingo", "6pm")],
+    "storrs-ct": [("Wed", "Trivia", "6:30–8:30pm"), ("Fri", "DJ", "10pm–1am"), ("Sat", "DJ", "10pm–1am")],
+    "delray-beach-fl": [("Sun", "Jackpot Bingo", "4–6pm"), ("Mon", "Bingo", "6–8pm"), ("Wed", "Trivia", "6–8pm")],
+}
+
+# Ongoing promotions (from squarepegpizzeria.com/promotions).
+PROMOS = {
+    "daily": [
+        ("Tuesday", "Pasta Night", "$15", "After 5pm. Carb up, wind down."),
+        ("Wednesday", "Wing Night", "$1 per wing", "After 5pm. You bring the appetite, we bring the heat."),
+        ("Friday", "Wine Night", "½-price bottles", "After 5pm. Because you survived the week."),
+    ],
+    "lunch": [
+        ("2 slices + drink", "Cheese or pepperoni."),
+        ("Half sandwich + salad + drink", "Any sandwich on the menu with a fresh salad."),
+        ("Pasta + salad + drink", "Your choice from the daily pasta lineup, with a garden salad."),
+    ],
+    "lunch_note": "$10 each. Monday–Friday, dine-in, lunchtime only.",
+    "app": [
+        ("Refer a friend, get $10", "Invite a friend through the Square Peg app. When they join, a $10 reward lands in your app wallet. Limit one referral reward per month."),
+        ("Rewards Club: $10 a month", "Pay $10 a month and get $20 in Square Peg credit, loaded automatically. Sign up in the app. Monthly credits expire in 30 days."),
+        ("Load money, get rewarded", "Load $20, get $22. Load $50, get $55. Load $100, get $110. Bonus credit to use in the restaurant."),
+    ],
+    "punch": [
+        ("Buy 6 pizzas, get a free large pizza", "Lunchtime only, until 3pm"),
+        ("Buy 6 sandwiches, get the 7th free", "Lunchtime only, until 3pm"),
+        ("Buy 6 desserts, get the 7th free", "Anytime"),
+    ],
+    "app_perks": ["$5 welcome reward", "App-only flash sales (lunch, dinner & more)", "Lunch specials & hero discounts", "Surprise drops & birthday perks"],
+    "heroes": "Active duty service members, veterans and first responders (police, firefighters, EMTs) get 15% off their meal. Just show a valid military, veteran or first responder ID. You serve the community. Let us serve you.",
+}

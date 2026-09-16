@@ -96,7 +96,6 @@
   function personalize() {
     var l = bySlug(store.get("sp_loc"));
     if (!l) return;
-    $$("[data-for-loc]").forEach(function (el) { el.textContent = "· " + (l.short || l.name); });
     var sel = $("#quick-loc");
     if (sel && !sel.value) { sel.value = l.slug; updateQuick(); }
     var call = $("#mbar-call");
@@ -148,7 +147,7 @@
           renderPicker();
           var near = sortedLocs()[0];
           var sel = $("#quick-loc");
-          if (sel && t.id === "geo-quick") { sel.value = near.slug; updateQuick(); setPref(near.slug); }
+          if (sel && t.id === "geo-quick") { sel.value = near.slug; updateQuick(); }
           sortGrid();
         } else setTimeout(function () { t.textContent = orig; }, 3000);
       });
@@ -161,9 +160,13 @@
     }
     if (t.classList.contains("menu-toggle")) {
       var d = $("#drawer"), open = d.classList.toggle("open");
-      t.setAttribute("aria-expanded", open ? "true" : "false"); return;
+      document.body.classList.toggle("menu-open", open);
+      t.setAttribute("aria-expanded", open ? "true" : "false");
+      t.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      t.innerHTML = open ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>';
+      return;
     }
-    if (t.hasAttribute("data-pick")) setPref(t.getAttribute("data-pick"));
+    if (t.hasAttribute("data-pick") && /order_click|call_click/.test(t.getAttribute("data-track") || "") ) setPref(t.getAttribute("data-pick"));
     if (t.hasAttribute("data-track")) track(t.getAttribute("data-track"), { location: t.getAttribute("data-pick") || t.getAttribute("data-loc") || "", source: t.getAttribute("data-src") || "" });
   });
   if (sheet) sheet.addEventListener("click", function (e) { if (e.target === sheet) sheet.close(); });
@@ -176,13 +179,13 @@
     go.removeAttribute("data-open-picker");
     go.href = l.order; go.setAttribute("data-pick", l.slug);
     go.querySelector("span").textContent = "Order from " + (l.short || l.name);
-    call.href = "tel:" + l.tel; call.setAttribute("data-pick", l.slug);
+    call.href = "tel:" + l.tel; call.setAttribute("data-pick", l.slug); call.setAttribute("data-track", "call_click");
     info.href = l.url;
     st.innerHTML = '<span class="status" data-status="' + l.slug + '"></span> ' + l.street + ", " + l.city;
     paintAll();
   }
   var qs = $("#quick-loc");
-  if (qs) qs.addEventListener("change", function () { updateQuick(); if (qs.value) setPref(qs.value); });
+  if (qs) qs.addEventListener("change", updateQuick);
 
   /* ---------- Sort location grid by distance ---------- */
   function sortGrid() {
@@ -212,8 +215,11 @@
     var run = function () { ("requestIdleCallback" in window) ? requestIdleCallback(fn, { timeout: 3000 }) : setTimeout(fn, 1); };
     if (document.readyState === "complete") setTimeout(run, ms); else addEventListener("load", function () { setTimeout(run, ms); });
   }
-  whenIdle(loadChat, 2500);
-  ["pointerdown", "keydown", "scroll"].forEach(function (ev) { addEventListener(ev, function once() { removeEventListener(ev, once); whenIdle(loadChat, 400); }, { passive: true }); });
+  // Load the chat widget on the visitor's first interaction (scroll, tap, key). It's a large script,
+  // so keeping it out of the first page load keeps the site fast.
+  var chatEvents = ["pointerdown", "keydown", "scroll", "touchstart", "mousemove"];
+  function chatOnce() { chatEvents.forEach(function (ev) { removeEventListener(ev, chatOnce); }); whenIdle(loadChat, 300); }
+  chatEvents.forEach(function (ev) { addEventListener(ev, chatOnce, { passive: true }); });
 
   /* ---------- Prefill forms from ?location= ---------- */
   function prefill() {
@@ -253,7 +259,56 @@
     });
   });
 
+  /* ---------- Connect form frames: auto-height ---------- */
+  addEventListener("message", function (e) {
+    if (e.origin !== "https://connect.squarepegpizzeria.com" || !e.data || e.data.type !== "sp-embed-height") return;
+    $$(".form-embed iframe").forEach(function (f) {
+      if (f.contentWindow !== e.source) return;
+      var h = Math.max(200, Math.min(4000, parseInt(e.data.height, 10) || 0));
+      f.style.height = h + "px";
+      f.closest(".form-embed").classList.add("is-sized");
+    });
+  });
+
+  /* ---------- Close menus on navigation / outside click ---------- */
+  document.addEventListener("click", function (e) {
+    $$("details.more[open]").forEach(function (m) { if (!m.contains(e.target) || e.target.closest("a")) m.removeAttribute("open"); });
+    var d = $("#drawer");
+    if (d && d.classList.contains("open") && e.target.closest("#drawer a")) {
+      d.classList.remove("open"); document.body.classList.remove("menu-open");
+      var tg = $(".menu-toggle"); if (tg) { tg.setAttribute("aria-expanded", "false"); tg.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>'; }
+    }
+  });
+  addEventListener("keydown", function (e) { if (e.key === "Escape") $$("details.more[open]").forEach(function (m) { m.removeAttribute("open"); }); });
+
+  /* ---------- Entertainment: tonight + today highlights ---------- */
+  var ENT = {};
+  try { ENT = JSON.parse(document.getElementById("sp-ent").textContent); } catch (e) {}
+  function paintEnt() {
+    var today = DAYS[nowET().day], FULL = { Tuesday: "Tue", Wednesday: "Wed", Friday: "Fri" };
+    $$("[data-ent-day]").forEach(function (el) { el.classList.toggle("is-today", el.getAttribute("data-ent-day") === today); });
+    $$("[data-tonight]").forEach(function (box) {
+      var html = "";
+      Object.keys(ENT).forEach(function (slug) {
+        ENT[slug].events.forEach(function (ev) {
+          if (ev[0] === today) html += '<a class="tonight-card" href="' + ENT[slug].url + '"><span>' + ENT[slug].name + "</span><b>" + ev[1] + "</b><span>" + ev[2] + "</span></a>";
+        });
+      });
+      box.innerHTML = html || '<p class="note">No trivia, bingo or DJ tonight. Check the weekly lineup, or come in for pizza anyway.</p>';
+    });
+  }
+
+  /* ---------- Careers frame (Wingman) auto-height ---------- */
+  addEventListener("message", function (e) {
+    var h = e && e.data && e.data.wingmanCareersHeight;
+    if (typeof h === "number" && h > 0 && h < 20000) {
+      var f = document.getElementById("wingman-careers");
+      if (f) { f.style.minHeight = "0"; f.style.height = h + "px"; }
+    }
+  });
+
   /* ---------- Init ---------- */
+  paintEnt();
   prefill();
   addEventListener("hashchange", prefill);
   paintAll();

@@ -16,13 +16,13 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS  # noqa
+from content import SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
 OUT = ROOT / ("preview" if PREVIEW else "dist-staging" if STAGING else "dist")
 IMG_SRC = ROOT / "assets" / "img-src"
-WIDTHS = [480, 800, 1200, 1600]
+WIDTHS = [360, 480, 640, 800, 1200, 1600]
 TODAY = date.today().isoformat()
 
 # ---------------------------------------------------------------- helpers
@@ -110,7 +110,7 @@ def build_images():
             r = im.resize((x, round(h * x / w)), Image.LANCZOS) if x != w else im
             r.save(dest / f"{name}-{x}.webp", "WEBP", quality=74, method=6)
             if not PREVIEW:
-                r.save(dest / f"{name}-{x}.avif", "AVIF", quality=55, speed=6)
+                r.save(dest / f"{name}-{x}.avif", "AVIF", quality=50, speed=6)
         IMG_META[name] = {"w": w, "h": h, "widths": widths, "alpha": has_alpha}
     print(f"  images: {len(IMG_META)} processed")
 
@@ -119,8 +119,8 @@ def build_brand():
     dest.mkdir(parents=True, exist_ok=True)
     src = Image.open(ROOT / "src" / "brand" / "logo-on-dark.png").convert("RGBA")
     orig = Image.open(ROOT / "src" / "brand" / "logo-src.png").convert("RGBA")
-    for w in (160, 320, 480):
-        src.resize((w, round(src.height * w / src.width)), Image.LANCZOS).save(dest / f"logo-on-dark-{w}.webp", "WEBP", quality=90, method=6)
+    for w in (160, 280, 480):
+        src.resize((w, round(src.height * w / src.width)), Image.LANCZOS).save(dest / f"logo-on-dark-{w}.webp", "WEBP", quality=72, method=6)
     if not PREVIEW:
         orig.resize((1200, round(orig.height * 1200 / orig.width)), Image.LANCZOS).save(dest / "logo.png", optimize=True)
         fav = Image.open(ROOT / "src" / "brand" / "favicon-512.png")
@@ -170,7 +170,7 @@ def hero_picture(desk, mob, alt):
         return img(mob, alt, cls="hero-img", eager=True)
     parts = ["<picture>"]
     for fmt in ([] if PREVIEW else ["avif"]) + ["webp"]:
-        parts.append(f'<source media="(min-width:900px)" type="image/{fmt}" srcset="' + ", ".join(f"{base}{desk}-{x}.{fmt} {x}w" for x in md["widths"]) + '" sizes="100vw">')
+        parts.append(f'<source media="(min-width:900px)" type="image/{fmt}" srcset="' + ", ".join(f"{base}{desk}-{x}.{fmt} {x}w" for x in md["widths"]) + '" sizes="56vw">')
         parts.append(f'<source type="image/{fmt}" srcset="' + ", ".join(f"{base}{mob}-{x}.{fmt} {x}w" for x in mm["widths"]) + '" sizes="100vw">')
     fb = mm["widths"][-1]
     parts.append(f'<img class="hero-img" src="{base}{mob}-{fb}.webp" alt="{html.escape(alt)}" width="{md["w"]}" height="{md["h"]}" fetchpriority="high">')
@@ -217,7 +217,7 @@ def restaurant_schema(l):
     page = abs_url(f"/locations/{l['slug']}/")
     o = {
         "@type": "Restaurant", "@id": page + "#restaurant",
-        "name": f"Square Peg Pizzeria {l.get('short', l['name'])}" if l["name"] != l.get("short", l["name"]) else f"Square Peg Pizzeria {l['name']}",
+        "name": f"Square Peg Pizzeria {l['name']}",
         "url": page, "telephone": tel(l["phone"]),
         "address": {"@type": "PostalAddress", "streetAddress": l["street"], "addressLocality": l["city"], "addressRegion": l["state"], "postalCode": l["zip"], "addressCountry": "US"},
         "servesCuisine": ["Pizza", "Italian", "American"], "priceRange": "$$",
@@ -256,9 +256,19 @@ ICONS = {
     "arrow": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
 }
 
-NAV = [("Menu", "MENU"), ("Locations", "/locations/"), ("Catering", "/catering/"), ("Large Parties", "/large-party-reservations/"),
-       ("Food Truck", "/food-truck/"), ("Deals", "/deals/"), ("Contact", "/contact/")]
-DRAWER_EXTRA = [("Fundraisers", "/fundraisers/"), ("Our Story", "/about/")]
+NAV = [("Menu", "MENU"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Catering", "/catering/"),
+       ("Large Parties", "/large-party-reservations/"), ("Entertainment", "/entertainment/")]
+MORE = [("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/"),
+        ("Rewards & Monthly Deals", "/deals/"), ("Gift Cards", "GIFT"), ("Roll the Dice", "/roll-the-dice/"),
+        ("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]
+DRAWER_EXTRA = []
+DRAWER_GROUPS = [
+    ("Eat", [("Menu", "MENU"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
+    ("Plan", [("Catering", "/catering/"), ("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
+    ("Fun", [("Entertainment", "/entertainment/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Cards", "GIFT")]),
+    ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
+]
+DAY_NAMES = {"Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"}
 
 T = {}
 
@@ -283,13 +293,27 @@ T["header"] = """<a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap">
     <a class="logo" href="{{ u('/') }}" aria-label="Square Peg Pizzeria home">
-      <img src="{{ imgbase }}logo-on-dark-320.webp" srcset="{{ imgbase }}logo-on-dark-160.webp 160w, {{ imgbase }}logo-on-dark-320.webp 320w, {{ imgbase }}logo-on-dark-480.webp 480w" sizes="130px" width="160" height="{{ (160 * logo_ratio)|round|int }}" alt="Square Peg Pizzeria">
+      <img src="{{ imgbase }}logo-on-dark-280.webp" srcset="{{ imgbase }}logo-on-dark-160.webp 160w, {{ imgbase }}logo-on-dark-280.webp 280w, {{ imgbase }}logo-on-dark-480.webp 480w" sizes="(min-width:980px) 153px, 135px" width="160" height="{{ (160 * logo_ratio)|round|int }}" alt="Square Peg Pizzeria">
     </a>
-    <nav class="nav" aria-label="Main">{% for n, p in nav %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}</nav>
+    <nav class="nav" aria-label="Main">{% for n, p in nav %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
+      <details class="more"><summary>More</summary><div class="more-menu">{% for n, p in more %}{% if p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}</div></details></nav>
     <a class="btn btn--sm header-order" href="{{ u('/locations/') }}" data-open-picker="order">{{ icons.bag|safe }}Order<span class="for" data-for-loc></span></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Open menu">{{ icons.menu|safe }}</button>
   </div>
-  <div class="drawer" id="drawer"><nav class="wrap" aria-label="Mobile">{% for n, p in nav %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% else %}<a href="{{ u(p) }}">{{ n }}</a>{% endif %}{% endfor %}{% for n, p in drawer_extra %}<a href="{{ u(p) }}">{{ n }}</a>{% endfor %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Gift Cards</a></nav></div>
+  <div class="drawer" id="drawer">
+    <div class="wrap drawer-inner">
+      <div class="drawer-cta">
+        <a class="btn" href="{{ u('/locations/') }}" data-open-picker="order">{{ icons.bag|safe }}Order online</a>
+        <a class="btn btn--ghost" href="{{ u('/locations/') }}" data-open-picker="call">{{ icons.phone|safe }}Call</a>
+      </div>
+      <nav aria-label="Mobile">
+        {% for title, links in drawer_groups %}<div class="drawer-group"><p class="drawer-title">{{ title }}</p>
+          {% for n, p in links %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% elif p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
+        </div>{% endfor %}
+      </nav>
+      <a class="drawer-app" href="{{ site.app_link }}" rel="noopener" data-track="app_click" data-src="drawer"{{ ext|safe }}><b>Get the Square Peg app</b><span>$5 off your next order + rewards every visit</span></a>
+    </div>
+  </div>
 </header>"""
 
 T["footer"] = """<section class="cta-band">
@@ -314,8 +338,8 @@ T["footer"] = """<section class="cta-band">
       </div>
       <div class="foot-links">
         <a href="{{ site.menu_url }}" data-open-picker="menu">Menu</a><a href="{{ u('/catering/') }}">Catering</a><a href="{{ u('/large-party-reservations/') }}">Large Parties</a><a href="{{ u('/food-truck/') }}">Food Truck</a>
-        <a href="{{ u('/deals/') }}">Deals & Rewards</a><a href="{{ u('/fundraisers/') }}">Tuesday Fundraisers</a><a href="{{ u('/about/') }}">Our Story</a><a href="{{ u('/contact/') }}">Contact</a>
-        <a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Gift Cards</a><a href="{{ u('/roll-the-dice/') }}">Roll the Dice</a><a href="{{ site.careers }}" rel="noopener"{{ ext|safe }}>Careers</a><a href="{{ site.app_link }}" rel="noopener"{{ ext|safe }}>Get the App</a>
+        <a href="{{ u('/promotions/') }}">Specials</a><a href="{{ u('/deals/') }}">Rewards & Deals</a><a href="{{ u('/entertainment/') }}">Entertainment</a><a href="{{ u('/private-events/') }}">Private Events & Classes</a><a href="{{ u('/fundraisers/') }}">Tuesday Fundraisers</a><a href="{{ u('/about/') }}">Our Story</a><a href="{{ u('/contact/') }}">Contact</a>
+        <a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Gift Cards</a><a href="{{ u('/roll-the-dice/') }}">Roll the Dice</a><a href="{{ u('/careers/') }}">Careers</a><a href="{{ site.app_link }}" rel="noopener"{{ ext|safe }}>Get the App</a>
         {% if site.facebook %}<a href="{{ site.facebook }}" rel="noopener"{{ ext|safe }}>Facebook</a>{% endif %}
         {% if site.instagram %}<a href="{{ site.instagram }}" rel="noopener"{{ ext|safe }}>Instagram</a>{% endif %}
       </div>
@@ -340,15 +364,16 @@ T["footer"] = """<section class="cta-band">
   </div>
 </dialog>
 <script type="application/json" id="sp-locs">{{ locs_json|safe }}</script>
-<script type="application/json" id="sp-cfg">{{ cfg_json|safe }}</script>"""
+<script type="application/json" id="sp-cfg">{{ cfg_json|safe }}</script>
+<script type="application/json" id="sp-ent">{{ ent_json|safe }}</script>"""
 
 T["loc_card"] = """<article class="loc-card" data-slug="{{ l.slug }}">
   <header><div><span class="tag">{{ l.tag }}</span><h3><a href="{{ u('/locations/' ~ l.slug ~ '/') }}">{{ l.name }}</a></h3></div><span class="status" data-status="{{ l.slug }}">{{ l.summary[0] }}</span></header>
   <address>{{ l.street }}<br>{{ l.city }}, {{ l.state }} {{ l.zip }}</address>
   <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><a class="phone" href="tel:{{ tel(l.phone) }}" data-track="call_click" data-loc="{{ l.slug }}">{{ l.phone }}</a><span class="dist"></span></div>
   <div class="btn-row">
-    <a class="btn btn--sm" href="{{ order(l) }}" data-pick="{{ l.slug }}" data-track="order_click" data-src="loc-card" rel="noopener">{{ icons.bag|safe }}Order</a>
-    <a class="btn btn--sm btn--ghost" href="{{ u('/locations/' ~ l.slug ~ '/') }}">Hours & info</a>
+    <a class="btn btn--sm" href="{{ order(l) }}" data-pick="{{ l.slug }}" data-track="order_click" data-src="loc-card" rel="noopener" aria-label="Order: Square Peg {{ l.short or l.name }}">{{ icons.bag|safe }}Order</a>
+    <a class="btn btn--sm btn--ghost" href="{{ u('/locations/' ~ l.slug ~ '/') }}" aria-label="Hours & info: Square Peg {{ l.short or l.name }}">Hours & info</a>
   </div>
 </article>"""
 
@@ -403,7 +428,7 @@ T["home"] = """
     <div class="sigs">
       {% for n, d, p in sigs %}<article class="sig">
         <div class="sig-photo">{{ img(p, n ~ ' pizza from Square Peg Pizzeria', sizes='(min-width:900px) 25vw, 78vw')|safe }}<span class="sig-size">12″ · 18″</span></div>
-        <div class="sig-body"><h3>{{ n }}</h3><p>{{ d }}</p><a class="btn btn--sm" href="{{ u('/locations/') }}" data-open-picker="order">Order this</a></div>
+        <div class="sig-body"><h3>{{ n }}</h3><p>{{ d }}</p><a class="btn btn--sm" href="{{ u('/locations/') }}" data-open-picker="order" aria-label="Order this: {{ n }}">Order this</a></div>
       </article>{% endfor %}
     </div>
   </div>
@@ -441,12 +466,19 @@ T["home"] = """
   </div>
 </section>
 
+<section class="section section--paper ent-band">
+  <div class="wrap">
+    <div class="section-head section-head--split"><div class="stack" style="gap:14px"><span class="eyebrow">Trivia · Bingo · DJ nights</span><h2>More than dinner. It’s a night out.</h2></div><a class="link-arrow" href="{{ u('/entertainment/') }}">Full weekly lineup →</a></div>
+    <div class="tonight" data-tonight><p class="note">Loading tonight’s lineup…</p></div>
+  </div>
+</section>
+
 <section class="section">
   <div class="wrap">
-    <div class="section-head"><span class="eyebrow">Catering, big groups & the food truck</span><h2>You host. We’ll handle it.</h2></div>
+    <div class="section-head"><span class="eyebrow">Catering, big groups & the food truck</span><h2>You host. We’ll make the pizza.</h2></div>
     <div class="tiles tiles--3">
       <a class="tile on-dark" href="{{ u('/catering/') }}">{{ img('table-spread', 'A catering spread of wings, meatballs, salads and drinks', sizes='(min-width:900px) 50vw, 100vw')|safe }}
-        <div class="tile-body"><span class="eyebrow">Catering</span><h3 style="font-size:clamp(34px,4vw,48px)">Enough pizza for everyone. We promise.</h3><p>Tell us the headcount and the date. We handle the count, the timing and the setup.</p><span class="btn">Plan my catering {{ icons.arrow|safe }}</span></div></a>
+        <div class="tile-body"><span class="eyebrow">Catering</span><h3 style="font-size:clamp(34px,4vw,48px)">Enough pizza for everyone. We promise.</h3><p>Tell us your headcount and date, and we’ll make sure there’s enough wood-fired pizza for everyone, ready when you pick it up.</p><span class="btn">Plan my catering {{ icons.arrow|safe }}</span></div></a>
       <a class="tile on-dark" href="{{ u('/large-party-reservations/') }}">{{ img('friends-holiday', 'A group of friends celebrating over pizza', sizes='(min-width:1000px) 33vw, 100vw')|safe }}
         <div class="tile-body"><span class="eyebrow">Large parties</span><h3 style="font-size:clamp(34px,4vw,48px)">Bring the whole crew.</h3><p>Birthdays, team dinners and reunions. We’ll save the tables and plan the food so it lands together.</p><span class="btn">Reserve for a group {{ icons.arrow|safe }}</span></div></a>
       <a class="tile on-dark" href="{{ u('/food-truck/') }}">{{ img('food-truck', 'The Square Peg Pizzeria wood-fired food truck', sizes='(min-width:900px) 50vw, 100vw')|safe }}
@@ -548,6 +580,7 @@ T["location"] = """
       <h2>Find us</h2>
       <address>Square Peg Pizzeria {{ l.name }}<br>{{ l.street }}<br>{{ l.city }}, {{ l.state }} {{ l.zip }}</address>
       <a class="link-arrow" href="tel:{{ tel(l.phone) }}" style="justify-self:start">{{ l.phone }}</a>
+      {% if ent.get(l.slug) %}<div class="mini-ent"><p class="note" style="font-weight:800;margin-bottom:6px">Weekly entertainment</p>{% for d, e, t in ent[l.slug] %}<div class="ent-row" data-ent-day="{{ d }}"><b>{{ day_names[d] }}</b><span>{{ e }} · {{ t }}</span></div>{% endfor %}<a class="link-arrow" href="{{ u('/entertainment/') }}" style="display:inline-block;margin-top:8px">All entertainment</a></div>{% endif %}
       <div class="btn-row"><a class="btn btn--sm btn--line" href="{{ maps(l) }}" rel="noopener"{{ ext|safe }}>Get directions</a><a class="btn btn--sm btn--dark" href="{{ u('/catering/') }}?location={{ l.slug }}">Catering from {{ l.short or l.name }}</a><a class="btn btn--sm btn--dark" href="{{ u('/large-party-reservations/') }}?location={{ l.slug }}">Large party here</a></div>
     </div>
   </div>
@@ -624,19 +657,21 @@ T["form_catering"] = """{% set fname = form_name|default('catering') %}<form cla
   <small>We reply within one business day. Prefer to talk? Call {{ site.catering_phone }}.</small>
 </form>"""
 
-T["booking_form"] = """{% set e = embeds.get(embed_key) %}{% if e %}<div class="form-embed" id="{{ fid }}-booking" style="--h-m:{{ e.mobile }}px;--h-d:{{ e.desktop }}px">
-  <iframe src="{{ e.src }}" title="{{ e.title }}" loading="lazy" allow="clipboard-write"></iframe>
+T["booking_form"] = """{% set e = embeds.get(embed_key) %}{% if e %}<div class="form-embed" id="{{ fid }}-booking" style="--h-m:{{ e.mobile }}px;--h-d:{{ e.desktop }}px;--crop:{{ e.crop }}px">
+  <div class="embed-frame"><iframe src="{{ e.src }}?embed=1" title="{{ e.title }}" loading="lazy" allow="clipboard-write"></iframe></div>
   <p class="embed-help">Trouble with the form? <a href="{{ e.src }}" rel="noopener" target="_blank">Open it in a new tab</a> or call {{ site.catering_phone }}.</p>
 </div>{% else %}{% include "form_catering" %}{% endif %}"""
 
-T["catering"] = """
+T["catering"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in items %}<figure class="{{ 'b-main' if loop.first else 'b-side' }}">{{ img(p, a, sizes=('(min-width:800px) 60vw, 100vw' if loop.first else '(min-width:800px) 36vw, 50vw'))|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endfor %}</div>{% endmacro %}
+{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
+
 <section class="page-head on-dark">
   {{ img('table-spread', 'A Square Peg catering spread', eager=True, cls='bg')|safe }}
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Catering</span></nav>
     <span class="eyebrow">Catering at all 10 locations</span>
     <h1>Pizza catering & events</h1>
-    <p class="lede">Birthdays, office lunches, team banquets, graduations, holiday parties. Tell us roughly how many people and we’ll figure out the rest together.</p>
+    <p class="lede">Birthdays, office lunches, team banquets, graduations, holiday parties. Tell us roughly how many people and we’ll plan the order with you.</p>
     <div class="btn-row"><a class="btn" href="#quote">Get a catering quote</a><a class="btn btn--ghost" href="tel:{{ tel(site.catering_phone) }}">{{ icons.phone|safe }}{{ site.catering_phone }}</a></div>
   </div>
 </section>
@@ -645,17 +680,17 @@ T["catering"] = """
     <div class="stack">
       <span class="eyebrow">Be at your own party</span>
       <h2>One less thing to worry about.</h2>
-      <p class="prose">The food is maybe 20% of whether a gathering goes well. The rest is timing, enough for everyone, and not spending the night in the kitchen. That’s the part we take off your plate.</p>
+      <p class="prose">Hosting is enough work already. Order wood-fired pizza, wings, salads and desserts from us, pick it up hot from your closest Square Peg, and spend the party with your guests instead of in the kitchen.</p>
       <ul class="checks">
         <li>Wood-fired pizzas, wings, salads, pasta & desserts</li>
-        <li>Pickup, delivery, or our food truck on site</li>
+        <li>Ready for pickup at your closest Square Peg</li>
         <li>Gluten-free crust & vegan cheese on request</li>
         <li>Headcount help, so you never run short</li>
         <li>Available from every Square Peg location</li>
       </ul>
-      <div class="gallery" style="margin-top:12px">{{ img('friends-sharing','Friends sharing a Square Peg pizza',sizes='(min-width:960px) 25vw, 50vw')|safe }}{{ img('margherita-board','Margherita pizza on a wooden board',sizes='(min-width:960px) 25vw, 50vw')|safe }}{{ img('oven-pizza','Pizza baking in the wood-fired oven',sizes='(min-width:960px) 25vw, 50vw')|safe }}{{ img('pizza-boxes','Stacked pizza boxes for a catering order',sizes='(min-width:960px) 25vw, 50vw')|safe }}</div>
+      {{ feature('friends-sharing', 'Friends sharing a Square Peg pizza', 'Wood-fired pies, sized for a crowd') }}
     </div>
-    {% with form_title='Get a catering quote', fid='cat', embed_key='catering', submit='Send my request', default_type='Catering pickup / delivery' %}{% include "booking_form" %}{% endwith %}
+    {% with form_title='Get a catering quote', fid='cat', embed_key='catering', submit='Send my request', default_type='Catering pickup' %}{% include "booking_form" %}{% endwith %}
   </div>
 </section>
 <section class="section">
@@ -666,7 +701,9 @@ T["catering"] = """
 </section>
 """
 
-T["parties"] = """
+T["parties"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in items %}<figure class="{{ 'b-main' if loop.first else 'b-side' }}">{{ img(p, a, sizes=('(min-width:800px) 60vw, 100vw' if loop.first else '(min-width:800px) 36vw, 50vw'))|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endfor %}</div>{% endmacro %}
+{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
+
 <section class="page-head on-dark">
   {{ img('friends-holiday', 'A group celebrating together over pizza', eager=True, cls='bg')|safe }}
   <div class="wrap">
@@ -690,6 +727,7 @@ T["parties"] = """
         <li>Available at every Square Peg (space varies by location)</li>
         <li>Gluten-free crust & vegan cheese on request</li>
       </ul>
+      {{ feature('dining-room-kids', 'Families and friends dining together at Square Peg', 'Your tables, saved and ready') }}
       <ol class="steps">
         <li><div><b>Send your request</b><span>Date, time, location and headcount.</span></div></li>
         <li><div><b>We confirm the details</b><span>We’ll check space at your location and plan the food with you.</span></div></li>
@@ -697,11 +735,6 @@ T["parties"] = """
       </ol>
     </div>
     {% with form_title='Request a large party reservation', fid='party', embed_key='large_party', form_name='large_party', submit='Send my request', default_type='Party at the restaurant' %}{% include "booking_form" %}{% endwith %}
-  </div>
-</section>
-<section class="section">
-  <div class="wrap">
-    <div class="gallery">{% for p, a in [('dining-room-kids','Families dining in at Square Peg'),('team-kids','A team celebrating at Square Peg'),('table-spread','A table full of Square Peg favorites'),('friends-sharing','Friends sharing pizza')] %}{{ img(p, a, sizes='(min-width:800px) 25vw, 50vw')|safe }}{% endfor %}</div>
   </div>
 </section>
 <section class="section section--paper">
@@ -733,7 +766,7 @@ T["contact"] = """
       <a href="{{ u('/fundraisers/') }}"><b>Fundraisers</b><span>Tuesday nights, 20% back</span></a>
       <a href="{{ u('/deals/') }}"><b>Rewards & app</b><span>Points, deals and sign-in</span></a>
       <a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}><b>Gift cards</b><span>Buy or check a balance</span></a>
-      <a href="{{ site.careers }}" rel="noopener"{{ ext|safe }}><b>Jobs</b><span>Apply at any location</span></a>
+      <a href="{{ u('/careers/') }}"><b>Jobs</b><span>Apply at any location</span></a>
     </div>
   </div>
 </section>
@@ -768,7 +801,9 @@ T["contact"] = """
 </section>
 """
 
-T["truck"] = """
+T["truck"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in items %}<figure class="{{ 'b-main' if loop.first else 'b-side' }}">{{ img(p, a, sizes=('(min-width:800px) 60vw, 100vw' if loop.first else '(min-width:800px) 36vw, 50vw'))|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endfor %}</div>{% endmacro %}
+{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
+
 <section class="page-head on-dark">
   {{ img('food-truck', 'The Square Peg Pizzeria food truck', eager=True, cls='bg')|safe }}
   <div class="wrap">
@@ -781,7 +816,7 @@ T["truck"] = """
 </section>
 <section class="section">
   <div class="wrap">
-    <div class="gallery">{% for p, a in [('truck-tent','The Square Peg truck and tent set up at an event'),('truck-menu','The food truck menu board at a private party'),('kid-slice','A young guest with a slice'),('oven-fire','The wood fire inside the truck oven'),('margherita-board','A fresh margherita from the truck'),('team-kids','A team celebration'),('friends-sharing','Friends sharing pizza'),('oven-pizza','A pizza baking in the wood-fired oven')] %}{{ img(p, a, sizes='(min-width:800px) 25vw, 50vw')|safe }}{% endfor %}</div>
+    {{ bento([('truck-tent', 'The Square Peg food truck and tent set up at an event', 'Set up in your driveway, lot or lawn'), ('truck-menu', 'The food truck menu board at a private party', 'Custom menu boards'), ('kid-slice', 'A young guest enjoying a slice', 'Fresh from the oven, on site')]) }}
   </div>
 </section>
 <section class="section section--paper" id="book">
@@ -871,8 +906,8 @@ T["fundraisers"] = """
       <p class="prose">Tuesdays book quickly. If your preferred date is taken, we’ll put you on our priority waiting list for the next opening.</p>
       <div class="faq" style="margin-top:12px">{% for q, a in faqs %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
     </div>
-    {% if embeds.fundraiser %}{% with e = embeds.fundraiser, fid = 'fundraiser' %}<div class="form-embed" id="fundraiser-booking" style="--h-m:{{ e.mobile }}px;--h-d:{{ e.desktop }}px">
-      <iframe src="{{ e.src }}" title="{{ e.title }}" loading="lazy" allow="clipboard-write"></iframe>
+    {% if embeds.fundraiser %}{% with e = embeds.fundraiser, fid = 'fundraiser' %}<div class="form-embed" id="fundraiser-booking" style="--h-m:{{ e.mobile }}px;--h-d:{{ e.desktop }}px;--crop:{{ e.crop }}px">
+      <div class="embed-frame"><iframe src="{{ e.src }}?embed=1" title="{{ e.title }}" loading="lazy" allow="clipboard-write"></iframe></div>
       <p class="embed-help">Trouble with the form? <a href="{{ e.src }}" rel="noopener" target="_blank">Open it in a new tab</a>.</p>
     </div>{% endwith %}{% else %}
     <form class="form" name="fundraiser" method="POST" action="{{ u('/thanks/') }}" data-netlify="true" netlify-honeypot="company_website">
@@ -896,7 +931,9 @@ T["fundraisers"] = """
 </section>
 """
 
-T["about"] = """
+T["about"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in items %}<figure class="{{ 'b-main' if loop.first else 'b-side' }}">{{ img(p, a, sizes=('(min-width:800px) 60vw, 100vw' if loop.first else '(min-width:800px) 36vw, 50vw'))|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endfor %}</div>{% endmacro %}
+{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
+
 <section class="page-head on-dark">
   {{ img('dough', 'Square Peg dough being made from scratch', eager=True, cls='bg')|safe }}
   <div class="wrap">
@@ -915,9 +952,9 @@ T["about"] = """
       <p>We roast, stretch, simmer, press and season with purpose, turning simple ingredients into something that feels familiar and still special. Water. Flour. Time. Heat. Hands that care.</p>
       <p>So this page isn’t really about us. It’s about the families, friends, neighbors and regulars who turn a pizza night into a shared memory: victory slices after long games, first dates, Tuesday fundraisers, and the table that keeps getting bigger.</p>
       <p style="font-weight:800">Whether you’re here for a quick bite, a family tradition, or the start of something new: your table is ready.</p>
-      <div class="btn-row" style="margin-top:24px"><a class="btn" href="{{ u('/locations/') }}" data-open-picker="order">{{ icons.bag|safe }}Order now</a><a class="btn btn--line" href="{{ site.careers }}" rel="noopener"{{ ext|safe }}>Join the crew</a></div>
+      <div class="btn-row" style="margin-top:24px"><a class="btn" href="{{ u('/locations/') }}" data-open-picker="order">{{ icons.bag|safe }}Order now</a><a class="btn btn--line" href="{{ u('/careers/') }}">Join the crew</a></div>
     </div>
-    <div class="gallery" style="grid-template-columns:1fr 1fr">{{ img('margherita-board','Margherita pizza on a board',sizes='(min-width:960px) 25vw, 50vw')|safe }}{{ img('oven-fire','The wood fire in a Square Peg oven',sizes='(min-width:960px) 25vw, 50vw')|safe }}{{ img('table-spread','A table full of Square Peg favorites',sizes='(min-width:960px) 25vw, 50vw')|safe }}{{ img('team-kids','A local team celebrating at Square Peg',sizes='(min-width:960px) 25vw, 50vw')|safe }}</div>
+    <div>{{ bento([('margherita-board', 'A wood-fired margherita on a board', ''), ('team-kids', 'A local youth team celebrating at Square Peg', ''), ('table-spread', 'A table full of Square Peg favorites', '')]) }}</div>
   </div>
 </section>
 """
@@ -958,6 +995,151 @@ T["sms"] = """
 </div></section>
 """
 
+T["promotions"] = """
+<section class="page-head on-dark">
+  {{ img('oven-pizza', 'A pizza baking in the wood-fired oven', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Specials</span></nav>
+    <span class="eyebrow">Your slice of rewards lives here</span>
+    <h1>Specials & promotions</h1>
+    <p class="lede">Daily specials, $10 lunches, app rewards and a thank-you for our local heroes. Here’s every way to get more out of your next Square Peg visit.</p>
+    <div class="btn-row"><a class="btn btn--flame" href="{{ site.app_link }}" rel="noopener" data-track="app_click" data-src="promos-head"{{ ext|safe }}>Get the app</a><a class="btn btn--ghost" href="{{ u('/deals/') }}">This month’s deal</a></div>
+  </div>
+</section>
+<nav class="menu-jump" aria-label="On this page"><div class="wrap"><a href="#daily">Daily specials</a><a href="#lunch">$10 lunch</a><a href="#app">App rewards</a><a href="#punch">Punch cards</a><a href="#heroes">Local heroes</a><a href="#gift">Gift cards</a></div></nav>
+<section class="section" id="daily">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">After 5pm</span><h2>Daily specials</h2></div>
+    <div class="deal-grid">{% for d, name, price, note in promos.daily %}<article class="deal-card" data-ent-day="{{ d[:3] }}"><span class="deal-day">{{ d }}</span><h3>{{ name }}</h3><b class="deal-price">{{ price }}</b><p>{{ note }}</p></article>{% endfor %}</div>
+  </div>
+</section>
+<section class="section section--dark on-dark" id="lunch">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">Monday–Friday · dine-in</span>
+      <h2>Lunch specials. Only $10.</h2>
+      <p class="prose" style="color:#e6ddd6">Drink included. Clean. Fast. Tasty. That’s lunch done right.</p>
+      <p class="note" style="color:#cfc6bf">{{ promos.lunch_note }}</p>
+      <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find a Square Peg</a><a class="btn btn--ghost" href="{{ u('/roll-the-dice/') }}">Roll the dice at lunch</a></div>
+    </div>
+    <div class="lunch-list">{% for n, dsc in promos.lunch %}<div class="lunch-item"><b>{{ n }}</b><span>{{ dsc }}</span><em>$10</em></div>{% endfor %}</div>
+  </div>
+</section>
+<section class="section" id="app">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Inside the Square Peg app</span><h2>Be nice. Earn more.</h2><p>Get $5 off your next order, exclusive in-app deals, flash promos and rewards every time you visit.</p></div>
+    <div class="deal-grid">{% for t, dsc in promos.app %}<article class="deal-card"><h3>{{ t }}</h3><p>{{ dsc }}</p></article>{% endfor %}</div>
+    <ul class="perks perks--row">{% for pk in promos.app_perks %}<li>{{ pk }}</li>{% endfor %}</ul>
+    <div class="btn-row"><a class="btn btn--dark" href="{{ site.app_link }}" rel="noopener" data-track="app_click" data-src="promos-app"{{ ext|safe }}>Download the app</a><a class="btn btn--line" href="{{ u('/deals/') }}">Points shop & monthly deal</a></div>
+  </div>
+</section>
+<section class="section section--paper" id="punch">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Digital punch cards, in the app</span><h2>Buy six. The next one’s on us.</h2></div>
+    <div class="punch-grid">{% for t, when in promos.punch %}<article class="punch"><div class="holes" aria-hidden="true">{% for i in range(6) %}<i></i>{% endfor %}<i class="free">FREE</i></div><h3>{{ t }}</h3><p class="note">{{ when }}</p></article>{% endfor %}</div>
+  </div>
+</section>
+<section class="section" id="heroes">
+  <div class="wrap heroes">
+    <div class="big-num" aria-hidden="true">15<sup>%</sup></div>
+    <div class="stack"><span class="eyebrow">A salute to our local heroes</span><h2>15% off for those who serve.</h2><p class="prose">{{ promos.heroes }}</p></div>
+  </div>
+</section>
+<section class="section section--dark on-dark" id="gift">
+  <div class="wrap gift-band">
+    <div class="stack"><span class="eyebrow">Gift cards</span><h2>Give the gift of pizza.</h2><p class="prose" style="color:#e6ddd6">Birthdays, teachers, coaches, thank-yous. Square Peg gift cards work at every location.</p></div>
+    <a class="btn btn--flame" href="{{ site.gift_cards_url }}" rel="noopener" data-track="giftcard_click" data-src="promos"{{ ext|safe }}>Buy a gift card</a>
+  </div>
+</section>
+"""
+
+T["entertainment"] = """
+<section class="page-head on-dark">
+  {{ img('friends-holiday', 'Friends enjoying a night out at Square Peg', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Entertainment</span></nav>
+    <span class="eyebrow">Trivia · Bingo · DJ nights</span>
+    <h1>Trivia, bingo & live DJ nights</h1>
+    <p class="lede">More than dinner. It’s a night out. Weekly entertainment at seven Square Pegs, plus private celebrations any night of the week.</p>
+    <div class="btn-row"><a class="btn" href="#lineup">See the weekly lineup</a><a class="btn btn--ghost" href="{{ u('/large-party-reservations/') }}">Reserve for a group</a></div>
+  </div>
+</section>
+<section class="section section--paper" id="tonight">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Happening today</span><h2>Tonight at Square Peg</h2></div>
+    <div class="tonight" data-tonight><p class="note">Loading tonight’s lineup…</p></div>
+  </div>
+</section>
+<section class="section" id="lineup">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Every week</span><h2>What’s happening at each Square Peg</h2></div>
+    <div class="ent-grid">{% for slug, rows in ent.items() %}{% set l = loc_by_slug[slug] %}<article class="ent-card">
+      <header><h3><a href="{{ u('/locations/' ~ slug ~ '/') }}">{{ l.short or l.name }}</a></h3><span class="note">{{ l.city }}, {{ l.state }}</span></header>
+      {% for d, e, t in rows %}<div class="ent-row" data-ent-day="{{ d }}"><b>{{ day_names[d] }}</b><span>{{ e }}</span><em>{{ t }}</em></div>{% endfor %}
+      <a class="btn btn--sm btn--line" href="{{ u('/locations/' ~ slug ~ '/') }}" aria-label="Hours & directions: Square Peg {{ l.short or l.name }}">Hours & directions</a>
+    </article>{% endfor %}</div>
+    <p class="note" style="margin-top:20px">Schedules can change for holidays and special events. Call your location to confirm.</p>
+  </div>
+</section>
+"""
+
+T["private_events"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in items %}<figure class="{{ 'b-main' if loop.first else 'b-side' }}">{{ img(p, a, sizes=('(min-width:800px) 60vw, 100vw' if loop.first else '(min-width:800px) 36vw, 50vw'))|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endfor %}</div>{% endmacro %}
+{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
+
+<section class="page-head on-dark">
+  {{ img('table-spread', 'A table full of Square Peg pizzas and appetizers', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Private Events & Classes</span></nav>
+    <span class="eyebrow">Private events · Pizza-making classes</span>
+    <h1>Plan your next event with us</h1>
+    <p class="lede">From small gatherings to larger celebrations, we offer flexible options, great food and seamless service to make your event effortless and memorable.</p>
+    <div class="btn-row"><a class="btn" href="{{ u('/large-party-reservations/') }}">Book now</a><a class="btn btn--ghost" href="#classes">Pizza-making classes</a></div>
+  </div>
+</section>
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Pick your kind of party</span><h2>Three ways to celebrate</h2></div>
+    <div class="tiles tiles--3">
+      <a class="tile on-dark" href="{{ u('/large-party-reservations/') }}">{{ img('dining-room-kids', 'A group celebrating at Square Peg', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">At the restaurant</span><h3>Large party reservations</h3><p>Birthdays, team dinners, showers and reunions.</p><span class="btn">Request a date {{ icons.arrow|safe }}</span></div></a>
+      <a class="tile on-dark" href="{{ u('/catering/') }}">{{ img('pizza-boxes', 'Stacked Square Peg pizza boxes', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">At your place</span><h3>Catering</h3><p>Wood-fired pizza for any headcount, ready for pickup.</p><span class="btn">Get a quote {{ icons.arrow|safe }}</span></div></a>
+      <a class="tile on-dark" href="{{ u('/food-truck/') }}">{{ img('truck-tent', 'The Square Peg food truck at an event', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">Anywhere</span><h3>The food truck</h3><p>A wood-fired oven on wheels at your event.</p><span class="btn">Book the truck {{ icons.arrow|safe }}</span></div></a>
+    </div>
+  </div>
+</section>
+<section class="section" id="classes">
+  <div class="wrap two-col" style="align-items:center">
+    {{ feature('dough', 'A ball of fresh pizza dough ready to stretch', 'Everyone’s a chef here') }}
+    <div class="stack">
+      <span class="eyebrow">Monthly · adults & kids</span>
+      <h2>Pizza-making classes</h2>
+      <p class="prose">Square Peg believes everyone is a chef, and we want to bring your inner chef to life. Every month we host adult pizza-making classes, plus <strong>free</strong> kids’ pizza-making classes.</p>
+      <ul class="checks"><li>Stretch, top and fire your own pie</li><li>Adult classes every month</li><li>Free classes for kids</li></ul>
+      <div class="btn-row"><a class="btn" href="{{ site.events_calendar_url or u('/entertainment/') }}"{% if site.events_calendar_url %} rel="noopener"{{ ext|safe }}{% endif %}>See upcoming dates</a>{% if site.instagram %}<a class="btn btn--line" href="{{ site.instagram }}" rel="noopener"{{ ext|safe }}>Follow on Instagram</a>{% endif %}</div>
+    </div>
+  </div>
+</section>
+"""
+
+T["careers"] = """
+<section class="page-head on-dark">
+  {{ img('oven-fire', 'The fire inside a Square Peg wood-fired oven', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Careers</span></nav>
+    <span class="eyebrow">Now hiring at every location</span>
+    <h1>Join the Square Peg crew</h1>
+    <p class="lede">We hire for attitude and instinct, and we’ll teach you the rest. Managers, servers, bartenders, kitchen and pizza cooks: start anywhere, grow everywhere.</p>
+    <div class="btn-row"><a class="btn" href="#apply">See open roles</a></div>
+  </div>
+</section>
+<section class="section section--paper" id="apply">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Pick your location & position when you apply</span><h2>Open positions</h2></div>
+    <div class="careers-embed"><iframe id="wingman-careers" src="{{ site.careers_embed_src }}" title="Careers at Square Peg Pizzeria: we're hiring" loading="lazy"></iframe></div>
+    <p class="note" style="margin-top:14px">Trouble loading? <a href="{{ site.careers_external }}" rel="noopener" target="_blank">Open the careers page</a>.</p>
+  </div>
+</section>
+"""
+
 T["simple"] = """
 <section class="page-head on-dark"><div class="wrap"><span class="eyebrow">{{ eyebrow }}</span><h1>{{ h1 }}</h1><p class="lede">{{ lede }}</p>
 <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}" data-open-picker="order">{{ icons.bag|safe }}Order now</a><a class="btn btn--ghost" href="{{ u('/') }}">Back to home</a></div></div></section>
@@ -968,7 +1150,7 @@ env = Environment(loader=DictLoader(T), autoescape=select_autoescape(default_for
 
 # ---------------------------------------------------------------- build
 def location_faqs(l):
-    name = l.get("short", l["name"])
+    name = (l.get("short") or l["name"])
     lines = "; ".join(hours_summary(l))
     return [
         (f"What are Square Peg {name}’s hours?", f"{lines}. Holiday hours may vary; online ordering always shows live availability."),
@@ -1015,12 +1197,12 @@ def main():
                       f"fbq('init','{SITE['meta_pixel_id']}');fbq('track','PageView');</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, ent=ENTERTAINMENT, day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
         site=SITE, locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
-        year=date.today().year, analytics=analytics, logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
+        year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING,
-        event_types=["Catering pickup / delivery", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
+        event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
     )
 
     pages = []  # (path, title, desc, body_template, extra ctx, schema, og, hero)
@@ -1057,6 +1239,18 @@ def main():
                                        {"@type": "Organization", "@id": ORG_ID, "name": SITE["name"], "email": SITE["email"],
                                         "contactPoint": [{"@type": "ContactPoint", "contactType": "customer service", "email": SITE["email"], "telephone": tel(SITE["catering_phone"]), "areaServed": ["US-CT", "US-FL"], "availableLanguage": "en"}]},
                                        breadcrumbs([("Home", "/"), ("Contact", "/contact/")])), None, None))
+    pages.append(("/promotions/", "Pizza Specials, $10 Lunch & App Rewards | Square Peg Pizzeria",
+                  "Square Peg Pizzeria specials: Tuesday pasta night, $1 wings Wednesday, half-price wine Friday, $10 weekday lunch, app rewards, punch cards and 15% off for heroes.",
+                  "promotions", {}, graph(breadcrumbs([("Home", "/"), ("Specials", "/promotions/")])), "oven-pizza", "oven-pizza"))
+    pages.append(("/entertainment/", "Trivia, Bingo & DJ Nights | Square Peg Pizzeria",
+                  "Weekly trivia, bingo and DJ nights at Square Peg Pizzeria in Plainville, Shelton, East Hartford, Glastonbury, Preston, Storrs and Delray Beach.",
+                  "entertainment", {}, graph(breadcrumbs([("Home", "/"), ("Entertainment", "/entertainment/")])), "friends-holiday", "friends-holiday"))
+    pages.append(("/private-events/", "Private Events & Pizza-Making Classes | Square Peg Pizzeria",
+                  "Plan a private event at Square Peg Pizzeria, and join our monthly pizza-making classes for adults plus free kids' classes. Parties, catering and the food truck.",
+                  "private_events", {}, graph(breadcrumbs([("Home", "/"), ("Private Events & Classes", "/private-events/")])), "table-spread", "table-spread"))
+    pages.append(("/careers/", "Careers: Now Hiring | Square Peg Pizzeria",
+                  "Join the Square Peg Pizzeria crew. Now hiring managers, servers, bartenders, kitchen staff and pizza cooks at locations across Connecticut and Delray Beach, FL.",
+                  "careers", {}, graph(breadcrumbs([("Home", "/"), ("Careers", "/careers/")])), "oven-fire", "oven-fire"))
     pages.append(("/food-truck/", "Wood-Fired Pizza Food Truck for Events in CT | Square Peg",
                   "Book the Square Peg Pizzeria wood-fired pizza food truck for backyard parties, weddings, schools, breweries and corporate events in Connecticut.",
                   "truck", {}, graph(breadcrumbs([("Home", "/"), ("Food Truck", "/food-truck/")])), "food-truck", "food-truck"))
@@ -1091,11 +1285,18 @@ def main():
         ctx.update(title=title, desc=desc, body=body, canonical=abs_url(path if path != "/404.html" else "/"),
                    og_image=img_url(og) if og else img_url("margherita-board"), schema=ld(schema) if schema else "",
                    preload_tag="")
-        if hero:
+        if path == "/" and not PREVIEW and IMG_META.get("margherita-board") and IMG_META.get("oven-fire"):
+            md, mm = IMG_META["margherita-board"], IMG_META["oven-fire"]
+            ctx["preload_tag"] = ('<link rel="preload" as="image" type="image/avif" media="(min-width:900px)" imagesizes="56vw" fetchpriority="high" imagesrcset="' + ", ".join(f"/img/margherita-board-{x}.avif {x}w" for x in md["widths"]) + '">'
+                                  '<link rel="preload" as="image" type="image/avif" media="(max-width:899px)" imagesizes="100vw" fetchpriority="high" imagesrcset="' + ", ".join(f"/img/oven-fire-{x}.avif {x}w" for x in mm["widths"]) + '">')
+        elif hero:
             ctx["preload_tag"] = preload(hero, "100vw")
         rendered.append((path, title, desc, body, ctx))
         if not PREVIEW:
             doc = env.get_template("page").render(**ctx)
+            full_css = ctx["css"]
+            slim = purge_css(full_css, doc)
+            doc = doc.replace("<style>" + full_css + "</style>", "<style>" + slim + "</style>", 1)
             if path == "/404.html":
                 doc = doc.replace('<meta name="description"', '<meta name="robots" content="noindex"><meta name="description"', 1)
             if path in ("/thanks/",):
@@ -1107,7 +1308,12 @@ def main():
     if PREVIEW:
         build_preview(rendered, base_ctx, js)
     else:
-        (OUT / "site.js").write_text(js)
+        import subprocess
+        try:
+            mini = subprocess.run(["/tmp/fs/node_modules/.bin/terser", "-c", "-m"], input=js, capture_output=True, text=True, timeout=60)
+            (OUT / "site.js").write_text(mini.stdout if mini.returncode == 0 and mini.stdout.strip() else js)
+        except Exception:
+            (OUT / "site.js").write_text(js)
         write_extras([p for p in pages if p[0] not in ("/404.html", "/thanks/")])
     print(f"  pages: {len(rendered)} -> {OUT}")
 
@@ -1154,10 +1360,10 @@ def redirect_map():
         # Old Toast website pages -> new pages
         ("/events-catering", "/catering/"), ("/catering-0", "/catering/"), ("/catering-5", "/catering/"),
         ("/catering-6", "/catering/"), ("/catering-booking", "/catering/"), ("/catering-form-test", "/catering/"),
-        ("/party-requests", "/large-party-reservations/"), ("/private-events", "/large-party-reservations/"),
+        ("/party-requests", "/large-party-reservations/"),
         ("/tuesday-charity-night", "/fundraisers/"), ("/tuesday-charity-signup", "/fundraisers/#apply"),
-        ("/monthly-deals", "/deals/"), ("/promotions", "/deals/"), ("/reward-program", "/deals/"),
-        ("/entertainment", "/"), ("/gallery", "/about/"),
+        ("/monthly-deals", "/deals/"), ("/reward-program", "/deals/"),
+        ("/gallery", "/about/"),
         ("/privacy-policy", "/privacy/"), ("/terms", "/privacy/"),
         # Toast-powered pages -> Toast on the order subdomain (same paths, so every deep link keeps working)
         ("/order", ORDER_HOST + "/order"), ("/order/*", ORDER_HOST + "/order/:splat"),
@@ -1172,7 +1378,7 @@ def redirect_map():
 
 def redirects_file():
     lines = ["# Square Peg Pizzeria redirects (Netlify format). All permanent (301).",
-             "# Pages that exist on the new site (/about, /contact, /food-truck, /locations, /roll-the-dice, /sms-terms) keep their URLs; no redirect needed.", ""]
+             "# Pages that exist on the new site (/about, /contact, /entertainment, /food-truck, /locations, /private-events, /promotions, /roll-the-dice, /sms-terms) keep their URLs; no redirect needed.", ""]
     for a, b in redirect_map():
         lines.append(f"{a:<28} {b:<60} 301")
     return "\n".join(lines) + "\n"
@@ -1188,7 +1394,11 @@ def vercel_config():
         {"source": "/(.*)", "headers": [
             {"key": "X-Content-Type-Options", "value": "nosniff"},
             {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
-            {"key": "Permissions-Policy", "value": "geolocation=(self), camera=(), microphone=()"}]
+            {"key": "Permissions-Policy", "value": "geolocation=(self), camera=(), microphone=()"},
+            {"key": "X-Frame-Options", "value": "SAMEORIGIN"},
+            {"key": "Content-Security-Policy", "value": "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"},
+            {"key": "Cross-Origin-Opener-Policy", "value": "same-origin-allow-popups"},
+            {"key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains"}]
             + ([{"key": "X-Robots-Tag", "value": "noindex, nofollow"}] if STAGING else [])},
         {"source": "/img/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
         {"source": "/fonts/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
@@ -1205,6 +1415,51 @@ def llms_txt():
             f"- [Catering]({abs_url('/catering/')})", f"- [Large party reservations]({abs_url('/large-party-reservations/')})", f"- [Contact]({abs_url('/contact/')})", f"- [Food truck]({abs_url('/food-truck/')})", f"- [Deals & rewards]({abs_url('/deals/')})",
             f"- [Tuesday fundraisers]({abs_url('/fundraisers/')})", f"- [Our story]({abs_url('/about/')})", ""]
     return "\n".join(out)
+
+SAFE_CLASSES = {"open", "menu-open", "is-open", "is-closed", "is-soon", "is-today", "is-near", "is-pref", "is-sized",
+                "pick", "pick-name", "pick-addr", "pick-meta", "pick-call", "tonight-card", "note", "status", "btn", "btn--sm", "sp-embed", "today"}
+
+def split_rules(css):
+    """Top-level CSS blocks: plain rules, @media blocks (split further), and other @-rules kept as-is."""
+    out, i, n = [], 0, len(css)
+    while i < n:
+        j = css.find("{", i)
+        if j < 0:
+            break
+        head = css[i:j].strip()
+        depth, k = 1, j + 1
+        while k < n and depth:
+            if css[k] == "{": depth += 1
+            elif css[k] == "}": depth -= 1
+            k += 1
+        body = css[j + 1:k - 1]
+        out.append((head, body))
+        i = k
+    return out
+
+def purge_css(css, page_html):
+    classes = set(re.findall(r'class="([^"]*)"', page_html))
+    tokens = set(" ".join(classes).split()) | SAFE_CLASSES
+    ids = set(re.findall(r'id="([^"]+)"', page_html))
+    def keep_selector(sel):
+        need_c = re.findall(r"\.([a-zA-Z0-9_-]+)", sel)
+        need_i = re.findall(r"#([a-zA-Z0-9_-]+)", sel)
+        return all(c in tokens for c in need_c) and all(i in ids for i in need_i)
+    def process(block):
+        res = []
+        for head, body in split_rules(block):
+            if head.startswith("@media") or head.startswith("@supports"):
+                inner = process(body)
+                if inner:
+                    res.append(head + "{" + inner + "}")
+            elif head.startswith("@"):
+                res.append(head + "{" + body + "}")
+            else:
+                sels = [x for x in head.split(",") if keep_selector(x)]
+                if sels:
+                    res.append(",".join(sels) + "{" + body + "}")
+        return "".join(res)
+    return process(css)
 
 def build_preview(rendered, ctx, js):
     """One self-contained page: every route is a section, switched by the URL hash."""

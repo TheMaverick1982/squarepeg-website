@@ -45,10 +45,11 @@ The site in `dist/` is ready to deploy. Work through this list before pointing s
 - [ ] `/roll-the-dice/` says **appetizer only**. If drinks count too, update `DICE` in `content.py`.
 
 ## 4. Forms
-- [x] Square Peg Connect forms are embedded: Catering (also used on Food Truck), Large Reservations, Tuesday Fundraisers. Frame heights are set in `EMBEDS` in `content.py`.
-- [ ] Walk through each embedded form on a phone and a laptop. If a step ever shows an inner scrollbar, raise that form's `mobile` / `desktop` height.
+- [x] Square Peg Connect forms are embedded: Catering (also used on Food Truck), Large Reservations, Tuesday Fundraisers.
+- [ ] **Add `CONNECT_EMBED_SNIPPET.html` to the Connect app** (just before `</body>` in its `index.html`) and redeploy Connect. Each form then hides its logo inside the website and resizes itself on every step, with no extra white space. Until then, the site trims the logo and uses fixed heights (`EMBEDS` in `content.py`).
+- [ ] **Catering is pickup-only.** The website never mentions catering delivery or setup. Note: the Fall catering campaign copy in this project (`Catering_Campaign_Suite_Fall_Holiday_2026.md`) still says "handles the count, the timing, and the setup". Update it to match.
+- [ ] Review `/promotions/` and `/entertainment/`: the specials and weekly lineups were copied from the current site. Confirm they're still current, and whether any specials vary by location.
 - [ ] In Connect, the location lists show 9 locations for large reservations and 8 for fundraisers. Confirm that's intended.
-- [ ] If Connect has a way to post its height to the parent page, send the docs and the frames can auto-resize.
 - [ ] **Contact form:** set up Supabase and email routing (see `DEPLOY_VERCEL.md`), then send a test message to every route.
 - [ ] Have someone review the **privacy page** draft (`/privacy/`) before launch.
 
