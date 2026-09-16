@@ -477,6 +477,29 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .careers-embed{background:var(--white);border-top:6px solid var(--ember);box-shadow:0 18px 50px rgba(20,17,16,.12)}
 .careers-embed iframe{display:block;width:100%;border:0;min-height:640px}
 
+.class-band{margin-top:32px;border:2px solid var(--ink);padding:24px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:18px;background:var(--paper)}
+.class-band p{color:var(--smoke);margin-top:6px}
+
+.card-ent{display:flex;flex-wrap:wrap;gap:6px}
+.ent-chip{font-size:13px;font-weight:700;color:#fff;background:rgba(255,181,36,.14);border-left:3px solid var(--flame);padding:5px 9px;white-space:nowrap}
+.ent-chip b{color:var(--flame);font-weight:800;margin-right:3px;text-transform:uppercase;letter-spacing:.04em}
+.ent-chip.is-today{background:var(--flame);color:var(--char);border-color:var(--char)}
+.ent-chip.is-today b{color:var(--char)}
+.ent-chip.is-today::after{content:" · Tonight";font-weight:800}
+.ent-strip{background:var(--char);color:#fff;border-top:4px solid var(--flame)}
+.ent-strip .wrap{padding-block:26px;display:grid;gap:16px}
+.ent-strip-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 16px}
+.ent-strip-head h2{font-size:clamp(28px,3.4vw,40px)}
+.ent-strip-head a{color:var(--flame);font-weight:800;text-decoration:none}
+.ent-cards{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+.ent-card-sm{background:var(--oven-2);padding:14px 16px;display:grid;gap:2px;border-left:4px solid var(--ember)}
+.ent-card-sm .d{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--flame)}
+.ent-card-sm b{font-family:var(--display);font-weight:800;font-size:28px;text-transform:uppercase;line-height:1}
+.ent-card-sm span{color:#cfc6bf;font-size:14px}
+.ent-card-sm.is-today{background:var(--flame);color:var(--char);border-color:var(--char)}
+.ent-card-sm.is-today .d,.ent-card-sm.is-today span{color:var(--char)}
+.ent-card-sm.is-today .d::after{content:" · Tonight"}
+
 /* ---------- Photo layouts ---------- */
 .feature-photo{margin:12px 0 0;position:relative;overflow:hidden;box-shadow:0 18px 40px rgba(20,17,16,.14)}
 .feature-photo img{width:100%;aspect-ratio:4/3;object-fit:cover}

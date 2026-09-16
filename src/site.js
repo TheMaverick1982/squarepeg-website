@@ -115,7 +115,7 @@
       var d = userPos ? '<span class="note">' + miles(userPos, l).toFixed(1) + " mi</span>" : "";
       var action = mode === "call"
         ? '<a class="btn btn--sm" href="tel:' + l.tel + '" data-pick="' + l.slug + '" data-track="call_click">Call</a>'
-        : '<a class="btn btn--sm" href="' + l.order + '" data-pick="' + l.slug + '" data-track="' + (mode === "menu" ? "menu_click" : "order_click") + '" data-src="picker" rel="noopener">' + (mode === "menu" ? "View menu" : "Order") + '</a>';
+        : '<a class="btn btn--sm" href="' + l.order + '" data-pick="' + l.slug + '" data-track="' + (mode === "menu" ? "menu_click" : "order_click") + '" data-src="picker" target="_blank" rel="noopener">' + (mode === "menu" ? "View menu" : "Order") + '</a>';
       row.innerHTML =
         '<div class="pick-name">' + (l.short || l.name) + "</div>" +
         '<div class="pick-addr">' + l.street + ", " + l.city + ", " + l.state + "</div>" +
@@ -177,7 +177,7 @@
     var l = bySlug(sel.value), go = $("#quick-order"), call = $("#quick-call"), info = $("#quick-info"), st = $("#quick-status");
     if (!l) { go.setAttribute("data-open-picker", "order"); go.href = CFG.locationsUrl; return; }
     go.removeAttribute("data-open-picker");
-    go.href = l.order; go.setAttribute("data-pick", l.slug);
+    go.href = l.order; go.target = "_blank"; go.rel = "noopener"; go.setAttribute("data-pick", l.slug);
     go.querySelector("span").textContent = "Order from " + (l.short || l.name);
     call.href = "tel:" + l.tel; call.setAttribute("data-pick", l.slug); call.setAttribute("data-track", "call_click");
     info.href = l.url;

@@ -370,6 +370,7 @@ T["footer"] = """<section class="cta-band">
 T["loc_card"] = """<article class="loc-card" data-slug="{{ l.slug }}">
   <header><div><span class="tag">{{ l.tag }}</span><h3><a href="{{ u('/locations/' ~ l.slug ~ '/') }}">{{ l.name }}</a></h3></div><span class="status" data-status="{{ l.slug }}">{{ l.summary[0] }}</span></header>
   <address>{{ l.street }}<br>{{ l.city }}, {{ l.state }} {{ l.zip }}</address>
+  {% if ent.get(l.slug) %}<div class="card-ent" aria-label="Weekly entertainment">{% for d, e, t in ent[l.slug] %}<span class="ent-chip" data-ent-day="{{ d }}"><b>{{ d }}</b> {{ e }}</span>{% endfor %}</div>{% endif %}
   <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><a class="phone" href="tel:{{ tel(l.phone) }}" data-track="call_click" data-loc="{{ l.slug }}">{{ l.phone }}</a><span class="dist"></span></div>
   <div class="btn-row">
     <a class="btn btn--sm" href="{{ order(l) }}" data-pick="{{ l.slug }}" data-track="order_click" data-src="loc-card" rel="noopener" aria-label="Order: Square Peg {{ l.short or l.name }}">{{ icons.bag|safe }}Order</a>
@@ -564,6 +565,12 @@ T["location"] = """
   </div>
 </section>
 
+{% if ent.get(l.slug) %}<section class="ent-strip on-dark" aria-label="Weekly entertainment at Square Peg {{ l.short or l.name }}">
+  <div class="wrap">
+    <div class="ent-strip-head"><span class="eyebrow">Weekly entertainment</span><a href="{{ u('/entertainment/') }}">All locations →</a></div>
+    <div class="ent-cards">{% for d, e, t in ent[l.slug] %}<div class="ent-card-sm" data-ent-day="{{ d }}"><span class="d">{{ day_names[d] }}</span><b>{{ e }}</b><span>{{ t }}</span></div>{% endfor %}</div>
+  </div>
+</section>{% endif %}
 <section class="section section--paper">
   <div class="wrap info">
     <div class="info-card">
@@ -580,7 +587,7 @@ T["location"] = """
       <h2>Find us</h2>
       <address>Square Peg Pizzeria {{ l.name }}<br>{{ l.street }}<br>{{ l.city }}, {{ l.state }} {{ l.zip }}</address>
       <a class="link-arrow" href="tel:{{ tel(l.phone) }}" style="justify-self:start">{{ l.phone }}</a>
-      {% if ent.get(l.slug) %}<div class="mini-ent"><p class="note" style="font-weight:800;margin-bottom:6px">Weekly entertainment</p>{% for d, e, t in ent[l.slug] %}<div class="ent-row" data-ent-day="{{ d }}"><b>{{ day_names[d] }}</b><span>{{ e }} · {{ t }}</span></div>{% endfor %}<a class="link-arrow" href="{{ u('/entertainment/') }}" style="display:inline-block;margin-top:8px">All entertainment</a></div>{% endif %}
+
       <div class="btn-row"><a class="btn btn--sm btn--line" href="{{ maps(l) }}" rel="noopener"{{ ext|safe }}>Get directions</a><a class="btn btn--sm btn--dark" href="{{ u('/catering/') }}?location={{ l.slug }}">Catering from {{ l.short or l.name }}</a><a class="btn btn--sm btn--dark" href="{{ u('/large-party-reservations/') }}?location={{ l.slug }}">Large party here</a></div>
     </div>
   </div>
@@ -1079,6 +1086,7 @@ T["entertainment"] = """
       <a class="btn btn--sm btn--line" href="{{ u('/locations/' ~ slug ~ '/') }}" aria-label="Hours & directions: Square Peg {{ l.short or l.name }}">Hours & directions</a>
     </article>{% endfor %}</div>
     <p class="note" style="margin-top:20px">Schedules can change for holidays and special events. Call your location to confirm.</p>
+    <div class="class-band"><div><span class="eyebrow">Monthly</span><h3>Pizza-making classes</h3><p>Adult classes every month, plus free kids’ classes. Stretch, top and fire your own pie.</p></div><div class="btn-row"><a class="btn" href="{{ site.events_calendar_url }}" target="_blank" rel="noopener" data-track="classes_click" data-src="entertainment">See dates & get tickets</a><a class="btn btn--line" href="{{ u('/private-events/') }}#classes">About the classes</a></div></div>
   </div>
 </section>
 """
@@ -1114,7 +1122,7 @@ T["private_events"] = """{% macro bento(items) %}<div class="bento">{% for p, a,
       <h2>Pizza-making classes</h2>
       <p class="prose">Square Peg believes everyone is a chef, and we want to bring your inner chef to life. Every month we host adult pizza-making classes, plus <strong>free</strong> kids’ pizza-making classes.</p>
       <ul class="checks"><li>Stretch, top and fire your own pie</li><li>Adult classes every month</li><li>Free classes for kids</li></ul>
-      <div class="btn-row"><a class="btn" href="{{ site.events_calendar_url or u('/entertainment/') }}"{% if site.events_calendar_url %} rel="noopener"{{ ext|safe }}{% endif %}>See upcoming dates</a>{% if site.instagram %}<a class="btn btn--line" href="{{ site.instagram }}" rel="noopener"{{ ext|safe }}>Follow on Instagram</a>{% endif %}</div>
+      <div class="btn-row"><a class="btn" href="{{ site.events_calendar_url or u('/entertainment/') }}"{% if site.events_calendar_url %} target="_blank" rel="noopener" data-track="classes_click" data-src="private-events"{% endif %}>See dates & get tickets</a>{% if site.instagram %}<a class="btn btn--line" href="{{ site.instagram }}" rel="noopener"{{ ext|safe }}>Follow on Instagram</a>{% endif %}</div>
     </div>
   </div>
 </section>
@@ -1297,6 +1305,7 @@ def main():
             full_css = ctx["css"]
             slim = purge_css(full_css, doc)
             doc = doc.replace("<style>" + full_css + "</style>", "<style>" + slim + "</style>", 1)
+            doc = external_new_tab(doc)
             if path == "/404.html":
                 doc = doc.replace('<meta name="description"', '<meta name="robots" content="noindex"><meta name="description"', 1)
             if path in ("/thanks/",):
@@ -1461,6 +1470,23 @@ def purge_css(css, page_html):
         return "".join(res)
     return process(css)
 
+def external_new_tab(doc):
+    """Every link that leaves squarepegpizzeria.com opens in a new tab."""
+    def fix(m):
+        tag = m.group(0)
+        href = re.search(r'href="([^"]+)"', tag).group(1)
+        if not href.startswith("http"):
+            return tag
+        host = re.sub(r"^https?://", "", href).split("/")[0].lower()
+        if host in ("squarepegpizzeria.com", "www.squarepegpizzeria.com") and not re.search(r"/(order|menu|gift-cards?)(/|$)", href):
+            return tag
+        if "target=" not in tag:
+            tag = tag[:-1] + ' target="_blank">'
+        if "rel=" not in tag:
+            tag = tag[:-1] + ' rel="noopener">'
+        return tag
+    return re.sub(r'<a\s[^>]*href="[^"]+"[^>]*>', fix, doc)
+
 def build_preview(rendered, ctx, js):
     """One self-contained page: every route is a section, switched by the URL hash."""
     home = rendered[0][4]
@@ -1510,7 +1536,7 @@ def build_preview(rendered, ctx, js):
            "<script>" + js + "</script>" + router)
     doc = doc.replace(' data-supabase="contact_messages"', '')
     doc = doc.replace('<form class="form" name=', '<form class="form" onsubmit="event.preventDefault();location.hash=\'/thanks/\'" name=')
-    (OUT / "square-peg-site.html").write_text(doc)
+    (OUT / "square-peg-site.html").write_text(external_new_tab(doc))
 
 if __name__ == "__main__":
     main()

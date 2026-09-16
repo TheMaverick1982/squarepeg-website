@@ -23,8 +23,8 @@ SITE = {
     "careers": "/careers/",
     "careers_external": "https://jobs.squarepegpizzeria.com/careers",
     "careers_embed_src": "https://www.joinwingman.app/careers/square-peg-pizzeria?embed=1",
-    # Where "See upcoming class dates" goes (Instagram or an online calendar). Blank = Entertainment page.
-    "events_calendar_url": "",
+    # Pizza-making classes: tickets and upcoming dates (Eventbrite).
+    "events_calendar_url": "https://www.eventbrite.com/o/square-peg-pizzeria-40036949473",
     "facebook": "https://www.facebook.com/squarepegpizzeria/",
     "instagram": "",  # add when confirmed, e.g. https://www.instagram.com/squarepegpizzeria/
     "catering_phone": "(860) 286-0415",  # TODO confirm the best catering line
