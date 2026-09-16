@@ -22,6 +22,7 @@ The site in `dist/` is ready to deploy. Work through this list before pointing s
 - [ ] **East Hartford:** the Toast slug is misspelled (`square-peg-pizzera-east-hartford`). The address is "Long Hill **Rd**" on your current site and Yelp, but the US Census address database has no 130 Long Hill *Rd*; it matches **130 Long Hill St** (as Toast has it). The new site now uses **Long Hill St**. Fix Yelp and your Google Business Profile to match.
 - [ ] **Shelton:** the address is **320** Howe Ave on your site but **310** in the Toast slug. Confirm which is right.
 - [ ] **Berlin:** the Toast slug says **119** Webster Square Rd; the address is **151**. Confirm.
+- [ ] **Rewards sign-up link:** the home page loyalty banner's "Sign up online" button uses `loyalty_signup` in `content.py` (currently `https://squarepegpizzeria.comosense.net/auth/signup`). Open it and confirm it's the right Como sign-up page, or paste the correct link. "Get the app" uses `app_link`.
 - [ ] Map coordinates for 9 locations now come from the US Census geocoder and are included in each page's search data. **Preston** (353 CT-165) didn't match, so its search data has no coordinates. Copy its exact lat/lng from Google Maps into `content.py` and set `"geo_exact": True`.
 - [ ] Review each location's blurb in `content.py`; they're written from what we know. Adjust local details freely.
 - [ ] Confirm the best **catering phone number** (`catering_phone`; currently Glastonbury's) and the contact email (`email`: info@squarepegpizzeria.com).
@@ -59,17 +60,23 @@ The site in `dist/` is ready to deploy. Work through this list before pointing s
 - [ ] Set up cross-domain measurement in GA4 for `squarepegpizzeria.com` + `order.squarepegpizzeria.com`, and verify both domains in Meta Business Manager so Toast purchases still attribute to ads.
 - [ ] Re-check the `CateringFormSubmit` conversion event from your Meta campaigns: the catering URL changes from `/events-catering` to `/catering/` (a redirect is included).
 
-## 6. Chatbot
+## 6. Social sharing
+- [x] Every page has its own branded 1200×630 share image (`/img/og/`) plus Open Graph and Twitter/X tags.
+- [ ] After launch, paste a few URLs into the Facebook Sharing Debugger (developers.facebook.com/tools/debug) to refresh Facebook's cached previews.
+
+## 7. Chatbot
 - [ ] The Vendasta chat snippet is installed on every page, loaded about 2.5 seconds after the page finishes so it doesn't slow the first load. The URL contains `webchat-client..prod` (two dots), copied exactly as provided; confirm it matches your Vendasta dashboard.
 - [ ] On phones, the bottom action bar leaves space on the right for the chat bubble. Check that they don't overlap once it's live.
 
-## 7. Go live
+## 8. Go live
 - [ ] Deploy `dist/` (**not** `dist-staging/`, which is hidden from Google) to Vercel (see `DEPLOY_VERCEL.md`) or Netlify.
 - [ ] Point the root domain and `www` to the host. **Don't touch the `order` records.**
 - [ ] **301 redirects are built in**: `dist/vercel.json` for Vercel, `dist/_redirects` for Netlify, with the full list in `REDIRECTS.csv`. Every URL in your current Toast sitemap is covered:
   - Toast pages move to the subdomain on the same path: `/order/*`, `/menu/*`, `/account/*`, `/checkout/*`, `/cart/*`, `/confirm/*` → `order.squarepegpizzeria.com/...`. App links, COMO emails, QR codes, Google "Order" buttons and the 400+ indexed menu-item URLs keep working and keep their search value.
   - Old content pages go to their new equivalents: `/events-catering`, `/catering-*`, `/party-requests`, `/private-events` → `/catering/`; `/tuesday-charity-night` → `/fundraisers/`; `/monthly-deals`, `/promotions`, `/reward-program` → `/deals/`; `/gift-card(s)` → Toast gift cards; and so on.
   - `/contact`, `/about`, `/food-truck`, `/locations`, `/roll-the-dice` and `/sms-terms` keep their URLs. `/private-events` and `/party-requests` now point to the new **Large Party Reservations** page.
+- [x] The redirects already set up in Toast (Website → Path redirects) are carried over: `/menu-<town>` goes straight to that store's ordering page, `/events/*` to Entertainment, `/party-request` to Large Parties, and `/popmenu-order` to the menu. Note: Toast currently sends `/menu-berlin` to the **Plainville** ordering page; the new site sends it to Berlin.
+- [x] Vercel adds a trailing slash before redirects run, so every rule matches both `/old-page` and `/old-page/`.
 - [ ] After launch, spot-check 5 old URLs (including one `/order/...` link and one `/menu/...` item link) and confirm each returns **301** and lands on the right page.
 - [ ] Any other host: `REDIRECTS.csv` has the same list (Cloudflare Pages reads `_redirects` as-is).
 - [ ] Google Search Console: verify the domain, submit `https://squarepegpizzeria.com/sitemap.xml`.

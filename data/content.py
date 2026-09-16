@@ -20,6 +20,8 @@ SITE = {
     "email": "info@squarepegpizzeria.com",
     "app_link": "https://onelink.to/squarepeg-app",
     "loyalty_signin": "https://squarepegpizzeria.comosense.net/auth/signin",
+    # Rewards web sign-up (home page loyalty banner). TODO confirm this is the right Como sign-up page.
+    "loyalty_signup": "https://squarepegpizzeria.comosense.net/auth/signup",
     "careers": "/careers/",
     "careers_external": "https://jobs.squarepegpizzeria.com/careers",
     "careers_embed_src": "https://www.joinwingman.app/careers/square-peg-pizzeria?embed=1",

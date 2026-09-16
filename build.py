@@ -155,6 +155,70 @@ def img(name, alt, sizes="100vw", cls="", eager=False, ratio=None):
     parts.append("</picture>")
     return "".join(parts)
 
+from PIL import ImageDraw, ImageFont
+
+def _font(name, size):
+    return ImageFont.truetype(str(ROOT / "src" / "fonts-ttf" / f"{name}.ttf"), size)
+
+def _wrap(draw, text, font, width):
+    words, lines, cur = text.split(), [], ""
+    for w in words:
+        t = (cur + " " + w).strip()
+        if draw.textlength(t, font=font) <= width:
+            cur = t
+        else:
+            if cur: lines.append(cur)
+            cur = w
+    if cur: lines.append(cur)
+    return lines
+
+def make_og(key, photo, eyebrow, headline, sub):
+    """1200x630 branded social share image."""
+    W, H = 1200, 630
+    out_dir = OUT / "img" / "og"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    canvas = Image.new("RGB", (W, H), (20, 17, 16))
+    src_path = next((p for p in IMG_SRC.glob(photo + ".*")), None)
+    if src_path:
+        ph = Image.open(src_path).convert("RGB")
+        tw, th = 760, H
+        r = max(tw / ph.width, th / ph.height)
+        ph = ph.resize((round(ph.width * r), round(ph.height * r)), Image.LANCZOS)
+        left = (ph.width - tw) // 2; top = (ph.height - th) // 2
+        canvas.paste(ph.crop((left, top, left + tw, top + th)), (W - tw, 0))
+    fade = Image.new("L", (W, 1))
+    for x in range(W):
+        fade.putpixel((x, 0), 255 if x < 470 else max(0, int(255 * (1 - (x - 470) / 330))))
+    canvas.paste(Image.new("RGB", (W, H), (20, 17, 16)), (0, 0), fade.resize((W, H)))
+    d = ImageDraw.Draw(canvas)
+    logo = Image.open(ROOT / "src" / "brand" / "logo-on-dark.png").convert("RGBA")
+    lw = 250; logo = logo.resize((lw, round(logo.height * lw / logo.width)), Image.LANCZOS)
+    canvas.paste(logo, (64, 52), logo)
+    y = 52 + logo.height + 46
+    ef = _font("figtree-latin-800-normal", 22)
+    d.rectangle((64, y + 5, 78, y + 19), fill=(255, 181, 36))
+    d.text((92, y), eyebrow.upper(), font=ef, fill=(255, 181, 36))
+    y += 48
+    size = 92
+    while True:
+        hf = _font("big-shoulders-display-latin-900-normal", size)
+        lines = _wrap(d, headline.upper(), hf, 620)
+        if len(lines) <= 3 or size <= 52: break
+        size -= 6
+    for ln in lines[:3]:
+        d.text((64, y), ln, font=hf, fill=(255, 255, 255))
+        y += int(size * 0.98)
+    if sub:
+        y += 14
+        sf = _font("figtree-latin-700-normal", 26)
+        for ln in _wrap(d, sub, sf, 620)[:2]:
+            y += 8
+            d.text((64, y), ln, font=sf, fill=(230, 221, 214))
+            y += 30
+    d.rectangle((0, H - 14, W, H), fill=(214, 27, 36))
+    canvas.save(out_dir / f"{key}.jpg", "JPEG", quality=84, optimize=True, progressive=True)
+    return abs_url(f"/img/og/{key}.jpg")
+
 def img_url(name, width=1200):
     m = IMG_META.get(name)
     if not m:
@@ -277,8 +341,8 @@ T["head"] = """<title>{{ title }}</title>
 {% if not preview %}<link rel="canonical" href="{{ canonical }}">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Square Peg Pizzeria"><meta property="og:locale" content="en_US">
 <meta property="og:title" content="{{ title }}"><meta property="og:description" content="{{ desc }}">
-<meta property="og:url" content="{{ canonical }}">{% if og_image %}<meta property="og:image" content="{{ og_image }}">{% endif %}
-<meta name="twitter:card" content="summary_large_image">
+<meta property="og:url" content="{{ canonical }}">{% if og_image %}<meta property="og:image" content="{{ og_image }}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{{ og_alt }}">{% endif %}
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{{ title }}"><meta name="twitter:description" content="{{ desc }}">{% if og_image %}<meta name="twitter:image" content="{{ og_image }}">{% endif %}
 <meta name="theme-color" content="#141110">
 <link rel="icon" href="/favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png">{% endif %}
 {% if preview %}<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -419,6 +483,17 @@ T["home"] = """
   <strong>{{ deal.headline }}</strong><span>{{ deal.eyebrow }} · Mon–Fri dine-in · {{ deal.expires_label }}</span>
   <a href="{{ u('/deals/') }}">See all deals →</a>
 </div></div>
+
+<aside class="loyalty-strip" aria-label="Square Peg Rewards"><div class="wrap">
+  <div class="loyalty-copy">
+    <span class="loyalty-tag">Rewards</span>
+    <p><strong>Join Square Peg Rewards. It's free.</strong> <span>$5 welcome reward, points every visit and members-only deals.</span></p>
+  </div>
+  <div class="loyalty-actions">
+    <a class="btn btn--flame btn--sm" href="{{ site.app_link }}" rel="noopener" data-track="app_click" data-src="home-loyalty">Get the app</a>
+    <a class="btn btn--ghost btn--sm" href="{{ site.loyalty_signup }}" rel="noopener" data-track="loyalty_signup_click" data-src="home-loyalty">Sign up online</a>
+  </div>
+</div></aside>
 
 <section class="section">
   <div class="wrap">
@@ -1290,8 +1365,23 @@ def main():
         ctx = dict(base_ctx, **extra)
         ctx["path"] = path
         body = env.get_template(tpl).render(**ctx)
+        og_url, og_alt = "", ""
+        if not PREVIEW and path not in ("/404.html", "/thanks/"):
+            h1m = re.search(r"<h1[^>]*>(.*?)</h1>", body, re.S)
+            h1_html = re.sub(r'<span class="(?:eyebrow h1-eyebrow|h1-sub)">.*?</span></?span>|<span class="(?:eyebrow h1-eyebrow|h1-sub)">.*?</span>', "", h1m.group(1) if h1m else title, flags=re.S)
+            head_txt = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", h1_html)).split())
+            ebm = re.search(r'<span class="eyebrow">(.*?)</span>', body, re.S)
+            eyebrow = " ".join(html.unescape(re.sub(r"<[^>]+>", "", ebm.group(1))).split()) if ebm else "Square Peg Pizzeria"
+            sub = ""
+            if path.startswith("/locations/") and "l" in extra:
+                l = extra["l"]; eyebrow = f"Wood-fired pizza · {l['city']}, {l['state']}"; sub = f"{l['street']}, {l['city']} · {l['phone']}"
+            if path == "/":
+                head_txt, eyebrow, sub = "Pizza worth remembering.", "Wood-fired pizza · CT & Delray Beach", "10 locations · Order pickup or delivery"
+            key = "home" if path == "/" else path.strip("/").replace("/", "-")
+            og_url = make_og(key, og or "margherita-board", eyebrow, head_txt, sub)
+            og_alt = head_txt if "Square Peg" in head_txt else f"{head_txt} | Square Peg Pizzeria"
         ctx.update(title=title, desc=desc, body=body, canonical=abs_url(path if path != "/404.html" else "/"),
-                   og_image=img_url(og) if og else img_url("margherita-board"), schema=ld(schema) if schema else "",
+                   og_image=og_url, og_alt=og_alt, schema=ld(schema) if schema else "",
                    preload_tag="")
         if path == "/" and not PREVIEW and IMG_META.get("margherita-board") and IMG_META.get("oven-fire"):
             md, mm = IMG_META["margherita-board"], IMG_META["oven-fire"]
@@ -1380,6 +1470,12 @@ def redirect_map():
         ("/account/*", ORDER_HOST + "/account/:splat"), ("/checkout/*", ORDER_HOST + "/checkout/:splat"),
         ("/cart/*", ORDER_HOST + "/cart/:splat"), ("/confirm/*", ORDER_HOST + "/confirm/:splat"),
     ]
+    # Redirects that already exist on the old Toast site (Toast > Website > Path redirects), pointed straight at their new homes
+    m += [("/party-request", "/large-party-reservations/"), ("/popmenu-order", ORDER_HOST + "/menu"),
+          ("/events/*", "/entertainment/")]
+    for l in LOCATIONS:
+        town = l["city"].lower().replace(" ", "-")
+        m.append((f"/menu-{town}", ORDER_HOST + "/order/" + l["toast"]))
     gc = SITE["gift_cards_url"]
     target = gc if not gc.startswith(SITE["domain"]) else ORDER_HOST + "/gift-cards"
     m += [("/gift-card", target), ("/gift-cards", target)]
@@ -1396,9 +1492,15 @@ def vercel_config():
     """Vercel equivalent of _redirects + _headers."""
     redirects = []
     for a, b in redirect_map():
-        src = a.replace("/*", "/:path*")
         dst = b.replace(":splat", ":path*")
-        redirects.append({"source": src, "destination": dst, "permanent": True})
+        if a.endswith("/*"):
+            base = a[:-2]
+            # /order/anything, plus the bare /order/ that Vercel's trailing-slash step can produce
+            redirects.append({"source": base + "/:path*", "destination": dst, "permanent": True})
+            continue
+        # match both /old-page and /old-page/ (Vercel adds the slash before redirects run)
+        for src in (a, a + "/"):
+            redirects.append({"source": src, "destination": dst, "permanent": True})
     headers = [
         {"source": "/(.*)", "headers": [
             {"key": "X-Content-Type-Options", "value": "nosniff"},

@@ -146,6 +146,19 @@ body.menu-open .mbar{display:none}
 .ribbon .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;padding-block:12px;font-weight:700;font-size:15px}
 .ribbon strong{font-family:var(--display);font-weight:900;font-size:22px;text-transform:uppercase;line-height:1}
 .ribbon a{font-weight:800}
+/* ---------- Loyalty strip (home, under the deal ribbon) ---------- */
+.loyalty-strip{background:var(--char);color:#fff;border-bottom:4px solid var(--ember)}
+.loyalty-strip .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:14px}
+.loyalty-copy{display:flex;align-items:center;gap:14px;min-width:0;flex:1 1 420px}
+.loyalty-tag{flex:none;background:var(--ember);color:#fff;font:900 13px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;padding:7px 10px}
+.loyalty-copy p{margin:0;font-size:15px;line-height:1.4;color:rgba(255,255,255,.86)}
+.loyalty-copy strong{color:#fff;font-weight:800}
+.loyalty-actions{display:flex;gap:10px;flex-wrap:wrap}
+@media (max-width:640px){
+  .loyalty-copy{flex-basis:100%;align-items:flex-start}
+  .loyalty-actions{width:100%}
+  .loyalty-actions .btn{flex:1 1 0;padding:0 10px}
+}
 
 /* ---------- Sections ---------- */
 .section{padding-block:clamp(64px,9vw,112px)}

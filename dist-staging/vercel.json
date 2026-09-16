@@ -9,7 +9,17 @@
       "permanent": true
     },
     {
+      "source": "/events-catering/",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
       "source": "/catering-0",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
+      "source": "/catering-0/",
       "destination": "/catering/",
       "permanent": true
     },
@@ -19,7 +29,17 @@
       "permanent": true
     },
     {
+      "source": "/catering-5/",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
       "source": "/catering-6",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
+      "source": "/catering-6/",
       "destination": "/catering/",
       "permanent": true
     },
@@ -29,7 +49,17 @@
       "permanent": true
     },
     {
+      "source": "/catering-booking/",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
       "source": "/catering-form-test",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
+      "source": "/catering-form-test/",
       "destination": "/catering/",
       "permanent": true
     },
@@ -39,7 +69,17 @@
       "permanent": true
     },
     {
+      "source": "/party-requests/",
+      "destination": "/large-party-reservations/",
+      "permanent": true
+    },
+    {
       "source": "/tuesday-charity-night",
+      "destination": "/fundraisers/",
+      "permanent": true
+    },
+    {
+      "source": "/tuesday-charity-night/",
       "destination": "/fundraisers/",
       "permanent": true
     },
@@ -49,7 +89,17 @@
       "permanent": true
     },
     {
+      "source": "/tuesday-charity-signup/",
+      "destination": "/fundraisers/#apply",
+      "permanent": true
+    },
+    {
       "source": "/monthly-deals",
+      "destination": "/deals/",
+      "permanent": true
+    },
+    {
+      "source": "/monthly-deals/",
       "destination": "/deals/",
       "permanent": true
     },
@@ -59,7 +109,17 @@
       "permanent": true
     },
     {
+      "source": "/reward-program/",
+      "destination": "/deals/",
+      "permanent": true
+    },
+    {
       "source": "/gallery",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/gallery/",
       "destination": "/about/",
       "permanent": true
     },
@@ -69,12 +129,27 @@
       "permanent": true
     },
     {
+      "source": "/privacy-policy/",
+      "destination": "/privacy/",
+      "permanent": true
+    },
+    {
       "source": "/terms",
       "destination": "/privacy/",
       "permanent": true
     },
     {
+      "source": "/terms/",
+      "destination": "/privacy/",
+      "permanent": true
+    },
+    {
       "source": "/order",
+      "destination": "https://order.squarepegpizzeria.com/order",
+      "permanent": true
+    },
+    {
+      "source": "/order/",
       "destination": "https://order.squarepegpizzeria.com/order",
       "permanent": true
     },
@@ -85,6 +160,11 @@
     },
     {
       "source": "/menu",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/menu/",
       "destination": "https://order.squarepegpizzeria.com/menu",
       "permanent": true
     },
@@ -114,12 +194,147 @@
       "permanent": true
     },
     {
+      "source": "/party-request",
+      "destination": "/large-party-reservations/",
+      "permanent": true
+    },
+    {
+      "source": "/party-request/",
+      "destination": "/large-party-reservations/",
+      "permanent": true
+    },
+    {
+      "source": "/popmenu-order",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/popmenu-order/",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/events/:path*",
+      "destination": "/entertainment/",
+      "permanent": true
+    },
+    {
+      "source": "/menu-glastonbury",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria",
+      "permanent": true
+    },
+    {
+      "source": "/menu-glastonbury/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria",
+      "permanent": true
+    },
+    {
+      "source": "/menu-east-hartford",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzera-east-hartford",
+      "permanent": true
+    },
+    {
+      "source": "/menu-east-hartford/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzera-east-hartford",
+      "permanent": true
+    },
+    {
+      "source": "/menu-vernon",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-vernon-226-talcottville-rd",
+      "permanent": true
+    },
+    {
+      "source": "/menu-vernon/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-vernon-226-talcottville-rd",
+      "permanent": true
+    },
+    {
+      "source": "/menu-bolton",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street",
+      "permanent": true
+    },
+    {
+      "source": "/menu-bolton/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street",
+      "permanent": true
+    },
+    {
+      "source": "/menu-storrs",
+      "destination": "https://order.squarepegpizzeria.com/order/squarepegwindsor",
+      "permanent": true
+    },
+    {
+      "source": "/menu-storrs/",
+      "destination": "https://order.squarepegpizzeria.com/order/squarepegwindsor",
+      "permanent": true
+    },
+    {
+      "source": "/menu-preston",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165",
+      "permanent": true
+    },
+    {
+      "source": "/menu-preston/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165",
+      "permanent": true
+    },
+    {
+      "source": "/menu-plainville",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-plainville-400-new-britain-avenue",
+      "permanent": true
+    },
+    {
+      "source": "/menu-plainville/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-plainville-400-new-britain-avenue",
+      "permanent": true
+    },
+    {
+      "source": "/menu-berlin",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road",
+      "permanent": true
+    },
+    {
+      "source": "/menu-berlin/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road",
+      "permanent": true
+    },
+    {
+      "source": "/menu-shelton",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-shelton-310-howe-avenue-unit-6",
+      "permanent": true
+    },
+    {
+      "source": "/menu-shelton/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-shelton-310-howe-avenue-unit-6",
+      "permanent": true
+    },
+    {
+      "source": "/menu-delray-beach",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue",
+      "permanent": true
+    },
+    {
+      "source": "/menu-delray-beach/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue",
+      "permanent": true
+    },
+    {
       "source": "/gift-card",
       "destination": "https://order.squarepegpizzeria.com/gift-cards",
       "permanent": true
     },
     {
+      "source": "/gift-card/",
+      "destination": "https://order.squarepegpizzeria.com/gift-cards",
+      "permanent": true
+    },
+    {
       "source": "/gift-cards",
+      "destination": "https://order.squarepegpizzeria.com/gift-cards",
+      "permanent": true
+    },
+    {
+      "source": "/gift-cards/",
       "destination": "https://order.squarepegpizzeria.com/gift-cards",
       "permanent": true
     }
