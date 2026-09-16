@@ -1,0 +1,30 @@
+# Square Peg Pizzeria redirects (Netlify format). All permanent (301).
+# Pages that exist on the new site (/about, /contact, /food-truck, /locations, /roll-the-dice, /sms-terms) keep their URLs; no redirect needed.
+
+/events-catering             /catering/                                                   301
+/catering-0                  /catering/                                                   301
+/catering-5                  /catering/                                                   301
+/catering-6                  /catering/                                                   301
+/catering-booking            /catering/                                                   301
+/catering-form-test          /catering/                                                   301
+/party-requests              /large-party-reservations/                                   301
+/private-events              /large-party-reservations/                                   301
+/tuesday-charity-night       /fundraisers/                                                301
+/tuesday-charity-signup      /fundraisers/#apply                                          301
+/monthly-deals               /deals/                                                      301
+/promotions                  /deals/                                                      301
+/reward-program              /deals/                                                      301
+/entertainment               /                                                            301
+/gallery                     /about/                                                      301
+/privacy-policy              /privacy/                                                    301
+/terms                       /privacy/                                                    301
+/order                       https://order.squarepegpizzeria.com/order                    301
+/order/*                     https://order.squarepegpizzeria.com/order/:splat             301
+/menu                        https://order.squarepegpizzeria.com/menu                     301
+/menu/*                      https://order.squarepegpizzeria.com/menu/:splat              301
+/account/*                   https://order.squarepegpizzeria.com/account/:splat           301
+/checkout/*                  https://order.squarepegpizzeria.com/checkout/:splat          301
+/cart/*                      https://order.squarepegpizzeria.com/cart/:splat              301
+/confirm/*                   https://order.squarepegpizzeria.com/confirm/:splat           301
+/gift-card                   https://order.squarepegpizzeria.com/gift-cards               301
+/gift-cards                  https://order.squarepegpizzeria.com/gift-cards               301

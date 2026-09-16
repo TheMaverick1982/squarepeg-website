@@ -1,0 +1,179 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": true,
+  "cleanUrls": false,
+  "redirects": [
+    {
+      "source": "/events-catering",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
+      "source": "/catering-0",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
+      "source": "/catering-5",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
+      "source": "/catering-6",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
+      "source": "/catering-booking",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
+      "source": "/catering-form-test",
+      "destination": "/catering/",
+      "permanent": true
+    },
+    {
+      "source": "/party-requests",
+      "destination": "/large-party-reservations/",
+      "permanent": true
+    },
+    {
+      "source": "/private-events",
+      "destination": "/large-party-reservations/",
+      "permanent": true
+    },
+    {
+      "source": "/tuesday-charity-night",
+      "destination": "/fundraisers/",
+      "permanent": true
+    },
+    {
+      "source": "/tuesday-charity-signup",
+      "destination": "/fundraisers/#apply",
+      "permanent": true
+    },
+    {
+      "source": "/monthly-deals",
+      "destination": "/deals/",
+      "permanent": true
+    },
+    {
+      "source": "/promotions",
+      "destination": "/deals/",
+      "permanent": true
+    },
+    {
+      "source": "/reward-program",
+      "destination": "/deals/",
+      "permanent": true
+    },
+    {
+      "source": "/entertainment",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/gallery",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/terms",
+      "destination": "/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/order",
+      "destination": "https://order.squarepegpizzeria.com/order",
+      "permanent": true
+    },
+    {
+      "source": "/order/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/menu",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/menu/:path*",
+      "destination": "https://order.squarepegpizzeria.com/menu/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/account/:path*",
+      "destination": "https://order.squarepegpizzeria.com/account/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/checkout/:path*",
+      "destination": "https://order.squarepegpizzeria.com/checkout/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/cart/:path*",
+      "destination": "https://order.squarepegpizzeria.com/cart/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/confirm/:path*",
+      "destination": "https://order.squarepegpizzeria.com/confirm/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/gift-card",
+      "destination": "https://order.squarepegpizzeria.com/gift-cards",
+      "permanent": true
+    },
+    {
+      "source": "/gift-cards",
+      "destination": "https://order.squarepegpizzeria.com/gift-cards",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(self), camera=(), microphone=()"
+        }
+      ]
+    },
+    {
+      "source": "/img/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}

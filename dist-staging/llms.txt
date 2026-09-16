@@ -1,0 +1,24 @@
+# Square Peg Pizzeria
+
+> Wood-fired pizza made from scratch daily, with 10 locations in Connecticut and Delray Beach, Florida. Online ordering for pickup and delivery, catering, a wood-fired food truck, Tuesday night fundraisers, and a rewards app.
+
+## Locations
+- [Glastonbury](https://squarepegpizzeria.com/locations/glastonbury-ct/): 1001 Hebron Ave, Glastonbury, CT 06033 · (860) 286-0415 · order: https://squarepegpizzeria.com/order/square-peg-pizzeria
+- [East Hartford](https://squarepegpizzeria.com/locations/east-hartford-ct/): 130 Long Hill St, East Hartford, CT 06108 · (860) 509-4221 · order: https://squarepegpizzeria.com/order/square-peg-pizzera-east-hartford
+- [Vernon](https://squarepegpizzeria.com/locations/vernon-ct/): 226 Talcottville Rd, Vernon, CT 06066 · (860) 926-0088 · order: https://squarepegpizzeria.com/order/square-peg-pizzeria-vernon-226-talcottville-rd
+- [Bolton](https://squarepegpizzeria.com/locations/bolton-ct/): 270 West St, Bolton, CT 06043 · (860) 791-7109 · order: https://squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street
+- [Storrs](https://squarepegpizzeria.com/locations/storrs-ct/): 9 Dog Ln, Storrs, CT 06268 · (860) 454-6038 · order: https://squarepegpizzeria.com/order/squarepegwindsor
+- [Preston](https://squarepegpizzeria.com/locations/preston-ct/): 353 CT-165, Preston, CT 06365 · (860) 319-0930 · order: https://squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165
+- [Plainville](https://squarepegpizzeria.com/locations/plainville-ct/): 400 New Britain Ave, Plainville, CT 06062 · (860) 996-0363 · order: https://squarepegpizzeria.com/order/square-peg-plainville-400-new-britain-avenue
+- [Berlin Truck Bar](https://squarepegpizzeria.com/locations/berlin-ct/): 151 Webster Square Rd, Berlin, CT 06037 · (860) 505-4072 · order: https://squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road
+- [Shelton](https://squarepegpizzeria.com/locations/shelton-ct/): 320 Howe Ave, Unit 6, Shelton, CT 06484 · (203) 538-5044 · order: https://squarepegpizzeria.com/order/square-peg-shelton-310-howe-avenue-unit-6
+- [Delray Beach](https://squarepegpizzeria.com/locations/delray-beach-fl/): 4957 W Atlantic Ave, Delray Beach, FL 33445 · (561) 566-8828 · order: https://squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue
+
+## Pages
+- [Catering](https://squarepegpizzeria.com/catering/)
+- [Large party reservations](https://squarepegpizzeria.com/large-party-reservations/)
+- [Contact](https://squarepegpizzeria.com/contact/)
+- [Food truck](https://squarepegpizzeria.com/food-truck/)
+- [Deals & rewards](https://squarepegpizzeria.com/deals/)
+- [Tuesday fundraisers](https://squarepegpizzeria.com/fundraisers/)
+- [Our story](https://squarepegpizzeria.com/about/)
