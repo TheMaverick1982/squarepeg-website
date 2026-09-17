@@ -16,7 +16,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS  # noqa
+from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -387,7 +387,7 @@ def restaurant_schema(l):
         "name": f"Square Peg Pizzeria {l['name']}",
         "url": page, "telephone": tel(l["phone"]),
         "address": {"@type": "PostalAddress", "streetAddress": l["street"], "addressLocality": l["city"], "addressRegion": l["state"], "postalCode": l["zip"], "addressCountry": "US"},
-        "servesCuisine": ["Pizza", "Italian", "American"], "priceRange": "$$",
+        "servesCuisine": ["Italian", "Pizza", "Italian-American", "American"], "priceRange": "$$",
         "hasMenu": order_url(l), "menu": order_url(l), "parentOrganization": {"@id": ORG_ID},
         "openingHoursSpecification": spec,
         **({"specialOpeningHoursSpecification": special} if special else {}),
@@ -433,7 +433,7 @@ MORE = [("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-
         ("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]
 DRAWER_EXTRA = []
 DRAWER_GROUPS = [
-    ("Eat", [("Menu", "MENU"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
+    ("Eat", [("Menu", "MENU"), ("What’s on the Menu", "/our-menu/"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
     ("Plan", [("Catering", "/catering/"), ("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
     ("Fun", [("Entertainment", "/entertainment/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
@@ -507,7 +507,7 @@ T["footer"] = """<section class="cta-band">
         </div>
       </div>
       <div class="foot-links">
-        <a href="{{ site.menu_url }}" data-open-picker="menu">Menu</a><a href="{{ u('/catering/') }}">Catering</a><a href="{{ u('/large-party-reservations/') }}">Large Parties</a><a href="{{ u('/food-truck/') }}">Food Truck</a>
+        <a href="{{ site.menu_url }}" data-open-picker="menu">Order &amp; Live Menu</a><a href="{{ u('/our-menu/') }}">What’s on the Menu</a><a href="{{ u('/catering/') }}">Catering</a><a href="{{ u('/large-party-reservations/') }}">Large Parties</a><a href="{{ u('/food-truck/') }}">Food Truck</a>
         <a href="{{ u('/promotions/') }}">Specials</a><a href="{{ u('/deals/') }}">Rewards & Deals</a><a href="{{ u('/entertainment/') }}">Entertainment</a><a href="{{ u('/private-events/') }}">Private Events & Classes</a><a href="{{ u('/fundraisers/') }}">Tuesday Fundraisers</a><a href="{{ u('/about/') }}">Our Story</a><a href="{{ u('/contact/') }}">Contact</a><a href="{{ u('/areas-we-serve/') }}">Towns We Serve</a>
         <a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Gift Cards</a><a href="{{ u('/roll-the-dice/') }}">Roll the Dice</a><a href="{{ u('/careers/') }}">Careers</a><a href="{{ site.app_link }}" rel="noopener"{{ ext|safe }}>Get the App</a>
         {% if site.facebook %}<a href="{{ site.facebook }}" rel="noopener"{{ ext|safe }}>Facebook</a>{% endif %}
@@ -564,7 +564,7 @@ T["home"] = """
 <section class="hero on-dark">
   {{ hero_picture('margherita-board', 'oven-fire', 'A wood-fired margherita pizza fresh from the Square Peg oven')|safe }}
   <div class="wrap">
-    <h1><span class="eyebrow h1-eyebrow"><span>Wood-fired pizza in Connecticut & Delray Beach, FL</span></span>Pizza worth <em>remembering.</em></h1>
+    <h1><span class="eyebrow h1-eyebrow"><span>Italian restaurant &amp; wood-fired pizza · CT &amp; Delray Beach, FL</span></span>Pizza worth <em>remembering.</em></h1>
     <p class="lede">Hand-stretched dough, a screaming-hot oven, and ten Square Pegs across Connecticut and Delray Beach. Order in under a minute.</p>
     <div class="hero-meta"><span>Pickup & delivery</span><span>12″ gluten-free crust</span><span>Catering for any crowd</span></div>
     <form class="quick" onsubmit="return false" aria-label="Quick order">
@@ -617,6 +617,19 @@ T["home"] = """
 </section>
 
 <section class="section section--paper">
+  <div class="wrap two-col more-than">
+    <figure class="feature-photo">{{ img('table-spread', 'Meatballs, wings, Caesar salad and drinks on a Square Peg table', sizes='(min-width:960px) 540px, 100vw')|safe }}</figure>
+    <div class="stack">
+      <span class="eyebrow">More than pizza</span>
+      <h2>Pasta, parm &amp; Italian-American favorites</h2>
+      <p class="lede">Square Peg is a full Italian-American restaurant. Bring the whole crew for dinner, lunch or a weeknight takeout run.</p>
+      <div>{% for n, d in pasta_items[:4] %}<div class="item"><h3>{{ n }}</h3><p>{{ d }}</p></div>{% endfor %}</div>
+      <div class="btn-row"><a class="btn" href="{{ u('/our-menu/') }}">See what’s on the menu</a><a class="btn btn--line" href="{{ site.menu_url }}" data-open-picker="menu">Live menu &amp; prices</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
   <div class="wrap craft">
     <div class="craft-photo">{{ img('dough', 'A ball of fresh Square Peg pizza dough', sizes='(min-width:900px) 50vw, 100vw')|safe }}
       <div class="stamp">Never<br>frozen<small>Dough made daily</small></div></div>
@@ -713,7 +726,7 @@ T["locations"] = """
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Locations</span></nav>
     <span class="eyebrow">Connecticut + Delray Beach, FL</span>
     <h1>Square Peg Pizzeria locations</h1>
-    <p class="lede">Ten wood-fired kitchens, all making dough from scratch every day. Find the closest one, check if it’s open, and order in a tap.</p>
+    <p class="lede">Ten Italian-American restaurants with wood-fired ovens, all making dough from scratch every day. Find the closest one, check if it’s open, and order in a tap.</p>
     <div class="btn-row"><button class="btn btn--flame" type="button" id="geo-quick">{{ icons.pin|safe }}Sort by closest to me</button><a class="btn btn--ghost" href="{{ u('/locations/') }}" data-open-picker="order">{{ icons.bag|safe }}Order now</a></div>
   </div>
 </section>
@@ -729,6 +742,44 @@ T["locations"] = """
 </section>
 """
 
+# ---------- MENU OVERVIEW
+T["our_menu"] = """
+<section class="page-head on-dark">
+  {{ img('table-spread', 'Pasta, meatballs, wings and salads at Square Peg Pizzeria', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Menu</span></nav>
+    <span class="eyebrow">Italian-American kitchen · wood-fired oven</span>
+    <h1>Our menu</h1>
+    <p class="lede">Wood-fired pizza, pasta, chicken parm, Italian subs, salads, wings and desserts, made in-house with dough and sauce from our own commissary.</p>
+    <div class="btn-row"><a class="btn btn--flame" href="{{ site.menu_url }}" data-open-picker="menu">{{ icons.bag|safe }}Live menu &amp; prices for your Peg</a><a class="btn btn--ghost" href="{{ u('/catering/') }}">Catering menu</a></div>
+  </div>
+</section>
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">The pizza</span><h2>Wood-fired, three ways</h2></div>
+    <div class="menu-styles">{% for n, d in menu.pizza_styles %}<div class="item"><h3>{{ n }}</h3><p>{{ d }}</p></div>{% endfor %}</div>
+    <div class="menu-sigs">{% for n, d, p in sigs %}<div class="item"><h3>{{ n }}</h3><p>{{ d }}</p></div>{% endfor %}</div>
+  </div>
+</section>
+{% for title, key, items in menu.sections %}<section class="section{% if loop.index is even %} section--paper{% endif %}" id="{{ key }}">
+  <div class="wrap two-col">
+    <div class="stack"><span class="eyebrow">{{ ['Italian classics', 'From the deli side', 'For the table', 'Fresh & crisp', 'For the little ones', 'Save room'][loop.index0] }}</span><h2>{{ title }}</h2>
+      {% if key == 'pasta' %}<p>Hearty Italian-American pasta dishes, finished to order. Most locations carry all six; a few carry a shorter list.</p>{% endif %}
+      {% if key == 'kids' %}<p>Every Square Peg has a kids’ menu, plus room for big family tables. <a href="{{ u('/large-party-reservations/') }}">Reserve for a large party →</a></p>{% endif %}
+    </div>
+    <div>{% for n, d in items %}<div class="item"><h3>{{ n }}</h3><p>{{ d }}</p></div>{% endfor %}</div>
+  </div>
+</section>{% endfor %}
+<section class="section section--dark on-dark">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Only at certain locations</span><h2>Location specials</h2></div>
+    <div class="menu-styles">{% for l in locs if l.menu_extra %}<div class="item"><h3><a href="{{ u('/locations/' ~ l.slug ~ '/') }}">{{ l.short or l.name }}</a></h3><p>{{ l.menu_extra|join('. ') }}.</p></div>{% endfor %}</div>
+    <p class="note" style="margin-top:20px;color:#e6ddd6">{{ menu.note }}</p>
+    <div class="btn-row" style="margin-top:18px"><a class="btn btn--flame" href="{{ site.menu_url }}" data-open-picker="menu">{{ icons.bag|safe }}Open my Peg’s menu</a><a class="btn btn--ghost" href="{{ u('/locations/') }}">Find a location</a></div>
+  </div>
+</section>
+"""
+
 # ---------- TOWNS WE SERVE
 T["areas"] = """
 <section class="page-head on-dark">
@@ -736,7 +787,7 @@ T["areas"] = """
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/locations/') }}">Locations</a><span aria-hidden="true">/</span><span>Towns we serve</span></nav>
     <span class="eyebrow">Within 15 miles of a Square Peg</span>
     <h1>Towns we serve</h1>
-    <p class="lede">{{ town_count }} towns in Connecticut, Rhode Island and South Florida are a short drive from one of our 10 wood-fired pizza kitchens. Find your town to see your closest Square Peg, then order ahead for pickup or check delivery at checkout.</p>
+    <p class="lede">{{ town_count }} towns in Connecticut, Rhode Island and South Florida are a short drive from one of our 10 Italian restaurants and wood-fired pizza kitchens. Find your town to see your closest Square Peg, then order ahead for pickup or check delivery at checkout.</p>
     <div class="town-search"><label for="town-filter" class="sr-only">Find your town</label><input id="town-filter" type="search" placeholder="Type your town, e.g. Manchester" autocomplete="address-level2"><button class="btn btn--flame" type="button" id="geo-quick">{{ icons.pin|safe }}Use my location</button></div>
   </div>
 </section>
@@ -772,8 +823,8 @@ T["location"] = """
   <div class="wrap loc-top">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/locations/') }}">Locations</a><span aria-hidden="true">/</span><span>{{ l.name }}</span></nav>
     <span class="eyebrow">{{ l.tag }}</span>
-    <h1>Square Peg Pizzeria {{ l.name }}<span class="h1-sub">Wood-fired pizza in {{ l.city }}, {{ l.state }}</span></h1>
-    <p class="lede">Wood-fired pizza, pasta, wings and more at {{ l.street }} in {{ l.city }}, {{ l.state }}. Order online for pickup or delivery, or come hang out.</p>
+    <h1>Square Peg Pizzeria {{ l.name }}<span class="h1-sub">Italian restaurant &amp; wood-fired pizza in {{ l.city }}, {{ l.state }}</span></h1>
+    <p class="lede">Wood-fired pizza, {{ lm.words[0] }}, {{ lm.words[1] }}, wings and more at {{ l.street }} in {{ l.city }}, {{ l.state }}. Dine in with family and friends, or order online for pickup or delivery.</p>
     <div><span class="status" data-status="{{ l.slug }}">{{ l.summary[0] }}</span></div>
     <div class="loc-actions">
       <a class="btn" href="{{ order(l) }}" data-pick="{{ l.slug }}" data-track="order_click" data-src="loc-hero" rel="noopener">{{ icons.bag|safe }}Order {{ l.short or l.name }} online</a>
@@ -816,16 +867,20 @@ T["location"] = """
   <div class="wrap two-col">
     <div class="stack local">
       <span class="eyebrow">About this Peg</span>
-      <h2>Wood-fired pizza in {{ l.city }}</h2>
+      <h2>Italian food &amp; wood-fired pizza in {{ l.city }}</h2>
       <p>{{ l.blurb }}</p>
-      <p>Every pie starts with dough made fresh daily and never frozen. Choose a red or white signature pie, build your own, or go gluten-free with our 12″ crust. Vegan cheese is available on any pizza.</p>
+      <p>Every pie starts with dough made fresh daily and never frozen. Choose a red or white {% if lm.detroit %}Neo-Neapolitan round or a crispy-edged Detroit-style pie{% else %}signature pie{% endif %}, build your own, or go gluten-free with our 12″ crust. Vegan cheese is available on any pizza.</p>
+      <p>Not in a pizza mood? The kitchen turns out Italian-American comfort food too: {{ join_and(lm.words + lm.rest) }}.{% if lm.extra %} Also here: {{ lm.extra|join('; ')|lower }}.{% endif %}</p>
       <div><p class="note" style="font-weight:700;margin-bottom:6px">Close to</p><div class="chips">{% for n in l.nearby %}<span class="chip">{{ n }}</span>{% endfor %}</div></div>
     </div>
     <div class="stack">
-      <span class="eyebrow">Popular here</span>
+      <span class="eyebrow">On the menu here</span>
       <div>
-        {% for n, d, p in sigs %}<div class="item"><h3>{{ n }}</h3><p>{{ d }}</p></div>{% endfor %}
+        {% for n, d, p in sigs[:2] %}<div class="item"><h3>{{ n }} pizza</h3><p>{{ d }}</p></div>{% endfor %}
+        {% for n, d in pasta_items if n in lm.pastas %}{% if loop.index <= 3 %}<div class="item"><h3>{{ n }}</h3><p>{{ d }}</p></div>{% endif %}{% endfor %}
+        <div class="item"><h3>{{ lm.parm[:1]|upper }}{{ lm.parm[1:] }}</h3><p>House-made pork meatballs{% if 'chicken' in lm.parm %} or crispy chicken{% endif %}, marinara and mozzarella on toasted bread.</p></div>
       </div>
+      <a class="link-arrow" href="{{ u('/our-menu/') }}" style="justify-self:start">Pasta, parm, salads &amp; more →</a>
       <div class="btn-row"><a class="btn" href="{{ order(l) }}" data-pick="{{ l.slug }}" data-track="order_click" data-src="loc-menu" rel="noopener">{{ icons.bag|safe }}See live menu & order</a><a class="btn btn--line" href="tel:{{ tel(l.phone) }}" data-track="call_click" data-loc="{{ l.slug }}">{{ icons.phone|safe }}Call in an order</a></div>
     </div>
   </div>
@@ -833,7 +888,7 @@ T["location"] = """
 
 {% if l.areas %}<section class="section section--paper" id="towns" aria-labelledby="towns-h">
   <div class="wrap">
-    <div class="section-head"><span class="eyebrow">Towns we serve</span><h2 id="towns-h">Wood-fired pizza near {{ l.nearby[:3]|join(', ') }} &amp; {{ l.areas|length - 3 }}+ more towns</h2>
+    <div class="section-head"><span class="eyebrow">Towns we serve</span><h2 id="towns-h">Pizza, pasta &amp; Italian food near {{ l.nearby[:3]|join(', ') }} &amp; {{ l.areas|length - 3 }}+ more towns</h2>
       <p class="lede">Square Peg {{ l.short or l.name }} is a quick drive from these towns{% if l.state == 'CT' %} around {{ l.city }}{% endif %}. Order ahead for pickup, check delivery at checkout, or book catering and the food truck for your event.</p></div>
     <div class="area-bands">{% for label, rows in l.area_bands %}<div class="area-band"><h3>{{ label }}</h3><ul class="area-list">{% for r in rows %}<li>{{ r.name }}{% if r.state != l.state %}, {{ r.state }}{% endif %}</li>{% endfor %}</ul></div>{% endfor %}</div>
     <p class="note" style="margin-top:18px">Straight-line distance from {{ l.street }}, {{ l.city }}. <a href="{{ u('/areas-we-serve/') }}">Find the closest Square Peg to any town →</a></p>
@@ -1385,11 +1440,32 @@ T["simple"] = """
 env = Environment(loader=DictLoader(T), autoescape=select_autoescape(default_for_string=True, default=True))
 
 # ---------------------------------------------------------------- build
+PASTA_NAMES = [n for n, _ in dict((k, v) for _, k, v in MENU["sections"])["pasta"]]
+
+def loc_menu(l):
+    pastas = l.get("pastas") or PASTA_NAMES
+    words = [("eggplant parm" if p == "The Bella Parmigiana" else p.lower()) for p in pastas]
+    kids, salads = l.get("kids_menu", True), l.get("salads", True)
+    parm = l.get("parm_line", "chicken and meatball parm sandwiches")
+    rest = [parm] + (["salads"] if salads else []) + ["wood-fired wings"] + (["a kids’ menu"] if kids else [])
+    return {"pastas": pastas, "words": words, "extra": l.get("menu_extra", []), "detroit": bool(l.get("detroit")),
+            "kids": kids, "rest": rest, "parm": parm}
+
+def join_and(items):
+    items = list(items)
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
 def location_faqs(l):
     name = (l.get("short") or l["name"])
     lines = "; ".join(hours_summary(l))
     return [
         (f"What are Square Peg {name}’s hours?", f"{lines}. " + ("Holiday hours are posted on this page as soon as they change." if l.get("hours_source") == "google" else "Holiday hours may vary; online ordering always shows live availability.")),
+        (f"Is Square Peg {name} an Italian restaurant?",
+         f"Yes. Along with wood-fired pizza, Square Peg {name} serves Italian-American favorites like {join_and(loc_menu(l)['words'][:4])}, plus {join_and([r for r in loc_menu(l)['rest'] if 'kids' not in r] + ['desserts'])}."),
+    ] + ([
+        (f"Is Square Peg {name} a good restaurant for families?",
+         f"Yes. There’s a kids’ menu (pasta, spaghetti and meatballs, chicken fingers, mac and cheese), room for big groups, and large party reservations for birthdays and team dinners."),
+    ] if loc_menu(l)["kids"] else []) + [
         (f"Can I order online from Square Peg {name}?", f"Yes. Tap “Order {name} online” to order for pickup, or choose delivery at checkout where it’s available."),
         ("Do you have gluten-free or vegan options?", "Yes. We offer a 12″ gluten-free crust, and vegan cheese can be added to any pizza."),
         (f"Does Square Peg {name} do catering?", f"Yes. {name} caters birthdays, office lunches, team events and more. Send a quick request on our catering page, or call {l['phone']}."),
@@ -1449,17 +1525,17 @@ def main():
         site=SITE, locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
-        ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT,
+        ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and,
         event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
     )
 
     pages = []  # (path, title, desc, body_template, extra ctx, schema, og, hero)
 
-    pages.append(("/", "Square Peg Pizzeria | Wood-Fired Pizza in CT & Delray Beach",
-                  "Wood-fired pizza made fresh daily at 10 Square Peg Pizzeria locations in CT and Delray Beach, FL. Order pickup or delivery, or book catering and our food truck.",
+    pages.append(("/", "Square Peg Pizzeria | Italian Restaurant & Wood-Fired Pizza",
+                  "Wood-fired pizza, pasta and Italian-American favorites at 10 Square Peg Pizzeria restaurants in CT and Delray Beach, FL. Order pickup or delivery, or book catering.",
                   "home", {}, org_schema(), "margherita-board", None))
-    pages.append(("/locations/", "Pizza Near You: 10 Square Peg Pizzeria Locations in CT & FL",
-                  "Square Peg Pizzeria in Glastonbury, East Hartford, Vernon, Bolton, Storrs, Preston, Plainville, Berlin, Shelton, CT and Delray Beach, FL. Hours & ordering.",
+    pages.append(("/locations/", "Italian Restaurants & Pizza Near You | Square Peg Pizzeria",
+                  "Square Peg Pizzeria restaurants in Glastonbury, East Hartford, Vernon, Bolton, Storrs, Preston, Plainville, Berlin, Shelton, CT and Delray Beach, FL.",
                   "locations", {}, graph(breadcrumbs([("Home", "/"), ("Locations", "/locations/")]),
                   {"@type": "ItemList", "name": "Square Peg Pizzeria locations", "itemListElement": [
                       {"@type": "ListItem", "position": i + 1, "url": abs_url(f"/locations/{l['slug']}/"), "name": f"Square Peg Pizzeria {l.get('short') or l['name']}"} for i, l in enumerate(LOCATIONS)]}), "margherita-board", None))
@@ -1469,11 +1545,18 @@ def main():
         others = sorted([o for o in LOCATIONS if o is not l], key=lambda o: (o["lat"] - l["lat"]) ** 2 + (o["lng"] - l["lng"]) ** 2)[:3]
         faqs = location_faqs(l)
         schema = graph(restaurant_schema(l), breadcrumbs([("Home", "/"), ("Locations", "/locations/"), (l["name"], f"/locations/{l['slug']}/")]), faq_schema(faqs))
-        title = f"Wood-Fired Pizza in {l['city']}, {l['state']} | Square Peg Pizzeria"
-        desc = f"Wood-fired pizza in {l['city']}, {l['state']} at {l['street']}. See hours, call {l['phone']}, and order pickup or delivery from Square Peg Pizzeria {name}."
+        title = f"Italian Restaurant & Pizza in {l['city']}, {l['state']} | Square Peg"
+        desc = f"Italian restaurant and wood-fired pizza at {l['street']}, {l['city']}, {l['state']}: pasta, chicken parm, wings and kids' meals. Hours, {l['phone']}, order online."
         pages.append((f"/locations/{l['slug']}/", title, desc, "location",
-                      dict(l=l, rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs), schema, l["photo"], l["photo"]))
+                      dict(l=l, lm=loc_menu(l), rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs), schema, l["photo"], l["photo"]))
 
+    menu_schema = {"@type": "Menu", "@id": abs_url("/our-menu/#menu"), "name": "Square Peg Pizzeria menu", "url": abs_url("/our-menu/"),
+                   "inLanguage": "en", "hasMenuSection": [
+                       {"@type": "MenuSection", "name": "Wood-fired pizza", "hasMenuItem": [{"@type": "MenuItem", "name": n, "description": d} for n, d, _ in SIGNATURES]}] + [
+                       {"@type": "MenuSection", "name": t, "hasMenuItem": [{"@type": "MenuItem", "name": n, "description": d} for n, d in items]} for t, _, items in MENU["sections"]]}
+    pages.append(("/our-menu/", "Menu: Pasta, Chicken Parm & Wood-Fired Pizza | Square Peg",
+                  "The Square Peg Pizzeria menu: wood-fired and Detroit-style pizza, pasta alla vodka, chicken parmesan, Italian subs, salads, wings, kids' meals and desserts.",
+                  "our_menu", dict(menu=MENU), graph(menu_schema, breadcrumbs([("Home", "/"), ("Menu", "/our-menu/")])), "table-spread", "table-spread"))
     dir_towns = town_directory()
     pages.append(("/areas-we-serve/", "Towns We Serve in CT, RI & South FL | Square Peg Pizzeria",
                   f"Find the closest Square Peg Pizzeria to your town. {TOWN_COUNT} towns in Connecticut, Rhode Island and South Florida are within 15 miles of one of our 10 wood-fired pizza kitchens.",
@@ -1700,7 +1783,12 @@ def llms_txt():
         out.append(f"- [{l['name']}]({abs_url('/locations/' + l['slug'] + '/')}): {l['street']}, {l['city']}, {l['state']} {l['zip']} · {l['phone']} · order: {order_url(l)}")
         if l.get("areas"):
             out.append(f"  - Nearby towns (within 15 miles): {', '.join(r['name'] + ('' if r['state'] == l['state'] else ', ' + r['state']) for r in l['areas'])}")
-    out += ["", "## Pages",
+    out += ["", "## Menu (Italian-American restaurant + wood-fired pizza)",
+            "- Pizza: " + "; ".join(f"{n} ({d})" for n, d in MENU["pizza_styles"])]
+    for t, _, items in MENU["sections"]:
+        out.append(f"- {t}: " + ", ".join(n for n, _ in items))
+    out += [f"- Full overview: {abs_url('/our-menu/')}. Live menus and prices: each location's order link above.", ""]
+    out += ["## Pages",
             f"- [Catering]({abs_url('/catering/')})", f"- [Large party reservations]({abs_url('/large-party-reservations/')})", f"- [Contact]({abs_url('/contact/')})", f"- [Food truck]({abs_url('/food-truck/')})", f"- [Deals & rewards]({abs_url('/deals/')})",
             f"- [Tuesday fundraisers]({abs_url('/fundraisers/')})", f"- [Our story]({abs_url('/about/')})", f"- [Towns we serve]({abs_url('/areas-we-serve/')}): every town within 15 miles and its closest Square Peg", ""]
     return "\n".join(out)

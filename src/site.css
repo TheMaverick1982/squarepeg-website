@@ -568,3 +568,10 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .town-geo{background:var(--char);color:#fff;padding:14px 18px;font-size:17px;font-weight:600;margin:0 0 20px}
 .town-geo a{color:var(--flame);font-weight:800}
 .town-list li[hidden]{display:none}
+
+/* ---------- Menu overview ---------- */
+.menu-styles{display:grid;gap:0 32px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.menu-sigs{display:grid;gap:0 32px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:12px}
+.on-dark .item{border-top-color:rgba(255,255,255,.25)}
+.on-dark .item a{color:#fff}
+.more-than{align-items:center}

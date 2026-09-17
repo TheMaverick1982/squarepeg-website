@@ -40,6 +40,7 @@ Set `TOAST_ON_SUBDOMAIN = True` at the top of `data/content.py`, rebuild and pus
 - `/catering/`, `/large-party-reservations/`, `/food-truck/`: your booking-system form (embed)
 - `/contact/`: contact form saved to Supabase, with emails routed by topic and location
 - `/fundraisers/`: Tuesday Night Fundraiser requests (embed)
+- `/our-menu/`: menu overview (pizza styles, pasta, parm sandwiches, salads, kids, desserts); live prices stay in Toast
 - `/areas-we-serve/`: every town within 15 miles of a store, with its closest Square Peg
 - `/deals/`: monthly deal and points shop
 - `/roll-the-dice/`, `/about/`, `/sms-terms/`, `/privacy/`, `/thanks/`, `/404.html`

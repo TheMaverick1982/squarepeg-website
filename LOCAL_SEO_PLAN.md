@@ -6,7 +6,7 @@
 
 ## 1. What's built into the site
 
-- **"Towns we serve" on every location page.** It lists every town within 15 miles, grouped under 5, 5–10 and 10–15 miles, under a heading like "Wood-fired pizza near Wethersfield, Rocky Hill, Portland & 31+ more towns". That's 23–40 towns per store.
+- **"Towns we serve" on every location page.** It lists every town within 15 miles, grouped under 5, 5–10 and 10–15 miles, under a heading like "Pizza, pasta & Italian food near Wethersfield, Rocky Hill, Portland & 31+ more towns". That's 23–40 towns per store.
 - **A new `/areas-we-serve/` page.** It covers all 166 towns in CT, RI and South Florida. For each town it shows the closest Square Peg, how far it is, and one or two other nearby stores. It has a "type your town" search and a "use my location" button, and is linked from the footer and the Locations page.
 - **Search data (schema).** Each restaurant now lists every nearby town as an area it serves, plus a 15-mile radius around the store.
 - **llms.txt** (the file AI assistants read) lists each store's nearby towns.
@@ -68,7 +68,43 @@ Send a few facts per page (what locals ask, events you've done there, photos) an
 - **Fix known mismatches first:** Shelton (310 vs 320 Howe Ave), Berlin (119 vs 151 Webster Square Rd) and East Hartford (Long Hill Rd vs St).
 - **Bolton:** point old Parkside Pizza listings to Square Peg Bolton where possible.
 
-## 4. How to measure
+## 4. Beyond "pizza": restaurant and Italian searches
+
+Searches like "restaurants near me", "Italian restaurant near me", "chicken parm near me" and "family restaurant [town]" are decided mostly by three things:
+- **Distance.** Google fills in "near me" from where the searcher is.
+- **Your Google Business Profile categories.** These matter most.
+- **How well your pages and reviews match the dish or cuisine searched.**
+
+### Already done on the website (Sept 2026)
+- **Location pages:**
+  - **Title:** "Italian Restaurant & Pizza in [Town], [State]".
+  - **Heading line:** "Italian restaurant & wood-fired pizza in [Town]".
+  - **Copy:** each store's real pastas, parm sandwiches, salads, wings and kids' menu, taken from its Toast menu.
+  - **Two new FAQs:** "Is it an Italian restaurant?" and "Is it good for families?"
+- **New `/our-menu/` page:** pizza styles (Neo-Neapolitan, Detroit-style, gluten-free), pasta, parm sandwiches and Italian subs, starters, salads, kids' meals, desserts and location specials. It carries menu data Google and AI tools can read, and links to each store's live Toast menu.
+- **Home page:** title "Italian Restaurant & Wood-Fired Pizza", plus a new "Pasta, parm & Italian-American favorites" section.
+- **Search data:** the restaurant type now lists Italian first, then Pizza, Italian-American and American. `llms.txt` includes a menu summary for AI assistants.
+
+### To do in Google Business Profile (the biggest lever for "near me")
+- **Primary category:** keep **Pizza restaurant**. It's your strongest match.
+- **Additional categories** (use the ones that are true for each store):
+  - **Italian restaurant**
+  - **Restaurant**
+  - **Family restaurant**
+  - **Takeout restaurant**
+  - **Caterer**
+  - **Bar** (Storrs, Berlin Truck Bar, and any store with a bar)
+  - **Breakfast restaurant** (East Hartford)
+- **Menu and products:** make sure the Toast menu is connected, or add menu items with photos (chicken parm, vodka pasta, Bolognese, wings).
+- **Attributes:** kid-friendly, good for groups, dine-in, takeout, delivery, outdoor seating, alcohol served (where true).
+- **Photos:** add pasta and non-pizza dishes, not just pizzas.
+- **Reviews:** ask guests to mention what they ordered. "Best chicken parm in Vernon" helps that page rank for that dish.
+
+### Please confirm
+- **Alcohol:** Which stores serve beer, wine or cocktails? Only East Hartford's online menu lists cocktails, so the site doesn't claim a bar anywhere else yet.
+- **Detroit-style pizza:** Is it at every location? The site only says so for Glastonbury, East Hartford, Shelton and Delray Beach, where the online menu shows it.
+
+## 5. How to measure
 
 - **Search Console:**
   - Filter Performance → Queries by town names (e.g. "manchester", "wethersfield") and compare month over month.
@@ -76,7 +112,7 @@ Send a few facts per page (what locals ask, events you've done there, photos) an
 - **Rank tracking:** a tracker such as Semrush, Ahrefs or a local grid-rank tool can check "pizza near me" style searches from points around each store. That shows how far out each store ranks.
 - **Orders:** Toast delivery addresses and loyalty signups by ZIP show whether out-of-town customers are growing.
 
-## 5. First 90 days
+## 6. First 90 days
 
 | When | What |
 |---|---|
