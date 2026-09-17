@@ -8,7 +8,7 @@ Square Peg Pizzeria static site builder.
 Content lives in data/content.py. Styles in src/site.css. Behavior in src/site.js.
 Photos: drop originals into assets/img-src/<name>.(webp|jpg|png) and rebuild.
 """
-import json, re, shutil, sys, html, hashlib
+import json, os, re, shutil, sys, html, hashlib
 from datetime import date
 from pathlib import Path
 from jinja2 import Environment, DictLoader, select_autoescape
@@ -16,7 +16,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS  # noqa
+from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -24,6 +24,78 @@ OUT = ROOT / ("preview" if PREVIEW else "dist-staging" if STAGING else "dist")
 IMG_SRC = ROOT / "assets" / "img-src"
 WIDTHS = [360, 480, 640, 800, 1200, 1600]
 TODAY = date.today().isoformat()
+
+# Hours-only rebuilds (the nightly Google hours sync on GitHub): reuse the images that are
+# already built instead of re-encoding them, so the commit only touches pages.
+REUSE = os.environ.get("SP_REUSE_ASSETS") == "1" and not PREVIEW
+PREV = OUT.parent / (OUT.name + ".prev")
+
+def reuse(path):
+    if not REUSE:
+        return False
+    old = PREV / path.relative_to(OUT)
+    if not old.exists():
+        return False
+    path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(old, path)
+    return True
+
+# ---------------------------------------------------------------- hours from Google
+# scripts/sync_google_hours.py writes data/hours_google.json from each location's
+# Google Business Profile. When a location is in that file, its Google hours replace
+# the hours typed into data/content.py (which stay as the fallback).
+GOOGLE_HOURS_FILE = ROOT / "data" / "hours_google.json"
+DOW_LONG = {"Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"}
+
+# ---------------------------------------------------------------- towns served
+# data/service_areas.json (scripts/build_service_areas.py): towns within 15 miles of each store.
+SERVICE_FILE = ROOT / "data" / "service_areas.json"
+STATE_NAMES = {"CT": "Connecticut", "RI": "Rhode Island", "MA": "Massachusetts", "NY": "New York", "FL": "Florida"}
+BANDS = [(5, "Under 5 miles"), (10, "5–10 miles"), (15.01, "10–15 miles")]
+
+TOWN_COUNT = 0
+
+def band(mi):
+    return next(label for top, label in BANDS if mi < top)
+
+def apply_service_areas():
+    data = json.loads(SERVICE_FILE.read_text())["locations"] if SERVICE_FILE.exists() else {}
+    for l in LOCATIONS:
+        rows = data.get(l["slug"], [])
+        l["areas"] = rows
+        l["area_bands"] = [(label, [r for r in rows if band(r["mi"]) == label]) for _, label in BANDS]
+        l["area_bands"] = [(label, rs) for label, rs in l["area_bands"] if rs]
+
+def town_directory():
+    """[(state name, [(town, st, [(loc, mi), ...nearest first]), ...]), ...]"""
+    towns = {}
+    for l in LOCATIONS:
+        for r in l.get("areas", []):
+            towns.setdefault((r["name"], r["state"]), []).append((l, r["mi"]))
+        towns.setdefault((l["city"], l["state"]), []).insert(0, (l, 0.0))
+    out = {}
+    for (name, st), hits in towns.items():
+        hits = sorted({id(h[0]): h for h in sorted(hits, key=lambda h: -h[1])}.values(), key=lambda h: h[1])
+        out.setdefault(st, []).append((name, st, hits))
+    order = ["CT", "RI", "MA", "NY", "FL"]
+    return [(STATE_NAMES[st], sorted(out[st], key=lambda t: t[0])) for st in order if st in out]
+
+def apply_google_hours():
+    if not GOOGLE_HOURS_FILE.exists():
+        return 0
+    data = json.loads(GOOGLE_HOURS_FILE.read_text()).get("locations", {})
+    n = 0
+    for l in LOCATIONS:
+        l.setdefault("special", {})
+        l.setdefault("hours_source", "site")
+        g = data.get(l["slug"])
+        if not g or not g.get("hours") or set(g["hours"]) != set(DAYS):
+            continue
+        l["hours"] = {d: (tuple(g["hours"][d]) if g["hours"][d] else None) for d in DAYS}
+        l["special"] = {k: (list(v) if v else None) for k, v in sorted(g.get("special", {}).items()) if k >= TODAY}
+        l["hours_source"] = "google"
+        n += 1
+    return n
 
 # ---------------------------------------------------------------- helpers
 def url(path):
@@ -63,8 +135,25 @@ def hours_rows(loc):
     names = {"Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"}
     for d in DAYS:
         v = loc["hours"][d]
-        rows.append((d, names[d], "Closed" if not v else f"{fmt_time(v[0])} – {fmt_time(v[1])}"))
+        rows.append((d, names[d], hours_text(v, " – ")))
     return rows
+
+def hours_text(v, sep="–"):
+    if not v:
+        return "Closed"
+    if v[0] == "00:00" and v[1] == "00:00":
+        return "Open 24 hours"
+    return f"{fmt_time(v[0])}{sep}{fmt_time(v[1])}"
+
+def special_rows(loc):
+    """Holiday / special hours from Google, e.g. ('2026-11-26', 'Thu, Nov 26', 'Closed')."""
+    out = []
+    for iso, v in sorted((loc.get("special") or {}).items()):
+        if iso < TODAY:
+            continue
+        dt = date.fromisoformat(iso)
+        out.append((iso, f"{dt:%a}, {dt:%b} {dt.day}", hours_text(v, " – ")))
+    return out
 
 def hours_summary(loc):
     """Compact lines like 'Mon–Tue 11:30am–9pm'."""
@@ -78,7 +167,7 @@ def hours_summary(loc):
     lines = []
     for a, b, v in groups:
         label = a if a == b else f"{a}–{b}"
-        lines.append(f"{label} {'Closed' if not v else fmt_time(v[0]) + '–' + fmt_time(v[1])}")
+        lines.append(f"{label} {hours_text(v)}")
     return lines
 
 # ---------------------------------------------------------------- images
@@ -107,10 +196,13 @@ def build_images():
         if PREVIEW:
             widths = [x for x in widths if x <= 1200][-2:] or widths[:1]
         for x in widths:
+            wp, ap = dest / f"{name}-{x}.webp", dest / f"{name}-{x}.avif"
+            if reuse(wp) and reuse(ap):
+                continue
             r = im.resize((x, round(h * x / w)), Image.LANCZOS) if x != w else im
-            r.save(dest / f"{name}-{x}.webp", "WEBP", quality=74, method=6)
+            r.save(wp, "WEBP", quality=74, method=6)
             if not PREVIEW:
-                r.save(dest / f"{name}-{x}.avif", "AVIF", quality=50, speed=6)
+                r.save(ap, "AVIF", quality=50, speed=6)
         IMG_META[name] = {"w": w, "h": h, "widths": widths, "alpha": has_alpha}
     print(f"  images: {len(IMG_META)} processed")
 
@@ -120,8 +212,10 @@ def build_brand():
     src = Image.open(ROOT / "src" / "brand" / "logo-on-dark.png").convert("RGBA")
     orig = Image.open(ROOT / "src" / "brand" / "logo-src.png").convert("RGBA")
     for w in (160, 280, 480):
+        if reuse(dest / f"logo-on-dark-{w}.webp"):
+            continue
         src.resize((w, round(src.height * w / src.width)), Image.LANCZOS).save(dest / f"logo-on-dark-{w}.webp", "WEBP", quality=72, method=6)
-    if not PREVIEW:
+    if not PREVIEW and not all(reuse(p) for p in (dest / "logo.png", OUT / "favicon-32.png", OUT / "apple-touch-icon.png", OUT / "icon-512.png")):
         orig.resize((1200, round(orig.height * 1200 / orig.width)), Image.LANCZOS).save(dest / "logo.png", optimize=True)
         fav = Image.open(ROOT / "src" / "brand" / "favicon-512.png")
         fav.resize((32, 32), Image.LANCZOS).save(OUT / "favicon-32.png")
@@ -177,6 +271,8 @@ def make_og(key, photo, eyebrow, headline, sub):
     W, H = 1200, 630
     out_dir = OUT / "img" / "og"
     out_dir.mkdir(parents=True, exist_ok=True)
+    if reuse(out_dir / f"{key}.jpg"):
+        return abs_url(f"/img/og/{key}.jpg")
     canvas = Image.new("RGB", (W, H), (20, 17, 16))
     src_path = next((p for p in IMG_SRC.glob(photo + ".*")), None)
     if src_path:
@@ -278,6 +374,13 @@ def restaurant_schema(l):
         spec.append({"@type": "OpeningHoursSpecification",
                      "dayOfWeek": {"Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"}[d],
                      "opens": v[0], "closes": "23:59" if v[1] == "00:00" else v[1]})
+    special = []
+    for iso, v in sorted((l.get("special") or {}).items()):
+        if iso < TODAY:
+            continue
+        # Closed all day = opens and closes at 00:00 (Google's recommended markup)
+        special.append({"@type": "OpeningHoursSpecification", "validFrom": iso, "validThrough": iso,
+                        "opens": v[0] if v else "00:00", "closes": ("23:59" if v[1] == "00:00" else v[1]) if v else "00:00"})
     page = abs_url(f"/locations/{l['slug']}/")
     o = {
         "@type": "Restaurant", "@id": page + "#restaurant",
@@ -287,8 +390,11 @@ def restaurant_schema(l):
         "servesCuisine": ["Pizza", "Italian", "American"], "priceRange": "$$",
         "hasMenu": order_url(l), "menu": order_url(l), "parentOrganization": {"@id": ORG_ID},
         "openingHoursSpecification": spec,
+        **({"specialOpeningHoursSpecification": special} if special else {}),
         "hasMap": maps_url(l),
-        "areaServed": [{"@type": "City", "name": f"{t}, {l['state']}"} for t in [l["city"]] + l["nearby"]],
+        "areaServed": [{"@type": "City", "name": f"{t}, {st}"} for t, st in dict.fromkeys(
+                           [(l["city"], l["state"])] + [(t, l["state"]) for t in l["nearby"]] + [(r["name"], r["state"]) for r in l.get("areas", [])])]
+                       + [{"@type": "GeoCircle", "geoMidpoint": {"@type": "GeoCoordinates", "latitude": l["lat"], "longitude": l["lng"]}, "geoRadius": "24140"}],
         "sameAs": l.get("same_as", []),
         "currenciesAccepted": "USD",
         "potentialAction": {"@type": "OrderAction", "target": {"@type": "EntryPoint", "urlTemplate": order_url(l), "actionPlatform": ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform"]}, "deliveryMethod": ["http://purl.org/goodrelations/v1#DeliveryModePickUp"]},
@@ -402,7 +508,7 @@ T["footer"] = """<section class="cta-band">
       </div>
       <div class="foot-links">
         <a href="{{ site.menu_url }}" data-open-picker="menu">Menu</a><a href="{{ u('/catering/') }}">Catering</a><a href="{{ u('/large-party-reservations/') }}">Large Parties</a><a href="{{ u('/food-truck/') }}">Food Truck</a>
-        <a href="{{ u('/promotions/') }}">Specials</a><a href="{{ u('/deals/') }}">Rewards & Deals</a><a href="{{ u('/entertainment/') }}">Entertainment</a><a href="{{ u('/private-events/') }}">Private Events & Classes</a><a href="{{ u('/fundraisers/') }}">Tuesday Fundraisers</a><a href="{{ u('/about/') }}">Our Story</a><a href="{{ u('/contact/') }}">Contact</a>
+        <a href="{{ u('/promotions/') }}">Specials</a><a href="{{ u('/deals/') }}">Rewards & Deals</a><a href="{{ u('/entertainment/') }}">Entertainment</a><a href="{{ u('/private-events/') }}">Private Events & Classes</a><a href="{{ u('/fundraisers/') }}">Tuesday Fundraisers</a><a href="{{ u('/about/') }}">Our Story</a><a href="{{ u('/contact/') }}">Contact</a><a href="{{ u('/areas-we-serve/') }}">Towns We Serve</a>
         <a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Gift Cards</a><a href="{{ u('/roll-the-dice/') }}">Roll the Dice</a><a href="{{ u('/careers/') }}">Careers</a><a href="{{ site.app_link }}" rel="noopener"{{ ext|safe }}>Get the App</a>
         {% if site.facebook %}<a href="{{ site.facebook }}" rel="noopener"{{ ext|safe }}>Facebook</a>{% endif %}
         {% if site.instagram %}<a href="{{ site.instagram }}" rel="noopener"{{ ext|safe }}>Instagram</a>{% endif %}
@@ -616,8 +722,45 @@ T["locations"] = """
     <h2 class="sr-only">All 10 Square Peg Pizzeria locations</h2>
     <div class="loc-grid loc-grid--all" id="loc-grid">
       {% for r in regions %}{% for l in locs if l.region == r %}{% include "loc_card" %}{% endfor %}{% endfor %}
-      <div class="loc-card loc-cta"><span class="eyebrow">Can’t decide?</span><h3>Let us pick the closest Peg.</h3><p>Share your location and we’ll sort all ten by distance, with live open/closed status.</p><div class="btn-row"><button class="btn btn--flame" type="button" onclick="document.getElementById('geo-quick').click()">{{ icons.pin|safe }}Find my closest</button><a class="btn btn--ghost" href="{{ u('/catering/') }}">Catering from any Peg</a></div></div>
+      <div class="loc-card loc-cta"><span class="eyebrow">Can’t decide?</span><h3>Let us pick the closest Peg.</h3><p>Share your location and we’ll sort all ten by distance, with live open/closed status.</p><div class="btn-row"><button class="btn btn--flame" type="button" onclick="document.getElementById('geo-quick').click()">{{ icons.pin|safe }}Find my closest</button><a class="btn btn--ghost" href="{{ u('/areas-we-serve/') }}">Look up your town</a></div></div>
     </div>
+    <p class="note" style="margin-top:20px;color:#e6ddd6">Serving {{ town_count }} towns across Connecticut, Rhode Island and South Florida. <a href="{{ u('/areas-we-serve/') }}" style="color:#fff">See every town we serve →</a></p>
+  </div>
+</section>
+"""
+
+# ---------- TOWNS WE SERVE
+T["areas"] = """
+<section class="page-head on-dark">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/locations/') }}">Locations</a><span aria-hidden="true">/</span><span>Towns we serve</span></nav>
+    <span class="eyebrow">Within 15 miles of a Square Peg</span>
+    <h1>Towns we serve</h1>
+    <p class="lede">{{ town_count }} towns in Connecticut, Rhode Island and South Florida are a short drive from one of our 10 wood-fired pizza kitchens. Find your town to see your closest Square Peg, then order ahead for pickup or check delivery at checkout.</p>
+    <div class="town-search"><label for="town-filter" class="sr-only">Find your town</label><input id="town-filter" type="search" placeholder="Type your town, e.g. Manchester" autocomplete="address-level2"><button class="btn btn--flame" type="button" id="geo-quick">{{ icons.pin|safe }}Use my location</button></div>
+  </div>
+</section>
+<section class="section section--paper">
+  <div class="wrap">
+    <p class="town-geo" id="town-geo" hidden></p>
+    <p class="note town-empty" id="town-empty" hidden>No match. Try a nearby town, or <a href="{{ u('/locations/') }}">see all 10 locations</a>.</p>
+    {% for state, rows in towns %}<div class="town-group">
+      <h2>{{ state }}</h2>
+      <ul class="town-list">{% for name, st, hits in rows %}<li data-town="{{ name|lower }}">
+        <b>{{ name }}</b>
+        <span>Closest: <a href="{{ u('/locations/' ~ hits[0][0].slug ~ '/') }}">Square Peg {{ hits[0][0].short or hits[0][0].name }}</a> · {{ 'in town' if hits[0][1] == 0 else band(hits[0][1])|lower }}</span>
+        {% if hits|length > 1 %}<span class="also">Also near: {% for h in hits[1:3] %}<a href="{{ u('/locations/' ~ h[0].slug ~ '/') }}">{{ h[0].short or h[0].name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</span>{% endif %}
+      </li>{% endfor %}</ul>
+    </div>{% endfor %}
+    <p class="note" style="margin-top:24px">Distances are straight-line from each restaurant, grouped as under 5, 5–10 and 10–15 miles.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap two-col">
+    <div class="stack"><span class="eyebrow">Having a party?</span><h2>Catering &amp; the food truck</h2><p>Pick up a catering order from any Square Peg, or book our wood-fired food truck for backyard parties, schools, breweries and corporate events.</p>
+      <div class="btn-row"><a class="btn" href="{{ u('/catering/') }}">Catering</a><a class="btn btn--line" href="{{ u('/food-truck/') }}">Food truck</a></div></div>
+    <div class="stack"><span class="eyebrow">For your school or team</span><h2>Tuesday fundraisers</h2><p>Groups from all of these towns can earn 20% of dine-in food sales with a Tuesday Night Fundraiser at their closest Square Peg.</p>
+      <div class="btn-row"><a class="btn" href="{{ u('/fundraisers/') }}">Request a Tuesday</a></div></div>
   </div>
 </section>
 """
@@ -652,7 +795,8 @@ T["location"] = """
       <h2>Hours</h2>
       <table class="hours"><caption class="sr-only">Opening hours for Square Peg Pizzeria {{ l.name }}</caption>
         <tbody>{% for d, name, v in rows %}<tr data-day="{{ d }}"><th scope="row">{{ name }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
-      <p class="note">Holiday hours may vary. Online ordering shows live availability.</p>
+      {% if specials %}<div class="special-hours" role="note"><h3>Holiday &amp; special hours</h3><ul>{% for iso, label, v in specials %}<li data-date="{{ iso }}"><span>{{ label }}</span><b>{{ v }}</b></li>{% endfor %}</ul></div>{% endif %}
+      <p class="note">{% if l.hours_source == 'google' %}Hours update daily from our Google listing, including holidays.{% else %}Holiday hours may vary.{% endif %} Online ordering shows live availability.</p>
     </div>
     <div class="map">
       <div class="map-fallback"><span class="pin" aria-hidden="true"><span></span></span><b>{{ l.street }}, {{ l.city }}, {{ l.state }}</b><a class="btn btn--sm btn--ghost" href="{{ maps(l) }}" rel="noopener"{{ ext|safe }}>Open in Google Maps</a></div>
@@ -687,7 +831,16 @@ T["location"] = """
   </div>
 </section>
 
-<section class="section section--paper">
+{% if l.areas %}<section class="section section--paper" id="towns" aria-labelledby="towns-h">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Towns we serve</span><h2 id="towns-h">Wood-fired pizza near {{ l.nearby[:3]|join(', ') }} &amp; {{ l.areas|length - 3 }}+ more towns</h2>
+      <p class="lede">Square Peg {{ l.short or l.name }} is a quick drive from these towns{% if l.state == 'CT' %} around {{ l.city }}{% endif %}. Order ahead for pickup, check delivery at checkout, or book catering and the food truck for your event.</p></div>
+    <div class="area-bands">{% for label, rows in l.area_bands %}<div class="area-band"><h3>{{ label }}</h3><ul class="area-list">{% for r in rows %}<li>{{ r.name }}{% if r.state != l.state %}, {{ r.state }}{% endif %}</li>{% endfor %}</ul></div>{% endfor %}</div>
+    <p class="note" style="margin-top:18px">Straight-line distance from {{ l.street }}, {{ l.city }}. <a href="{{ u('/areas-we-serve/') }}">Find the closest Square Peg to any town →</a></p>
+  </div>
+</section>{% endif %}
+
+<section class="section">
   <div class="wrap">
     <div class="tiles">
       <a class="tile on-dark" href="{{ u('/fundraisers/') }}" style="min-height:360px">{{ img('team-kids', 'A youth team at a Square Peg Tuesday fundraiser', sizes='(min-width:900px) 50vw, 100vw')|safe }}
@@ -1236,7 +1389,7 @@ def location_faqs(l):
     name = (l.get("short") or l["name"])
     lines = "; ".join(hours_summary(l))
     return [
-        (f"What are Square Peg {name}’s hours?", f"{lines}. Holiday hours may vary; online ordering always shows live availability."),
+        (f"What are Square Peg {name}’s hours?", f"{lines}. " + ("Holiday hours are posted on this page as soon as they change." if l.get("hours_source") == "google" else "Holiday hours may vary; online ordering always shows live availability.")),
         (f"Can I order online from Square Peg {name}?", f"Yes. Tap “Order {name} online” to order for pickup, or choose delivery at checkout where it’s available."),
         ("Do you have gluten-free or vegan options?", "Yes. We offer a 12″ gluten-free crust, and vegan cheese can be added to any pizza."),
         (f"Does Square Peg {name} do catering?", f"Yes. {name} caters birthdays, office lunches, team events and more. Send a quick request on our catering page, or call {l['phone']}."),
@@ -1245,9 +1398,21 @@ def location_faqs(l):
     ]
 
 def main():
+    if PREV.exists():
+        shutil.rmtree(PREV)
     if OUT.exists():
-        shutil.rmtree(OUT)
+        if REUSE:
+            OUT.rename(PREV)
+        else:
+            shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
+    g = apply_google_hours()
+    print("  toast: " + (f"order/menu links -> {TOAST_SUBDOMAIN} (launch mode)" if TOAST_ON_SUBDOMAIN
+                         else f"order/menu links -> {TOAST_MAIN_DOMAIN} (pre-launch). Set TOAST_ON_SUBDOMAIN = True in data/content.py on launch day."))
+    apply_service_areas()
+    global TOWN_COUNT
+    TOWN_COUNT = sum(len(rows) for _, rows in town_directory())
+    print(f"  hours: {g} of {len(LOCATIONS)} locations from Google" if g else "  hours: from data/content.py")
     build_images()
     logo_ratio = build_brand()
     css = (ROOT / "src" / "site.css").read_text()
@@ -1266,7 +1431,7 @@ def main():
     locs_json = json.dumps([{
         "slug": l["slug"], "name": l["name"], "short": l.get("short") or l["name"], "street": l["street"], "city": l["city"], "state": l["state"],
         "phone": l["phone"], "tel": tel(l["phone"]), "order": order_url(l), "url": url(f"/locations/{l['slug']}/"),
-        "lat": l["lat"], "lng": l["lng"], "hours": l["hours"], "region": l["region"]} for l in LOCATIONS], separators=(",", ":"))
+        "lat": l["lat"], "lng": l["lng"], "hours": l["hours"], "special": l.get("special") or {}, "region": l["region"]} for l in LOCATIONS], separators=(",", ":"))
     cfg_json = json.dumps({"chatSrc": "" if PREVIEW else SITE["chat_src"], "chatId": SITE["chat_widget_id"], "locationsUrl": url("/locations/"),
                            "supabaseUrl": SITE.get("supabase_url", ""), "supabaseKey": SITE.get("supabase_anon_key", ""), "thanksUrl": url("/thanks/")})
 
@@ -1284,7 +1449,7 @@ def main():
         site=SITE, locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
-        ext=' target="_blank"' if PREVIEW else "", staging=STAGING,
+        ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT,
         event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
     )
 
@@ -1307,8 +1472,12 @@ def main():
         title = f"Wood-Fired Pizza in {l['city']}, {l['state']} | Square Peg Pizzeria"
         desc = f"Wood-fired pizza in {l['city']}, {l['state']} at {l['street']}. See hours, call {l['phone']}, and order pickup or delivery from Square Peg Pizzeria {name}."
         pages.append((f"/locations/{l['slug']}/", title, desc, "location",
-                      dict(l=l, rows=hours_rows(l), near=others, faqs=faqs), schema, l["photo"], l["photo"]))
+                      dict(l=l, rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs), schema, l["photo"], l["photo"]))
 
+    dir_towns = town_directory()
+    pages.append(("/areas-we-serve/", "Towns We Serve in CT, RI & South FL | Square Peg Pizzeria",
+                  f"Find the closest Square Peg Pizzeria to your town. {TOWN_COUNT} towns in Connecticut, Rhode Island and South Florida are within 15 miles of one of our 10 wood-fired pizza kitchens.",
+                  "areas", dict(towns=dir_towns), graph(breadcrumbs([("Home", "/"), ("Locations", "/locations/"), ("Towns we serve", "/areas-we-serve/")])), "oven-pizza", None))
     pages.append(("/catering/", "Pizza Catering in Connecticut | Square Peg Pizzeria",
                   "Wood-fired pizza catering for parties, offices, schools and events from all 10 Square Peg Pizzeria locations. Get a quote in 60 seconds.",
                   "catering", dict(faqs=CATERING_FAQ), graph(faq_schema(CATERING_FAQ), breadcrumbs([("Home", "/"), ("Catering", "/catering/")])), "table-spread", "table-spread"))
@@ -1409,11 +1578,14 @@ def main():
     else:
         import subprocess
         try:
-            mini = subprocess.run(["/tmp/fs/node_modules/.bin/terser", "-c", "-m"], input=js, capture_output=True, text=True, timeout=60)
+            terser = os.environ.get("TERSER") or shutil.which("terser") or "/tmp/fs/node_modules/.bin/terser"
+            mini = subprocess.run([terser, "-c", "-m"], input=js, capture_output=True, text=True, timeout=60)
             (OUT / "site.js").write_text(mini.stdout if mini.returncode == 0 and mini.stdout.strip() else js)
         except Exception:
             (OUT / "site.js").write_text(js)
         write_extras([p for p in pages if p[0] not in ("/404.html", "/thanks/")])
+    if PREV.exists():
+        shutil.rmtree(PREV)
     print(f"  pages: {len(rendered)} -> {OUT}")
 
 def write_extras(pages):
@@ -1451,7 +1623,7 @@ def write_extras(pages):
     ]))
     (OUT / "netlify.toml").write_text('[build]\n  publish = "."\n\n[build.processing.html]\n  pretty_urls = true\n')
 
-ORDER_HOST = "https://order.squarepegpizzeria.com"
+ORDER_HOST = TOAST_SUBDOMAIN   # redirects from old main-domain Toast URLs always go here
 
 def redirect_map():
     """Every URL in the old Toast sitemap -> its new home. 301 = permanent (passes SEO value)."""
@@ -1477,8 +1649,12 @@ def redirect_map():
         town = l["city"].lower().replace(" ", "-")
         m.append((f"/menu-{town}", ORDER_HOST + "/order/" + l["toast"]))
     gc = SITE["gift_cards_url"]
-    target = gc if not gc.startswith(SITE["domain"]) else ORDER_HOST + "/gift-cards"
+    target = gc if not gc.startswith((SITE["domain"], ORDER_HOST)) else ORDER_HOST + TOAST_PATHS["gift_cards"]
     m += [("/gift-card", target), ("/gift-cards", target)]
+    # Older (Popmenu-era) URLs still in Google's index, e.g. www.squarepegpizzeria.com/popmenu-digital-gift-cards
+    m += [("/popmenu-digital-gift-cards", target),
+          ("/menus", ORDER_HOST + "/menu"), ("/menus/*", ORDER_HOST + "/menu"), ("/dishes/*", ORDER_HOST + "/menu"),
+          ("/reviews", "/about/"), ("/jobs", "/careers/")]
     return m
 
 def redirects_file():
@@ -1522,12 +1698,14 @@ def llms_txt():
            "## Locations"]
     for l in LOCATIONS:
         out.append(f"- [{l['name']}]({abs_url('/locations/' + l['slug'] + '/')}): {l['street']}, {l['city']}, {l['state']} {l['zip']} · {l['phone']} · order: {order_url(l)}")
+        if l.get("areas"):
+            out.append(f"  - Nearby towns (within 15 miles): {', '.join(r['name'] + ('' if r['state'] == l['state'] else ', ' + r['state']) for r in l['areas'])}")
     out += ["", "## Pages",
             f"- [Catering]({abs_url('/catering/')})", f"- [Large party reservations]({abs_url('/large-party-reservations/')})", f"- [Contact]({abs_url('/contact/')})", f"- [Food truck]({abs_url('/food-truck/')})", f"- [Deals & rewards]({abs_url('/deals/')})",
-            f"- [Tuesday fundraisers]({abs_url('/fundraisers/')})", f"- [Our story]({abs_url('/about/')})", ""]
+            f"- [Tuesday fundraisers]({abs_url('/fundraisers/')})", f"- [Our story]({abs_url('/about/')})", f"- [Towns we serve]({abs_url('/areas-we-serve/')}): every town within 15 miles and its closest Square Peg", ""]
     return "\n".join(out)
 
-SAFE_CLASSES = {"open", "menu-open", "is-open", "is-closed", "is-soon", "is-today", "is-near", "is-pref", "is-sized",
+SAFE_CLASSES = {"open", "is-past", "menu-open", "is-open", "is-closed", "is-soon", "is-today", "is-near", "is-pref", "is-sized",
                 "pick", "pick-name", "pick-addr", "pick-meta", "pick-call", "tonight-card", "note", "status", "btn", "btn--sm", "sp-embed", "today"}
 
 def split_rules(css):

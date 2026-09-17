@@ -1,0 +1,13 @@
+{
+  "_note": "Google place ID for each location (slug from data/content.py). Used by scripts/sync_google_hours.py.",
+  "glastonbury-ct": "",
+  "east-hartford-ct": "",
+  "vernon-ct": "",
+  "bolton-ct": "",
+  "storrs-ct": "",
+  "preston-ct": "",
+  "plainville-ct": "",
+  "berlin-ct": "",
+  "shelton-ct": "",
+  "delray-beach-fl": ""
+}

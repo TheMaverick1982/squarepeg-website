@@ -3,20 +3,37 @@ Square Peg Pizzeria — site content.
 Everything the site says lives here. Edit this file, run `python3 build.py`, redeploy.
 """
 
+import os
+
+# ------------------------------------------------------------------ TOAST GO-LIVE SWITCH
+# Today Toast serves ordering and menus on the main domain (squarepegpizzeria.com/order/...).
+# At launch this website takes over the main domain and Toast moves to the order subdomain.
+# On launch day set TOAST_ON_SUBDOMAIN = True, rebuild, push. That one change moves every
+# Order / Menu / Gift card button, the search data and llms.txt to the subdomain.
+# (The 301 redirects from old main-domain Toast URLs always point to the subdomain.)
+# For a test build without editing this file: SP_TOAST_ON_SUBDOMAIN=1 python3 build.py --staging
+TOAST_ON_SUBDOMAIN = False
+TOAST_MAIN_DOMAIN = "https://squarepegpizzeria.com"          # where Toast lives today
+TOAST_SUBDOMAIN = "https://order.squarepegpizzeria.com"      # where Toast lives after launch
+# Paths on the Toast site. The redirects assume Toast keeps the same paths on the subdomain;
+# confirm with Toast (LAUNCH_CHECKLIST.md) and change these if its paths differ.
+TOAST_PATHS = {"order": "/order/", "picker": "/order", "menu": "/menu", "gift_cards": "/gift-cards"}
+if os.environ.get("SP_TOAST_ON_SUBDOMAIN") in ("1", "0"):
+    TOAST_ON_SUBDOMAIN = os.environ["SP_TOAST_ON_SUBDOMAIN"] == "1"
+TOAST_HOST = TOAST_SUBDOMAIN if TOAST_ON_SUBDOMAIN else TOAST_MAIN_DOMAIN
+
 SITE = {
     "name": "Square Peg Pizzeria",
     "domain": "https://squarepegpizzeria.com",
-    # Where "Order" buttons go. Today: the live Toast pages.
-    # At launch (after order.squarepegpizzeria.com is connected to Toast Online Ordering Pro)
-    # change this to "https://order.squarepegpizzeria.com/order/"
-    "order_base": "https://squarepegpizzeria.com/order/",
-    "order_picker_toast": "https://squarepegpizzeria.com/order",
+    # Where "Order" buttons go: TOAST_HOST + /order/<location's toast slug>. Set by the switch above.
+    "order_base": TOAST_HOST + TOAST_PATHS["order"],
+    "order_picker_toast": TOAST_HOST + TOAST_PATHS["picker"],
     # Menus live in Toast (per location, with live prices). "Menu" buttons open the location
     # picker and send guests to that location's Toast page. This is the fallback link.
-    # At launch change to the Toast menu/ordering URL on the order subdomain.
-    "menu_url": "https://squarepegpizzeria.com/menu",
-    # Toast eGift cards. At launch use the Toast gift card link (Toast Web > Gift Cards), e.g. https://www.toasttab.com/<your-slug>/giftcards
-    "gift_cards_url": "https://squarepegpizzeria.com/gift-cards",
+    "menu_url": TOAST_HOST + TOAST_PATHS["menu"],
+    # Toast eGift cards. If Toast gives you a different gift card link (e.g. https://www.toasttab.com/<slug>/giftcards),
+    # replace this line with that full URL.
+    "gift_cards_url": TOAST_HOST + TOAST_PATHS["gift_cards"],
     "email": "info@squarepegpizzeria.com",
     "app_link": "https://onelink.to/squarepeg-app",
     "loyalty_signin": "https://squarepegpizzeria.comosense.net/auth/signin",

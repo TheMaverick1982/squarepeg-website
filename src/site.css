@@ -358,6 +358,12 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hours th,.hours td{padding:9px 0;border-bottom:1px solid var(--line);text-align:left;font-size:16px}
 .hours td{text-align:right}
 .hours tr.today th,.hours tr.today td{font-weight:800;color:var(--ember-deep)}
+.special-hours{margin-top:16px;border:2px solid var(--flame);background:#fff8e6;padding:12px 14px}
+.special-hours h3{margin:0 0 6px;font:800 13px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--char)}
+.special-hours ul{list-style:none;margin:0;padding:0}
+.special-hours li{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:15px;font-variant-numeric:tabular-nums}
+.special-hours li+li{border-top:1px solid rgba(20,17,16,.12)}
+.special-hours li.is-past{display:none}
 .map{position:relative;min-height:340px;background:var(--oven);overflow:hidden}
 .map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:1}
 .map-fallback{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:12px;color:#fff;text-align:center;padding:24px}
@@ -543,3 +549,22 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .center{text-align:center;justify-items:center}
 @media (min-width:960px){.two-col:has(.form-embed)>.stack{position:sticky;top:100px}}
 @media (min-width:960px){.two-col>div:has(>.bento){position:sticky;top:100px}}
+
+/* ---------- Towns we serve ---------- */
+.area-bands{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.area-band{background:var(--white);border:1px solid var(--line);padding:18px 20px}
+.area-band h3{margin:0 0 10px;font:800 13px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--ember-deep)}
+.area-list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:15px;font-weight:600}
+.town-search{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;max-width:640px}
+.town-search input{flex:1 1 260px;min-height:52px;padding:0 16px;border:2px solid #fff;background:#fff;color:var(--char);font:600 17px var(--body);border-radius:0}
+.town-group+.town-group{margin-top:36px}
+.town-group h2{font-size:32px;margin:0 0 14px}
+.town-list{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.town-list li{background:var(--white);border:1px solid var(--line);padding:12px 14px;display:grid;gap:3px;font-size:14px}
+.town-list b{font-size:17px}
+.town-list .also{color:var(--smoke)}
+.town-list a{font-weight:700}
+.town-empty{font-size:16px;margin-bottom:16px}
+.town-geo{background:var(--char);color:#fff;padding:14px 18px;font-size:17px;font-weight:600;margin:0 0 20px}
+.town-geo a{color:var(--flame);font-weight:800}
+.town-list li[hidden]{display:none}

@@ -22,10 +22,19 @@
 
   /* ---------- Open-now logic (all locations are US Eastern time) ---------- */
   function nowET() {
-    var parts = new Intl.DateTimeFormat("en-US", { timeZone: TZ, weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+    var parts = new Intl.DateTimeFormat("en-US", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
     var o = {};
     parts.forEach(function (p) { o[p.type] = p.value; });
-    return { day: DAYS.indexOf(o.weekday), mins: (parseInt(o.hour, 10) % 24) * 60 + parseInt(o.minute, 10) };
+    return { day: DAYS.indexOf(o.weekday), mins: (parseInt(o.hour, 10) % 24) * 60 + parseInt(o.minute, 10), y: +o.year, m: +o.month, d: +o.day };
+  }
+  // Hours for today + offset days: holiday/special hours (from Google) win over the weekly hours.
+  function isoDay(n, offset) {
+    return new Date(Date.UTC(n.y, n.m - 1, n.d + offset)).toISOString().slice(0, 10);
+  }
+  function hoursOn(loc, n, offset) {
+    var iso = isoDay(n, offset), sp = loc.special || {};
+    if (Object.prototype.hasOwnProperty.call(sp, iso)) return sp[iso];
+    return loc.hours[DAYS[((n.day + offset) % 7 + 7) % 7]];
   }
   function toMin(t) { var a = t.split(":"); return +a[0] * 60 + +a[1]; }
   function fmt(t) {
@@ -37,19 +46,19 @@
   function status(loc) {
     var n = nowET();
     // check yesterday's late-night window first
-    var yKey = DAYS[(n.day + 6) % 7], y = loc.hours[yKey];
+    var y = hoursOn(loc, n, -1);
     if (y) {
       var yo = toMin(y[0]), yc = toMin(y[1]);
       if (yc <= yo && n.mins < yc) return { open: true, label: "Open · till " + fmt(y[1]), soon: yc - n.mins <= 45 };
     }
-    var t = loc.hours[DAYS[n.day]];
+    var t = hoursOn(loc, n, 0);
     if (t) {
       var o = toMin(t[0]), c = toMin(t[1]); if (c <= o) c += 1440;
       if (n.mins >= o && n.mins < c) return { open: true, label: (c - n.mins <= 45 ? "Closing soon · " : "Open · till ") + fmt(t[1]), soon: c - n.mins <= 45 };
       if (n.mins < o) return { open: false, label: "Opens " + fmt(t[0]) + " today" };
     }
     for (var i = 1; i <= 7; i++) {
-      var d = DAYS[(n.day + i) % 7], hrs = loc.hours[d];
+      var d = DAYS[(n.day + i) % 7], hrs = hoursOn(loc, n, i);
       if (hrs) return { open: false, label: "Closed · opens " + (i === 1 ? "tomorrow " : d + " ") + fmt(hrs[0]) };
     }
     return { open: false, label: "Closed" };
@@ -64,6 +73,23 @@
     $$("[data-status]").forEach(function (el) { var l = bySlug(el.getAttribute("data-status")); if (l) paintStatus(el, l); });
     var n = nowET();
     $$(".hours tr[data-day]").forEach(function (tr) { tr.classList.toggle("today", tr.getAttribute("data-day") === DAYS[n.day]); });
+    var today = isoDay(n, 0);
+    $$(".special-hours li[data-date]").forEach(function (li) { li.classList.toggle("is-past", li.getAttribute("data-date") < today); });
+    $$(".special-hours").forEach(function (box) { box.hidden = !$$("li:not(.is-past)", box).length; });
+  }
+
+  /* ---------- Towns we serve: filter ---------- */
+  var townInput = $("#town-filter");
+  if (townInput) {
+    townInput.addEventListener("input", function () {
+      var q = townInput.value.trim().toLowerCase(), any = false;
+      $$(".town-group").forEach(function (g) {
+        var shown = 0;
+        $$("li[data-town]", g).forEach(function (li) { var ok = !q || li.getAttribute("data-town").indexOf(q) !== -1; li.hidden = !ok; if (ok) shown++; });
+        g.hidden = !shown; if (shown) any = true;
+      });
+      var e = $("#town-empty"); if (e) e.hidden = any;
+    });
   }
 
   /* ---------- Distance ---------- */
@@ -148,6 +174,11 @@
           var near = sortedLocs()[0];
           var sel = $("#quick-loc");
           if (sel && t.id === "geo-quick") { sel.value = near.slug; updateQuick(); }
+          var tg = $("#town-geo");
+          if (tg) {
+            tg.innerHTML = 'Closest to you: <a href="' + near.url + '">Square Peg ' + near.short + "</a>, about " + Math.round(miles(userPos, near)) + ' miles away. <a href="' + near.order + '" target="_blank" rel="noopener" data-track="order_click" data-src="towns-geo">Order ' + near.short + " →</a>";
+            tg.hidden = false;
+          }
           sortGrid();
         } else setTimeout(function () { t.textContent = orig; }, 3000);
       });

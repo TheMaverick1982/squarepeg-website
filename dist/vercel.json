@@ -337,6 +337,56 @@
       "source": "/gift-cards/",
       "destination": "https://order.squarepegpizzeria.com/gift-cards",
       "permanent": true
+    },
+    {
+      "source": "/popmenu-digital-gift-cards",
+      "destination": "https://order.squarepegpizzeria.com/gift-cards",
+      "permanent": true
+    },
+    {
+      "source": "/popmenu-digital-gift-cards/",
+      "destination": "https://order.squarepegpizzeria.com/gift-cards",
+      "permanent": true
+    },
+    {
+      "source": "/menus",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/menus/",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/menus/:path*",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/dishes/:path*",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/reviews",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/",
+      "destination": "/about/",
+      "permanent": true
+    },
+    {
+      "source": "/jobs",
+      "destination": "/careers/",
+      "permanent": true
+    },
+    {
+      "source": "/jobs/",
+      "destination": "/careers/",
+      "permanent": true
     }
   ],
   "headers": [

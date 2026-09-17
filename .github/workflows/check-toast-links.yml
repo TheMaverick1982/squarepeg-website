@@ -1,0 +1,22 @@
+# Launch day: confirm every Toast ordering/menu link loads on the order subdomain
+# before switching the website's buttons to it. Actions > Check Toast links > Run workflow.
+name: Check Toast links
+
+on:
+  workflow_dispatch:
+    inputs:
+      host:
+        description: "Toast host to check"
+        default: "https://order.squarepegpizzeria.com"
+        type: string
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/check_toast_links.py "${{ inputs.host }}"

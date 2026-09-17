@@ -38,3 +38,9 @@
 /menu-delray-beach           https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue 301
 /gift-card                   https://order.squarepegpizzeria.com/gift-cards               301
 /gift-cards                  https://order.squarepegpizzeria.com/gift-cards               301
+/popmenu-digital-gift-cards  https://order.squarepegpizzeria.com/gift-cards               301
+/menus                       https://order.squarepegpizzeria.com/menu                     301
+/menus/*                     https://order.squarepegpizzeria.com/menu                     301
+/dishes/*                    https://order.squarepegpizzeria.com/menu                     301
+/reviews                     /about/                                                      301
+/jobs                        /careers/                                                    301

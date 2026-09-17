@@ -6,3 +6,4 @@ _source/
 *.zip
 node_modules/
 .vercel
+*.prev/

@@ -36,3 +36,9 @@ https://squarepegpizzeria.com/menu-shelton,https://order.squarepegpizzeria.com/o
 https://squarepegpizzeria.com/menu-delray-beach,https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue,301
 https://squarepegpizzeria.com/gift-card,https://order.squarepegpizzeria.com/gift-cards,301
 https://squarepegpizzeria.com/gift-cards,https://order.squarepegpizzeria.com/gift-cards,301
+https://squarepegpizzeria.com/popmenu-digital-gift-cards,https://order.squarepegpizzeria.com/gift-cards,301
+https://squarepegpizzeria.com/menus,https://order.squarepegpizzeria.com/menu,301
+https://squarepegpizzeria.com/menus/*,https://order.squarepegpizzeria.com/menu,301
+https://squarepegpizzeria.com/dishes/*,https://order.squarepegpizzeria.com/menu,301
+https://squarepegpizzeria.com/reviews,https://squarepegpizzeria.com/about/,301
+https://squarepegpizzeria.com/jobs,https://squarepegpizzeria.com/careers/,301

@@ -1,0 +1,45 @@
+# One-time setup: find each location's Google place ID and save data/google_places.json.
+# Actions > Find Google place IDs > Run workflow, then read the summary table.
+name: Find Google place IDs
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Look up every location again (replaces saved IDs)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site-build
+  cancel-in-progress: false
+
+jobs:
+  find:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Look up place IDs
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+        run: python3 scripts/find_google_place_ids.py ${{ inputs.force && '--force' || '' }}
+      - name: Save them
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git diff --quiet -- data/google_places.json && { echo "No new place IDs."; exit 0; }
+          owner="${{ github.repository_owner }}"
+          id=$(gh api "users/$owner" --jq .id)
+          git config user.name "$owner"
+          git config user.email "${id}+${owner}@users.noreply.github.com"
+          git add data/google_places.json
+          git commit -m "Save Google place IDs for hours sync"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

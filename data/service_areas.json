@@ -1,0 +1,1606 @@
+{
+ "_note": "Towns within 15 miles (straight line) of each store. Built by scripts/build_service_areas.py from USPS town names (zipcodes package) and GeoNames town centers (geonames.org, CC BY 4.0).",
+ "radius_miles": 15.0,
+ "locations": {
+  "glastonbury-ct": [
+   {
+    "name": "Wethersfield",
+    "state": "CT",
+    "mi": 4.1
+   },
+   {
+    "name": "South Glastonbury",
+    "state": "CT",
+    "mi": 4.2
+   },
+   {
+    "name": "East Hartford",
+    "state": "CT",
+    "mi": 4.9
+   },
+   {
+    "name": "Manchester",
+    "state": "CT",
+    "mi": 4.9
+   },
+   {
+    "name": "Rocky Hill",
+    "state": "CT",
+    "mi": 6.1
+   },
+   {
+    "name": "Hartford",
+    "state": "CT",
+    "mi": 6.6
+   },
+   {
+    "name": "Bolton",
+    "state": "CT",
+    "mi": 7.8
+   },
+   {
+    "name": "Newington",
+    "state": "CT",
+    "mi": 7.8
+   },
+   {
+    "name": "South Windsor",
+    "state": "CT",
+    "mi": 7.8
+   },
+   {
+    "name": "Marlborough",
+    "state": "CT",
+    "mi": 7.9
+   },
+   {
+    "name": "Cromwell",
+    "state": "CT",
+    "mi": 9.2
+   },
+   {
+    "name": "West Hartford",
+    "state": "CT",
+    "mi": 9.2
+   },
+   {
+    "name": "Vernon",
+    "state": "CT",
+    "mi": 10.0
+   },
+   {
+    "name": "Windsor",
+    "state": "CT",
+    "mi": 10.0
+   },
+   {
+    "name": "Andover",
+    "state": "CT",
+    "mi": 10.2
+   },
+   {
+    "name": "East Berlin",
+    "state": "CT",
+    "mi": 10.4
+   },
+   {
+    "name": "East Hampton",
+    "state": "CT",
+    "mi": 10.4
+   },
+   {
+    "name": "Portland",
+    "state": "CT",
+    "mi": 10.5
+   },
+   {
+    "name": "Bloomfield",
+    "state": "CT",
+    "mi": 11.0
+   },
+   {
+    "name": "Berlin",
+    "state": "CT",
+    "mi": 11.1
+   },
+   {
+    "name": "New Britain",
+    "state": "CT",
+    "mi": 11.3
+   },
+   {
+    "name": "Middletown",
+    "state": "CT",
+    "mi": 11.4
+   },
+   {
+    "name": "Hebron",
+    "state": "CT",
+    "mi": 11.5
+   },
+   {
+    "name": "Amston",
+    "state": "CT",
+    "mi": 12.4
+   },
+   {
+    "name": "Broad Brook",
+    "state": "CT",
+    "mi": 13.0
+   },
+   {
+    "name": "Coventry",
+    "state": "CT",
+    "mi": 13.2
+   },
+   {
+    "name": "Farmington",
+    "state": "CT",
+    "mi": 13.3
+   },
+   {
+    "name": "East Windsor",
+    "state": "CT",
+    "mi": 13.6
+   },
+   {
+    "name": "Columbia",
+    "state": "CT",
+    "mi": 13.8
+   },
+   {
+    "name": "Ellington",
+    "state": "CT",
+    "mi": 14.0
+   },
+   {
+    "name": "Rockfall",
+    "state": "CT",
+    "mi": 14.2
+   },
+   {
+    "name": "Avon",
+    "state": "CT",
+    "mi": 14.7
+   },
+   {
+    "name": "Windsor Locks",
+    "state": "CT",
+    "mi": 14.9
+   },
+   {
+    "name": "Plainville",
+    "state": "CT",
+    "mi": 15.0
+   }
+  ],
+  "east-hartford-ct": [
+   {
+    "name": "South Windsor",
+    "state": "CT",
+    "mi": 2.7
+   },
+   {
+    "name": "Manchester",
+    "state": "CT",
+    "mi": 3.9
+   },
+   {
+    "name": "Hartford",
+    "state": "CT",
+    "mi": 5.0
+   },
+   {
+    "name": "Windsor",
+    "state": "CT",
+    "mi": 5.0
+   },
+   {
+    "name": "Glastonbury",
+    "state": "CT",
+    "mi": 5.4
+   },
+   {
+    "name": "Wethersfield",
+    "state": "CT",
+    "mi": 6.1
+   },
+   {
+    "name": "Bloomfield",
+    "state": "CT",
+    "mi": 7.4
+   },
+   {
+    "name": "Vernon",
+    "state": "CT",
+    "mi": 7.5
+   },
+   {
+    "name": "West Hartford",
+    "state": "CT",
+    "mi": 7.9
+   },
+   {
+    "name": "Bolton",
+    "state": "CT",
+    "mi": 8.1
+   },
+   {
+    "name": "Broad Brook",
+    "state": "CT",
+    "mi": 8.3
+   },
+   {
+    "name": "East Windsor",
+    "state": "CT",
+    "mi": 8.8
+   },
+   {
+    "name": "Newington",
+    "state": "CT",
+    "mi": 9.2
+   },
+   {
+    "name": "South Glastonbury",
+    "state": "CT",
+    "mi": 9.3
+   },
+   {
+    "name": "Windsor Locks",
+    "state": "CT",
+    "mi": 9.7
+   },
+   {
+    "name": "Rocky Hill",
+    "state": "CT",
+    "mi": 9.8
+   },
+   {
+    "name": "Ellington",
+    "state": "CT",
+    "mi": 10.1
+   },
+   {
+    "name": "Tariffville",
+    "state": "CT",
+    "mi": 11.8
+   },
+   {
+    "name": "Andover",
+    "state": "CT",
+    "mi": 11.9
+   },
+   {
+    "name": "Simsbury",
+    "state": "CT",
+    "mi": 12.2
+   },
+   {
+    "name": "Avon",
+    "state": "CT",
+    "mi": 12.3
+   },
+   {
+    "name": "Marlborough",
+    "state": "CT",
+    "mi": 12.4
+   },
+   {
+    "name": "East Granby",
+    "state": "CT",
+    "mi": 12.5
+   },
+   {
+    "name": "Weatogue",
+    "state": "CT",
+    "mi": 12.6
+   },
+   {
+    "name": "Enfield",
+    "state": "CT",
+    "mi": 12.8
+   },
+   {
+    "name": "Tolland",
+    "state": "CT",
+    "mi": 12.9
+   },
+   {
+    "name": "New Britain",
+    "state": "CT",
+    "mi": 13.1
+   },
+   {
+    "name": "Farmington",
+    "state": "CT",
+    "mi": 13.2
+   },
+   {
+    "name": "Coventry",
+    "state": "CT",
+    "mi": 13.5
+   },
+   {
+    "name": "Cromwell",
+    "state": "CT",
+    "mi": 13.7
+   },
+   {
+    "name": "East Berlin",
+    "state": "CT",
+    "mi": 13.9
+   },
+   {
+    "name": "Berlin",
+    "state": "CT",
+    "mi": 14.0
+   },
+   {
+    "name": "Suffield",
+    "state": "CT",
+    "mi": 14.0
+   },
+   {
+    "name": "West Simsbury",
+    "state": "CT",
+    "mi": 14.7
+   },
+   {
+    "name": "Hebron",
+    "state": "CT",
+    "mi": 14.9
+   }
+  ],
+  "vernon-ct": [
+   {
+    "name": "Manchester",
+    "state": "CT",
+    "mi": 4.5
+   },
+   {
+    "name": "Ellington",
+    "state": "CT",
+    "mi": 4.8
+   },
+   {
+    "name": "Bolton",
+    "state": "CT",
+    "mi": 5.4
+   },
+   {
+    "name": "Broad Brook",
+    "state": "CT",
+    "mi": 5.4
+   },
+   {
+    "name": "East Windsor",
+    "state": "CT",
+    "mi": 5.9
+   },
+   {
+    "name": "South Windsor",
+    "state": "CT",
+    "mi": 6.7
+   },
+   {
+    "name": "Tolland",
+    "state": "CT",
+    "mi": 6.8
+   },
+   {
+    "name": "East Hartford",
+    "state": "CT",
+    "mi": 7.3
+   },
+   {
+    "name": "Windsor",
+    "state": "CT",
+    "mi": 7.9
+   },
+   {
+    "name": "Coventry",
+    "state": "CT",
+    "mi": 9.0
+   },
+   {
+    "name": "Andover",
+    "state": "CT",
+    "mi": 9.3
+   },
+   {
+    "name": "Windsor Locks",
+    "state": "CT",
+    "mi": 9.5
+   },
+   {
+    "name": "South Willington",
+    "state": "CT",
+    "mi": 9.9
+   },
+   {
+    "name": "Glastonbury",
+    "state": "CT",
+    "mi": 10.5
+   },
+   {
+    "name": "Somers",
+    "state": "CT",
+    "mi": 10.5
+   },
+   {
+    "name": "Enfield",
+    "state": "CT",
+    "mi": 10.9
+   },
+   {
+    "name": "Hartford",
+    "state": "CT",
+    "mi": 11.2
+   },
+   {
+    "name": "Wethersfield",
+    "state": "CT",
+    "mi": 11.8
+   },
+   {
+    "name": "Bloomfield",
+    "state": "CT",
+    "mi": 12.3
+   },
+   {
+    "name": "Willington",
+    "state": "CT",
+    "mi": 12.4
+   },
+   {
+    "name": "Mansfield",
+    "state": "CT",
+    "mi": 12.7
+   },
+   {
+    "name": "Stafford Springs",
+    "state": "CT",
+    "mi": 12.7
+   },
+   {
+    "name": "South Glastonbury",
+    "state": "CT",
+    "mi": 13.1
+   },
+   {
+    "name": "Suffield",
+    "state": "CT",
+    "mi": 13.1
+   },
+   {
+    "name": "Columbia",
+    "state": "CT",
+    "mi": 13.5
+   },
+   {
+    "name": "Marlborough",
+    "state": "CT",
+    "mi": 13.6
+   },
+   {
+    "name": "Hebron",
+    "state": "CT",
+    "mi": 13.9
+   },
+   {
+    "name": "West Hartford",
+    "state": "CT",
+    "mi": 13.9
+   },
+   {
+    "name": "East Granby",
+    "state": "CT",
+    "mi": 14.7
+   },
+   {
+    "name": "Tariffville",
+    "state": "CT",
+    "mi": 14.7
+   }
+  ],
+  "bolton-ct": [
+   {
+    "name": "Andover",
+    "state": "CT",
+    "mi": 3.2
+   },
+   {
+    "name": "Manchester",
+    "state": "CT",
+    "mi": 5.0
+   },
+   {
+    "name": "Coventry",
+    "state": "CT",
+    "mi": 6.0
+   },
+   {
+    "name": "Vernon",
+    "state": "CT",
+    "mi": 6.7
+   },
+   {
+    "name": "Hebron",
+    "state": "CT",
+    "mi": 6.9
+   },
+   {
+    "name": "Marlborough",
+    "state": "CT",
+    "mi": 7.1
+   },
+   {
+    "name": "Columbia",
+    "state": "CT",
+    "mi": 7.4
+   },
+   {
+    "name": "Amston",
+    "state": "CT",
+    "mi": 8.7
+   },
+   {
+    "name": "Glastonbury",
+    "state": "CT",
+    "mi": 9.1
+   },
+   {
+    "name": "South Glastonbury",
+    "state": "CT",
+    "mi": 9.1
+   },
+   {
+    "name": "East Hartford",
+    "state": "CT",
+    "mi": 9.5
+   },
+   {
+    "name": "Tolland",
+    "state": "CT",
+    "mi": 9.6
+   },
+   {
+    "name": "Mansfield",
+    "state": "CT",
+    "mi": 10.1
+   },
+   {
+    "name": "South Willington",
+    "state": "CT",
+    "mi": 10.5
+   },
+   {
+    "name": "South Windsor",
+    "state": "CT",
+    "mi": 11.1
+   },
+   {
+    "name": "Ellington",
+    "state": "CT",
+    "mi": 11.3
+   },
+   {
+    "name": "Wethersfield",
+    "state": "CT",
+    "mi": 11.3
+   },
+   {
+    "name": "East Hampton",
+    "state": "CT",
+    "mi": 12.0
+   },
+   {
+    "name": "Willimantic",
+    "state": "CT",
+    "mi": 12.0
+   },
+   {
+    "name": "Mansfield Center",
+    "state": "CT",
+    "mi": 12.3
+   },
+   {
+    "name": "Broad Brook",
+    "state": "CT",
+    "mi": 12.5
+   },
+   {
+    "name": "Lebanon",
+    "state": "CT",
+    "mi": 12.5
+   },
+   {
+    "name": "Colchester",
+    "state": "CT",
+    "mi": 12.7
+   },
+   {
+    "name": "Hartford",
+    "state": "CT",
+    "mi": 12.9
+   },
+   {
+    "name": "East Windsor",
+    "state": "CT",
+    "mi": 13.0
+   },
+   {
+    "name": "Rocky Hill",
+    "state": "CT",
+    "mi": 13.0
+   },
+   {
+    "name": "Windsor",
+    "state": "CT",
+    "mi": 13.1
+   },
+   {
+    "name": "Willington",
+    "state": "CT",
+    "mi": 13.8
+   },
+   {
+    "name": "North Windham",
+    "state": "CT",
+    "mi": 14.3
+   },
+   {
+    "name": "South Windham",
+    "state": "CT",
+    "mi": 14.4
+   },
+   {
+    "name": "Windham",
+    "state": "CT",
+    "mi": 14.7
+   },
+   {
+    "name": "Cromwell",
+    "state": "CT",
+    "mi": 14.8
+   }
+  ],
+  "storrs-ct": [
+   {
+    "name": "Mansfield",
+    "state": "CT",
+    "mi": 1.1
+   },
+   {
+    "name": "Mansfield Center",
+    "state": "CT",
+    "mi": 3.3
+   },
+   {
+    "name": "South Willington",
+    "state": "CT",
+    "mi": 4.6
+   },
+   {
+    "name": "Coventry",
+    "state": "CT",
+    "mi": 4.9
+   },
+   {
+    "name": "Chaplin",
+    "state": "CT",
+    "mi": 5.5
+   },
+   {
+    "name": "North Windham",
+    "state": "CT",
+    "mi": 6.0
+   },
+   {
+    "name": "Willington",
+    "state": "CT",
+    "mi": 6.3
+   },
+   {
+    "name": "Willimantic",
+    "state": "CT",
+    "mi": 6.8
+   },
+   {
+    "name": "Ashford",
+    "state": "CT",
+    "mi": 7.6
+   },
+   {
+    "name": "Tolland",
+    "state": "CT",
+    "mi": 7.9
+   },
+   {
+    "name": "Columbia",
+    "state": "CT",
+    "mi": 8.1
+   },
+   {
+    "name": "Andover",
+    "state": "CT",
+    "mi": 8.5
+   },
+   {
+    "name": "Windham",
+    "state": "CT",
+    "mi": 8.5
+   },
+   {
+    "name": "Eastford",
+    "state": "CT",
+    "mi": 9.4
+   },
+   {
+    "name": "South Windham",
+    "state": "CT",
+    "mi": 9.4
+   },
+   {
+    "name": "Hampton",
+    "state": "CT",
+    "mi": 9.5
+   },
+   {
+    "name": "Bolton",
+    "state": "CT",
+    "mi": 10.4
+   },
+   {
+    "name": "Stafford Springs",
+    "state": "CT",
+    "mi": 10.8
+   },
+   {
+    "name": "Woodstock Valley",
+    "state": "CT",
+    "mi": 10.8
+   },
+   {
+    "name": "Scotland",
+    "state": "CT",
+    "mi": 11.0
+   },
+   {
+    "name": "Vernon",
+    "state": "CT",
+    "mi": 11.5
+   },
+   {
+    "name": "Lebanon",
+    "state": "CT",
+    "mi": 11.9
+   },
+   {
+    "name": "Hebron",
+    "state": "CT",
+    "mi": 12.0
+   },
+   {
+    "name": "Ellington",
+    "state": "CT",
+    "mi": 13.5
+   },
+   {
+    "name": "Amston",
+    "state": "CT",
+    "mi": 13.7
+   },
+   {
+    "name": "North Franklin",
+    "state": "CT",
+    "mi": 14.0
+   },
+   {
+    "name": "Pomfret Center",
+    "state": "CT",
+    "mi": 14.2
+   },
+   {
+    "name": "Manchester",
+    "state": "CT",
+    "mi": 14.5
+   },
+   {
+    "name": "Brooklyn",
+    "state": "CT",
+    "mi": 15.0
+   }
+  ],
+  "preston-ct": [
+   {
+    "name": "Taftville",
+    "state": "CT",
+    "mi": 4.7
+   },
+   {
+    "name": "Norwich",
+    "state": "CT",
+    "mi": 4.9
+   },
+   {
+    "name": "Jewett City",
+    "state": "CT",
+    "mi": 5.7
+   },
+   {
+    "name": "Ledyard",
+    "state": "CT",
+    "mi": 6.0
+   },
+   {
+    "name": "North Stonington",
+    "state": "CT",
+    "mi": 7.5
+   },
+   {
+    "name": "Voluntown",
+    "state": "CT",
+    "mi": 7.7
+   },
+   {
+    "name": "Yantic",
+    "state": "CT",
+    "mi": 7.7
+   },
+   {
+    "name": "Baltic",
+    "state": "CT",
+    "mi": 8.3
+   },
+   {
+    "name": "Gales Ferry",
+    "state": "CT",
+    "mi": 8.3
+   },
+   {
+    "name": "Uncasville",
+    "state": "CT",
+    "mi": 9.0
+   },
+   {
+    "name": "Montville",
+    "state": "CT",
+    "mi": 9.3
+   },
+   {
+    "name": "Bozrah",
+    "state": "CT",
+    "mi": 10.2
+   },
+   {
+    "name": "North Franklin",
+    "state": "CT",
+    "mi": 10.5
+   },
+   {
+    "name": "Quaker Hill",
+    "state": "CT",
+    "mi": 10.9
+   },
+   {
+    "name": "Canterbury",
+    "state": "CT",
+    "mi": 11.1
+   },
+   {
+    "name": "Plainfield",
+    "state": "CT",
+    "mi": 11.1
+   },
+   {
+    "name": "Hopkinton",
+    "state": "RI",
+    "mi": 11.4
+   },
+   {
+    "name": "Oakdale",
+    "state": "CT",
+    "mi": 11.4
+   },
+   {
+    "name": "Stonington",
+    "state": "CT",
+    "mi": 11.4
+   },
+   {
+    "name": "Gilman",
+    "state": "CT",
+    "mi": 11.7
+   },
+   {
+    "name": "Mystic",
+    "state": "CT",
+    "mi": 11.7
+   },
+   {
+    "name": "Ashaway",
+    "state": "RI",
+    "mi": 12.3
+   },
+   {
+    "name": "Pawcatuck",
+    "state": "CT",
+    "mi": 12.7
+   },
+   {
+    "name": "Westerly",
+    "state": "RI",
+    "mi": 12.9
+   },
+   {
+    "name": "Groton",
+    "state": "CT",
+    "mi": 13.0
+   },
+   {
+    "name": "New London",
+    "state": "CT",
+    "mi": 13.1
+   },
+   {
+    "name": "Scotland",
+    "state": "CT",
+    "mi": 13.1
+   },
+   {
+    "name": "Hope Valley",
+    "state": "RI",
+    "mi": 13.8
+   },
+   {
+    "name": "Moosup",
+    "state": "CT",
+    "mi": 14.1
+   },
+   {
+    "name": "South Windham",
+    "state": "CT",
+    "mi": 14.5
+   },
+   {
+    "name": "Waterford",
+    "state": "CT",
+    "mi": 14.9
+   }
+  ],
+  "plainville-ct": [
+   {
+    "name": "New Britain",
+    "state": "CT",
+    "mi": 2.9
+   },
+   {
+    "name": "Farmington",
+    "state": "CT",
+    "mi": 3.3
+   },
+   {
+    "name": "Berlin",
+    "state": "CT",
+    "mi": 5.7
+   },
+   {
+    "name": "Southington",
+    "state": "CT",
+    "mi": 5.7
+   },
+   {
+    "name": "Bristol",
+    "state": "CT",
+    "mi": 6.0
+   },
+   {
+    "name": "Newington",
+    "state": "CT",
+    "mi": 6.0
+   },
+   {
+    "name": "Unionville",
+    "state": "CT",
+    "mi": 6.0
+   },
+   {
+    "name": "East Berlin",
+    "state": "CT",
+    "mi": 7.2
+   },
+   {
+    "name": "Plantsville",
+    "state": "CT",
+    "mi": 7.2
+   },
+   {
+    "name": "West Hartford",
+    "state": "CT",
+    "mi": 7.8
+   },
+   {
+    "name": "Burlington",
+    "state": "CT",
+    "mi": 8.2
+   },
+   {
+    "name": "Rocky Hill",
+    "state": "CT",
+    "mi": 8.8
+   },
+   {
+    "name": "Terryville",
+    "state": "CT",
+    "mi": 9.2
+   },
+   {
+    "name": "Wolcott",
+    "state": "CT",
+    "mi": 9.2
+   },
+   {
+    "name": "Meriden",
+    "state": "CT",
+    "mi": 9.3
+   },
+   {
+    "name": "Avon",
+    "state": "CT",
+    "mi": 9.6
+   },
+   {
+    "name": "Wethersfield",
+    "state": "CT",
+    "mi": 9.8
+   },
+   {
+    "name": "Hartford",
+    "state": "CT",
+    "mi": 10.0
+   },
+   {
+    "name": "Cromwell",
+    "state": "CT",
+    "mi": 11.1
+   },
+   {
+    "name": "Plymouth",
+    "state": "CT",
+    "mi": 11.3
+   },
+   {
+    "name": "Rockfall",
+    "state": "CT",
+    "mi": 11.7
+   },
+   {
+    "name": "Weatogue",
+    "state": "CT",
+    "mi": 11.9
+   },
+   {
+    "name": "Bloomfield",
+    "state": "CT",
+    "mi": 12.0
+   },
+   {
+    "name": "Canton",
+    "state": "CT",
+    "mi": 12.0
+   },
+   {
+    "name": "Glastonbury",
+    "state": "CT",
+    "mi": 12.0
+   },
+   {
+    "name": "Middletown",
+    "state": "CT",
+    "mi": 12.1
+   },
+   {
+    "name": "Portland",
+    "state": "CT",
+    "mi": 12.1
+   },
+   {
+    "name": "Middlefield",
+    "state": "CT",
+    "mi": 12.2
+   },
+   {
+    "name": "Cheshire",
+    "state": "CT",
+    "mi": 12.4
+   },
+   {
+    "name": "Thomaston",
+    "state": "CT",
+    "mi": 12.4
+   },
+   {
+    "name": "South Glastonbury",
+    "state": "CT",
+    "mi": 13.5
+   },
+   {
+    "name": "Waterbury",
+    "state": "CT",
+    "mi": 13.7
+   },
+   {
+    "name": "East Hartford",
+    "state": "CT",
+    "mi": 13.8
+   },
+   {
+    "name": "Prospect",
+    "state": "CT",
+    "mi": 13.9
+   },
+   {
+    "name": "West Simsbury",
+    "state": "CT",
+    "mi": 14.0
+   },
+   {
+    "name": "Harwinton",
+    "state": "CT",
+    "mi": 14.1
+   },
+   {
+    "name": "Oakville",
+    "state": "CT",
+    "mi": 14.1
+   },
+   {
+    "name": "Simsbury",
+    "state": "CT",
+    "mi": 14.2
+   },
+   {
+    "name": "Northfield",
+    "state": "CT",
+    "mi": 14.4
+   },
+   {
+    "name": "Wallingford",
+    "state": "CT",
+    "mi": 14.8
+   }
+  ],
+  "berlin-ct": [
+   {
+    "name": "East Berlin",
+    "state": "CT",
+    "mi": 1.8
+   },
+   {
+    "name": "New Britain",
+    "state": "CT",
+    "mi": 2.8
+   },
+   {
+    "name": "Rocky Hill",
+    "state": "CT",
+    "mi": 4.7
+   },
+   {
+    "name": "Newington",
+    "state": "CT",
+    "mi": 4.9
+   },
+   {
+    "name": "Cromwell",
+    "state": "CT",
+    "mi": 5.7
+   },
+   {
+    "name": "Plainville",
+    "state": "CT",
+    "mi": 6.6
+   },
+   {
+    "name": "Middletown",
+    "state": "CT",
+    "mi": 6.7
+   },
+   {
+    "name": "Portland",
+    "state": "CT",
+    "mi": 6.7
+   },
+   {
+    "name": "Rockfall",
+    "state": "CT",
+    "mi": 6.9
+   },
+   {
+    "name": "Meriden",
+    "state": "CT",
+    "mi": 7.0
+   },
+   {
+    "name": "Southington",
+    "state": "CT",
+    "mi": 7.2
+   },
+   {
+    "name": "Wethersfield",
+    "state": "CT",
+    "mi": 7.6
+   },
+   {
+    "name": "Farmington",
+    "state": "CT",
+    "mi": 7.7
+   },
+   {
+    "name": "Middlefield",
+    "state": "CT",
+    "mi": 7.9
+   },
+   {
+    "name": "Plantsville",
+    "state": "CT",
+    "mi": 8.6
+   },
+   {
+    "name": "Glastonbury",
+    "state": "CT",
+    "mi": 9.2
+   },
+   {
+    "name": "South Glastonbury",
+    "state": "CT",
+    "mi": 9.2
+   },
+   {
+    "name": "West Hartford",
+    "state": "CT",
+    "mi": 9.2
+   },
+   {
+    "name": "Hartford",
+    "state": "CT",
+    "mi": 9.8
+   },
+   {
+    "name": "Durham",
+    "state": "CT",
+    "mi": 10.7
+   },
+   {
+    "name": "Bristol",
+    "state": "CT",
+    "mi": 10.9
+   },
+   {
+    "name": "Unionville",
+    "state": "CT",
+    "mi": 11.0
+   },
+   {
+    "name": "Cheshire",
+    "state": "CT",
+    "mi": 12.0
+   },
+   {
+    "name": "Wallingford",
+    "state": "CT",
+    "mi": 12.5
+   },
+   {
+    "name": "Wolcott",
+    "state": "CT",
+    "mi": 12.6
+   },
+   {
+    "name": "East Hartford",
+    "state": "CT",
+    "mi": 12.7
+   },
+   {
+    "name": "East Hampton",
+    "state": "CT",
+    "mi": 13.1
+   },
+   {
+    "name": "Avon",
+    "state": "CT",
+    "mi": 13.3
+   },
+   {
+    "name": "Higganum",
+    "state": "CT",
+    "mi": 13.3
+   },
+   {
+    "name": "Burlington",
+    "state": "CT",
+    "mi": 13.6
+   },
+   {
+    "name": "Bloomfield",
+    "state": "CT",
+    "mi": 13.7
+   },
+   {
+    "name": "Terryville",
+    "state": "CT",
+    "mi": 14.1
+   },
+   {
+    "name": "Marlborough",
+    "state": "CT",
+    "mi": 14.7
+   },
+   {
+    "name": "Prospect",
+    "state": "CT",
+    "mi": 14.9
+   },
+   {
+    "name": "South Windsor",
+    "state": "CT",
+    "mi": 14.9
+   }
+  ],
+  "shelton-ct": [
+   {
+    "name": "Derby",
+    "state": "CT",
+    "mi": 0.4
+   },
+   {
+    "name": "Ansonia",
+    "state": "CT",
+    "mi": 2.3
+   },
+   {
+    "name": "Orange",
+    "state": "CT",
+    "mi": 4.2
+   },
+   {
+    "name": "Woodbridge",
+    "state": "CT",
+    "mi": 5.0
+   },
+   {
+    "name": "Seymour",
+    "state": "CT",
+    "mi": 5.7
+   },
+   {
+    "name": "Milford",
+    "state": "CT",
+    "mi": 6.6
+   },
+   {
+    "name": "Monroe",
+    "state": "CT",
+    "mi": 7.0
+   },
+   {
+    "name": "Trumbull",
+    "state": "CT",
+    "mi": 7.6
+   },
+   {
+    "name": "West Haven",
+    "state": "CT",
+    "mi": 8.1
+   },
+   {
+    "name": "Oxford",
+    "state": "CT",
+    "mi": 8.3
+   },
+   {
+    "name": "New Haven",
+    "state": "CT",
+    "mi": 8.5
+   },
+   {
+    "name": "Beacon Falls",
+    "state": "CT",
+    "mi": 8.6
+   },
+   {
+    "name": "Bethany",
+    "state": "CT",
+    "mi": 9.0
+   },
+   {
+    "name": "Stratford",
+    "state": "CT",
+    "mi": 9.3
+   },
+   {
+    "name": "Sandy Hook",
+    "state": "CT",
+    "mi": 10.4
+   },
+   {
+    "name": "Bridgeport",
+    "state": "CT",
+    "mi": 10.7
+   },
+   {
+    "name": "Easton",
+    "state": "CT",
+    "mi": 11.5
+   },
+   {
+    "name": "Hamden",
+    "state": "CT",
+    "mi": 11.5
+   },
+   {
+    "name": "East Haven",
+    "state": "CT",
+    "mi": 11.9
+   },
+   {
+    "name": "Naugatuck",
+    "state": "CT",
+    "mi": 12.0
+   },
+   {
+    "name": "Newtown",
+    "state": "CT",
+    "mi": 13.0
+   },
+   {
+    "name": "North Haven",
+    "state": "CT",
+    "mi": 13.1
+   },
+   {
+    "name": "Southbury",
+    "state": "CT",
+    "mi": 13.1
+   },
+   {
+    "name": "Prospect",
+    "state": "CT",
+    "mi": 14.2
+   },
+   {
+    "name": "Branford",
+    "state": "CT",
+    "mi": 14.5
+   },
+   {
+    "name": "Middlebury",
+    "state": "CT",
+    "mi": 14.8
+   },
+   {
+    "name": "Fairfield",
+    "state": "CT",
+    "mi": 15.0
+   }
+  ],
+  "delray-beach-fl": [
+   {
+    "name": "Gulf Stream",
+    "state": "FL",
+    "mi": 3.5
+   },
+   {
+    "name": "Highland Beach",
+    "state": "FL",
+    "mi": 5.3
+   },
+   {
+    "name": "Golf",
+    "state": "FL",
+    "mi": 5.4
+   },
+   {
+    "name": "Boynton Beach",
+    "state": "FL",
+    "mi": 5.8
+   },
+   {
+    "name": "Briny Breezes",
+    "state": "FL",
+    "mi": 6.0
+   },
+   {
+    "name": "Ocean Ridge",
+    "state": "FL",
+    "mi": 6.6
+   },
+   {
+    "name": "Boca Raton",
+    "state": "FL",
+    "mi": 7.3
+   },
+   {
+    "name": "Manalapan",
+    "state": "FL",
+    "mi": 8.5
+   },
+   {
+    "name": "Hypoluxo",
+    "state": "FL",
+    "mi": 8.6
+   },
+   {
+    "name": "Atlantis",
+    "state": "FL",
+    "mi": 9.3
+   },
+   {
+    "name": "Deerfield Beach",
+    "state": "FL",
+    "mi": 9.7
+   },
+   {
+    "name": "Lantana",
+    "state": "FL",
+    "mi": 9.9
+   },
+   {
+    "name": "South Palm Beach",
+    "state": "FL",
+    "mi": 10.4
+   },
+   {
+    "name": "Lake Worth Beach",
+    "state": "FL",
+    "mi": 11.4
+   },
+   {
+    "name": "Hillsboro Beach",
+    "state": "FL",
+    "mi": 11.6
+   },
+   {
+    "name": "Greenacres",
+    "state": "FL",
+    "mi": 11.9
+   },
+   {
+    "name": "Palm Springs",
+    "state": "FL",
+    "mi": 12.4
+   },
+   {
+    "name": "Parkland",
+    "state": "FL",
+    "mi": 12.5
+   },
+   {
+    "name": "Cloud Lake",
+    "state": "FL",
+    "mi": 12.8
+   },
+   {
+    "name": "Glen Ridge",
+    "state": "FL",
+    "mi": 12.8
+   },
+   {
+    "name": "Lighthouse Point",
+    "state": "FL",
+    "mi": 12.8
+   },
+   {
+    "name": "Lake Clarke Shores",
+    "state": "FL",
+    "mi": 13.3
+   },
+   {
+    "name": "Coconut Creek",
+    "state": "FL",
+    "mi": 14.7
+   }
+  ]
+ }
+}

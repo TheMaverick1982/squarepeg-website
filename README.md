@@ -17,12 +17,21 @@ A fast, static website for squarepegpizzeria.com. Ordering, menus and gift cards
 | `LAUNCH_CHECKLIST.md` | Everything to do before going live. |
 | `DEPLOY_VERCEL.md` | GitHub → Vercel setup, forms, Supabase. |
 | `REDIRECTS.csv` | Every old URL and where it now goes (301). |
+| `HOURS_SYNC.md` | Hours come from Google Business Profile every night. Setup and how it works. |
+| `scripts/`, `.github/workflows/` | The nightly Google hours sync, and the towns-within-15-miles builder. |
+| `data/service_areas.json` | Towns within 15 miles of each store (used on location pages and `/areas-we-serve/`). |
+| `LOCAL_SEO_PLAN.md` | How to rank in the towns around each store. |
+
+## Launch day: Toast moves to order.squarepegpizzeria.com
+Set `TOAST_ON_SUBDOMAIN = True` at the top of `data/content.py`, rebuild and push. First run **Actions → Check Toast links** to confirm the subdomain works. Full steps are in `LAUNCH_CHECKLIST.md` section 1.
 
 ## Updating the site
 
-1. Edit `data/content.py` (for example, change the monthly `DEAL`, or a location's hours).
-2. Run `python3 build.py && python3 build.py --staging` (needs Python 3 and `pip3 install -r requirements.txt`).
-3. Commit and push in GitHub Desktop; Vercel redeploys automatically.
+1. In GitHub Desktop, click **Fetch origin** and **Pull** if it offers. The nightly hours job pushes changes on its own.
+2. Edit `data/content.py` (for example, change the monthly `DEAL`).
+   - **Hours:** once the Google sync is on, change them in Google, not here. See `HOURS_SYNC.md`.
+3. Run `python3 build.py && python3 build.py --staging` (needs Python 3 and `pip3 install -r requirements.txt`).
+4. Commit and push in GitHub Desktop; Vercel redeploys automatically.
 
 ## Pages
 
@@ -31,6 +40,7 @@ A fast, static website for squarepegpizzeria.com. Ordering, menus and gift cards
 - `/catering/`, `/large-party-reservations/`, `/food-truck/`: your booking-system form (embed)
 - `/contact/`: contact form saved to Supabase, with emails routed by topic and location
 - `/fundraisers/`: Tuesday Night Fundraiser requests (embed)
+- `/areas-we-serve/`: every town within 15 miles of a store, with its closest Square Peg
 - `/deals/`: monthly deal and points shop
 - `/roll-the-dice/`, `/about/`, `/sms-terms/`, `/privacy/`, `/thanks/`, `/404.html`
 

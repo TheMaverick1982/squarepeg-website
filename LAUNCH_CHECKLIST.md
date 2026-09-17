@@ -9,13 +9,27 @@ The site in `dist/` is ready to deploy. Work through this list before pointing s
   - `_acme-challenge.order` CNAME → the value Toast gives you
 - [ ] Open `order.squarepegpizzeria.com/order/<slug>` for each location and confirm it loads.
 - [ ] Confirm the URL pattern Toast uses on the subdomain. The redirects assume the same paths as today (`/order/<slug>`, `/menu/<slug>`). If Toast uses different paths, update `redirect_map()` in `build.py`.
-- [ ] In `data/content.py`, change:
-  - `order_base` → `https://order.squarepegpizzeria.com/order/`
-  - `menu_url` → the Toast menu or ordering URL on the subdomain
-  - `gift_cards_url` → your Toast eGift card link
-- [ ] Rebuild: `python3 build.py`
+- [ ] **The site is ready for the switch: it's one setting.** `TOAST_ON_SUBDOMAIN` at the top of `data/content.py` moves every Order, Menu and Gift Card button, the search data and `llms.txt` from `squarepegpizzeria.com/...` to `order.squarepegpizzeria.com/...`. The 301 redirects for old Toast URLs already point to the subdomain.
+- [ ] If Toast uses different paths on the subdomain, or a different gift card link, change `TOAST_PATHS` (or `gift_cards_url`) in the same file.
+
+### Launch day: switching Toast to the subdomain
+1. **Connect the subdomain in Toast.** Toast connects `order.squarepegpizzeria.com` (DNS records above). Wait until it loads in a browser.
+2. **Check the links.** In GitHub, go to **Actions → Check Toast links → Run workflow**. Every row should be ✅.
+   - A ❌ with 403 can mean Toast blocks automated checks. Open that link yourself to confirm.
+3. **Flip the switch.** In `data/content.py`, set `TOAST_ON_SUBDOMAIN = True`. Then rebuild and push:
+   - `python3 build.py && python3 build.py --staging`, then push, or
+   - ask Claude to do it.
+4. **Move the main domain.** Point `squarepegpizzeria.com` and `www` to Vercel (section 8).
+   - From then on, old links like `squarepegpizzeria.com/order/...` redirect (301) to the same page on the subdomain.
+5. **Spot-check from a phone:**
+   - an Order button
+   - a Menu button
+   - Gift Cards
+   - one old `/order/...` link
+   - one old `/menu-<town>` link
 
 ## 2. Fix these details (found during the build)
+- [ ] **Turn on the Google hours sync** (`HOURS_SYNC.md`). After that, Google Business Profile is the only place to edit hours, and the "Hours: website vs Google" report shows every mismatch to fix first.
 - [ ] **Hours don't match between your website and Toast ordering.** The new site uses the hours from your current /locations page. Confirm each location's hours (see the table below), then update `data/content.py`.
 - [ ] **Storrs:** the Slice page (squarepegpizzeriastorrs.com) lists **(203) 220-4513** with 11am–9pm hours. Your site lists (860) 454-6038. Fix the Slice listing, or ask Slice to link to your site.
 - [ ] **Storrs:** its Toast ordering slug is `squarepegwindsor`. It works, but consider renaming it in Toast (e.g. `square-peg-storrs`), then update `toast` in `content.py`.
@@ -70,11 +84,17 @@ The site in `dist/` is ready to deploy. Work through this list before pointing s
 
 ## 8. Go live
 - [ ] Deploy `dist/` (**not** `dist-staging/`, which is hidden from Google) to Vercel (see `DEPLOY_VERCEL.md`) or Netlify.
-- [ ] Point the root domain and `www` to the host. **Don't touch the `order` records.**
+- [ ] Point the root domain and `www` to the host. **Don't touch the `order` records.** In Vercel, set `www.squarepegpizzeria.com` to **redirect (308) to `squarepegpizzeria.com`**, because Google still has old `www.` pages indexed (e.g. `/events/trivia-night`).
 - [ ] **301 redirects are built in**: `dist/vercel.json` for Vercel, `dist/_redirects` for Netlify, with the full list in `REDIRECTS.csv`. Every URL in your current Toast sitemap is covered:
   - Toast pages move to the subdomain on the same path: `/order/*`, `/menu/*`, `/account/*`, `/checkout/*`, `/cart/*`, `/confirm/*` → `order.squarepegpizzeria.com/...`. App links, COMO emails, QR codes, Google "Order" buttons and the 400+ indexed menu-item URLs keep working and keep their search value.
-  - Old content pages go to their new equivalents: `/events-catering`, `/catering-*`, `/party-requests`, `/private-events` → `/catering/`; `/tuesday-charity-night` → `/fundraisers/`; `/monthly-deals`, `/promotions`, `/reward-program` → `/deals/`; `/gift-card(s)` → Toast gift cards; and so on.
-  - `/contact`, `/about`, `/food-truck`, `/locations`, `/roll-the-dice` and `/sms-terms` keep their URLs. `/private-events` and `/party-requests` now point to the new **Large Party Reservations** page.
+  - Old content pages go to their new equivalents:
+    - `/events-catering` and `/catering-*` → `/catering/`
+    - `/party-requests` → `/large-party-reservations/`
+    - `/tuesday-charity-night` → `/fundraisers/`
+    - `/monthly-deals` and `/reward-program` → `/deals/`
+    - `/gallery` → `/about/`
+    - `/gift-card(s)` and the old `/popmenu-digital-gift-cards` → Toast gift cards
+  - `/contact`, `/about`, `/entertainment`, `/food-truck`, `/locations`, `/private-events`, `/promotions`, `/roll-the-dice` and `/sms-terms` keep their URLs.
 - [x] The redirects already set up in Toast (Website → Path redirects) are carried over: `/menu-<town>` goes straight to that store's ordering page, `/events/*` to Entertainment, `/party-request` to Large Parties, and `/popmenu-order` to the menu. Note: Toast currently sends `/menu-berlin` to the **Plainville** ordering page; the new site sends it to Berlin.
 - [x] Vercel adds a trailing slash before redirects run, so every rule matches both `/old-page` and `/old-page/`.
 - [ ] After launch, spot-check 5 old URLs (including one `/order/...` link and one `/menu/...` item link) and confirm each returns **301** and lands on the right page.
@@ -83,3 +103,29 @@ The site in `dist/` is ready to deploy. Work through this list before pointing s
 - [ ] Google Business Profile, for each location: set the website to that location's page (e.g. `/locations/glastonbury-ct/`), and set the order link to its Toast page.
 - [ ] Update Yelp, Apple Maps, Facebook and Slice listings to the same name, address, phone and hours.
 - [ ] Run PageSpeed Insights on the home page and one location page after launch.
+
+## 9. Protect your Google rankings
+
+**Ranking spot-check (Sept 17, 2026).** This was a rough check with an unlocalized search tool, not your real data.
+- **Brand searches:** squarepegpizzeria.com shows up for "Square Peg Pizzeria + town", usually around positions 5–10. The Toast `/order/<slug>` pages rank for these the most, plus `/locations`, `/`, `/events-catering` and `/private-events`.
+- **Generic searches:** for "pizza + town" and catering searches, the website itself doesn't appear. Those customers come through Google Maps (your Business Profiles), Yelp, Toast, DoorDash and Slice.
+- **Takeaway:** the rebuild mainly has upside there, as long as the redirects and Business Profile links are right.
+
+### Before launch
+- [ ] **Get a baseline from Search Console.** Go to Performance → Search results → last 16 months → **Queries** and **Pages** tabs → Export, and also export the Pages (indexing) report. Send both to Claude, which will match every query and URL that gets clicks to its new page and redirect.
+- [ ] **Confirm Toast keeps the same paths on `order.squarepegpizzeria.com`** (`/order/<slug>`, `/menu/<slug>`, item URLs). This is where most current brand rankings live.
+- [ ] **Fix the unfinished page title on `vip.squarepegpizzeria.com`.** Google shows it as "{City} Appreciation Week | …". This is separate from the rebuild.
+- [ ] **Bolton:** 4 of the top 10 results for "pizza bolton ct" still point to Parkside Pizza (Yelp, a Toast listing, parksidepizzact.com). Update or redirect those to Square Peg Bolton where you can.
+
+### Launch week
+- [ ] **Search Console:**
+  - Submit the new sitemap.
+  - Use URL Inspection → **Request indexing** for the home page and all 10 location pages.
+- [ ] **Business Profiles:**
+  - Website link → the location page.
+  - Menu and order links → the Toast subdomain.
+- [ ] **Request indexing** for `/areas-we-serve/` too, and work through `LOCAL_SEO_PLAN.md` (service areas, fundraiser link asks, event listings).
+
+### First 4–6 weeks
+- [ ] **Check Search Console → Pages → "Not found (404)" weekly.** Send any old URLs that show up there to Claude to add redirects.
+- [ ] **Compare clicks and impressions with the baseline.** A dip for 2–4 weeks after a rebuild is normal; brand searches should recover first.
