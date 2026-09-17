@@ -70,7 +70,7 @@ def h(mon, tue, wed, thu, fri, sat, sun):
 # Several differ from the hours shown in Toast ordering — see LAUNCH_CHECKLIST.md.
 LOCATIONS = [
     {
-        "slug": "glastonbury-ct", "detroit": True, "name": "Glastonbury", "region": "Greater Hartford",
+        "slug": "glastonbury-ct", "name": "Glastonbury", "region": "Greater Hartford",
         "street": "1001 Hebron Ave", "city": "Glastonbury", "state": "CT", "zip": "06033",
         "phone": "(860) 286-0415", "toast": "square-peg-pizzeria",
         "lat": 41.717186, "lng": -72.574051, "geo_exact": True,  # US Census geocoder
@@ -82,7 +82,7 @@ LOCATIONS = [
         "photo": "oven-pizza",
     },
     {
-        "slug": "east-hartford-ct", "menu_extra": ["Breakfast on weekends from 7am: omelettes and the Pegg & Cheese", "Brunch cocktails like mimosas, Bloody Marys and Aperol spritzes"], "detroit": True, "name": "East Hartford", "region": "Greater Hartford",
+        "slug": "east-hartford-ct", "menu_extra": ["Breakfast on weekends from 7am: omelettes and the Pegg & Cheese", "Brunch cocktails like mimosas, Bloody Marys and Aperol spritzes"], "name": "East Hartford", "region": "Greater Hartford",
         "street": "130 Long Hill St", "city": "East Hartford", "state": "CT", "zip": "06108",
         "phone": "(860) 509-4221", "toast": "square-peg-pizzera-east-hartford",
         "lat": 41.790362, "lng": -72.594171, "geo_exact": True,  # US Census geocoder
@@ -105,7 +105,8 @@ LOCATIONS = [
         "photo": "margherita-board",
     },
     {
-        "slug": "bolton-ct", "pastas": ["Chicken Parmesan", "Pasta alla Vodka", "Spaghetti & Meatballs", "The Bella Parmigiana"], "menu_extra": ["Burgers"], "name": "Bolton", "region": "Greater Hartford",
+        # "bar": False = no beer/wine/cocktails yet (liquor license pending); "detroit": False = no Detroit-style pizza yet. Remove each once available.
+        "slug": "bolton-ct", "bar": False, "detroit": False, "pastas": ["Chicken Parmesan", "Pasta alla Vodka", "Spaghetti & Meatballs", "The Bella Parmigiana"], "menu_extra": ["Burgers"], "name": "Bolton", "region": "Greater Hartford",
         "street": "270 West St", "city": "Bolton", "state": "CT", "zip": "06043",
         "phone": "(860) 791-7109", "toast": "square-peg-pizzeria-bolton-270-west-street",
         "lat": 41.742106, "lng": -72.436706, "geo_exact": True,  # US Census geocoder
@@ -161,7 +162,7 @@ LOCATIONS = [
         "photo": "truck-tent",
     },
     {
-        "slug": "shelton-ct", "detroit": True, "name": "Shelton", "region": "Fairfield & New Haven",
+        "slug": "shelton-ct", "name": "Shelton", "region": "Fairfield & New Haven",
         "street": "320 Howe Ave, Unit 6", "city": "Shelton", "state": "CT", "zip": "06484",
         "phone": "(203) 538-5044", "toast": "square-peg-shelton-310-howe-avenue-unit-6",
         "lat": 41.314898, "lng": -73.091125, "geo_exact": True,  # US Census geocoder
@@ -172,7 +173,7 @@ LOCATIONS = [
         "photo": "friends-sharing",
     },
     {
-        "slug": "delray-beach-fl", "detroit": True, "name": "Delray Beach", "region": "Florida",
+        "slug": "delray-beach-fl", "name": "Delray Beach", "region": "Florida",
         "street": "4957 W Atlantic Ave", "city": "Delray Beach", "state": "FL", "zip": "33445",
         "phone": "(561) 566-8828", "toast": "square-peg-delray-beach-4957-west-atlantic-avenue",
         "lat": 26.457838, "lng": -80.12169, "geo_exact": True,  # US Census geocoder
@@ -215,7 +216,7 @@ SIGNATURES = [
 MENU = {
     "pizza_styles": [
         ("Neo-Neapolitan rounds", "Wood-fired, 12″ (6 slices) or 18″ (8 slices), red or white."),
-        ("Detroit-style", "Thick, crispy-edged 10×14″ pan pizza (6 slices). At most locations."),
+        ("Detroit-style", "Thick, crispy-edged 10×14″ pan pizza (6 slices). At every location except Bolton."),
         ("Gluten-free", "12″ gluten-free crust on any round pie. Vegan cheese on any pizza."),
     ],
     "sections": [
@@ -250,12 +251,18 @@ MENU = {
             ("Kids pasta, spaghetti & meatballs, pasta alla vodka", "Smaller portions of the grown-up favorites."),
             ("Chicken fingers & mac and cheese", "The reliable ones."),
         ]),
+        ("Beer, wine & cocktails", "drinks", [
+            ("Cocktails", "Margaritas, spritzes and house specialties, shaken to go with pizza and pasta."),
+            ("Beer", "Draft and bottled beer, including local picks."),
+            ("Wine", "Reds and whites by the glass or bottle."),
+        ]),
         ("Desserts", "desserts", [
             ("New York-style cheesecake", "In a graham cracker crust."),
             ("Gelato sandwiches & Italian sorbet", "A cool finish after the wood-fired oven."),
             ("Fried dough, brownies & warm cookies", "Chocolate chip cookies topped with sea salt."),
         ]),
     ],
+    "drinks_note": "Beer, wine and cocktails are served at every Square Peg except Bolton.",
     "note": "Menus vary a little by location and change with the seasons. Your Square Peg’s online menu always has the current items and prices.",
 }
 

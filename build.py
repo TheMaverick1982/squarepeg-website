@@ -622,7 +622,7 @@ T["home"] = """
     <div class="stack">
       <span class="eyebrow">More than pizza</span>
       <h2>Pasta, parm &amp; Italian-American favorites</h2>
-      <p class="lede">Square Peg is a full Italian-American restaurant. Bring the whole crew for dinner, lunch or a weeknight takeout run.</p>
+      <p class="lede">Square Peg is a full Italian-American restaurant, with beer, wine and cocktails at nearly every location. Bring the whole crew for dinner, lunch or a weeknight takeout run.</p>
       <div>{% for n, d in pasta_items[:4] %}<div class="item"><h3>{{ n }}</h3><p>{{ d }}</p></div>{% endfor %}</div>
       <div class="btn-row"><a class="btn" href="{{ u('/our-menu/') }}">See what’s on the menu</a><a class="btn btn--line" href="{{ site.menu_url }}" data-open-picker="menu">Live menu &amp; prices</a></div>
     </div>
@@ -750,7 +750,7 @@ T["our_menu"] = """
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Menu</span></nav>
     <span class="eyebrow">Italian-American kitchen · wood-fired oven</span>
     <h1>Our menu</h1>
-    <p class="lede">Wood-fired pizza, pasta, chicken parm, Italian subs, salads, wings and desserts, made in-house with dough and sauce from our own commissary.</p>
+    <p class="lede">Wood-fired pizza, pasta, chicken parm, Italian subs, salads, wings, desserts, and beer, wine and cocktails. Made in-house with dough and sauce from our own commissary.</p>
     <div class="btn-row"><a class="btn btn--flame" href="{{ site.menu_url }}" data-open-picker="menu">{{ icons.bag|safe }}Live menu &amp; prices for your Peg</a><a class="btn btn--ghost" href="{{ u('/catering/') }}">Catering menu</a></div>
   </div>
 </section>
@@ -763,8 +763,9 @@ T["our_menu"] = """
 </section>
 {% for title, key, items in menu.sections %}<section class="section{% if loop.index is even %} section--paper{% endif %}" id="{{ key }}">
   <div class="wrap two-col">
-    <div class="stack"><span class="eyebrow">{{ ['Italian classics', 'From the deli side', 'For the table', 'Fresh & crisp', 'For the little ones', 'Save room'][loop.index0] }}</span><h2>{{ title }}</h2>
+    <div class="stack"><span class="eyebrow">{{ {'pasta': 'Italian classics', 'sandwiches': 'From the deli side', 'starters': 'For the table', 'salads': 'Fresh & crisp', 'kids': 'For the little ones', 'drinks': 'From the bar', 'desserts': 'Save room'}[key] }}</span><h2>{{ title }}</h2>
       {% if key == 'pasta' %}<p>Hearty Italian-American pasta dishes, finished to order. Most locations carry all six; a few carry a shorter list.</p>{% endif %}
+      {% if key == 'drinks' %}<p>{{ menu.drinks_note }} Ask your server about seasonal cocktails and what’s on draft.</p>{% endif %}
       {% if key == 'kids' %}<p>Every Square Peg has a kids’ menu, plus room for big family tables. <a href="{{ u('/large-party-reservations/') }}">Reserve for a large party →</a></p>{% endif %}
     </div>
     <div>{% for n, d in items %}<div class="item"><h3>{{ n }}</h3><p>{{ d }}</p></div>{% endfor %}</div>
@@ -870,7 +871,7 @@ T["location"] = """
       <h2>Italian food &amp; wood-fired pizza in {{ l.city }}</h2>
       <p>{{ l.blurb }}</p>
       <p>Every pie starts with dough made fresh daily and never frozen. Choose a red or white {% if lm.detroit %}Neo-Neapolitan round or a crispy-edged Detroit-style pie{% else %}signature pie{% endif %}, build your own, or go gluten-free with our 12″ crust. Vegan cheese is available on any pizza.</p>
-      <p>Not in a pizza mood? The kitchen turns out Italian-American comfort food too: {{ join_and(lm.words + lm.rest) }}.{% if lm.extra %} Also here: {{ lm.extra|join('; ')|lower }}.{% endif %}</p>
+      <p>Not in a pizza mood? The kitchen turns out Italian-American comfort food too: {{ join_and(lm.words + lm.rest) }}.{% if lm.bar %} Pair it with a cocktail, a glass of wine or a cold beer.{% endif %}{% if lm.extra %} Also here: {{ lm.extra|join('; ')|lower }}.{% endif %}</p>
       <div><p class="note" style="font-weight:700;margin-bottom:6px">Close to</p><div class="chips">{% for n in l.nearby %}<span class="chip">{{ n }}</span>{% endfor %}</div></div>
     </div>
     <div class="stack">
@@ -1448,7 +1449,7 @@ def loc_menu(l):
     kids, salads = l.get("kids_menu", True), l.get("salads", True)
     parm = l.get("parm_line", "chicken and meatball parm sandwiches")
     rest = [parm] + (["salads"] if salads else []) + ["wood-fired wings"] + (["a kids’ menu"] if kids else [])
-    return {"pastas": pastas, "words": words, "extra": l.get("menu_extra", []), "detroit": bool(l.get("detroit")),
+    return {"pastas": pastas, "words": words, "extra": l.get("menu_extra", []), "detroit": l.get("detroit", True), "bar": l.get("bar", True),
             "kids": kids, "rest": rest, "parm": parm}
 
 def join_and(items):
@@ -1465,7 +1466,10 @@ def location_faqs(l):
     ] + ([
         (f"Is Square Peg {name} a good restaurant for families?",
          f"Yes. There’s a kids’ menu (pasta, spaghetti and meatballs, chicken fingers, mac and cheese), room for big groups, and large party reservations for birthdays and team dinners."),
-    ] if loc_menu(l)["kids"] else []) + [
+    ] if loc_menu(l)["kids"] else []) + ([
+        (f"Does Square Peg {name} serve beer, wine and cocktails?",
+         f"Yes. Square Peg {name} serves beer, wine and cocktails with dine-in meals, so it works for date nights, game nights and dinner with friends."),
+    ] if loc_menu(l)["bar"] else []) + [
         (f"Can I order online from Square Peg {name}?", f"Yes. Tap “Order {name} online” to order for pickup, or choose delivery at checkout where it’s available."),
         ("Do you have gluten-free or vegan options?", "Yes. We offer a 12″ gluten-free crust, and vegan cheese can be added to any pizza."),
         (f"Does Square Peg {name} do catering?", f"Yes. {name} caters birthdays, office lunches, team events and more. Send a quick request on our catering page, or call {l['phone']}."),
@@ -1555,7 +1559,7 @@ def main():
                        {"@type": "MenuSection", "name": "Wood-fired pizza", "hasMenuItem": [{"@type": "MenuItem", "name": n, "description": d} for n, d, _ in SIGNATURES]}] + [
                        {"@type": "MenuSection", "name": t, "hasMenuItem": [{"@type": "MenuItem", "name": n, "description": d} for n, d in items]} for t, _, items in MENU["sections"]]}
     pages.append(("/our-menu/", "Menu: Pasta, Chicken Parm & Wood-Fired Pizza | Square Peg",
-                  "The Square Peg Pizzeria menu: wood-fired and Detroit-style pizza, pasta alla vodka, chicken parmesan, Italian subs, salads, wings, kids' meals and desserts.",
+                  "The Square Peg Pizzeria menu: wood-fired and Detroit-style pizza, pasta alla vodka, chicken parmesan, Italian subs, wings, kids' meals, beer, wine and cocktails.",
                   "our_menu", dict(menu=MENU), graph(menu_schema, breadcrumbs([("Home", "/"), ("Menu", "/our-menu/")])), "table-spread", "table-spread"))
     dir_towns = town_directory()
     pages.append(("/areas-we-serve/", "Towns We Serve in CT, RI & South FL | Square Peg Pizzeria",

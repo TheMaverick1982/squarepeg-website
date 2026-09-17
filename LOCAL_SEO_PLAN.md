@@ -93,16 +93,17 @@ Searches like "restaurants near me", "Italian restaurant near me", "chicken parm
   - **Family restaurant**
   - **Takeout restaurant**
   - **Caterer**
-  - **Bar** (Storrs, Berlin Truck Bar, and any store with a bar)
+  - **Bar** (every store except Bolton, for now)
   - **Breakfast restaurant** (East Hartford)
 - **Menu and products:** make sure the Toast menu is connected, or add menu items with photos (chicken parm, vodka pasta, Bolognese, wings).
-- **Attributes:** kid-friendly, good for groups, dine-in, takeout, delivery, outdoor seating, alcohol served (where true).
+- **Attributes:** kid-friendly, good for groups, dine-in, takeout, delivery, outdoor seating, alcohol served (all except Bolton).
 - **Photos:** add pasta and non-pizza dishes, not just pizzas.
 - **Reviews:** ask guests to mention what they ordered. "Best chicken parm in Vernon" helps that page rank for that dish.
 
-### Please confirm
-- **Alcohol:** Which stores serve beer, wine or cocktails? Only East Hartford's online menu lists cocktails, so the site doesn't claim a bar anywhere else yet.
-- **Detroit-style pizza:** Is it at every location? The site only says so for Glastonbury, East Hartford, Shelton and Delray Beach, where the online menu shows it.
+### Confirmed (Sept 17, 2026)
+- **Drinks:** beer, wine and cocktails at every location except Bolton, which is waiting on its liquor license. The site says so: every location page except Bolton's has a drinks line and FAQ, and the menu page has a Beer, wine & cocktails section.
+  - **When Bolton's license comes through:** delete `"bar": False` for Bolton in `data/content.py`, then rebuild.
+- **Detroit-style pizza:** at every location except Bolton, for now. When Bolton adds it, delete `"detroit": False` for Bolton in `data/content.py`.
 
 ## 5. How to measure
 
