@@ -357,6 +357,10 @@ CONTACT_TOPICS = [
 ENTERTAINMENT = {
     "plainville-ct": [("Mon", "Bingo", "6–8pm"), ("Wed", "Trivia", "6:30–8:30pm"), ("Fri", "DJ", "7–10pm")],
     "shelton-ct": [("Tue", "Bingo", "6–8pm")],
+    # A 4th value is an optional start date: the event shows with a "from <date>" badge until
+    # then, and the badge disappears on its own once the date passes (no rebuild needed).
+    # Tidy up by deleting the 4th value whenever you're next in here.
+    "vernon-ct": [("Wed", "Trivia", "6:30–8:30pm"), ("Sat", "Bingo", "6–8pm", "2026-09-26")],
     "east-hartford-ct": [("Thu", "Bingo", "6:30–8:30pm"), ("Sat", "Bingo", "6:30–8:30pm")],
     "glastonbury-ct": [("Wed", "What Trivia", "6:30–9pm")],
     "preston-ct": [("Thu", "Trivia", "7–9pm"), ("Sun", "Bingo", "6pm")],

@@ -505,6 +505,10 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .ent-chip.is-today{background:var(--flame);color:var(--char);border-color:var(--char)}
 .ent-chip.is-today b{color:var(--char)}
 .ent-chip.is-today::after{content:" · Tonight";font-weight:800}
+/* "from Sept 26" on an event that hasn't started yet */
+.ent-soon{font-style:normal;font-weight:800;font-size:.82em;letter-spacing:.02em;text-transform:uppercase;
+  color:var(--flame);background:rgba(255,181,36,.13);border-radius:999px;padding:2px 7px;margin-left:5px;white-space:nowrap}
+.ent-row .ent-soon,.ent-card-sm .ent-soon{color:var(--ember-deep);background:rgba(214,27,36,.09)}
 .ent-strip{background:var(--char);color:#fff;border-top:4px solid var(--flame)}
 .ent-strip .wrap{padding-block:26px;display:grid;gap:16px}
 .ent-strip-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 16px}

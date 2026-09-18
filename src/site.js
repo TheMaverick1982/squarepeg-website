@@ -335,14 +335,28 @@
   /* ---------- Entertainment: tonight + today highlights ---------- */
   var ENT = {};
   try { ENT = JSON.parse(document.getElementById("sp-ent").textContent); } catch (e) {}
+  // An event can carry a start date. Until that date it's listed with a "from <date>" badge and
+  // kept out of Tonight; on the day, the badge drops and it joins the lineup — without a rebuild,
+  // so a page built weeks earlier still gets it right.
+  function started(from) { return !from || from <= isoDay(nowET(), 0); }
+
   function paintEnt() {
-    var today = DAYS[nowET().day], FULL = { Tuesday: "Tue", Wednesday: "Wed", Friday: "Fri" };
-    $$("[data-ent-day]").forEach(function (el) { el.classList.toggle("is-today", el.getAttribute("data-ent-day") === today); });
+    var n = nowET(), today = DAYS[n.day], iso = isoDay(n, 0);
+    $$("[data-ent-day]").forEach(function (el) {
+      var from = el.getAttribute("data-ent-from");
+      if (from && from <= iso) {                       // it's running now: drop the badge
+        el.removeAttribute("data-ent-from");
+        var tag = el.querySelector(".ent-soon");
+        if (tag) tag.parentNode.removeChild(tag);
+        from = null;
+      }
+      el.classList.toggle("is-today", !from && el.getAttribute("data-ent-day") === today);
+    });
     $$("[data-tonight]").forEach(function (box) {
       var html = "";
       Object.keys(ENT).forEach(function (slug) {
         ENT[slug].events.forEach(function (ev) {
-          if (ev[0] === today) html += '<a class="tonight-card" href="' + ENT[slug].url + '"><span>' + ENT[slug].name + "</span><b>" + ev[1] + "</b><span>" + ev[2] + "</span></a>";
+          if (ev[0] === today && started(ev[3])) html += '<a class="tonight-card" href="' + ENT[slug].url + '"><span>' + ENT[slug].name + "</span><b>" + ev[1] + "</b><span>" + ev[2] + "</span></a>";
         });
       });
       box.innerHTML = html || '<p class="note">No trivia, bingo or DJ tonight. Check the weekly lineup, or come in for pizza anyway.</p>';
