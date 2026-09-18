@@ -10,11 +10,11 @@ on:
     inputs:
       url:
         description: "Site to check"
-        default: "https://squarepeg-website.vercel.app"
+        default: "https://squarepegpizzeria.com"
         type: string
 
 env:
-  SITE_URL: "https://squarepeg-website.vercel.app"
+  SITE_URL: "https://squarepegpizzeria.com"
 
 jobs:
   check:
