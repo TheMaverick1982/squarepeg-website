@@ -79,11 +79,15 @@ def main():
 
     # 3. Redirects still work.
     # trailingSlash is on, so Vercel often adds a slash-normalising hop of its own before our
-    # redirect runs. Walk the whole chain: every hop must be permanent, and the address we
-    # finally land on is what gets compared.
+    # redirect runs. Walk the chain while it stays on our own domain: every hop must be
+    # permanent, and the address we finally land on is what gets compared.
+    # Once a hop points off-site (Toast), that address IS the answer — whether Toast then serves
+    # it is Toast's business, and the "Check Toast links" workflow covers that separately.
     for src, expect in REDIRECTS:
         url, hops, codes, ok = base + src, 0, [], True
         while hops < 5:
+            if not url.startswith(base):
+                break                   # left our domain: the destination is what we wanted
             code, headers, _, loc = get(url, follow=False)
             if code not in (301, 308):
                 if hops == 0:
