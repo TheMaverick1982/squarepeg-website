@@ -816,7 +816,7 @@
    {
     "name": "Taftville",
     "state": "CT",
-    "mi": 4.7
+    "mi": 4.4
    },
    {
     "name": "Norwich",
@@ -826,47 +826,47 @@
    {
     "name": "Jewett City",
     "state": "CT",
-    "mi": 5.7
+    "mi": 5.4
    },
    {
     "name": "Ledyard",
     "state": "CT",
-    "mi": 6.0
-   },
-   {
-    "name": "North Stonington",
-    "state": "CT",
-    "mi": 7.5
+    "mi": 6.4
    },
    {
     "name": "Voluntown",
     "state": "CT",
-    "mi": 7.7
+    "mi": 7.6
    },
    {
     "name": "Yantic",
+    "state": "CT",
+    "mi": 7.6
+   },
+   {
+    "name": "North Stonington",
     "state": "CT",
     "mi": 7.7
    },
    {
     "name": "Baltic",
     "state": "CT",
-    "mi": 8.3
+    "mi": 8.1
    },
    {
     "name": "Gales Ferry",
     "state": "CT",
-    "mi": 8.3
+    "mi": 8.6
    },
    {
     "name": "Uncasville",
     "state": "CT",
-    "mi": 9.0
+    "mi": 9.3
    },
    {
     "name": "Montville",
     "state": "CT",
-    "mi": 9.3
+    "mi": 9.4
    },
    {
     "name": "Bozrah",
@@ -876,77 +876,82 @@
    {
     "name": "North Franklin",
     "state": "CT",
-    "mi": 10.5
-   },
-   {
-    "name": "Quaker Hill",
-    "state": "CT",
-    "mi": 10.9
+    "mi": 10.3
    },
    {
     "name": "Canterbury",
     "state": "CT",
-    "mi": 11.1
+    "mi": 10.8
    },
    {
     "name": "Plainfield",
     "state": "CT",
-    "mi": 11.1
+    "mi": 10.8
    },
    {
-    "name": "Hopkinton",
-    "state": "RI",
-    "mi": 11.4
+    "name": "Quaker Hill",
+    "state": "CT",
+    "mi": 11.1
    },
    {
     "name": "Oakdale",
     "state": "CT",
-    "mi": 11.4
-   },
-   {
-    "name": "Stonington",
-    "state": "CT",
-    "mi": 11.4
+    "mi": 11.5
    },
    {
     "name": "Gilman",
+    "state": "CT",
+    "mi": 11.6
+   },
+   {
+    "name": "Hopkinton",
+    "state": "RI",
+    "mi": 11.6
+   },
+   {
+    "name": "Stonington",
     "state": "CT",
     "mi": 11.7
    },
    {
     "name": "Mystic",
     "state": "CT",
-    "mi": 11.7
+    "mi": 12.1
    },
    {
     "name": "Ashaway",
     "state": "RI",
-    "mi": 12.3
-   },
-   {
-    "name": "Pawcatuck",
-    "state": "CT",
-    "mi": 12.7
-   },
-   {
-    "name": "Westerly",
-    "state": "RI",
-    "mi": 12.9
-   },
-   {
-    "name": "Groton",
-    "state": "CT",
-    "mi": 13.0
-   },
-   {
-    "name": "New London",
-    "state": "CT",
-    "mi": 13.1
+    "mi": 12.5
    },
    {
     "name": "Scotland",
     "state": "CT",
-    "mi": 13.1
+    "mi": 12.7
+   },
+   {
+    "name": "Pawcatuck",
+    "state": "CT",
+    "mi": 13.0
+   },
+   {
+    "name": "Westerly",
+    "state": "RI",
+    "mi": 13.2
+   },
+   {
+    "name": "Groton",
+    "state": "CT",
+    "mi": 13.3
+   },
+   {
+    "name": "New London",
+    "state": "CT",
+    "mi": 13.4
+   },
+   {
+    "name": "Moosup",
+    "state": "CT",
+    "mi": 13.7
    },
    {
     "name": "Hope Valley",
@@ -954,17 +959,12 @@
     "mi": 13.8
    },
    {
-    "name": "Moosup",
-    "state": "CT",
-    "mi": 14.1
-   },
-   {
     "name": "South Windham",
     "state": "CT",
-    "mi": 14.5
+    "mi": 14.2
    },
    {
-    "name": "Waterford",
+    "name": "Windham",
     "state": "CT",
     "mi": 14.9
    }

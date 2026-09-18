@@ -140,7 +140,7 @@ LOCATIONS = [
         "slug": "preston-ct", "name": "Preston", "region": "Eastern CT",
         "street": "353 CT-165", "city": "Preston", "state": "CT", "zip": "06365",
         "phone": "(860) 319-0930", "toast": "square-peg-new-preston-353-connecticut-165",
-        "lat": 41.5237, "lng": -71.9820,  # approximate: Census geocoder had no match for 353 CT-165
+        "lat": 41.528840, "lng": -71.982108, "geo_exact": True,  # exact pin from Google Maps
         "hours_note": "The kitchen closes an hour before we do on Wednesday and Thursday.", "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:30","23:00"),("11:00","23:00"),("11:00","21:00"))),
         "tag": "Southeastern CT",
         "blurb": "On Route 165, Preston brings wood-fired pies to Norwich, Ledyard and the rest of the southeast corner of the state. It’s an easy dinner stop before or after a night at the casinos.",
@@ -298,14 +298,16 @@ CATERING_FAQ = [
 ]
 
 SMS_TERMS = [
-    ("Program", "“Square Peg Pizzeria SMS Alerts.” We run an SMS program to keep you informed about exclusive promotions and deals, upcoming events and entertainment, order confirmations, and loyalty and rewards updates."),
-    ("Message frequency", "Up to 8 messages per month, depending on your activity and location."),
-    ("Costs", "Message and data rates may apply. Check with your mobile carrier."),
-    ("Opting out", "Reply STOP, CANCEL, END, QUIT or UNSUBSCRIBE to any message. You’ll receive one confirmation message, and then messages will stop."),
-    ("Help", "Reply HELP, email info@squarepegpizzeria.com, or call (860) 286-0415."),
-    ("Carriers", "Supported on all major U.S. carriers. Availability may vary."),
-    ("Participation is optional", "Opting in to SMS is never required to make a purchase, use our services, or join our rewards program."),
-    ("Privacy", "Your mobile information is kept confidential and is not shared with third parties for their marketing purposes."),
+    ("Program", "Square Peg Pizzeria offers a recurring SMS messaging program to keep you informed about exclusive promotions and deals, upcoming events and entertainment, order confirmations, and loyalty and rewards updates."),
+    ("Program name", "Square Peg Pizzeria SMS Alerts."),
+    ("Message frequency", "Message frequency varies. You may receive up to 8 messages per month depending on your activity and location."),
+    ("Message and data rates", "Message and data rates may apply. Check with your mobile carrier for details on your messaging plan."),
+    ("How to opt out", "You may opt out of our SMS program at any time. Reply STOP, CANCEL, END, QUIT, or UNSUBSCRIBE to any message from us. You will receive one final confirmation message confirming your opt-out. No further messages will be sent after that."),
+    ("How to get help", "Reply HELP to any message for assistance. You may also contact us directly at info@squarepegpizzeria.com or (860) 286-0415."),
+    ("Supported carriers", "Available on all major US carriers. Carrier availability may vary."),
+    ("Consent is not required for purchase", "Opting into our SMS program is never required to make a purchase, use our services, or participate in our rewards program."),
+    ("Data sharing", "No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. All categories exclude text messaging originator opt-in data and consent. This information will not be shared with any third party."),
+    ("Privacy", "For full details on how we handle your personal information, see our Privacy Policy at squarepegpizzeria.com/privacy/."),
 ]
 
 DICE = {

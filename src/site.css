@@ -541,6 +541,13 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .note{font-size:14px;color:var(--smoke)}
 .prose{max-width:66ch;font-size:18px}
 .prose p+p{margin-top:16px}
+.prose h2{font-size:clamp(26px,3vw,32px);margin:36px 0 10px;line-height:1.05}
+.prose h3{font-family:var(--body);text-transform:none;letter-spacing:0;font-size:19px;font-weight:800;margin:24px 0 6px}
+.prose h2+h3{margin-top:14px}
+.prose ul{margin:12px 0 0;padding-left:22px;display:grid;gap:6px}
+.prose li{line-height:1.5}
+.prose .note{font-size:15px;margin-bottom:22px}
+.prose a{font-weight:700}
 .prose .pull{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(34px,5vw,54px);line-height:.95;color:var(--ember);margin-block:28px}
 .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .gallery img{width:100%;aspect-ratio:1;object-fit:cover}

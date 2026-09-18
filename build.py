@@ -1489,8 +1489,61 @@ def location_faqs(l):
         ("Can our group host a fundraiser here?", "Yes. Every Tuesday from 4pm to close, one organization earns 20% of dine-in food sales from its supporters."),
     ]
 
-PRIVACY_TEXT = """<p class='note'>Last updated: April 13, 2026. Mirrored from the version on our previous website; tell us if anything needs changing.</p><h2>What we collect</h2><p>When you send a message through this website, book catering, a large party or a Tuesday fundraiser, or join our rewards program, we collect the details you give us: your name, email address, phone number, the location you choose, your message, and event details. If you order online, Toast handles the order and payment and keeps your order history.</p><h2>How we use it</h2><p>We use your information to answer you, plan your event, process and deliver orders, run our loyalty and rewards program, and send the updates you asked for. We do not sell your personal information.</p><h2>Text messages</h2><p>Our SMS program sends up to 8 messages a month. Opting in is never required to buy anything or to join rewards. Mobile information and SMS consent are never shared with third parties or affiliates for their marketing. Full details are on our <a href='/sms-terms/'>SMS terms</a> page.</p><h2>Who else is involved</h2><p>Some parts of this site are run by companies we work with: Toast for ordering, menus and gift cards; our rewards app for points and offers; our booking system for catering, large party and fundraiser requests; our hiring system for job applications; and our chat provider. Each handles your information under its own privacy policy.</p><h2>Cookies and measurement</h2><p>This site may use analytics and advertising cookies to understand visits and measure our ads. You can block cookies in your browser settings.</p><h2>Your choices</h2><p>You can ask us for a copy of the information we hold about you, ask us to correct it, or ask us to delete it. Reply STOP to any text to stop messages, or use the unsubscribe link in any email.</p><h2>Contact</h2><p>Email <a href='mailto:info@squarepegpizzeria.com'>info@squarepegpizzeria.com</a> or call (860) 286-0415.</p>"""
-TERMS_TEXT = """<p class='note'>Last updated: April 13, 2026. Mirrored from the version on our previous website; tell us if anything needs changing.</p><h2>Using this website</h2><p>This website is here to share our menus, locations, hours, events and offers, and to send you to our ordering system. Everything on it, including text, photos, logos and designs, belongs to Square Peg Pizzeria and may not be copied or reused without our permission.</p><h2>Ordering</h2><p>Online orders, payments, gift cards and order history are handled by Toast under its own terms. Prices, menu items and availability are set by each location and can change.</p><h2>Offers and rewards</h2><p>Promotions, monthly deals, points and rewards are subject to their own terms, are limited to the locations and dates listed, cannot be combined with other offers unless we say so, and can change or end at any time.</p><h2>Text messages</h2><p>Joining our SMS program is optional. You may receive up to 8 messages a month. Message and data rates may apply. Reply STOP to opt out or HELP for help. See our <a href='/sms-terms/'>SMS terms</a>.</p><h2>Accuracy</h2><p>We keep hours, menus and details as current as we can, but they can change without notice. Online ordering always shows the live menu and availability.</p><h2>Liability</h2><p>This website is provided as is. To the extent the law allows, Square Peg Pizzeria is not liable for any damages arising from the use of this website, our SMS program, or any site we link to.</p><h2>Changes</h2><p>We may update these terms at any time. The date at the top shows the most recent update.</p><h2>Contact</h2><p>Email <a href='mailto:info@squarepegpizzeria.com'>info@squarepegpizzeria.com</a> or call (860) 286-0415.</p>"""
+PRIVACY_TEXT = """<p class="note">Last updated: April 13, 2026</p>
+<h2>Who we are</h2>
+<p>Square Peg Pizzeria operates restaurants, catering, and food truck services across Connecticut and Florida. This Privacy Policy explains how we collect, use, and protect your personal information when you interact with our website, contact forms, rewards program, or SMS messaging service.</p>
+<h2>What information we collect</h2>
+<p>We may collect the following personal information:</p>
+<ul><li>Name</li><li>Email address</li><li>Phone number</li><li>Location preference (which restaurant location you are associated with)</li><li>Messages or inquiries you submit through our contact form</li><li>Order and transaction history when you order through our platform</li></ul>
+<h2>How we use your information</h2>
+<p>We use your personal information to:</p>
+<ul><li>Respond to your inquiries and customer service requests</li><li>Process online orders and catering bookings</li><li>Administer our loyalty and rewards program</li><li>Send you SMS messages you have explicitly opted into, including promotions, event announcements, order confirmations, and loyalty rewards updates</li><li>Send you email communications you have opted into</li><li>Improve our services and website experience</li></ul>
+<h2>SMS messaging</h2>
+<p>If you opt into our SMS program, the following terms apply:</p>
+<ul><li><strong>Program:</strong> Square Peg Pizzeria SMS Alerts</li><li><strong>Message Type:</strong> Promotions &amp; deals, event announcements, order confirmations, loyalty &amp; rewards updates</li><li><strong>Frequency:</strong> Message frequency varies. You may receive up to 8 messages per month.</li><li><strong>Rates:</strong> Message and data rates may apply. Check with your mobile carrier.</li><li><strong>Opt-Out:</strong> Reply STOP, CANCEL, END, QUIT, or UNSUBSCRIBE at any time to opt out. You will receive one final confirmation message and no further messages.</li><li><strong>Help:</strong> Reply HELP for assistance, or contact us at <a href="mailto:info@squarepegpizzeria.com">info@squarepegpizzeria.com</a> or (860) 286-0415.</li></ul>
+<h2>Data sharing</h2>
+<p>We do not sell your personal information to third parties.</p>
+<p>No mobile information will be shared with third parties or affiliates for marketing or promotional purposes.</p>
+<p>SMS opt-in data and consent will not be shared with any third party under any circumstances.</p>
+<p>We may share your information with service providers who assist us in operating our website and fulfilling orders, solely for that purpose and under strict confidentiality obligations.</p>
+<h2>Data retention</h2>
+<p>We retain your personal information for as long as necessary to provide our services and comply with legal obligations. You may request deletion of your data at any time.</p>
+<h2>Your rights</h2>
+<p>You have the right to:</p>
+<ul><li>Access the personal information we hold about you</li><li>Request correction of inaccurate information</li><li>Request deletion of your personal information</li><li>Opt out of SMS messages at any time by replying STOP</li><li>Opt out of marketing emails by clicking the unsubscribe link in any email</li></ul>
+<h2>How to contact us</h2>
+<p>To exercise any of your rights, or if you have questions about this Privacy Policy, contact us at:</p>
+<p><strong>Business:</strong> Square Peg Pizzeria<br><strong>Email:</strong> <a href="mailto:info@squarepegpizzeria.com">info@squarepegpizzeria.com</a><br><strong>Phone:</strong> (860) 286-0415<br><strong>Website:</strong> <a href="https://squarepegpizzeria.com">https://squarepegpizzeria.com</a></p>
+<h2>Changes to this policy</h2>
+<p>We may update this Privacy Policy from time to time. The date at the top of this page reflects the most recent revision. Continued use of our services after any update constitutes your acceptance of the revised policy.</p>"""
+TERMS_TEXT = """<p class="note">Last updated: April 13, 2026</p>
+<p>These Terms &amp; Conditions govern your use of the Square Peg Pizzeria website and SMS messaging program. By using our website or opting into our SMS program, you agree to these terms.</p>
+<h2>SMS messaging program</h2>
+<h3>Enrollment</h3>
+<p>By providing your phone number and checking the opt-in box on any of our forms, you consent to receive recurring automated text messages from Square Peg Pizzeria. Your consent is not a condition of any purchase.</p>
+<h3>Message types</h3>
+<p>Messages may include: promotional offers and deals, event and entertainment announcements, order confirmations and updates, loyalty and rewards program notifications.</p>
+<h3>Message frequency</h3>
+<p>Message frequency varies. You may receive up to 8 messages per month.</p>
+<h3>Charges</h3>
+<p>Message and data rates may apply. Square Peg Pizzeria does not charge for SMS messages, but your mobile carrier’s standard messaging rates may apply.</p>
+<h3>How to opt out</h3>
+<p>Reply STOP, CANCEL, END, QUIT, or UNSUBSCRIBE at any time to opt out of all future messages. You will receive one confirmation message and will receive no further messages from this program.</p>
+<h3>How to get help</h3>
+<p>Reply HELP to any message. You may also contact us at <a href="mailto:info@squarepegpizzeria.com">info@squarepegpizzeria.com</a> or call us at (860) 286-0415.</p>
+<h3>Supported carriers</h3>
+<p>Service is available on all major US carriers including AT&amp;T, Verizon, T-Mobile, Sprint, Boost, Cricket, MetroPCS, US Cellular, and others. Carrier support may vary.</p>
+<h2>Website use</h2>
+<p>The Square Peg Pizzeria website is provided for informational and ordering purposes. We reserve the right to update or modify the website and its content at any time without notice.</p>
+<h2>Intellectual property</h2>
+<p>All content on this website, including text, images, logos, and graphics, is the property of Square Peg Pizzeria and may not be reproduced without written permission.</p>
+<h2>Limitation of liability</h2>
+<p>Square Peg Pizzeria is not liable for any indirect, incidental, or consequential damages arising from your use of our website or SMS program.</p>
+<h2>Changes to these terms</h2>
+<p>We may update these Terms &amp; Conditions at any time. The date at the top of this page reflects the most recent update. Continued use of our website or SMS program constitutes acceptance of any updated terms.</p>
+<h2>Contact us</h2>
+<p>Questions about these terms? Contact us at <a href="mailto:info@squarepegpizzeria.com">info@squarepegpizzeria.com</a> or (860) 286-0415.</p>
+<p><strong>Business:</strong> Square Peg Pizzeria<br><strong>Website:</strong> <a href="https://squarepegpizzeria.com">https://squarepegpizzeria.com</a><br><strong>Email:</strong> <a href="mailto:info@squarepegpizzeria.com">info@squarepegpizzeria.com</a><br><strong>Phone:</strong> (860) 286-0415</p>"""
 
 def main():
     if PREV.exists():
