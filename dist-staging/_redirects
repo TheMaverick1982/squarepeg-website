@@ -14,7 +14,6 @@
 /reward-program              /deals/                                                      301
 /gallery                     /about/                                                      301
 /privacy-policy              /privacy/                                                    301
-/terms                       /privacy/                                                    301
 /order                       https://order.squarepegpizzeria.com/order                    301
 /order/*                     https://order.squarepegpizzeria.com/order/:splat             301
 /menu                        https://order.squarepegpizzeria.com/menu                     301

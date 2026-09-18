@@ -12,7 +12,6 @@ https://squarepegpizzeria.com/monthly-deals,https://squarepegpizzeria.com/deals/
 https://squarepegpizzeria.com/reward-program,https://squarepegpizzeria.com/deals/,301
 https://squarepegpizzeria.com/gallery,https://squarepegpizzeria.com/about/,301
 https://squarepegpizzeria.com/privacy-policy,https://squarepegpizzeria.com/privacy/,301
-https://squarepegpizzeria.com/terms,https://squarepegpizzeria.com/privacy/,301
 https://squarepegpizzeria.com/order,https://order.squarepegpizzeria.com/order,301
 https://squarepegpizzeria.com/order/*,https://order.squarepegpizzeria.com/order/:splat,301
 https://squarepegpizzeria.com/menu,https://order.squarepegpizzeria.com/menu,301

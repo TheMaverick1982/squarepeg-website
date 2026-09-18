@@ -5,31 +5,29 @@
 //                  WEBHOOK_SECRET   any long random string, also set as a header on the webhook
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-// ---- Routing: edit these addresses ------------------------------------------------
-const DEFAULT_TO = "info@squarepegpizzeria.com";
-const BY_TOPIC: Record<string, string> = {
-  "Catering": "catering@squarepegpizzeria.com",
-  "Large party reservation": "catering@squarepegpizzeria.com",
-  "Food truck": "catering@squarepegpizzeria.com",
-  "Fundraiser": "info@squarepegpizzeria.com",
-  "Gift cards": "info@squarepegpizzeria.com",
-  "Rewards / app help": "info@squarepegpizzeria.com",
-  "Jobs": "info@squarepegpizzeria.com",
-  "Media or partnership": "info@squarepegpizzeria.com",
-};
-// Location-specific topics (feedback, general questions) go to that store's manager.
+// ---- Who gets the emails -----------------------------------------------------------
+// Every website message goes to this whole list. To send certain topics to certain people
+// instead, put addresses in BY_TOPIC / BY_LOCATION below and set ALWAYS_TO to the few who
+// should still see everything.
+const ALWAYS_TO = [
+  "kelly@squarepegpizzeria.com",
+  "maffefinancial@hotmail.com",
+  "catering@squarepegpizzeria.com",
+  "marketing@squarepegpizzeria.com",
+  "hr@squarepegpizzeria.com",
+];
+// Optional extra recipients by topic (added to ALWAYS_TO, not instead of it).
+const BY_TOPIC: Record<string, string> = {};
+// Optional extra recipient for location-specific topics, e.g. "Glastonbury": "glastonbury@…"
 const LOCATION_TOPICS = new Set(["General question", "Feedback about a visit"]);
-const BY_LOCATION: Record<string, string> = {
-  // "Glastonbury": "glastonbury@squarepegpizzeria.com",
-  // "East Hartford": "easthartford@squarepegpizzeria.com",
-};
+const BY_LOCATION: Record<string, string> = {};
 // -------------------------------------------------------------------------------------
 
-function routeFor(topic?: string, location?: string): string {
-  if (topic && LOCATION_TOPICS.has(topic) && location && BY_LOCATION[location]) return BY_LOCATION[location];
-  if (topic && BY_TOPIC[topic]) return BY_TOPIC[topic];
-  if (location && BY_LOCATION[location]) return BY_LOCATION[location];
-  return DEFAULT_TO;
+function recipients(topic?: string, location?: string): string[] {
+  const to = [...ALWAYS_TO];
+  if (topic && BY_TOPIC[topic]) to.push(BY_TOPIC[topic]);
+  if (location && BY_LOCATION[location] && (!topic || LOCATION_TOPICS.has(topic))) to.push(BY_LOCATION[location]);
+  return [...new Set(to.map((a) => a.trim().toLowerCase()).filter(Boolean))];
 }
 
 // ---- Spam filter: score a message, email only the ones that look real ----------------
@@ -57,11 +55,11 @@ function spamScore(r: Record<string, unknown>): { score: number; why: string[] }
 
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 
-async function sendEmail(to: string, replyTo: string, subject: string, html: string) {
+async function sendEmail(to: string[], replyTo: string, subject: string, html: string) {
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${Deno.env.get("RESEND_API_KEY")}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: Deno.env.get("NOTIFY_FROM"), to: [to], reply_to: replyTo, subject, html }),
+    body: JSON.stringify({ from: Deno.env.get("NOTIFY_FROM"), to, reply_to: replyTo, subject, html }),
   });
   if (!r.ok) throw new Error(`Email failed: ${r.status} ${await r.text()}`);
 }
@@ -79,7 +77,7 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ ok: true, skipped: "spam", why }), { headers: { "Content-Type": "application/json" } });
   }
 
-  const to = routeFor(record.topic, record.location);
+  const to = recipients(record.topic, record.location);
   const name = [record.first_name, record.last_name].filter(Boolean).join(" ") || "Website visitor";
   const subject = `[Website] ${record.topic ?? "Message"}${record.location ? ` · ${record.location}` : ""} · ${name}`;
   const html = `
@@ -92,6 +90,6 @@ Deno.serve(async (req) => {
 
   await sendEmail(to, record.email, subject, html);
 
-  await db0.from("contact_messages").update({ routed_to: to }).eq("id", record.id);
+  await db0.from("contact_messages").update({ routed_to: to.join(", ") }).eq("id", record.id);
   return new Response(JSON.stringify({ ok: true, to }), { headers: { "Content-Type": "application/json" } });
 });

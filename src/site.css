@@ -576,3 +576,13 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .on-dark .item a{color:#fff}
 .more-than{align-items:center}
 .hp{position:absolute!important;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+
+/* ---------- Header sign-in menu ---------- */
+.site-header .signin{margin-left:auto}
+.site-header .signin>summary{font:800 15px/1 var(--body);color:#fff;padding:10px 12px;cursor:pointer;list-style:none;white-space:nowrap}
+.site-header .signin>summary::-webkit-details-marker{display:none}
+.site-header .signin>summary:hover{color:var(--flame)}
+.more-menu--right{right:0;left:auto;min-width:260px}
+.more-menu--right a{display:grid;gap:2px}
+.more-menu--right a span{font-weight:600;font-size:13px;color:var(--smoke)}
+@media (max-width:979px){.site-header .signin{display:none}}

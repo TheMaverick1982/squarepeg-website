@@ -16,7 +16,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU  # noqa
+from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -467,6 +467,11 @@ T["header"] = """<a class="skip" href="#main">Skip to content</a>
     </a>
     <nav class="nav" aria-label="Main">{% for n, p in nav %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
       <details class="more"><summary>More</summary><div class="more-menu">{% for n, p in more %}{% if p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}</div></details></nav>
+    <details class="more signin"><summary>Sign in</summary><div class="more-menu more-menu--right">
+      <a href="{{ site.toast_account }}" rel="noopener"{{ ext|safe }}>Ordering account <span>Toast: saved cards &amp; past orders</span></a>
+      <a href="{{ site.loyalty_signin }}" rel="noopener"{{ ext|safe }}>Rewards account <span>Points, offers &amp; rewards</span></a>
+      <a href="{{ site.app_link }}" rel="noopener" data-track="app_click" data-src="signin"{{ ext|safe }}>Get the app <span>$5 off your first order</span></a>
+    </div></details>
     <a class="btn btn--sm header-order" href="{{ u('/locations/') }}" data-open-picker="order">{{ icons.bag|safe }}Order<span class="for" data-for-loc></span></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Open menu">{{ icons.menu|safe }}</button>
   </div>
@@ -481,6 +486,10 @@ T["header"] = """<a class="skip" href="#main">Skip to content</a>
           {% for n, p in links %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% elif p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
         </div>{% endfor %}
       </nav>
+      <div class="drawer-group"><p class="drawer-title">Sign in</p>
+        <a href="{{ site.toast_account }}" rel="noopener"{{ ext|safe }}>Ordering account (Toast)</a>
+        <a href="{{ site.loyalty_signin }}" rel="noopener"{{ ext|safe }}>Rewards account</a>
+      </div>
       <a class="drawer-app" href="{{ site.app_link }}" rel="noopener" data-track="app_click" data-src="drawer"{{ ext|safe }}><b>Get the Square Peg app</b><span>$5 off your next order + rewards every visit</span></a>
     </div>
   </div>
@@ -517,7 +526,7 @@ T["footer"] = """<section class="cta-band">
     <div class="be-nice" aria-hidden="true" data-text="Be Nice."></div>
     <div class="foot-base">
       <span>© {{ year }} Square Peg Pizzeria. Wood-fired in Connecticut & Delray Beach, FL.</span>
-      <span><a href="{{ u('/privacy/') }}">Privacy</a> · <a href="{{ u('/sms-terms/') }}">SMS Terms</a> · <a href="{{ site.loyalty_signin }}" rel="noopener"{{ ext|safe }}>Rewards sign-in</a></span>
+      <span><a href="{{ u('/privacy/') }}">Privacy Policy</a> · <a href="{{ u('/terms/') }}">Terms &amp; Conditions</a> · <a href="{{ u('/sms-terms/') }}">SMS Terms</a> · <a href="{{ site.loyalty_signin }}" rel="noopener"{{ ext|safe }}>Rewards sign-in</a></span>
     </div>
   </div>
 </footer>
@@ -848,7 +857,7 @@ T["location"] = """
       <table class="hours"><caption class="sr-only">Opening hours for Square Peg Pizzeria {{ l.name }}</caption>
         <tbody>{% for d, name, v in rows %}<tr data-day="{{ d }}"><th scope="row">{{ name }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
       {% if specials %}<div class="special-hours" role="note"><h3>Holiday &amp; special hours</h3><ul>{% for iso, label, v in specials %}<li data-date="{{ iso }}"><span>{{ label }}</span><b>{{ v }}</b></li>{% endfor %}</ul></div>{% endif %}
-      <p class="note">{% if l.hours_source == 'google' %}Hours update daily from our Google listing, including holidays.{% else %}Holiday hours may vary.{% endif %} Online ordering shows live availability.</p>
+      <p class="note">{% if l.hours_note %}{{ l.hours_note }} {% endif %}{% if l.hours_source == 'google' %}Hours update daily from our Google listing, including holidays.{% else %}Holiday hours may vary.{% endif %} Online ordering shows live availability.</p>
     </div>
     <div class="map">
       <div class="map-fallback"><span class="pin" aria-hidden="true"><span></span></span><b>{{ l.street }}, {{ l.city }}, {{ l.state }}</b><a class="btn btn--sm btn--ghost" href="{{ maps(l) }}" rel="noopener"{{ ext|safe }}>Open in Google Maps</a></div>
@@ -945,12 +954,12 @@ T["form_catering"] = """{% set fname = form_name|default('catering') %}<form cla
   </div>
   <div class="field"><label for="{{ fid }}-notes">Anything else?</label><textarea id="{{ fid }}-notes" name="notes" placeholder="Venue, dietary needs (gluten-free, vegan), budget…"></textarea></div>
   <button class="btn btn--block" type="submit" data-track="lead_submit" data-src="{{ fid }}">{{ submit }}</button>
-  <small>We reply within one business day. Prefer to talk? Call {{ site.catering_phone }}.</small>
+  <small>We reply within one business day. Prefer to talk? Call the location closest to your event.</small>
 </form>"""
 
 T["booking_form"] = """{% set e = embeds.get(embed_key) %}{% if e %}<div class="form-embed" id="{{ fid }}-booking" style="--h-m:{{ e.mobile }}px;--h-d:{{ e.desktop }}px;--crop:{{ e.crop }}px">
   <div class="embed-frame"><iframe src="{{ e.src }}?embed=1" title="{{ e.title }}" loading="lazy" allow="clipboard-write"></iframe></div>
-  <p class="embed-help">Trouble with the form? <a href="{{ e.src }}" rel="noopener" target="_blank">Open it in a new tab</a> or call {{ site.catering_phone }}.</p>
+  <p class="embed-help">Trouble with the form? <a href="{{ e.src }}" rel="noopener" target="_blank">Open it in a new tab</a>, or call <a href="{{ u('/locations/') }}">any location</a>.</p>
 </div>{% else %}{% include "form_catering" %}{% endif %}"""
 
 T["catering"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in items %}<figure class="{{ 'b-main' if loop.first else 'b-side' }}">{{ img(p, a, sizes=('(min-width:800px) 60vw, 100vw' if loop.first else '(min-width:800px) 36vw, 50vw'))|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endfor %}</div>{% endmacro %}
@@ -963,7 +972,7 @@ T["catering"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap i
     <span class="eyebrow">Catering at all 10 locations</span>
     <h1>Pizza catering & events</h1>
     <p class="lede">Birthdays, office lunches, team banquets, graduations, holiday parties. Tell us roughly how many people and we’ll plan the order with you.</p>
-    <div class="btn-row"><a class="btn" href="#quote">Get a catering quote</a><a class="btn btn--ghost" href="tel:{{ tel(site.catering_phone) }}">{{ icons.phone|safe }}{{ site.catering_phone }}</a></div>
+    <div class="btn-row"><a class="btn" href="#quote">Get a catering quote</a><a class="btn btn--ghost" href="{{ u('/locations/') }}" data-open-picker="call">{{ icons.phone|safe }}Call a location</a></div>
   </div>
 </section>
 <section class="section section--paper" id="quote">
@@ -1480,6 +1489,9 @@ def location_faqs(l):
         ("Can our group host a fundraiser here?", "Yes. Every Tuesday from 4pm to close, one organization earns 20% of dine-in food sales from its supporters."),
     ]
 
+PRIVACY_TEXT = """<p class='note'>Last updated: April 13, 2026. Mirrored from the version on our previous website; tell us if anything needs changing.</p><h2>What we collect</h2><p>When you send a message through this website, book catering, a large party or a Tuesday fundraiser, or join our rewards program, we collect the details you give us: your name, email address, phone number, the location you choose, your message, and event details. If you order online, Toast handles the order and payment and keeps your order history.</p><h2>How we use it</h2><p>We use your information to answer you, plan your event, process and deliver orders, run our loyalty and rewards program, and send the updates you asked for. We do not sell your personal information.</p><h2>Text messages</h2><p>Our SMS program sends up to 8 messages a month. Opting in is never required to buy anything or to join rewards. Mobile information and SMS consent are never shared with third parties or affiliates for their marketing. Full details are on our <a href='/sms-terms/'>SMS terms</a> page.</p><h2>Who else is involved</h2><p>Some parts of this site are run by companies we work with: Toast for ordering, menus and gift cards; our rewards app for points and offers; our booking system for catering, large party and fundraiser requests; our hiring system for job applications; and our chat provider. Each handles your information under its own privacy policy.</p><h2>Cookies and measurement</h2><p>This site may use analytics and advertising cookies to understand visits and measure our ads. You can block cookies in your browser settings.</p><h2>Your choices</h2><p>You can ask us for a copy of the information we hold about you, ask us to correct it, or ask us to delete it. Reply STOP to any text to stop messages, or use the unsubscribe link in any email.</p><h2>Contact</h2><p>Email <a href='mailto:info@squarepegpizzeria.com'>info@squarepegpizzeria.com</a> or call (860) 286-0415.</p>"""
+TERMS_TEXT = """<p class='note'>Last updated: April 13, 2026. Mirrored from the version on our previous website; tell us if anything needs changing.</p><h2>Using this website</h2><p>This website is here to share our menus, locations, hours, events and offers, and to send you to our ordering system. Everything on it, including text, photos, logos and designs, belongs to Square Peg Pizzeria and may not be copied or reused without our permission.</p><h2>Ordering</h2><p>Online orders, payments, gift cards and order history are handled by Toast under its own terms. Prices, menu items and availability are set by each location and can change.</p><h2>Offers and rewards</h2><p>Promotions, monthly deals, points and rewards are subject to their own terms, are limited to the locations and dates listed, cannot be combined with other offers unless we say so, and can change or end at any time.</p><h2>Text messages</h2><p>Joining our SMS program is optional. You may receive up to 8 messages a month. Message and data rates may apply. Reply STOP to opt out or HELP for help. See our <a href='/sms-terms/'>SMS terms</a>.</p><h2>Accuracy</h2><p>We keep hours, menus and details as current as we can, but they can change without notice. Online ordering always shows the live menu and availability.</p><h2>Liability</h2><p>This website is provided as is. To the extent the law allows, Square Peg Pizzeria is not liable for any damages arising from the use of this website, our SMS program, or any site we link to.</p><h2>Changes</h2><p>We may update these terms at any time. The date at the top shows the most recent update.</p><h2>Contact</h2><p>Email <a href='mailto:info@squarepegpizzeria.com'>info@squarepegpizzeria.com</a> or call (860) 286-0415.</p>"""
+
 def main():
     if PREV.exists():
         shutil.rmtree(PREV)
@@ -1530,7 +1542,7 @@ def main():
 
     base_ctx = dict(
         u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, ent=ENTERTAINMENT, day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
-        site=SITE, locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
+        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and,
@@ -1580,7 +1592,7 @@ def main():
                   "contact", {}, graph({"@type": "ContactPage", "url": abs_url("/contact/"), "name": "Contact Square Peg Pizzeria",
                                         "about": {"@id": ORG_ID}},
                                        {"@type": "Organization", "@id": ORG_ID, "name": SITE["name"], "email": SITE["email"],
-                                        "contactPoint": [{"@type": "ContactPoint", "contactType": "customer service", "email": SITE["email"], "telephone": tel(SITE["catering_phone"]), "areaServed": ["US-CT", "US-FL"], "availableLanguage": "en"}]},
+                                        "contactPoint": [{"@type": "ContactPoint", "contactType": "customer service", "email": SITE["email"], "areaServed": ["US-CT", "US-FL"], "availableLanguage": "en"}]},
                                        breadcrumbs([("Home", "/"), ("Contact", "/contact/")])), None, None))
     pages.append(("/promotions/", "Pizza Specials, $10 Lunch & App Rewards | Square Peg Pizzeria",
                   "Square Peg Pizzeria specials: Tuesday pasta night, $1 wings Wednesday, half-price wine Friday, $10 weekday lunch, app rewards, punch cards and 15% off for heroes.",
@@ -1613,10 +1625,12 @@ def main():
                   "sms", dict(sms=SMS_TERMS), None, None, None))
     pages.append(("/thanks/", "Thank You | Square Peg Pizzeria", "Thanks for reaching out to Square Peg Pizzeria.", "simple",
                   dict(eyebrow="Request received", h1="Thank you!", lede="We got your request and will get back to you within one business day. While you wait, there’s pizza.", prose=""), None, None, None))
-    pages.append(("/privacy/", "Privacy | Square Peg Pizzeria", "How Square Peg Pizzeria handles information you share on this website.", "simple",
-                  dict(eyebrow="Privacy", h1="Privacy notice", lede="Plain-language summary of how this website handles your information.",
-                       prose="<p><strong>DRAFT, to be reviewed before launch.</strong></p><p>When you send a catering, food truck or fundraiser request, we use your name, email, phone and event details only to respond and plan your event.</p><p>Online orders are processed by our ordering provider, Toast, under its own <a href='https://pos.toasttab.com/privacy' rel='noopener'>privacy statement</a>. Rewards are managed in the Square Peg app.</p><p>This site may use analytics and advertising cookies to understand visits and measure our ads. You can block cookies in your browser settings.</p><p>Questions? Call any Square Peg location.</p>"),
-                  None, None, None))
+    pages.append(("/privacy/", "Privacy Policy | Square Peg Pizzeria", "How Square Peg Pizzeria collects, uses and protects the information you share on this website, in our rewards program and by text.", "simple",
+                  dict(eyebrow="Privacy", h1="Privacy policy", lede="What we collect, how we use it, and the choices you have.",
+                       prose=PRIVACY_TEXT), None, None, None))
+    pages.append(("/terms/", "Terms & Conditions | Square Peg Pizzeria", "The terms for using the Square Peg Pizzeria website, our offers and rewards, and our text message program.", "simple",
+                  dict(eyebrow="Terms", h1="Terms & conditions", lede="The rules for using this website, our offers and our text messages.",
+                       prose=TERMS_TEXT), None, None, None))
     pages.append(("/404.html", "Page Not Found | Square Peg Pizzeria", "That page doesn’t exist.", "simple",
                   dict(eyebrow="404", h1="This page is a square peg.", lede="It doesn’t fit anywhere. Let’s get you back to the pizza."), None, None, None))
 
@@ -1749,7 +1763,7 @@ def redirect_map():
         ("/tuesday-charity-night", "/fundraisers/"), ("/tuesday-charity-signup", "/fundraisers/#apply"),
         ("/monthly-deals", "/deals/"), ("/reward-program", "/deals/"),
         ("/gallery", "/about/"),
-        ("/privacy-policy", "/privacy/"), ("/terms", "/privacy/"),
+        ("/privacy-policy", "/privacy/"),
         # Toast-powered pages -> Toast on the order subdomain (same paths, so every deep link keeps working)
         ("/order", ORDER_HOST + "/order"), ("/order/*", ORDER_HOST + "/order/:splat"),
         ("/menu", ORDER_HOST + "/menu"), ("/menu/*", ORDER_HOST + "/menu/:splat"),
