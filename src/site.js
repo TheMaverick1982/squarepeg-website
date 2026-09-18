@@ -99,12 +99,14 @@
     var x = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
     return 2 * R * Math.asin(Math.sqrt(x));
   }
+  // cb(ok, code) — code 1 means the visitor blocked location, which is worth saying out loud
+  // because it's fixable. 2 and 3 are "couldn't get a fix" and "timed out", which aren't.
   function locate(cb) {
-    if (!navigator.geolocation) { cb(false); return; }
+    if (!navigator.geolocation) { cb(false, 0); return; }
     navigator.geolocation.getCurrentPosition(function (p) {
       userPos = { lat: p.coords.latitude, lng: p.coords.longitude };
-      cb(true);
-    }, function () { cb(false); }, { maximumAge: 600000, timeout: 8000 });
+      cb(true, 0);
+    }, function (err) { cb(false, err && err.code); }, { maximumAge: 600000, timeout: 12000 });
   }
   function sortedLocs() {
     var pref = store.get("sp_loc");
@@ -167,8 +169,10 @@
     if (t.id === "geo-sheet" || t.id === "geo-quick") {
       e.preventDefault();
       var orig = t.textContent; t.textContent = "Finding you…";
-      locate(function (ok) {
-        t.textContent = ok ? "Sorted by distance" : "Location unavailable. Pick from the list";
+      locate(function (ok, code) {
+        t.textContent = ok ? "Sorted by distance"
+          : code === 1 ? "Location is blocked for this site — allow it in your browser, or pick from the list"
+          : "Couldn't find you — pick from the list";
         if (ok) {
           renderPicker();
           var near = sortedLocs()[0];
@@ -180,7 +184,7 @@
             tg.hidden = false;
           }
           sortGrid();
-        } else setTimeout(function () { t.textContent = orig; }, 3000);
+        } else setTimeout(function () { t.textContent = orig; }, 6000);
       });
       return;
     }
