@@ -266,21 +266,35 @@
     if (!table) return;
     e.preventDefault();
     var fd = new FormData(f);
-    if (fd.get("company_website")) { location.href = CFG.thanksUrl; return; }
+    // Spam traps: a field only a bot fills in, and a form submitted impossibly fast.
+    var loaded = parseInt(fd.get("form_loaded") || "0", 10);
+    if (fd.get("company_website")) { location.href = CFG.thanksUrl; return; }   // only a bot fills this in
+    var tooFast = loaded ? 2500 - (Date.now() - loaded) : 0;                     // submitted within 2.5s of loading
+    if (tooFast > 0) { setTimeout(function () { f.requestSubmit ? f.requestSubmit() : f.submit(); }, tooFast); return; }
     var btn = f.querySelector('[type="submit"]');
-    if (!CFG.supabaseUrl || !CFG.supabaseKey) { alert("This form isn't connected yet. Please call your location or email us."); return; }
+    var viaFunction = !!CFG.contactEndpoint;
+    if (!viaFunction && (!CFG.supabaseUrl || !CFG.supabaseKey)) { alert("This form isn't connected yet. Please call your location or email us."); return; }
     var row = {
       first_name: fd.get("first_name") || null, last_name: fd.get("last_name") || null,
       email: fd.get("email") || null, phone: fd.get("phone") || null,
       topic: fd.get("event_type") || null, location: fd.get("location") || null,
       message: fd.get("notes") || null, page: location.pathname
     };
+    var url = viaFunction ? CFG.contactEndpoint : CFG.supabaseUrl.replace(/\/$/, "") + "/rest/v1/" + table;
+    var headers = viaFunction
+      ? { "Content-Type": "application/json" }
+      : { "Content-Type": "application/json", apikey: CFG.supabaseKey, Authorization: "Bearer " + CFG.supabaseKey, Prefer: "return=minimal" };
+    if (viaFunction) {
+      var t = f.querySelector('[name="cf-turnstile-response"]');
+      row.turnstile_token = t ? t.value : "";
+      row.elapsed_ms = loaded ? Date.now() - loaded : null;
+      if (f.querySelector(".cf-turnstile") && !row.turnstile_token) {
+        alert("Please complete the “I'm not a robot” check, then send again.");
+        return;
+      }
+    }
     if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
-    fetch(CFG.supabaseUrl.replace(/\/$/, "") + "/rest/v1/" + table, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", apikey: CFG.supabaseKey, Authorization: "Bearer " + CFG.supabaseKey, Prefer: "return=minimal" },
-      body: JSON.stringify(row)
-    }).then(function (r) {
+    fetch(url, { method: "POST", headers: headers, body: JSON.stringify(row) }).then(function (r) {
       if (!r.ok) throw new Error(r.status);
       track("contact_submit", { topic: row.topic || "", location: row.location || "" });
       location.href = CFG.thanksUrl;
@@ -289,6 +303,8 @@
       alert("Sorry, that didn't go through. Please try again, or call your location.");
     });
   });
+
+  $$("form[data-supabase] input[name=form_loaded]").forEach(function (i) { i.value = String(Date.now()); });
 
   /* ---------- Connect form frames: auto-height ---------- */
   addEventListener("message", function (e) {

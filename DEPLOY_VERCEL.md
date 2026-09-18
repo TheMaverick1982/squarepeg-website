@@ -57,31 +57,9 @@ In the Vercel project, go to **Settings → Deployment Protection**.
 These pages embed your Connect forms (`connect.squarepegpizzeria.com/public/...`). The addresses and frame heights live in `EMBEDS` in `data/content.py`. Food Truck uses the catering form.
 
 ### Contact form → Supabase (with routed email notifications)
-1. **Create the project and table**
-   - In Supabase, click **New project** (e.g. `square-peg-website`).
-   - Open **SQL Editor**, paste `supabase/contact_messages.sql`, and click **Run**.
-   - The website can only *add* messages. Nobody can read them without logging in to Supabase.
-2. **Connect the website**
-   - Go to **Project Settings → API**. Copy the **Project URL** into `supabase_url` and the **anon public** key into `supabase_anon_key` (both in `data/content.py`).
-   - The anon key is meant to be public.
-3. **Set up routed email notifications**
-   1. Create a free **Resend** account (resend.com) and verify `squarepegpizzeria.com`. Any email service works; the function has one small `sendEmail()` block to swap out.
-   2. Edit the routing addresses at the top of `supabase/functions/notify-contact/index.ts`:
-      - by topic: catering questions go to catering, jobs to hiring, and so on
-      - by location: feedback about a specific store goes to that store's manager
-   3. Deploy the function (Supabase CLI):
-      ```bash
-      supabase functions deploy notify-contact --no-verify-jwt
-      supabase secrets set RESEND_API_KEY=... NOTIFY_FROM="Square Peg Website <website@squarepegpizzeria.com>" WEBHOOK_SECRET=<long random string>
-      ```
-   4. In Supabase, go to **Database → Webhooks → Create**:
-      - **Table:** `contact_messages`
-      - **Events:** Insert
-      - **Type:** Supabase Edge Function, pointing to `notify-contact`
-      - **Header:** `x-webhook-secret` set to the same secret as above
-4. **Rebuild and publish:** run `python3 build.py --staging`, then commit and push.
+Full step-by-step, including reusing your existing Resend account and the optional Turnstile check: **`SUPABASE_SETUP.md`**.
 
-Each message lands in the `contact_messages` table with `routed_to` filled in, so you can track who got what. Replies go straight to the customer.
+In short: create the Supabase project, run `supabase/contact_messages.sql`, put the Project URL and anon key into `data/content.py`, deploy the `notify-contact` function with your Resend key, and add a Database Webhook on insert.
 
 ---
 

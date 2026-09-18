@@ -636,7 +636,7 @@ T["home"] = """
     <div class="stack">
       <span class="eyebrow">How we make it</span>
       <h2>Water. Flour. Time. Fire.</h2>
-      <p class="prose" style="font-size:18px">Every dough ball starts in our East Hartford kitchen and gets stretched by hand before it hits the wood-fired oven. We roast, simmer and season with purpose, and it’s worth it for the head-tilt, the smile and the “wow” after the first bite.</p>
+      <p class="prose" style="font-size:18px">Every dough ball starts in one of our two commissary kitchens, East Hartford for Connecticut and Delray Beach for Florida, and gets stretched by hand before it hits the wood-fired oven. We roast, simmer and season with purpose, and it’s worth it for the head-tilt, the smile and the “wow” after the first bite.</p>
       <div class="facts">
         <div class="fact"><b>12″ / 18″</b><span>Small & large pies</span></div>
         <div class="fact"><b>GF</b><span>12″ gluten-free crust</span></div>
@@ -750,7 +750,7 @@ T["our_menu"] = """
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Menu</span></nav>
     <span class="eyebrow">Italian-American kitchen · wood-fired oven</span>
     <h1>Our menu</h1>
-    <p class="lede">Wood-fired pizza, pasta, chicken parm, Italian subs, salads, wings, desserts, and beer, wine and cocktails. Made in-house with dough and sauce from our own commissary.</p>
+    <p class="lede">Wood-fired pizza, pasta, chicken parm, Italian subs, salads, wings, desserts, and beer, wine and cocktails. Made in-house with dough and sauce from our own commissary kitchens in East Hartford, CT and Delray Beach, FL.</p>
     <div class="btn-row"><a class="btn btn--flame" href="{{ site.menu_url }}" data-open-picker="menu">{{ icons.bag|safe }}Live menu &amp; prices for your Peg</a><a class="btn btn--ghost" href="{{ u('/catering/') }}">Catering menu</a></div>
   </div>
 </section>
@@ -1070,11 +1070,12 @@ T["contact"] = """
     </div>
     <form class="form" name="contact" method="POST" action="{{ u('/thanks/') }}" data-supabase="contact_messages" netlify-honeypot="company_website">
       <input type="hidden" name="form-name" value="contact">
-      <p class="sr-only"><label>Leave blank <input name="company_website"></label></p>
+      <div class="hp" aria-hidden="true"><label>Leave this field empty<input name="company_website" type="text" tabindex="-1" autocomplete="off"></label></div>
+      <input type="hidden" name="form_loaded" value="">
       <h2>Send us a message</h2>
       <div class="field-row field-row--pair">
-        <div class="field"><label for="ct-first">First name</label><input id="ct-first" name="first_name" autocomplete="given-name" required></div>
-        <div class="field"><label for="ct-last">Last name</label><input id="ct-last" name="last_name" autocomplete="family-name"></div>
+        <div class="field"><label for="ct-first">First name</label><input id="ct-first" name="first_name" autocomplete="given-name" maxlength="80" required></div>
+        <div class="field"><label for="ct-last">Last name</label><input id="ct-last" name="last_name" autocomplete="family-name" maxlength="80"></div>
       </div>
       <div class="field-row">
         <div class="field"><label for="ct-email">Email</label><input id="ct-email" type="email" name="email" autocomplete="email" required></div>
@@ -1084,7 +1085,9 @@ T["contact"] = """
         <div class="field"><label for="ct-topic">Topic</label><select id="ct-topic" name="event_type">{% for t in contact_topics %}<option>{{ t }}</option>{% endfor %}</select></div>
         <div class="field"><label for="ct-loc">Location</label><select id="ct-loc" name="location"><option value="">Not location-specific</option>{% for l in locs %}<option value="{{ l.name }}">{{ l.name }}</option>{% endfor %}</select></div>
       </div>
-      <div class="field"><label for="ct-notes">Message</label><textarea id="ct-notes" name="notes" required></textarea></div>
+      <div class="field"><label for="ct-notes">Message</label><textarea id="ct-notes" name="notes" maxlength="3000" required></textarea></div>
+      {% if site.turnstile_site_key and not preview %}<div class="cf-turnstile" data-sitekey="{{ site.turnstile_site_key }}" data-theme="light" data-size="flexible"></div>
+      <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endif %}
       <button class="btn btn--block" type="submit" data-track="lead_submit" data-src="contact">Send message</button>
       <small>We reply within one business day. Need something right now? Call your location.</small>
     </form>
@@ -1239,7 +1242,7 @@ T["about"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in i
     <div class="prose">
       <p>Square Peg Pizzeria was started by UConn alumni who grew up in Hartford and came home to build the kind of place they’d want to hang out in. The first oven was lit in Glastonbury in 2020. Today there are ten Square Pegs, from Storrs Center to Shelton to Delray Beach, Florida.</p>
       <p class="pull">That moment is the product. The pizza is how we get there.</p>
-      <p>Every day, our team makes dough from scratch in our East Hartford kitchen. It’s never frozen. It isn’t the easy way to do it, but it’s the way that gets the head-tilt, the smile and the “wow.”</p>
+      <p>Every day, our team makes dough from scratch in our commissary kitchens: East Hartford for the Connecticut Pegs, Delray Beach for Florida. It’s never frozen. It isn’t the easy way to do it, but it’s the way that gets the head-tilt, the smile and the “wow.”</p>
       <p>We roast, stretch, simmer, press and season with purpose, turning simple ingredients into something that feels familiar and still special. Water. Flour. Time. Heat. Hands that care.</p>
       <p>So this page isn’t really about us. It’s about the families, friends, neighbors and regulars who turn a pizza night into a shared memory: victory slices after long games, first dates, Tuesday fundraisers, and the table that keeps getting bigger.</p>
       <p style="font-weight:800">Whether you’re here for a quick bite, a family tradition, or the start of something new: your table is ready.</p>
@@ -1513,7 +1516,8 @@ def main():
         "phone": l["phone"], "tel": tel(l["phone"]), "order": order_url(l), "url": url(f"/locations/{l['slug']}/"),
         "lat": l["lat"], "lng": l["lng"], "hours": l["hours"], "special": l.get("special") or {}, "region": l["region"]} for l in LOCATIONS], separators=(",", ":"))
     cfg_json = json.dumps({"chatSrc": "" if PREVIEW else SITE["chat_src"], "chatId": SITE["chat_widget_id"], "locationsUrl": url("/locations/"),
-                           "supabaseUrl": SITE.get("supabase_url", ""), "supabaseKey": SITE.get("supabase_anon_key", ""), "thanksUrl": url("/thanks/")})
+                           "supabaseUrl": SITE.get("supabase_url", ""), "supabaseKey": SITE.get("supabase_anon_key", ""), "thanksUrl": url("/thanks/"),
+                           "contactEndpoint": "" if PREVIEW else SITE.get("contact_endpoint", "")})
 
     analytics = ""
     if SITE["ga4_id"]:
@@ -1700,6 +1704,11 @@ def write_extras(pages):
         "  X-Content-Type-Options: nosniff",
         "  Referrer-Policy: strict-origin-when-cross-origin",
         "  Permissions-Policy: geolocation=(self), camera=(), microphone=()",
+        "  X-Frame-Options: SAMEORIGIN",
+        "  Cross-Origin-Opener-Policy: same-origin-allow-popups",
+        "  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload",
+        f"  Content-Security-Policy: {CSP_ENFORCED}",
+        f"  Content-Security-Policy-Report-Only: {CSP_FULL}",
         "/img/*",
         "  Cache-Control: public, max-age=31536000, immutable",
         "/fonts/*",
@@ -1709,6 +1718,24 @@ def write_extras(pages):
         "",
     ]))
     (OUT / "netlify.toml").write_text('[build]\n  publish = "."\n\n[build.processing.html]\n  pretty_urls = true\n')
+
+CSP_ENFORCED = "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+# Everything the pages actually load: our own files, the Vendasta chat, analytics (when switched on),
+# the Connect/Wingman form frames, Google Maps frames and Supabase for the contact form.
+CSP_FULL = "; ".join([
+    "default-src 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'self'",
+    "form-action 'self'",
+    "img-src 'self' data: https:",
+    "font-src 'self' data:",
+    "style-src 'self' 'unsafe-inline'",
+    "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://cdn.apigateway.co https://*.apigateway.co https://www.googletagmanager.com https://connect.facebook.net",
+    "connect-src 'self' https://*.supabase.co https://*.functions.supabase.co https://challenges.cloudflare.com https://*.apigateway.co https://www.google-analytics.com https://*.analytics.google.com https://connect.facebook.net https://www.facebook.com",
+    "frame-src https://challenges.cloudflare.com https://connect.squarepegpizzeria.com https://www.joinwingman.app https://www.google.com https://maps.google.com https://*.apigateway.co",
+    "upgrade-insecure-requests",
+])
 
 ORDER_HOST = TOAST_SUBDOMAIN   # redirects from old main-domain Toast URLs always go here
 
@@ -1770,7 +1797,10 @@ def vercel_config():
             {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
             {"key": "Permissions-Policy", "value": "geolocation=(self), camera=(), microphone=()"},
             {"key": "X-Frame-Options", "value": "SAMEORIGIN"},
-            {"key": "Content-Security-Policy", "value": "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"},
+            {"key": "Content-Security-Policy", "value": CSP_ENFORCED},
+            # Full policy in report-only mode first: check the browser console for blocks, then
+            # move this value into Content-Security-Policy above (see SECURITY_AND_BACKUPS.md).
+            {"key": "Content-Security-Policy-Report-Only", "value": CSP_FULL},
             {"key": "Cross-Origin-Opener-Policy", "value": "same-origin-allow-popups"},
             {"key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains"}]
             + ([{"key": "X-Robots-Tag", "value": "noindex, nofollow"}] if STAGING else [])},

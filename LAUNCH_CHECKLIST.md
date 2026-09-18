@@ -1,6 +1,6 @@
 # Square Peg Pizzeria: Launch Checklist
 
-The site in `dist/` is ready to deploy. Work through this list before pointing squarepegpizzeria.com at it.
+The site in `dist/` is ready to deploy. **For the short, ordered version, see `GO_LIVE.md`.** This file has the full detail.
 
 ## 1. Toast setup (do this first)
 - [ ] Confirm with your Toast rep that you can switch from **Toast Websites** to **Toast Online Ordering Pro** (or keep both), and what it costs.
@@ -65,7 +65,7 @@ The site in `dist/` is ready to deploy. Work through this list before pointing s
 - [ ] **Catering is pickup-only.** The website never mentions catering delivery or setup. Note: the Fall catering campaign copy in this project (`Catering_Campaign_Suite_Fall_Holiday_2026.md`) still says "handles the count, the timing, and the setup". Update it to match.
 - [ ] Review `/promotions/` and `/entertainment/`: the specials and weekly lineups were copied from the current site. Confirm they're still current, and whether any specials vary by location.
 - [ ] In Connect, the location lists show 9 locations for large reservations and 8 for fundraisers. Confirm that's intended.
-- [ ] **Contact form:** set up Supabase and email routing (see `DEPLOY_VERCEL.md`), then send a test message to every route.
+- [ ] **Contact form:** set up Supabase and email routing (see `SUPABASE_SETUP.md`), then send a test message to every route.
 - [ ] Have someone review the **privacy page** draft (`/privacy/`) before launch.
 
 ## 5. Tracking
@@ -82,7 +82,24 @@ The site in `dist/` is ready to deploy. Work through this list before pointing s
 - [ ] The Vendasta chat snippet is installed on every page, loaded about 2.5 seconds after the page finishes so it doesn't slow the first load. The URL contains `webchat-client..prod` (two dots), copied exactly as provided; confirm it matches your Vendasta dashboard.
 - [ ] On phones, the bottom action bar leaves space on the right for the chat bubble. Check that they don't overlap once it's live.
 
+## 7b. Security, spam & backups
+See `SECURITY_AND_BACKUPS.md` for the details.
+- [x] Contact form has a honeypot field, a timing check, database limits (3 messages an hour per email, 2 links max, no HTML) and spam scoring before anything is emailed.
+- [x] Security headers on every page: HSTS, nosniff, referrer policy, permissions policy, frame protection and a content security policy.
+- [ ] **After launch:** check the browser console for "Content Security Policy" messages on the home, location, catering, careers and chat pages, then switch the strict policy from report-only to enforced.
+- [ ] **Daily health check:** change `SITE_URL` in `.github/workflows/site-health.yml` to `https://squarepegpizzeria.com`.
+- [ ] **Contact form:** follow `SUPABASE_SETUP.md` (table, keys, Resend notifications, optional Turnstile).
+- [ ] **Weekly message backup:** add the `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` secrets in GitHub so contact messages are exported weekly. (Supabase's free plan takes no automatic backups.)
+- [ ] Add a free uptime monitor (UptimeRobot or similar) that alerts someone if the site goes down.
+- [ ] Turn on two-factor authentication for GitHub, Vercel, Supabase and the domain registrar, and lock the domain.
+- [ ] Add SPF, DKIM and DMARC records when Resend is set up for contact form emails.
+
 ## 8. Go live
+- [ ] **Move the Vercel projects to a Square Peg team first** (do this before attaching the domain):
+  - Vercel's Hobby plan is for non-commercial personal use only ([fair use](https://vercel.com/docs/limits/fair-use-guidelines#commercial-usage)), so the business belongs on a Pro team ($20/user/month).
+  - Create the team on a company email, add Brian as a member, then in each project use **Settings → General → Transfer Project**. Transfers are **zero downtime** and take 10 seconds to 10 minutes ([docs](https://vercel.com/docs/projects/transferring-projects)).
+  - Deployments, environment variables, domains, the GitHub link and security settings come along. Integrations must be added again, and usage/log history resets.
+  - Reconnect the GitHub repo if prompted (the new team needs access to it), and re-create the deploy hook if one was added for the hours sync.
 - [ ] Deploy `dist/` (**not** `dist-staging/`, which is hidden from Google) to Vercel (see `DEPLOY_VERCEL.md`) or Netlify.
 - [ ] Point the root domain and `www` to the host. **Don't touch the `order` records.** In Vercel, set `www.squarepegpizzeria.com` to **redirect (308) to `squarepegpizzeria.com`**, because Google still has old `www.` pages indexed (e.g. `/events/trivia-night`).
 - [ ] **301 redirects are built in**: `dist/vercel.json` for Vercel, `dist/_redirects` for Netlify, with the full list in `REDIRECTS.csv`. Every URL in your current Toast sitemap is covered:

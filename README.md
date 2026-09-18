@@ -14,13 +14,16 @@ A fast, static website for squarepegpizzeria.com. Ordering, menus and gift cards
 | `build.py` | Rebuilds `dist/` from the files above. |
 | `dist-staging/` | Same site, hidden from Google, for team review on Vercel. |
 | `supabase/` | Contact form table and the email-routing function. |
-| `LAUNCH_CHECKLIST.md` | Everything to do before going live. |
+| `GO_LIVE.md` | **Start here:** the short, ordered list to get live, and who does what. |
+| `LAUNCH_CHECKLIST.md` | The full detail behind it. |
 | `DEPLOY_VERCEL.md` | GitHub → Vercel setup, forms, Supabase. |
 | `REDIRECTS.csv` | Every old URL and where it now goes (301). |
 | `HOURS_SYNC.md` | Hours come from Google Business Profile every night. Setup and how it works. |
 | `scripts/`, `.github/workflows/` | The nightly Google hours sync, and the towns-within-15-miles builder. |
 | `data/service_areas.json` | Towns within 15 miles of each store (used on location pages and `/areas-we-serve/`). |
 | `LOCAL_SEO_PLAN.md` | How to rank in the towns around each store. |
+| `SUPABASE_SETUP.md` | Contact form: Supabase, Resend emails, optional Turnstile and the weekly export. |
+| `SECURITY_AND_BACKUPS.md` | Spam protection, security headers, what's backed up and how to restore. |
 
 ## Launch day: Toast moves to order.squarepegpizzeria.com
 Set `TOAST_ON_SUBDOMAIN = True` at the top of `data/content.py`, rebuild and push. First run **Actions → Check Toast links** to confirm the subdomain works. Full steps are in `LAUNCH_CHECKLIST.md` section 1.

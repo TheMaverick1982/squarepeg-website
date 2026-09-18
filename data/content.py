@@ -53,8 +53,13 @@ SITE = {
     "chat_widget_id": "c8ba1e1a-1e32-11f1-a953-6241c47b1fa1",
     # Contact form → Supabase (see supabase/contact_messages.sql and DEPLOY_VERCEL.md).
     # The anon key is public by design; the table only allows inserts.
-    "supabase_url": "",       # e.g. https://abcdefgh.supabase.co
-    "supabase_anon_key": "",
+    # Optional: send the contact form through the submit-contact Edge Function instead of
+    # straight to the table, so a Cloudflare Turnstile check can be verified server-side.
+    # Fill in both to switch it on (see SUPABASE_SETUP.md); leave blank to post to the table.
+    "contact_endpoint": "",        # e.g. https://abcdefgh.functions.supabase.co/submit-contact
+    "turnstile_site_key": "",      # Cloudflare Turnstile site key (public)
+    "supabase_url": "https://ytkwogufrjffcgfpinrf.supabase.co",
+    "supabase_anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0a3dvZ3VmcmpmZmNnZnBpbnJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MDM5MDIsImV4cCI6MjEwNTI3OTkwMn0.TBUjxGEnpo-sv7Yinb1GKIKOW14R2o1sYq5B_5viDPA",
     # Analytics — fill in to activate (left blank = nothing loads)
     "ga4_id": "",
     "meta_pixel_id": "",
@@ -88,7 +93,7 @@ LOCATIONS = [
         "lat": 41.790362, "lng": -72.594171, "geo_exact": True,  # US Census geocoder
         "hours": h(("11:00","22:00"),("11:00","20:30"),("11:00","20:30"),("11:00","22:00"),("11:00","20:30"),("07:00","20:30"),("07:00","22:00")),
         "tag": "Breakfast on weekends",
-        "blurb": "East Hartford is home base: our commissary here makes the dough and sauce for every Square Peg, fresh and never frozen. It’s also the one Peg serving breakfast, with omelettes and the Pegg & Cheese from 7am on weekends.",
+        "blurb": "East Hartford is home base: our commissary kitchen here makes the dough and sauce for every Connecticut Square Peg, fresh and never frozen. It’s also the one Peg serving breakfast, with omelettes and the Pegg & Cheese from 7am on weekends.",
         "nearby": ["Hartford", "Manchester", "South Windsor", "Wethersfield", "Glastonbury"],
         "same_as": ["https://www.yelp.com/biz/square-peg-pizzeria-east-hartford"],
         "photo": "dough",
@@ -179,7 +184,7 @@ LOCATIONS = [
         "lat": 26.457838, "lng": -80.12169, "geo_exact": True,  # US Census geocoder
         "hours": h(("11:30","21:00"),("11:30","21:00"),("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:00","22:00"),("11:00","21:00")),
         "tag": "Connecticut pizza in Florida",
-        "blurb": "Connecticut pizza, Florida sunshine. On West Atlantic Avenue, our Delray Peg feeds snowbirds who missed their Glastonbury pie and locals who are just finding out what the fuss is about.",
+        "blurb": "Connecticut pizza, Florida sunshine. Delray Beach has its own kitchen making dough and sauce from scratch, the same way East Hartford does for our Connecticut Pegs. On West Atlantic Avenue, our Delray Peg feeds snowbirds who missed their Glastonbury pie and locals who are just finding out what the fuss is about.",
         "nearby": ["Boynton Beach", "Boca Raton", "Lake Worth Beach", "Highland Beach"],
         "photo": "kid-slice",
     },

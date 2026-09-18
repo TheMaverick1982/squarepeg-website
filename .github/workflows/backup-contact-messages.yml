@@ -1,0 +1,42 @@
+# Weekly backup of the contact form messages out of Supabase.
+# The file is kept as a GitHub Actions artifact for 90 days (it is NOT committed to the repo,
+# because it contains customer contact details). Download it from the run page.
+#
+# Needs two repository secrets (GitHub > Settings > Secrets and variables > Actions):
+#   SUPABASE_URL          e.g. https://abcdefgh.supabase.co
+#   SUPABASE_SERVICE_KEY  Supabase > Project Settings > API > service_role (keep private)
+# Without them the job skips quietly.
+name: Backup contact messages
+
+on:
+  schedule:
+    - cron: "20 12 * * 1"   # Mondays, ~8:20am Eastern
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+    steps:
+      - name: Export messages
+        id: export
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_KEY" ]; then
+            echo "::notice::Supabase secrets aren't set yet, so there's nothing to back up."
+            echo "have=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          curl -fsS "${SUPABASE_URL%/}/rest/v1/contact_messages?select=*&order=created_at.desc" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            -H "Accept: text/csv" -o contact_messages.csv
+          echo "Rows (including header): $(wc -l < contact_messages.csv)" >> "$GITHUB_STEP_SUMMARY"
+          echo "have=true" >> "$GITHUB_OUTPUT"
+      - name: Keep the file for 90 days
+        if: steps.export.outputs.have == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: contact-messages-${{ github.run_id }}
+          path: contact_messages.csv
+          retention-days: 90

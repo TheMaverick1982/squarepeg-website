@@ -1,0 +1,28 @@
+# Every morning: check the live site loads, redirects work and security headers are set.
+# If something breaks, this job fails and GitHub emails you.
+# Before launch it checks the review site; at launch change SITE_URL below to the real domain.
+name: Site health check
+
+on:
+  schedule:
+    - cron: "40 11 * * *"   # ~7:40am Eastern
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Site to check"
+        default: "https://squarepeg-website.vercel.app"
+        type: string
+
+env:
+  SITE_URL: "https://squarepeg-website.vercel.app"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/check_site_health.py "${{ inputs.url || env.SITE_URL }}"
