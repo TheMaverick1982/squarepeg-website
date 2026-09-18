@@ -589,7 +589,11 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .site-header .signin>summary{font:800 15px/1 var(--body);color:#fff;padding:10px 12px;cursor:pointer;list-style:none;white-space:nowrap}
 .site-header .signin>summary::-webkit-details-marker{display:none}
 .site-header .signin>summary:hover{color:var(--flame)}
-.more-menu--right{right:0;left:auto;min-width:260px}
-.more-menu--right a{display:grid;gap:2px}
-.more-menu--right a span{font-weight:600;font-size:13px;color:var(--smoke)}
+.more-menu--right{right:0;left:auto;min-width:268px;padding:6px}
+.site-header .signin .more-menu a{display:grid;gap:2px;padding:11px 12px;border:0;font:800 15px/1.25 var(--body);color:#fff;text-decoration:none}
+.site-header .signin .more-menu a:hover{background:var(--oven-2);color:var(--flame)}
+.site-header .signin .more-menu a span{font-weight:600;font-size:13px;color:#b6aaa2;text-decoration:none}
+.site-header .signin .more-menu a:hover span{color:#e6ddd6}
+.site-header .signin .more-menu a+a{border-top:1px solid var(--line-dark)}
+.site-header .signin[open]>summary{color:var(--flame)}
 @media (max-width:979px){.site-header .signin{display:none}}

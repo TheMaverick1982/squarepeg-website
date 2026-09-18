@@ -84,9 +84,10 @@ Claude can't verify these; they're on the site now as best guesses.
 1. Create the **production Vercel project** from the same repo with Root Directory `dist` (the review site keeps using `dist-staging`).
 2. Point **squarepegpizzeria.com** and **www** at it. Set `www` to redirect to the main domain. Don't touch the `order` DNS records.
 3. Watch the first deploy, then spot-check on a phone: an Order button, a Menu button, Gift Cards, one old `/order/...` link, one `/menu-<town>` link.
-4. **Google Search Console:** verify the domain, submit `sitemap.xml`, request indexing for the home page, the 10 location pages, the menu page and the towns page.
-5. **Google Business Profile, each location:** website link → that location's page; menu and order links → the Toast subdomain.
-6. Change `SITE_URL` in `.github/workflows/site-health.yml` to the real domain.
+4. **Nothing to unblock by hand.** The "hide from Google" tag and the blocking robots.txt exist **only** in the review build (`dist-staging`). The production folder (`dist`) has neither, so publishing it is what unblocks the site. The daily health check confirms it and fails if a noindex tag ever sneaks in.
+5. **Google Search Console:** verify the domain, submit `https://squarepegpizzeria.com/sitemap.xml`, then use URL Inspection → Request indexing for the home page, the 10 location pages, the menu page and the towns page. Re-submit the sitemap any time pages are added.
+6. **Google Business Profile, each location:** website link → that location's page; menu and order links → the Toast subdomain.
+7. Change `SITE_URL` in `.github/workflows/site-health.yml` to the real domain.
 
 ---
 

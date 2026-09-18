@@ -12,7 +12,7 @@ import os
 # Order / Menu / Gift card button, the search data and llms.txt to the subdomain.
 # (The 301 redirects from old main-domain Toast URLs always point to the subdomain.)
 # For a test build without editing this file: SP_TOAST_ON_SUBDOMAIN=1 python3 build.py --staging
-TOAST_ON_SUBDOMAIN = False
+TOAST_ON_SUBDOMAIN = True
 TOAST_MAIN_DOMAIN = "https://squarepegpizzeria.com"          # where Toast lives today
 TOAST_SUBDOMAIN = "https://order.squarepegpizzeria.com"      # where Toast lives after launch
 # Paths on the Toast site. The redirects assume Toast keeps the same paths on the subdomain;
