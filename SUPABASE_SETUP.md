@@ -69,25 +69,37 @@ Good news: because Resend already sends from your domain for the other app, **th
 
 ---
 
-## 4. Optional: Cloudflare Turnstile (invisible "are you human" check)
+## 4. Held in reserve: Cloudflare Turnstile (invisible "are you human" check)
 
-Add this only if spam gets through. It needs a free Cloudflare account; your DNS doesn't have to move.
+**Don't turn this on yet.** The four layers already in place (honeypot, timing trap, database rules, spam scoring) handle normal spam. This is the fifth layer, ready to switch on if spam ever starts getting through to the inboxes. Everything below is already written and committed; it just isn't activated.
+
+### Why it's safe to add here
+
+Turnstile has a reputation for locking people out, but that reputation comes from **login pages**, where a failed check means you can't get into your account. This site has no login, and ordering happens in Toast, so the worst case is one contact message. Even that is guarded:
+
+- **Managed mode is invisible** for the overwhelming majority of visitors. Only traffic that looks automated gets an interactive challenge.
+- **The check fails open.** `humanCheck()` in `supabase/functions/submit-contact/index.ts` only rejects when Cloudflare actively says the token is bad. If Cloudflare is down, slow, times out, or the widget never loaded (ad blocker, flaky connection), the message goes through.
+- **There are two kill switches.** Unset `TURNSTILE_SECRET_KEY` in Supabase and every submission passes — no redeploy, no rebuild, takes ten seconds. Or blank `turnstile_site_key` in `data/content.py` and rebuild to remove the widget from the page entirely.
+
+### Steps, when the day comes
 
 1. In Cloudflare: **Turnstile → Add widget**
    - **Domain:** `squarepegpizzeria.com`
    - **Widget mode:** Managed
-   - Copy the **site key** (public) and the **secret key** (private).
-2. Deploy the second function and give it the secret:
-   ```bash
-   supabase functions deploy submit-contact --no-verify-jwt
-   supabase secrets set TURNSTILE_SECRET_KEY=0x_xxx \
-     ALLOWED_ORIGINS="https://squarepegpizzeria.com,https://www.squarepegpizzeria.com"
-   ```
-3. In `data/content.py` set both, then rebuild:
-   - `"contact_endpoint": "https://<project ref>.functions.supabase.co/submit-contact",`
+   - Copy the **site key** (public, goes in the website) and the **secret key** (private, never goes in the website).
+2. **Deploy the function** — Supabase → **Edge Functions → Deploy a new function → Via Editor**, name it `submit-contact`, paste the contents of `supabase/functions/submit-contact/index.ts`. The file in the editor must be called `index.ts`.
+3. **Edge Functions → Secrets**, add two:
+   - `TURNSTILE_SECRET_KEY` — the secret key from step 1
+   - `ALLOWED_ORIGINS` — `https://squarepegpizzeria.com,https://www.squarepegpizzeria.com`
+4. In `data/content.py`, set both and rebuild:
+   - `"contact_endpoint": "https://ytkwogufrjffcgfpinrf.functions.supabase.co/submit-contact",`
    - `"turnstile_site_key": "0x_yyy",`
 
-The form then goes through that function, which checks the Turnstile result, re-checks the honeypot and timing, enforces the 3-an-hour limit, and only then saves the message. Leave both settings blank and everything works as before.
+The form then posts through that function, which verifies Turnstile, re-checks the honeypot and timing, enforces the 3-an-hour limit, and only then saves the message. Leave both settings blank and the form posts straight into the table exactly as it does today.
+
+### Watch it for a week after switching on
+
+Compare the number of rows landing in `contact_messages` against the week before. A sharp drop in *legitimate* messages means the check is too aggressive — unset the secret and tell me.
 
 ## 5. Optional: weekly backup of the messages
 

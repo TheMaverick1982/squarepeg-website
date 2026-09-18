@@ -26,16 +26,33 @@ function cors(origin: string | null) {
 
 const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
+// Verify the Turnstile token with Cloudflare.
+//
+// This FAILS OPEN on purpose. A contact form is not a login: the cost of turning away a real
+// customer is far higher than the cost of letting one spam message through to a filter that
+// then scores it anyway. So we only reject when Cloudflare actively tells us the token is bad.
+// If Cloudflare is down, slow, or unreachable, the message goes through.
+//
+// It is skipped entirely when TURNSTILE_SECRET_KEY is unset — that is the kill switch. Unset
+// the secret and every submission passes, with no redeploy and no site rebuild.
 async function humanCheck(token: string, ip: string): Promise<boolean> {
   const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
   if (!secret) return true;                      // check not set up: let it through
-  const body = new FormData();
-  body.append("secret", secret);
-  body.append("response", token);
-  if (ip) body.append("remoteip", ip);
-  const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body });
-  const out = await r.json().catch(() => ({ success: false }));
-  return out.success === true;
+  if (!token) return true;                       // widget never loaded (blocked, offline): let it through
+  try {
+    const body = new FormData();
+    body.append("secret", secret);
+    body.append("response", token);
+    if (ip) body.append("remoteip", ip);
+    const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST", body, signal: AbortSignal.timeout(4000),
+    });
+    if (!r.ok) return true;                      // Cloudflare erroring: don't punish the visitor
+    const out = await r.json();
+    return out?.success === true;                // the only case we actually turn someone away
+  } catch {
+    return true;                                 // timeout or network failure: let it through
+  }
 }
 
 Deno.serve(async (req) => {

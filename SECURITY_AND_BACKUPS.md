@@ -35,7 +35,17 @@ Four layers, so a bot has to beat all of them:
 
 The public Supabase key in the site is meant to be public: it can only *add* messages, never read them. Reading requires a Supabase login.
 
-**If spam still gets through,** Cloudflare Turnstile (a free, invisible "are you human" check) is already built and waiting: deploy the `submit-contact` function and fill in two settings. Steps are in `SUPABASE_SETUP.md`, section 4.
+### The fifth layer, held in reserve
+
+**If spam still gets through,** Cloudflare Turnstile (a free, usually invisible "are you human" check) is already written and committed, waiting to be switched on. Full steps are in `SUPABASE_SETUP.md`, section 4.
+
+Turnstile has a reputation for locking real people out, but that comes from **login pages**, where failing the check means losing access to your account. This site has no login and ordering happens in Toast, so the worst case here is a single contact message. Three things keep even that from happening:
+
+- **Managed mode is invisible** to the overwhelming majority of visitors. Only traffic that looks automated ever sees a challenge.
+- **The check fails open.** `humanCheck()` in `supabase/functions/submit-contact/index.ts` rejects a submission *only* when Cloudflare actively says the token is bad. Cloudflare down, slow, timing out, or the widget blocked by an ad blocker — the message goes through anyway.
+- **Two kill switches.** Unset `TURNSTILE_SECRET_KEY` in Supabase and every submission passes, in about ten seconds, with no redeploy and no rebuild. Or blank `turnstile_site_key` in `data/content.py` and rebuild to take the widget off the page entirely.
+
+After switching it on, compare a week of `contact_messages` rows against the week before. A drop in *legitimate* messages means it's too aggressive — unset the secret.
 
 ## 3. Security headers
 
@@ -92,7 +102,7 @@ Without those secrets the job skips quietly.
 
 If anything fails, the job fails and GitHub emails you. Run it any time from **Actions → Site health check → Run workflow**.
 
-**At launch:** change `SITE_URL` at the top of that file from the review site to `https://squarepegpizzeria.com`.
+**Done at launch:** `SITE_URL` now points at `https://squarepegpizzeria.com`. The redirect checks follow each chain only as far as our own domain — once a redirect hands off to Toast, that address is the answer, and whether Toast serves it is what the separate **Check Toast links** workflow is for.
 
 **Worth adding:** a free uptime monitor (UptimeRobot, Better Stack) that texts someone if the site or ordering goes down at 7pm on a Friday. The GitHub check runs once a day; an uptime monitor checks every few minutes.
 
