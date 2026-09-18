@@ -149,6 +149,11 @@
       "permanent": true
     },
     {
+      "source": "/order/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/order/:path*",
+      "permanent": true
+    },
+    {
       "source": "/menu",
       "destination": "https://order.squarepegpizzeria.com/menu",
       "permanent": true
@@ -164,7 +169,17 @@
       "permanent": true
     },
     {
+      "source": "/menu/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/menu/:path*",
+      "permanent": true
+    },
+    {
       "source": "/account/:path*",
+      "destination": "https://order.squarepegpizzeria.com/account/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/account/:path*/",
       "destination": "https://order.squarepegpizzeria.com/account/:path*",
       "permanent": true
     },
@@ -174,12 +189,27 @@
       "permanent": true
     },
     {
+      "source": "/checkout/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/checkout/:path*",
+      "permanent": true
+    },
+    {
       "source": "/cart/:path*",
       "destination": "https://order.squarepegpizzeria.com/cart/:path*",
       "permanent": true
     },
     {
+      "source": "/cart/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/cart/:path*",
+      "permanent": true
+    },
+    {
       "source": "/confirm/:path*",
+      "destination": "https://order.squarepegpizzeria.com/confirm/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/confirm/:path*/",
       "destination": "https://order.squarepegpizzeria.com/confirm/:path*",
       "permanent": true
     },
@@ -205,6 +235,11 @@
     },
     {
       "source": "/events/:path*",
+      "destination": "/entertainment/",
+      "permanent": true
+    },
+    {
+      "source": "/events/:path*/",
       "destination": "/entertainment/",
       "permanent": true
     },
@@ -354,7 +389,17 @@
       "permanent": true
     },
     {
+      "source": "/menus/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
       "source": "/dishes/:path*",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/dishes/:path*/",
       "destination": "https://order.squarepegpizzeria.com/menu",
       "permanent": true
     },

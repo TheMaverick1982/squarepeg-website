@@ -22,7 +22,12 @@ MUST_HEADERS = {
     "strict-transport-security": None,
 }
 REDIRECTS = [("/monthly-deals", "/deals/"), ("/tuesday-charity-night", "/fundraisers/"),
-             ("/events/trivia-night", "/entertainment/"), ("/gift-cards", "gift"), ("/menu-plainville", "/order/")]
+             ("/events/trivia-night", "/entertainment/"), ("/gift-cards", "/gift-cards"),
+             ("/menu-plainville", "/order/square-peg-plainville"),
+             # Old ordering links from QR codes and Google, in both slash forms.
+             ("/order/square-peg-plainville-400-new-britain-avenue", "/order/square-peg-plainville"),
+             ("/order/square-peg-plainville-400-new-britain-avenue/", "/order/square-peg-plainville"),
+             ("/menus/pizza", "/menu"), ("/dishes/margherita", "/menu")]
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -72,12 +77,31 @@ def main():
         ok = bool(val) and (expect is None or expect in val.lower())
         check(f"Header {h}", ok, val[:70] or "missing")
 
-    # 3. Redirects still work
+    # 3. Redirects still work.
+    # trailingSlash is on, so Vercel often adds a slash-normalising hop of its own before our
+    # redirect runs. Walk the whole chain: every hop must be permanent, and the address we
+    # finally land on is what gets compared.
     for src, expect in REDIRECTS:
-        code, headers, _, loc = get(base + src, follow=False)
-        loc = headers.get("location", loc) or ""
-        ok = code in (301, 308) and expect in loc
-        check(f"Redirect {src}", ok, f"HTTP {code} → {loc[:70]}")
+        url, hops, codes, ok = base + src, 0, [], True
+        while hops < 5:
+            code, headers, _, loc = get(url, follow=False)
+            if code not in (301, 308):
+                if hops == 0:
+                    ok = False          # never redirected at all
+                elif code != 200:
+                    ok = False          # chain ended on an error, e.g. a 404
+                break
+            codes.append(str(code))
+            nxt = headers.get("location", loc) or ""
+            if not nxt:
+                ok = False
+                break
+            url = nxt if "://" in nxt else base + nxt
+            hops += 1
+        else:
+            ok = False                  # still bouncing after 5 hops: a loop
+        ok = ok and expect in url
+        check(f"Redirect {src}", ok, f"{'→'.join(codes) or 'no redirect'} → {url[:70]}")
 
     # 4. Sitemap and robots sanity
     code, _, body, _ = get(base + "/sitemap.xml")

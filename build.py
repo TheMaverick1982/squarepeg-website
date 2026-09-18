@@ -1852,8 +1852,10 @@ def vercel_config():
         dst = b.replace(":splat", ":path*")
         if a.endswith("/*"):
             base = a[:-2]
-            # /order/anything, plus the bare /order/ that Vercel's trailing-slash step can produce
-            redirects.append({"source": base + "/:path*", "destination": dst, "permanent": True})
+            # /order/anything, plus the trailing-slash form. trailingSlash is on, so Vercel 308s
+            # /order/foo to /order/foo/ BEFORE redirects run; without the twin that lands on a 404.
+            for src in (base + "/:path*", base + "/:path*/"):
+                redirects.append({"source": src, "destination": dst, "permanent": True})
             continue
         # match both /old-page and /old-page/ (Vercel adds the slash before redirects run)
         for src in (a, a + "/"):
