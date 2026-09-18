@@ -362,6 +362,18 @@ def org_schema():
              "logo": abs_url("/img/logo.png"), "image": abs_url("/img/logo.png"),
              "subOrganization": [{"@id": abs_url(f"/locations/{l['slug']}/#restaurant")} for l in LOCATIONS]},
             {"@type": "WebSite", "@id": abs_url("/#website"), "url": abs_url("/"), "name": SITE["name"], "publisher": {"@id": ORG_ID}},
+        ] + [
+            # A short Restaurant node per location, sharing the @id of the full node on that
+            # location's own page, so the home page itself carries local-business markup instead
+            # of only pointing at it. Same entity, partial description — what @id is for.
+            {"@type": "Restaurant", "@id": abs_url(f"/locations/{l['slug']}/") + "#restaurant",
+             "name": f"Square Peg Pizzeria {l['name']}", "url": abs_url(f"/locations/{l['slug']}/"),
+             "telephone": tel(l["phone"]),
+             "address": {"@type": "PostalAddress", "streetAddress": l["street"], "addressLocality": l["city"],
+                         "addressRegion": l["state"], "postalCode": l["zip"], "addressCountry": "US"},
+             "servesCuisine": ["Italian", "Pizza", "Italian-American", "American"], "priceRange": "$$",
+             "parentOrganization": {"@id": ORG_ID}}
+            for l in LOCATIONS
         ],
     }
 
@@ -1605,7 +1617,7 @@ def main():
     pages = []  # (path, title, desc, body_template, extra ctx, schema, og, hero)
 
     pages.append(("/", "Square Peg Pizzeria | Italian Restaurant & Wood-Fired Pizza",
-                  "Wood-fired pizza, pasta and Italian-American favorites at 10 Square Peg Pizzeria restaurants in CT and Delray Beach, FL. Order pickup or delivery, or book catering.",
+                  "Wood-fired pizza, pasta and Italian-American favorites at 10 Square Peg restaurants in CT and Delray Beach, FL. Order pickup, delivery or catering.",
                   "home", {}, org_schema(), "margherita-board", None))
     pages.append(("/locations/", "Italian Restaurants & Pizza Near You | Square Peg Pizzeria",
                   "Square Peg Pizzeria restaurants in Glastonbury, East Hartford, Vernon, Bolton, Storrs, Preston, Plainville, Berlin, Shelton, CT and Delray Beach, FL.",

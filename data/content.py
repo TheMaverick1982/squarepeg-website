@@ -65,7 +65,7 @@ SITE = {
     "supabase_url": "https://ytkwogufrjffcgfpinrf.supabase.co",
     "supabase_anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0a3dvZ3VmcmpmZmNnZnBpbnJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MDM5MDIsImV4cCI6MjEwNTI3OTkwMn0.TBUjxGEnpo-sv7Yinb1GKIKOW14R2o1sYq5B_5viDPA",
     # Analytics — fill in to activate (left blank = nothing loads)
-    "ga4_id": "",
+    "ga4_id": "G-REQKJC1SBJ",
     "meta_pixel_id": "",
 }
 
