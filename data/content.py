@@ -181,7 +181,7 @@ LOCATIONS = [
         "photo": "truck-tent",
     },
     {
-        "slug": "shelton-ct",
+        "slug": "shelton-ct", "sunday_ticket": True,
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Wed": "21:00", "Thu": "21:00", "Fri": "22:00", "Sat": "22:00"}, "name": "Shelton", "region": "Fairfield & New Haven",
         "street": "320 Howe Ave, Unit 6", "city": "Shelton", "state": "CT", "zip": "06484",
@@ -226,10 +226,10 @@ POINTS = [
 APP_PERKS = ["$5 off your next order", "Exclusive in-app deals", "Flash promos", "Rewards every visit"]
 
 SIGNATURES = [
-    ("Spicy Margherita", "Cherry peppers, spicy capicola, fresh mozzarella, basil", "pizza-cutout"),
-    ("Margherita", "Fresh mozzarella, tomato sauce & basil. The classic, fire-kissed", "margherita-board"),
-    ("Prince of Paramus", "House pork meatballs, mushrooms, mozzarella, tomato sauce", "table-spread"),
-    ("Bianco", "Goat cheese, ricotta, garlic, maple & Calabrian chili oil", "oven-pizza"),
+    ("Spicy Margherita", "Cherry peppers, spicy capicola, fresh mozzarella, basil", "pie-spicy-margherita"),
+    ("Margherita", "Fresh mozzarella, tomato sauce & basil. The classic, fire-kissed", "pie-margherita"),
+    ("Prince of Paramus", "House pork meatballs, mushrooms, mozzarella, tomato sauce", "pie-prince-of-paramus"),
+    ("Bianco", "Goat cheese, ricotta, garlic, maple & Calabrian chili oil", "pie-bianco"),
 ]
 
 # Menu overview for /our-menu/ and location pages. Taken from the Toast online menus (Sept 2026).

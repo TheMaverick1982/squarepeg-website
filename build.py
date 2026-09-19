@@ -686,7 +686,7 @@ T["home"] = """
     <div class="stack">
       <span class="eyebrow">How we make it</span>
       <h2>Water. Flour. Time. Fire.</h2>
-      <p class="prose" style="font-size:18px">Every dough ball starts in one of our two commissary kitchens, East Hartford for Connecticut and Delray Beach for Florida, and gets stretched by hand before it hits the wood-fired oven. We roast, simmer and season with purpose, and it’s worth it for the head-tilt, the smile and the “wow” after the first bite.</p>
+      <p class="prose" style="font-size:18px">Every dough ball is made from scratch — in our East Hartford commissary kitchen for the Connecticut Pegs, and in-house at Delray Beach — then stretched by hand before it hits the wood-fired oven. We roast, simmer and season with purpose, and it’s worth it for the head-tilt, the smile and the “wow” after the first bite.</p>
       <div class="facts">
         <div class="fact"><b>12″ / 18″</b><span>Small & large pies</span></div>
         <div class="fact"><b>GF</b><span>12″ gluten-free crust</span></div>
@@ -800,7 +800,7 @@ T["our_menu"] = """
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Menu</span></nav>
     <span class="eyebrow">Italian-American kitchen · wood-fired oven</span>
     <h1>Our menu</h1>
-    <p class="lede">Wood-fired pizza, pasta, chicken parm, Italian subs, salads, wings, desserts, and beer, wine and cocktails. Made in-house with dough and sauce from our own commissary kitchens in East Hartford, CT and Delray Beach, FL.</p>
+    <p class="lede">Wood-fired pizza, pasta, chicken parm, Italian subs, salads, wings, desserts, and beer, wine and cocktails. Dough and sauce made from scratch: our East Hartford commissary kitchen supplies the Connecticut Pegs, and Delray Beach makes its own in-house.</p>
     <div class="btn-row"><a class="btn btn--flame" href="{{ site.menu_url }}" data-open-picker="menu">{{ icons.bag|safe }}Live menu &amp; prices for your Peg</a><a class="btn btn--ghost" href="{{ u('/catering/') }}">Catering menu</a></div>
   </div>
 </section>
@@ -1292,7 +1292,7 @@ T["about"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in i
     <div class="prose">
       <p>Square Peg Pizzeria was started by UConn alumni who grew up in Hartford and came home to build the kind of place they’d want to hang out in. The first oven was lit in Glastonbury in 2020. Today there are ten Square Pegs, from Storrs Center to Shelton to Delray Beach, Florida.</p>
       <p class="pull">That moment is the product. The pizza is how we get there.</p>
-      <p>Every day, our team makes dough from scratch in our commissary kitchens: East Hartford for the Connecticut Pegs, Delray Beach for Florida. It’s never frozen. It isn’t the easy way to do it, but it’s the way that gets the head-tilt, the smile and the “wow.”</p>
+      <p>Every day, our team makes dough from scratch: in our East Hartford commissary kitchen for the Connecticut Pegs, and in-house at Delray Beach. It’s never frozen. It isn’t the easy way to do it, but it’s the way that gets the head-tilt, the smile and the “wow.”</p>
       <p>We roast, stretch, simmer, press and season with purpose, turning simple ingredients into something that feels familiar and still special. Water. Flour. Time. Heat. Hands that care.</p>
       <p>So this page isn’t really about us. It’s about the families, friends, neighbors and regulars who turn a pizza night into a shared memory: victory slices after long games, first dates, Tuesday fundraisers, and the table that keeps getting bigger.</p>
       <p style="font-weight:800">Whether you’re here for a quick bite, a family tradition, or the start of something new: your table is ready.</p>
