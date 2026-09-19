@@ -340,6 +340,19 @@
   // so a page built weeks earlier still gets it right.
   function started(from) { return !from || from <= isoDay(nowET(), 0); }
 
+  /* ---------- Seasonal blocks (Game Day, and anything else with a run of dates) ----------
+     Anything carrying data-season-from / data-season-to shows only inside that window, and
+     data-season-invert flips it (the "back next season" message). Checked in the browser, so
+     the season turns itself on and off without anyone rebuilding or remembering. */
+  function paintSeason() {
+    var today = isoDay(nowET(), 0);
+    $$("[data-season-from]").forEach(function (el) {
+      var from = el.getAttribute("data-season-from"), to = el.getAttribute("data-season-to");
+      var inSeason = today >= from && (!to || today <= to);
+      el.hidden = el.hasAttribute("data-season-invert") ? inSeason : !inSeason;
+    });
+  }
+
   function paintEnt() {
     var n = nowET(), today = DAYS[n.day], iso = isoDay(n, 0);
     $$("[data-ent-day]").forEach(function (el) {
@@ -374,6 +387,7 @@
 
   /* ---------- Init ---------- */
   paintEnt();
+  paintSeason();
   prefill();
   addEventListener("hashchange", prefill);
   paintAll();

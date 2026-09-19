@@ -406,3 +406,39 @@ PROMOS = {
     "app_perks": ["$5 welcome reward", "App-only flash sales (lunch, dinner & more)", "Lunch specials & hero discounts", "Surprise drops & birthday perks"],
     "heroes": "Active duty service members, veterans and first responders (police, firefighters, EMTs) get 15% off their meal. Just show a valid military, veteran or first responder ID. You serve the community. Let us serve you.",
 }
+
+# ---------------------------------------------------------------- GAME DAY (football season)
+# The page lives at /game-day/ all year, but the nav link, home banner and the specials
+# themselves only show between these dates. The window is checked in the browser, so the page
+# turns itself on and off without a rebuild. Next season: move both dates forward.
+GAME_DAY = {
+    "season_from": "2026-09-01",
+    "season_to": "2027-02-15",          # a week after the Super Bowl
+    "season_label": "2026–27 football season",
+    "tagline": "Come for the game. Stay for the pizza.",
+    # Headline deals, shown as a band. These run during games only.
+    "band": [
+        ("$4", "Green Tea shots", "During football games"),
+        ("$7", "Game day cocktails", "During football games"),
+        ("$4", "Miller Lite", "During football games"),
+    ],
+    "cocktails_price": "$7 each",
+    "cocktails": [
+        ("The Blitz", "Transfusion", ["Vodka", "Grape juice", "Fresh lime", "Ginger ale"], "Cherry garnish"),
+        ("The Hail Mary", "Dark 'n' Stormy", ["Captain spiced rum", "Fresh lime", "Ginger beer"], "Lime garnish"),
+        ("Sack Attack", "Blue margarita", ["Tequila", "Triple sec", "Fresh lime juice", "Blue curaçao"], "Lime garnish"),
+        ("Touchdown Tea", "John Daly", ["Vodka", "Iced tea", "Lemonade"], "Lemon garnish"),
+    ],
+    "mocktails_price": "$5 each",
+    "mocktails": [
+        ("The Extra Point", "", ["Orange juice", "Pineapple juice", "Fresh lemon juice", "Club soda", "Grenadine"], "Cherry garnish"),
+        ("The Rookie", "", ["Orange juice", "Cranberry", "Pineapple juice", "Sprite"], "Lime garnish"),
+    ],
+    "pizza_price": "$15 small · $26 large",
+    "pizzas": [
+        ("The White Out", "Chicken bacon ranch",
+         ["Parm cream", "Mozzarella", "Chicken", "Bacon", "Ranch drizzle", "Green onions"]),
+        ("The Red Zone", "Loaded red",
+         ["Red sauce", "Mozzarella", "Pepperoni", "Sausage", "Roasted red peppers", "Ricotta"]),
+    ],
+}

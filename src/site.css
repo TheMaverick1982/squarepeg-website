@@ -604,3 +604,66 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .site-header .signin .more-menu a+a{border-top:1px solid var(--line-dark)}
 .site-header .signin[open]>summary{color:var(--flame)}
 @media (max-width:979px){.site-header .signin{display:none}}
+
+/* ---------------------------------------------------------------- Game Day (football season) */
+.nav-gd{position:relative}
+.nav-gd::before{content:"";position:absolute;left:-11px;top:50%;transform:translateY(-50%);
+  width:6px;height:6px;border-radius:50%;background:var(--flame)}
+.gd-head h1 .gd-hot{color:var(--flame);display:block}
+.gd-off{padding:clamp(56px,10vw,110px) 0;background:var(--char);color:#fff;text-align:center}
+.gd-off h2{max-width:18ch;margin-inline:auto}
+.gd-off p{max-width:56ch;margin:14px auto 0;color:#d9d2cc}
+.gd-off .btn-row{justify-content:center;margin-top:24px}
+/* headline price band */
+.gd-band-wrap{padding-block:clamp(28px,5vw,46px)}
+.gd-band{display:grid;gap:14px;grid-template-columns:1fr}
+@media (min-width:720px){.gd-band{grid-template-columns:repeat(3,1fr)}}
+.gd-band-item{display:grid;gap:3px;padding:20px 22px;border:1px solid var(--line-dark);
+  background:linear-gradient(140deg,var(--oven-2),var(--oven));border-left:4px solid var(--flame)}
+.gd-band-item b{font-family:var(--display);font-weight:900;font-size:clamp(40px,6vw,54px);line-height:.9;color:var(--flame)}
+.gd-band-item span{font-weight:800;font-size:17px}
+.gd-band-item em{font-style:normal;font-size:13px;color:#b7ada6;text-transform:uppercase;letter-spacing:.08em}
+.gd-band-note{margin-top:16px;color:#b7ada6}
+/* drink cards */
+.gd-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.gd-grid--two{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));max-width:620px}
+.gd-card{display:flex;flex-direction:column;padding:20px;border:1px solid var(--line);background:#fff;border-top:4px solid var(--ember)}
+.gd-card header{margin-bottom:12px}
+.gd-card h3{font-size:clamp(22px,2.4vw,27px);line-height:1.05}
+.gd-style{display:block;margin-top:3px;font-size:13px;font-weight:700;color:var(--smoke);text-transform:uppercase;letter-spacing:.07em}
+.gd-card ul{list-style:none;display:grid;gap:5px;margin:0;padding:0;font-size:15px}
+.gd-card li{padding-left:15px;position:relative}
+.gd-card li::before{content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--ember)}
+.gd-garnish{margin-top:auto;padding-top:12px;font-size:13px;font-weight:700;color:var(--smoke)}
+.gd-card--zero{border-top-color:var(--basil)}
+.gd-card--zero li::before{background:var(--basil)}
+/* pizzas */
+.gd-pizzas{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:760px){.gd-pizzas{grid-template-columns:1fr 1fr}}
+.gd-pizza{padding:clamp(24px,4vw,34px);border:1px solid var(--line-dark);
+  background:linear-gradient(140deg,var(--oven-2),var(--oven))}
+.gd-pizza-kicker{display:block;font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--flame)}
+.gd-pizza h3{margin-top:6px;font-size:clamp(32px,5vw,46px);line-height:.95;text-transform:uppercase}
+.gd-pizza-parts{margin-top:12px;color:#d9d2cc;font-size:15px;line-height:1.55}
+.gd-order{margin-top:24px}
+/* where to watch */
+.gd-where a{display:grid;gap:1px}
+.gd-where a span{font-size:13px;color:var(--smoke)}
+/* Game Day: fixes from the first mockup pass */
+.nav .nav-gd{white-space:nowrap}
+.gd-grid--two{max-width:780px}
+.gd-where{margin-top:20px}
+.gd-where a{text-decoration:none;padding:12px 14px;border:1px solid var(--line);background:#fff;transition:border-color .15s,transform .15s}
+.gd-where a:hover{border-color:var(--ember);transform:translateY(-1px)}
+.gd-where a b{font-size:17px}
+.gd-where li{padding:0!important}
+.gd-where li::before{display:none}
+/* Game Day home banner — sits with the deal ribbon, only during the season */
+.gd-strip{background:var(--char);color:#fff;border-bottom:1px solid var(--line-dark)}
+.gd-strip .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding-block:14px}
+.gd-strip-copy{display:flex;align-items:center;gap:12px;flex:1 1 320px;min-width:0}
+.gd-strip-tag{flex:none;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--char);background:var(--flame);padding:5px 10px}
+.gd-strip p{font-size:15px;line-height:1.4}
+.gd-strip p span{color:#c9c0b9}
+@media (max-width:600px){.gd-strip p span{display:block}}

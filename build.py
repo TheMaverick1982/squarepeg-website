@@ -16,7 +16,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU  # noqa
+from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -448,8 +448,9 @@ ICONS = {
 }
 
 NAV = [("Menu", "MENU"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Catering", "/catering/"),
-       ("Large Parties", "/large-party-reservations/"), ("Entertainment", "/entertainment/")]
-MORE = [("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/"),
+       ("Entertainment", "/entertainment/")]
+MORE = [("Large Parties", "/large-party-reservations/"),
+        ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/"),
         ("Rewards & Monthly Deals", "/deals/"), ("Gift Cards", "GIFT"), ("Roll the Dice", "/roll-the-dice/"),
         ("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]
 DRAWER_EXTRA = []
@@ -498,7 +499,7 @@ T["header"] = """<a class="skip" href="#main">Skip to content</a>
       <img src="{{ imgbase }}logo-on-dark-280.webp" srcset="{{ imgbase }}logo-on-dark-160.webp 160w, {{ imgbase }}logo-on-dark-280.webp 280w, {{ imgbase }}logo-on-dark-480.webp 480w" sizes="(min-width:980px) 153px, 135px" width="160" height="{{ (160 * logo_ratio)|round|int }}" alt="Square Peg Pizzeria">
     </a>
     <nav class="nav" aria-label="Main">{% for n, p in nav %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
-      <details class="more"><summary>More</summary><div class="more-menu">{% for n, p in more %}{% if p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}</div></details></nav>
+      <details class="more"><summary>More</summary><div class="more-menu"><a class="nav-gd" href="{{ u('/game-day/') }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}"{% if path == '/game-day/' %} aria-current="page"{% endif %}>Game Day</a>{% for n, p in more %}{% if p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}</div></details></nav>
     <details class="more signin"><summary>Sign in</summary><div class="more-menu more-menu--right">
       <a href="{{ site.toast_account }}" rel="noopener"{{ ext|safe }}>Ordering account <span>Toast: saved cards &amp; past orders</span></a>
       <a href="{{ site.loyalty_signin }}" rel="noopener"{{ ext|safe }}>Rewards account <span>Points, offers &amp; rewards</span></a>
@@ -515,7 +516,7 @@ T["header"] = """<a class="skip" href="#main">Skip to content</a>
       </div>
       <nav aria-label="Mobile">
         {% for title, links in drawer_groups %}<div class="drawer-group"><p class="drawer-title">{{ title }}</p>
-          {% for n, p in links %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% elif p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
+          {% for n, p in links %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% elif p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}{% if title == 'Fun' %}<a href="{{ u('/game-day/') }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}"{% if path == '/game-day/' %} aria-current="page"{% endif %}>Game Day</a>{% endif %}
         </div>{% endfor %}
       </nav>
       <div class="drawer-group"><p class="drawer-title">Sign in</p>
@@ -630,6 +631,14 @@ T["home"] = """
   <strong>{{ deal.headline }}</strong><span>{{ deal.eyebrow }} · Mon–Fri dine-in · {{ deal.expires_label }}</span>
   <a href="{{ u('/deals/') }}">See all deals →</a>
 </div></div>
+
+<aside class="gd-strip" aria-label="Game day specials" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}"><div class="wrap">
+  <div class="gd-strip-copy">
+    <span class="gd-strip-tag">Game day</span>
+    <p><strong>Football season tastes better here.</strong> <span>$4 Green Tea shots, $7 cocktails and $4 Miller Lite during every game.</span></p>
+  </div>
+  <a class="btn btn--flame btn--sm" href="{{ u('/game-day/') }}" data-track="game_day_click" data-src="home-strip">See game day specials</a>
+</div></aside>
 
 <aside class="loyalty-strip" aria-label="Square Peg Rewards"><div class="wrap">
   <div class="loyalty-copy">
@@ -1388,6 +1397,81 @@ T["promotions"] = """
 </section>
 """
 
+T["game_day"] = """
+<section class="page-head on-dark gd-head">
+  {{ img('oven-fire', 'Pizza in the wood-fired oven', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/promotions/') }}">Specials</a><span aria-hidden="true">/</span><span>Game Day</span></nav>
+    <span class="eyebrow">{{ gd.tagline }}</span>
+    <h1>Game day <span class="gd-hot">specials</span></h1>
+    <p class="lede">Food, drinks, football. Wood-fired pizza, cold drinks and every game on — all season long at nine Square Pegs.</p>
+    <div class="btn-row"><a class="btn btn--flame" href="#pizzas">See the game day pizzas</a><a class="btn btn--ghost" href="{{ u('/locations/') }}">Find your Peg</a></div>
+  </div>
+</section>
+
+<div class="gd-off" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}" data-season-invert hidden>
+  <div class="wrap">
+    <h2>Game day specials are back next season.</h2>
+    <p>Our football specials run from September through the big game. In the meantime there’s still plenty on — daily specials, rewards and a wood-fired oven that never cools down.</p>
+    <div class="btn-row"><a class="btn btn--flame" href="{{ u('/promotions/') }}">See what’s on now</a><a class="btn btn--ghost" href="{{ u('/entertainment/') }}">Trivia, bingo &amp; DJ nights</a></div>
+  </div>
+</div>
+
+<div data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}">
+<section class="section section--dark on-dark gd-band-wrap">
+  <div class="wrap">
+    <div class="gd-band">{% for price, what, when in gd.band %}<div class="gd-band-item"><b>{{ price }}</b><span>{{ what }}</span><em>{{ when }}</em></div>{% endfor %}</div>
+    <p class="note gd-band-note">Game day pricing runs while football is on. Ask your server what’s playing.</p>
+  </div>
+</section>
+
+<nav class="menu-jump" aria-label="On this page"><div class="wrap"><a href="#cocktails">Cocktails</a><a href="#mocktails">Mocktails</a><a href="#pizzas">Game day pizzas</a><a href="#where">Where</a></div></nav>
+
+<section class="section" id="cocktails">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">{{ gd.cocktails_price }}</span><h2>Game day cocktails</h2></div>
+    <div class="gd-grid">{% for name, style, parts, garnish in gd.cocktails %}<article class="gd-card">
+      <header><h3>{{ name }}</h3>{% if style %}<span class="gd-style">{{ style }}</span>{% endif %}</header>
+      <ul>{% for p in parts %}<li>{{ p }}</li>{% endfor %}</ul>
+      <p class="gd-garnish">{{ garnish }}</p>
+    </article>{% endfor %}</div>
+  </div>
+</section>
+
+<section class="section section--paper" id="mocktails">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">{{ gd.mocktails_price }} · no alcohol</span><h2>Mocktails</h2></div>
+    <div class="gd-grid gd-grid--two">{% for name, style, parts, garnish in gd.mocktails %}<article class="gd-card gd-card--zero">
+      <header><h3>{{ name }}</h3>{% if style %}<span class="gd-style">{{ style }}</span>{% endif %}</header>
+      <ul>{% for p in parts %}<li>{{ p }}</li>{% endfor %}</ul>
+      <p class="gd-garnish">{{ garnish }}</p>
+    </article>{% endfor %}</div>
+  </div>
+</section>
+
+<section class="section section--dark on-dark" id="pizzas">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">{{ gd.pizza_price }} · same price on both</span><h2>Game day pizzas</h2></div>
+    <div class="gd-pizzas">{% for name, style, parts in gd.pizzas %}<article class="gd-pizza">
+      <span class="gd-pizza-kicker">{{ style }}</span>
+      <h3>{{ name }}</h3>
+      <p class="gd-pizza-parts">{{ parts|join(' · ') }}</p>
+    </article>{% endfor %}</div>
+    <div class="btn-row gd-order"><a class="btn btn--flame" href="{{ site.order_picker_toast }}" rel="noopener" data-track="order_click" data-src="game-day"{{ ext|safe }}>Order a game day pie</a><a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the full menu</a></div>
+  </div>
+</section>
+
+<section class="section" id="where">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">All games. All season long.</span><h2>Where to watch</h2></div>
+    <p class="lede">Game day drinks are on at every Square Peg with a bar. Bolton is dry while its liquor licence comes through — the pizza is still very much on.</p>
+    <ul class="town-list gd-where">{% for l in gd_locs %}<li><a href="{{ u('/locations/' ~ l.slug ~ '/') }}"><b>{{ l.short or l.name }}</b><span>{{ l.city }}, {{ l.state }}</span></a></li>{% endfor %}</ul>
+    <p class="note">Please drink responsibly. Must be 21+ to order alcohol; ID required.</p>
+  </div>
+</section>
+</div>
+"""
+
 T["entertainment"] = """
 <section class="page-head on-dark">
   {{ img('friends-holiday', 'Friends enjoying a night out at Square Peg', eager=True, cls='bg')|safe }}
@@ -1626,7 +1710,7 @@ def main():
                       f"fbq('init','{SITE['meta_pixel_id']}');fbq('track','PageView');</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, ent=ENTERTAINMENT, ent_from=ent_from, ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], ent=ENTERTAINMENT, ent_from=ent_from, ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
@@ -1682,6 +1766,9 @@ def main():
     pages.append(("/promotions/", "Pizza Specials, $10 Lunch & App Rewards | Square Peg Pizzeria",
                   "Square Peg Pizzeria specials: Tuesday pasta night, $1 wings Wednesday, half-price wine Friday, $10 weekday lunch, app rewards, punch cards and 15% off for heroes.",
                   "promotions", {}, graph(breadcrumbs([("Home", "/"), ("Specials", "/promotions/")])), "oven-pizza", "oven-pizza"))
+    pages.append(("/game-day/", "Game Day Specials | Square Peg Pizzeria",
+                  "Football season at Square Peg: $4 Green Tea shots, $7 game day cocktails, $4 Miller Lite and two game day pizzas at nine Connecticut and Florida locations.",
+                  "game_day", {}, graph(breadcrumbs([("Home", "/"), ("Specials", "/promotions/"), ("Game Day", "/game-day/")])), "oven-fire", "oven-fire"))
     pages.append(("/entertainment/", "Trivia, Bingo & DJ Nights | Square Peg Pizzeria",
                   "Weekly trivia, bingo and DJ nights at Square Peg Pizzeria in Plainville, Shelton, East Hartford, Glastonbury, Preston, Storrs and Delray Beach.",
                   "entertainment", {}, graph(breadcrumbs([("Home", "/"), ("Entertainment", "/entertainment/")])), "friends-holiday", "friends-holiday"))
