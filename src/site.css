@@ -692,3 +692,9 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .gd-pizza-kicker{color:var(--ember-bright)}
 .gd-strip-tag{background:var(--ember);color:#fff}
 .nav-gd::before{background:var(--ember-bright)}
+/* Game Day band: price on the left, the drink itself on the right */
+.gd-band-item{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px 16px 22px}
+.gd-band-text{display:grid;gap:3px;min-width:0}
+.gd-band-pic{flex:none;width:96px;display:flex;align-items:center;justify-content:center}
+.gd-band-pic img{max-height:112px;width:auto;max-width:96px;object-fit:contain;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.55))}

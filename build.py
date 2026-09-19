@@ -1420,7 +1420,10 @@ T["game_day"] = """
 <div data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}">
 <section class="section section--dark on-dark gd-band-wrap">
   <div class="wrap">
-    <div class="gd-band">{% for price, what, when in gd.band %}<div class="gd-band-item"><b>{{ price }}</b><span>{{ what }}</span><em>{{ when }}</em></div>{% endfor %}</div>
+    <div class="gd-band">{% for price, what, when, pic in gd.band %}<div class="gd-band-item">
+      <div class="gd-band-text"><b>{{ price }}</b><span>{{ what }}</span><em>{{ when }}</em></div>
+      <div class="gd-band-pic">{{ img(pic, what, sizes='110px')|safe }}</div>
+    </div>{% endfor %}</div>
     <p class="note gd-band-note">Game day pricing runs while football is on. Ask your server what’s playing.</p>
   </div>
 </section>

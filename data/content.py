@@ -418,9 +418,9 @@ GAME_DAY = {
     "tagline": "Come for the game. Stay for the pizza.",
     # Headline deals, shown as a band. These run during games only.
     "band": [
-        ("$4", "Green Tea shots", "During football games"),
-        ("$7", "Game day cocktails", "During football games"),
-        ("$4", "Miller Lite", "During football games"),
+        ("$4", "Green Tea shots", "During football games", "band-shot"),
+        ("$7", "Game day cocktails", "During football games", "band-cocktail"),
+        ("$4", "Miller Lite", "During football games", "band-miller"),
     ],
     "cocktails_price": "$7 each",
     "cocktails": [
