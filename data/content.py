@@ -79,11 +79,13 @@ def h(mon, tue, wed, thu, fri, sat, sun):
 # Several differ from the hours shown in Toast ordering — see LAUNCH_CHECKLIST.md.
 LOCATIONS = [
     {
-        "slug": "glastonbury-ct", "name": "Glastonbury", "region": "Greater Hartford",
+        "slug": "glastonbury-ct",
+        # Kitchen closes before the bar on these days (from the store hours).
+        "kitchen": {"Wed": "21:00", "Thu": "21:00", "Fri": "23:00"}, "name": "Glastonbury", "region": "Greater Hartford",
         "street": "1001 Hebron Ave", "city": "Glastonbury", "state": "CT", "zip": "06033",
         "phone": "(860) 286-0415", "toast": "square-peg-pizzeria",
         "lat": 41.717186, "lng": -72.574051, "geo_exact": True,  # US Census geocoder
-        "hours_note": "The kitchen closes an hour before we do Wednesday through Friday.", "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:30","00:00"),("11:00","23:00"),("11:00","21:00"))),
+        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:30","00:00"),("11:00","23:00"),("11:00","21:00"))),
         "tag": "Where it all started",
         "blurb": "Our first Square Peg. Glastonbury is where the wood-fired oven got lit in 2020, and it’s still where regulars come for date nights, team dinners, and the same pie they’ve ordered since day one.",
         "nearby": ["Wethersfield", "Rocky Hill", "Portland", "Hebron", "Marlborough"],
@@ -103,11 +105,13 @@ LOCATIONS = [
         "photo": "dough",
     },
     {
-        "slug": "vernon-ct", "name": "Vernon", "region": "Greater Hartford",
+        "slug": "vernon-ct",
+        # Kitchen closes before the bar on these days (from the store hours).
+        "kitchen": {"Wed": "21:00", "Thu": "21:00", "Fri": "23:00"}, "name": "Vernon", "region": "Greater Hartford",
         "street": "226 Talcottville Rd", "city": "Vernon", "state": "CT", "zip": "06066",
         "phone": "(860) 926-0088", "toast": "square-peg-pizzeria-vernon-226-talcottville-rd",
         "lat": 41.836661, "lng": -72.491494, "geo_exact": True,  # US Census geocoder
-        "hours_note": "The kitchen closes an hour before we do Wednesday through Friday.", "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:30","00:00"),("11:00","23:00"),("11:00","21:00"))),
+        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:30","00:00"),("11:00","23:00"),("11:00","21:00"))),
         "tag": "Open till midnight Fridays",
         "blurb": "Right on Talcottville Road (Route 83), Vernon is the easy stop for Rockville, Ellington and Tolland: pickup on the way home, or a late one on Friday when the oven runs until midnight.",
         "nearby": ["Rockville", "Ellington", "Tolland", "Manchester", "South Windsor"],
@@ -126,33 +130,39 @@ LOCATIONS = [
         "photo": "pizza-boxes",
     },
     {
-        "slug": "storrs-ct", "name": "Storrs", "region": "Eastern CT",
+        "slug": "storrs-ct",
+        # Kitchen closes before the bar on these days (from the store hours).
+        "kitchen": {"Sun": "21:00", "Wed": "21:00", "Thu": "22:00", "Fri": "23:00", "Sat": "23:00"}, "name": "Storrs", "region": "Eastern CT",
         "street": "9 Dog Ln", "city": "Storrs", "state": "CT", "zip": "06268",
         "phone": "(860) 454-6038", "toast": "squarepegwindsor",
         "lat": 41.804999, "lng": -72.243305, "geo_exact": True,  # US Census geocoder
-        "hours_note": "The kitchen closes an hour or two before the bar Wednesday through Saturday.", "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","00:00"),("11:30","01:00"),("11:00","01:00"),("11:00","22:00"))),
+        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","00:00"),("11:30","01:00"),("11:00","01:00"),("11:00","22:00"))),
         "tag": "Steps from UConn",
         "blurb": "Our founders are UConn alumni, so Storrs Center feels like coming home. Dog Lane is where Husky fans land after the game and alumni reunions come together, and the oven runs until 1am on Fridays and Saturdays.",
         "nearby": ["Mansfield", "Coventry", "Willington", "Ashford", "Tolland"],
         "photo": "friends-holiday",
     },
     {
-        "slug": "preston-ct", "name": "Preston", "region": "Eastern CT",
+        "slug": "preston-ct",
+        # Kitchen closes before the bar on these days (from the store hours).
+        "kitchen": {"Wed": "21:00", "Thu": "21:00"}, "name": "Preston", "region": "Eastern CT",
         "street": "353 CT-165", "city": "Preston", "state": "CT", "zip": "06365",
         "phone": "(860) 319-0930", "toast": "square-peg-new-preston-353-connecticut-165",
         "lat": 41.528840, "lng": -71.982108, "geo_exact": True,  # exact pin from Google Maps
-        "hours_note": "The kitchen closes an hour before we do on Wednesday and Thursday.", "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:30","23:00"),("11:00","23:00"),("11:00","21:00"))),
+        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:30","23:00"),("11:00","23:00"),("11:00","21:00"))),
         "tag": "Southeastern CT",
         "blurb": "On Route 165, Preston brings wood-fired pies to Norwich, Ledyard and the rest of the southeast corner of the state. It’s an easy dinner stop before or after a night at the casinos.",
         "nearby": ["Norwich", "Ledyard", "Griswold", "Lisbon", "North Stonington"],
         "photo": "table-spread",
     },
     {
-        "slug": "plainville-ct", "name": "Plainville", "region": "Central CT",
+        "slug": "plainville-ct",
+        # Kitchen closes before the bar on these days (from the store hours).
+        "kitchen": {"Wed": "21:00", "Thu": "21:00"}, "name": "Plainville", "region": "Central CT",
         "street": "400 New Britain Ave", "city": "Plainville", "state": "CT", "zip": "06062",
         "phone": "(860) 996-0363", "toast": "square-peg-plainville-400-new-britain-avenue",
         "lat": 41.671493, "lng": -72.833556, "geo_exact": True,  # US Census geocoder
-        "hours_note": "The kitchen closes an hour before we do on Wednesday and Thursday.", "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:00","23:00"),("11:00","23:00"),("11:00","21:00"))),
+        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:00","23:00"),("11:00","23:00"),("11:00","21:00"))),
         "tag": "Central Connecticut",
         "blurb": "Plainville is our Central CT kitchen, close to New Britain, Southington and Farmington. Drop in, pick up on the way home, or plan a party we can feed.",
         "nearby": ["New Britain", "Southington", "Farmington", "Bristol", "Berlin"],
@@ -171,11 +181,13 @@ LOCATIONS = [
         "photo": "truck-tent",
     },
     {
-        "slug": "shelton-ct", "name": "Shelton", "region": "Fairfield & New Haven",
+        "slug": "shelton-ct",
+        # Kitchen closes before the bar on these days (from the store hours).
+        "kitchen": {"Wed": "21:00", "Thu": "21:00", "Fri": "22:00", "Sat": "22:00"}, "name": "Shelton", "region": "Fairfield & New Haven",
         "street": "320 Howe Ave, Unit 6", "city": "Shelton", "state": "CT", "zip": "06484",
         "phone": "(203) 538-5044", "toast": "square-peg-shelton-310-howe-avenue-unit-6",
         "lat": 41.314898, "lng": -73.091125, "geo_exact": True,  # US Census geocoder
-        "hours_note": "The kitchen closes an hour before we do Wednesday through Saturday.", "hours": h(*(("12:00","21:00"),("12:00","21:00"),("12:00","22:00"),("12:00","22:00"),("12:00","23:00"),("11:00","23:00"),("11:00","21:00"))),
+        "hours": h(*(("12:00","21:00"),("12:00","21:00"),("12:00","22:00"),("12:00","22:00"),("12:00","23:00"),("11:00","23:00"),("11:00","21:00"))),
         "tag": "Downtown Shelton",
         "blurb": "Our Fairfield County outpost on Howe Avenue, a short walk from the Riverwalk. Shelton brings the Square Peg oven to Derby, Stratford and the Valley.",
         "nearby": ["Derby", "Ansonia", "Stratford", "Trumbull", "Monroe"],

@@ -358,6 +358,9 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hours th,.hours td{padding:9px 0;border-bottom:1px solid var(--line);text-align:left;font-size:16px}
 .hours td{text-align:right}
 .hours tr.today th,.hours tr.today td{font-weight:800;color:var(--ember-deep)}
+/* Secondary line: the bar stays open after the kitchen stops on some days */
+.hours .kitchen-note{display:block;margin-top:2px;font-size:13px;font-weight:600;line-height:1.3;color:var(--smoke)}
+.hours tr.today .kitchen-note{color:var(--ember-deep);font-weight:700}
 .special-hours{margin-top:16px;border:2px solid var(--flame);background:#fff8e6;padding:12px 14px}
 .special-hours h3{margin:0 0 6px;font:800 13px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--char)}
 .special-hours ul{list-style:none;margin:0;padding:0}

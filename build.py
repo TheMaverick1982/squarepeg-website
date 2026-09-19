@@ -131,11 +131,20 @@ def fmt_time(t):
     return f"{h12}{':%02d' % mm if mm else ''}{ap}"
 
 def hours_rows(loc):
+    """(day, full name, hours text, kitchen text or None).
+
+    Several stores keep the bar open after the kitchen stops. Where loc["kitchen"] gives an
+    earlier closing time for a day, that day gets a second line so nobody turns up at 10pm
+    expecting food. Days without a kitchen entry close together and get no extra line.
+    """
     rows = []
     names = {"Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"}
+    kitchen = loc.get("kitchen") or {}
     for d in DAYS:
         v = loc["hours"][d]
-        rows.append((d, names[d], hours_text(v, " – ")))
+        k = kitchen.get(d)
+        note = f"Kitchen closes {fmt_time(k)}" if (v and k and k != v[1]) else None
+        rows.append((d, names[d], hours_text(v, " – "), note))
     return rows
 
 def hours_text(v, sep="–"):
@@ -878,7 +887,7 @@ T["location"] = """
     <div class="info-card">
       <h2>Hours</h2>
       <table class="hours"><caption class="sr-only">Opening hours for Square Peg Pizzeria {{ l.name }}</caption>
-        <tbody>{% for d, name, v in rows %}<tr data-day="{{ d }}"><th scope="row">{{ name }}</th><td>{{ v }}</td></tr>{% endfor %}</tbody></table>
+        <tbody>{% for d, name, v, kit in rows %}<tr data-day="{{ d }}"><th scope="row">{{ name }}</th><td>{{ v }}{% if kit %}<span class="kitchen-note">{{ kit }}</span>{% endif %}</td></tr>{% endfor %}</tbody></table>
       {% if specials %}<div class="special-hours" role="note"><h3>Holiday &amp; special hours</h3><ul>{% for iso, label, v in specials %}<li data-date="{{ iso }}"><span>{{ label }}</span><b>{{ v }}</b></li>{% endfor %}</ul></div>{% endif %}
       <p class="note">{% if l.hours_note %}{{ l.hours_note }} {% endif %}{% if l.hours_source == 'google' %}Hours update daily from our Google listing, including holidays.{% else %}Holiday hours may vary.{% endif %} Online ordering shows live availability.</p>
     </div>
