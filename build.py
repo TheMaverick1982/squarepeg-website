@@ -637,7 +637,7 @@ T["home"] = """
     <span class="gd-strip-tag">Game day</span>
     <p><strong>Football season tastes better here.</strong> <span>$4 Green Tea shots, $7 cocktails and $4 Miller Lite during every game.</span></p>
   </div>
-  <a class="btn btn--flame btn--sm" href="{{ u('/game-day/') }}" data-track="game_day_click" data-src="home-strip">See game day specials</a>
+  <a class="btn btn--sm" href="{{ u('/game-day/') }}" data-track="game_day_click" data-src="home-strip">See game day specials</a>
 </div></aside>
 
 <aside class="loyalty-strip" aria-label="Square Peg Rewards"><div class="wrap">
@@ -1405,7 +1405,7 @@ T["game_day"] = """
     <span class="eyebrow">{{ gd.tagline }}</span>
     <h1>Game day <span class="gd-hot">specials</span></h1>
     <p class="lede">Food, drinks, football. Wood-fired pizza, cold drinks and every game on — all season long at nine Square Pegs.</p>
-    <div class="btn-row"><a class="btn btn--flame" href="#pizzas">See the game day pizzas</a><a class="btn btn--ghost" href="{{ u('/locations/') }}">Find your Peg</a></div>
+    <div class="btn-row"><a class="btn" href="#pizzas">See the game day pizzas</a><a class="btn btn--ghost" href="{{ u('/locations/') }}">Find your Peg</a></div>
   </div>
 </section>
 
@@ -1413,7 +1413,7 @@ T["game_day"] = """
   <div class="wrap">
     <h2>Game day specials are back next season.</h2>
     <p>Our football specials run from September through the big game. In the meantime there’s still plenty on — daily specials, rewards and a wood-fired oven that never cools down.</p>
-    <div class="btn-row"><a class="btn btn--flame" href="{{ u('/promotions/') }}">See what’s on now</a><a class="btn btn--ghost" href="{{ u('/entertainment/') }}">Trivia, bingo &amp; DJ nights</a></div>
+    <div class="btn-row"><a class="btn" href="{{ u('/promotions/') }}">See what’s on now</a><a class="btn btn--ghost" href="{{ u('/entertainment/') }}">Trivia, bingo &amp; DJ nights</a></div>
   </div>
 </div>
 
@@ -1425,12 +1425,13 @@ T["game_day"] = """
   </div>
 </section>
 
-<nav class="menu-jump" aria-label="On this page"><div class="wrap"><a href="#cocktails">Cocktails</a><a href="#mocktails">Mocktails</a><a href="#pizzas">Game day pizzas</a><a href="#where">Where</a></div></nav>
+<nav class="menu-jump" aria-label="On this page"><div class="wrap"><a href="#cocktails">Cocktails</a><a href="#mocktails">Mocktails</a><a href="#pizzas">Game day pizzas</a><a href="#sunday-ticket">Sunday Ticket</a><a href="#where">Where</a></div></nav>
 
 <section class="section" id="cocktails">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">{{ gd.cocktails_price }}</span><h2>Game day cocktails</h2></div>
-    <div class="gd-grid">{% for name, style, parts, garnish in gd.cocktails %}<article class="gd-card">
+    <div class="gd-grid">{% for name, pic, style, parts, garnish in gd.cocktails %}<article class="gd-card">
+      <div class="gd-pic">{{ img(pic, name ~ ' cocktail', sizes='(min-width:900px) 280px, 46vw')|safe }}</div>
       <header><h3>{{ name }}</h3>{% if style %}<span class="gd-style">{{ style }}</span>{% endif %}</header>
       <ul>{% for p in parts %}<li>{{ p }}</li>{% endfor %}</ul>
       <p class="gd-garnish">{{ garnish }}</p>
@@ -1441,7 +1442,8 @@ T["game_day"] = """
 <section class="section section--paper" id="mocktails">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">{{ gd.mocktails_price }} · no alcohol</span><h2>Mocktails</h2></div>
-    <div class="gd-grid gd-grid--two">{% for name, style, parts, garnish in gd.mocktails %}<article class="gd-card gd-card--zero">
+    <div class="gd-grid gd-grid--two">{% for name, pic, style, parts, garnish in gd.mocktails %}<article class="gd-card gd-card--zero">
+      <div class="gd-pic">{{ img(pic, name ~ ' mocktail', sizes='(min-width:900px) 340px, 46vw')|safe }}</div>
       <header><h3>{{ name }}</h3>{% if style %}<span class="gd-style">{{ style }}</span>{% endif %}</header>
       <ul>{% for p in parts %}<li>{{ p }}</li>{% endfor %}</ul>
       <p class="gd-garnish">{{ garnish }}</p>
@@ -1457,7 +1459,23 @@ T["game_day"] = """
       <h3>{{ name }}</h3>
       <p class="gd-pizza-parts">{{ parts|join(' · ') }}</p>
     </article>{% endfor %}</div>
-    <div class="btn-row gd-order"><a class="btn btn--flame" href="{{ site.order_picker_toast }}" rel="noopener" data-track="order_click" data-src="game-day"{{ ext|safe }}>Order a game day pie</a><a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the full menu</a></div>
+    <div class="btn-row gd-order"><a class="btn" href="{{ site.order_picker_toast }}" rel="noopener" data-track="order_click" data-src="game-day"{{ ext|safe }}>Order a game day pie</a><a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the full menu</a></div>
+  </div>
+</section>
+
+<section class="section section--paper" id="sunday-ticket">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Sundays start here</span><h2>NFL Sunday Ticket</h2></div>
+    <div class="gd-st">
+      <div class="gd-st-copy">
+        <p class="lede">Every live out-of-market Sunday afternoon game, on our screens. Bring the crew, order a pie, and watch your team even when the local channels aren’t carrying them.</p>
+        <p class="gd-st-at"><b>Watch it at:</b> {% for l in st_locs %}<a href="{{ u('/locations/' ~ l.slug ~ '/') }}">{{ l.short or l.name }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+        <p class="note">{{ gd.sunday_ticket_note }}</p>
+        <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">Hours &amp; directions</a></div>
+      </div>
+      <figure class="gd-st-art">{{ img('sunday-ticket', 'NFL Sunday Ticket for Business from EverPass: watch every live out-of-market Sunday game here', sizes='(min-width:900px) 420px, 92vw')|safe }}</figure>
+    </div>
+    <p class="gd-st-legal">{{ gd.sunday_ticket_legal }}</p>
   </div>
 </section>
 
@@ -1465,7 +1483,7 @@ T["game_day"] = """
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">All games. All season long.</span><h2>Where to watch</h2></div>
     <p class="lede">Game day drinks are on at every Square Peg with a bar. Bolton is dry while its liquor licence comes through — the pizza is still very much on.</p>
-    <ul class="town-list gd-where">{% for l in gd_locs %}<li><a href="{{ u('/locations/' ~ l.slug ~ '/') }}"><b>{{ l.short or l.name }}</b><span>{{ l.city }}, {{ l.state }}</span></a></li>{% endfor %}</ul>
+    <ul class="town-list gd-where">{% for l in gd_locs %}<li><a href="{{ u('/locations/' ~ l.slug ~ '/') }}"><b>{{ l.short or l.name }}</b><span>{{ l.city }}, {{ l.state }}{% if l.sunday_ticket %} · <em>Sunday Ticket</em>{% endif %}</span></a></li>{% endfor %}</ul>
     <p class="note">Please drink responsibly. Must be 21+ to order alcohol; ID required.</p>
   </div>
 </section>
@@ -1710,7 +1728,7 @@ def main():
                       f"fbq('init','{SITE['meta_pixel_id']}');fbq('track','PageView');</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], ent=ENTERTAINMENT, ent_from=ent_from, ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",

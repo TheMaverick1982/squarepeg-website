@@ -667,3 +667,28 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .gd-strip p{font-size:15px;line-height:1.4}
 .gd-strip p span{color:#c9c0b9}
 @media (max-width:600px){.gd-strip p span{display:block}}
+/* Game Day: the drink glass sits on its own dark tile at the top of each card */
+.gd-card{padding:0;overflow:hidden}
+.gd-pic{background:var(--oven);line-height:0}
+.gd-pic img{width:100%;height:auto;aspect-ratio:5/4;object-fit:cover}
+.gd-card header{margin:0;padding:16px 20px 0}
+.gd-card ul{padding:12px 20px 0}
+.gd-garnish{padding:12px 20px 18px}
+/* NFL Sunday Ticket */
+.gd-st{display:grid;gap:26px;align-items:center}
+@media (min-width:860px){.gd-st{grid-template-columns:1fr 420px}}
+.gd-st-at{margin-top:16px;font-size:17px}
+.gd-st-at a{font-weight:800;text-decoration:none;border-bottom:2px solid var(--ember);padding-bottom:1px}
+.gd-st-at a:hover{color:var(--ember)}
+.gd-st-copy .note{margin-top:8px}
+.gd-st-copy .btn-row{margin-top:20px}
+.gd-st-art img{width:100%;height:auto;border:1px solid var(--line)}
+.gd-st-legal{margin-top:22px;font-size:12px;line-height:1.5;color:var(--smoke)}
+.gd-where em{font-style:normal;font-weight:800;color:var(--ember-deep)}
+/* Game Day colour balance: red leads, yellow accents — same as the home page */
+.gd-head h1 .gd-hot{color:var(--ember-bright)}
+.gd-band-item{border-left-color:var(--ember)}
+.gd-band-item b{color:var(--ember-bright)}
+.gd-pizza-kicker{color:var(--ember-bright)}
+.gd-strip-tag{background:var(--ember);color:#fff}
+.nav-gd::before{background:var(--ember-bright)}

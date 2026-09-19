@@ -143,7 +143,7 @@ LOCATIONS = [
         "photo": "friends-holiday",
     },
     {
-        "slug": "preston-ct",
+        "slug": "preston-ct", "sunday_ticket": True,
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Wed": "21:00", "Thu": "21:00"}, "name": "Preston", "region": "Eastern CT",
         "street": "353 CT-165", "city": "Preston", "state": "CT", "zip": "06365",
@@ -194,7 +194,7 @@ LOCATIONS = [
         "photo": "friends-sharing",
     },
     {
-        "slug": "delray-beach-fl", "name": "Delray Beach", "region": "Florida",
+        "slug": "delray-beach-fl", "sunday_ticket": True, "name": "Delray Beach", "region": "Florida",
         "street": "4957 W Atlantic Ave", "city": "Delray Beach", "state": "FL", "zip": "33445",
         "phone": "(561) 566-8828", "toast": "square-peg-delray-beach-4957-west-atlantic-avenue",
         "lat": 26.457838, "lng": -80.12169, "geo_exact": True,  # US Census geocoder
@@ -424,16 +424,20 @@ GAME_DAY = {
     ],
     "cocktails_price": "$7 each",
     "cocktails": [
-        ("The Blitz", "Transfusion", ["Vodka", "Grape juice", "Fresh lime", "Ginger ale"], "Cherry garnish"),
-        ("The Hail Mary", "Dark 'n' Stormy", ["Captain spiced rum", "Fresh lime", "Ginger beer"], "Lime garnish"),
-        ("Sack Attack", "Blue margarita", ["Tequila", "Triple sec", "Fresh lime juice", "Blue curaçao"], "Lime garnish"),
-        ("Touchdown Tea", "John Daly", ["Vodka", "Iced tea", "Lemonade"], "Lemon garnish"),
+        ("The Blitz", "drink-blitz", "Transfusion", ["Vodka", "Grape juice", "Fresh lime", "Ginger ale"], "Cherry garnish"),
+        ("The Hail Mary", "drink-hail-mary", "Dark 'n' Stormy", ["Captain spiced rum", "Fresh lime", "Ginger beer"], "Lime garnish"),
+        ("Sack Attack", "drink-sack-attack", "Blue margarita", ["Tequila", "Triple sec", "Fresh lime juice", "Blue curaçao"], "Lime garnish"),
+        ("Touchdown Tea", "drink-touchdown-tea", "John Daly", ["Vodka", "Iced tea", "Lemonade"], "Lemon garnish"),
     ],
     "mocktails_price": "$5 each",
     "mocktails": [
-        ("The Extra Point", "", ["Orange juice", "Pineapple juice", "Fresh lemon juice", "Club soda", "Grenadine"], "Cherry garnish"),
-        ("The Rookie", "", ["Orange juice", "Cranberry", "Pineapple juice", "Sprite"], "Lime garnish"),
+        ("The Extra Point", "drink-extra-point", "", ["Orange juice", "Pineapple juice", "Fresh lemon juice", "Club soda", "Grenadine"], "Cherry garnish"),
+        ("The Rookie", "drink-rookie", "", ["Orange juice", "Cranberry", "Pineapple juice", "Sprite"], "Lime garnish"),
     ],
+    # NFL Sunday Ticket for Business, via EverPass. Add "sunday_ticket": True to a location
+    # in LOCATIONS as each store's equipment goes in.
+    "sunday_ticket_note": "More Square Pegs are getting set up as their equipment arrives.",
+    "sunday_ticket_legal": "NFL Sunday Ticket only includes out-of-market Sunday afternoon games; it does not include games available in-market on local channels (CBS, FOX) or on NFL Network and national NFL games. Select digital-only and international games excluded. NFL Sunday Ticket via EverPass is only available for commercial establishments in the U.S., U.S.V.I. and P.R.",
     "pizza_price": "$15 small · $26 large",
     "pizzas": [
         ("The White Out", "Chicken bacon ranch",
