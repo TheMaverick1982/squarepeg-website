@@ -436,8 +436,7 @@ GAME_DAY = {
     ],
     # NFL Sunday Ticket for Business, via EverPass. Add "sunday_ticket": True to a location
     # in LOCATIONS as each store's equipment goes in.
-    "sunday_ticket_note": "More Square Pegs are getting set up as their equipment arrives.",
-    "sunday_ticket_legal": "NFL Sunday Ticket only includes out-of-market Sunday afternoon games; it does not include games available in-market on local channels (CBS, FOX) or on NFL Network and national NFL games. Select digital-only and international games excluded. NFL Sunday Ticket via EverPass is only available for commercial establishments in the U.S., U.S.V.I. and P.R.",
+    "sunday_ticket_note": "More Square Pegs will have the Sunday Ticket soon.",
     "pizza_price": "$15 small · $26 large",
     "pizzas": [
         ("The White Out", "Chicken bacon ranch",

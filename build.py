@@ -1478,14 +1478,13 @@ T["game_day"] = """
       </div>
       <figure class="gd-st-art">{{ img('sunday-ticket', 'NFL Sunday Ticket for Business from EverPass: watch every live out-of-market Sunday game here', sizes='(min-width:900px) 420px, 92vw')|safe }}</figure>
     </div>
-    <p class="gd-st-legal">{{ gd.sunday_ticket_legal }}</p>
   </div>
 </section>
 
 <section class="section" id="where">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">All games. All season long.</span><h2>Where to watch</h2></div>
-    <p class="lede">Game day drinks are on at every Square Peg with a bar. Bolton is dry while its liquor licence comes through — the pizza is still very much on.</p>
+    <p class="lede">Game day drinks are on at every Square Peg with a bar, and a full bar is coming soon to Bolton. Wherever you watch, the pizza is on.</p>
     <ul class="town-list gd-where">{% for l in gd_locs %}<li><a href="{{ u('/locations/' ~ l.slug ~ '/') }}"><b>{{ l.short or l.name }}</b><span>{{ l.city }}, {{ l.state }}{% if l.sunday_ticket %} · <em>Sunday Ticket</em>{% endif %}</span></a></li>{% endfor %}</ul>
     <p class="note">Please drink responsibly. Must be 21+ to order alcohol; ID required.</p>
   </div>
