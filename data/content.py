@@ -79,7 +79,7 @@ def h(mon, tue, wed, thu, fri, sat, sun):
 # Several differ from the hours shown in Toast ordering — see LAUNCH_CHECKLIST.md.
 LOCATIONS = [
     {
-        "slug": "glastonbury-ct",
+        "slug": "glastonbury-ct", "review_url": "",
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Wed": "21:00", "Thu": "21:00", "Fri": "23:00"}, "name": "Glastonbury", "region": "Greater Hartford",
         "street": "1001 Hebron Ave", "city": "Glastonbury", "state": "CT", "zip": "06033",
@@ -93,7 +93,7 @@ LOCATIONS = [
         "photo": "oven-pizza",
     },
     {
-        "slug": "east-hartford-ct", "menu_extra": ["Breakfast on weekends from 7am: omelettes and the Pegg & Cheese", "Brunch cocktails like mimosas, Bloody Marys and Aperol spritzes"], "name": "East Hartford", "region": "Greater Hartford",
+        "slug": "east-hartford-ct", "review_url": "", "menu_extra": ["Breakfast on weekends from 7am: omelettes and the Pegg & Cheese", "Brunch cocktails like mimosas, Bloody Marys and Aperol spritzes"], "name": "East Hartford", "region": "Greater Hartford",
         "street": "130 Long Hill St", "city": "East Hartford", "state": "CT", "zip": "06108",
         "phone": "(860) 509-4221", "toast": "square-peg-pizzera-east-hartford",
         "lat": 41.790362, "lng": -72.594171, "geo_exact": True,  # US Census geocoder
@@ -105,7 +105,7 @@ LOCATIONS = [
         "photo": "dough",
     },
     {
-        "slug": "vernon-ct",
+        "slug": "vernon-ct", "review_url": "",
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Wed": "21:00", "Thu": "21:00", "Fri": "23:00"}, "name": "Vernon", "region": "Greater Hartford",
         "street": "226 Talcottville Rd", "city": "Vernon", "state": "CT", "zip": "06066",
@@ -119,7 +119,7 @@ LOCATIONS = [
     },
     {
         # "bar": False = no beer/wine/cocktails yet (liquor license pending); "detroit": False = no Detroit-style pizza yet. Remove each once available.
-        "slug": "bolton-ct", "bar": False, "detroit": False, "pastas": ["Chicken Parmesan", "Pasta alla Vodka", "Spaghetti & Meatballs", "The Bella Parmigiana"], "menu_extra": ["Burgers"], "name": "Bolton", "region": "Greater Hartford",
+        "slug": "bolton-ct", "review_url": "", "bar": False, "detroit": False, "pastas": ["Chicken Parmesan", "Pasta alla Vodka", "Spaghetti & Meatballs", "The Bella Parmigiana"], "menu_extra": ["Burgers"], "name": "Bolton", "region": "Greater Hartford",
         "street": "270 West St", "city": "Bolton", "state": "CT", "zip": "06043",
         "phone": "(860) 791-7109", "toast": "square-peg-pizzeria-bolton-270-west-street",
         "lat": 41.742106, "lng": -72.436706, "geo_exact": True,  # US Census geocoder
@@ -130,7 +130,7 @@ LOCATIONS = [
         "photo": "pizza-boxes",
     },
     {
-        "slug": "storrs-ct",
+        "slug": "storrs-ct", "review_url": "",
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Sun": "21:00", "Wed": "21:00", "Thu": "22:00", "Fri": "23:00", "Sat": "23:00"}, "name": "Storrs", "region": "Eastern CT",
         "street": "9 Dog Ln", "city": "Storrs", "state": "CT", "zip": "06268",
@@ -143,7 +143,7 @@ LOCATIONS = [
         "photo": "friends-holiday",
     },
     {
-        "slug": "preston-ct", "sunday_ticket": True,
+        "slug": "preston-ct", "review_url": "", "sunday_ticket": True,
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Wed": "21:00", "Thu": "21:00"}, "name": "Preston", "region": "Eastern CT",
         "street": "353 CT-165", "city": "Preston", "state": "CT", "zip": "06365",
@@ -156,7 +156,7 @@ LOCATIONS = [
         "photo": "table-spread",
     },
     {
-        "slug": "plainville-ct",
+        "slug": "plainville-ct", "review_url": "",
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Wed": "21:00", "Thu": "21:00"}, "name": "Plainville", "region": "Central CT",
         "street": "400 New Britain Ave", "city": "Plainville", "state": "CT", "zip": "06062",
@@ -170,7 +170,7 @@ LOCATIONS = [
         "photo": "oven-fire",
     },
     {
-        "slug": "berlin-ct", "pastas": ["Chicken Parmesan", "Pasta alla Vodka", "Pasta Bolognese", "Spaghetti & Meatballs"], "menu_extra": ["Hot dogs"], "kids_menu": False, "salads": False, "parm_line": "meatball parm and Italian combo sandwiches", "name": "Berlin Truck Bar", "short": "Berlin", "region": "Central CT",
+        "slug": "berlin-ct", "review_url": "", "pastas": ["Chicken Parmesan", "Pasta alla Vodka", "Pasta Bolognese", "Spaghetti & Meatballs"], "menu_extra": ["Hot dogs"], "kids_menu": False, "salads": False, "parm_line": "meatball parm and Italian combo sandwiches", "name": "Berlin Truck Bar", "short": "Berlin", "region": "Central CT",
         "street": "151 Webster Square Rd", "city": "Berlin", "state": "CT", "zip": "06037",
         "phone": "(860) 505-4072", "toast": "square-peg-pizza-berlin-119-webster-square-road",
         "lat": 41.628734, "lng": -72.745911, "geo_exact": True,  # US Census geocoder
@@ -181,7 +181,7 @@ LOCATIONS = [
         "photo": "truck-tent",
     },
     {
-        "slug": "shelton-ct", "sunday_ticket": True,
+        "slug": "shelton-ct", "review_url": "", "sunday_ticket": True,
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Wed": "21:00", "Thu": "21:00", "Fri": "22:00", "Sat": "22:00"}, "name": "Shelton", "region": "Fairfield & New Haven",
         "street": "320 Howe Ave, Unit 6", "city": "Shelton", "state": "CT", "zip": "06484",
@@ -194,7 +194,7 @@ LOCATIONS = [
         "photo": "friends-sharing",
     },
     {
-        "slug": "delray-beach-fl", "sunday_ticket": True, "name": "Delray Beach", "region": "Florida",
+        "slug": "delray-beach-fl", "review_url": "", "sunday_ticket": True, "name": "Delray Beach", "region": "Florida",
         "street": "4957 W Atlantic Ave", "city": "Delray Beach", "state": "FL", "zip": "33445",
         "phone": "(561) 566-8828", "toast": "square-peg-delray-beach-4957-west-atlantic-avenue",
         "lat": 26.457838, "lng": -80.12169, "geo_exact": True,  # US Census geocoder

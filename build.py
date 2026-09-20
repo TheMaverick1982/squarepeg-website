@@ -10,6 +10,7 @@ Photos: drop originals into assets/img-src/<name>.(webp|jpg|png) and rebuild.
 """
 import json, os, re, shutil, sys, html, hashlib
 from datetime import date
+from urllib.parse import quote_plus
 from pathlib import Path
 from jinja2 import Environment, DictLoader, select_autoescape
 from PIL import Image
@@ -129,6 +130,20 @@ def fmt_time(t):
     ap = "pm" if hh >= 12 else "am"
     h12 = hh % 12 or 12
     return f"{h12}{':%02d' % mm if mm else ''}{ap}"
+
+def review_url(l):
+    """Where 'Leave a review' goes.
+
+    Prefer the store's own Google review link (the short g.page/r/.../review one from its
+    Business Profile) — that opens the review box directly. Until those are filled in, fall
+    back to a Maps lookup for the exact address, which opens the Google Maps app on a phone
+    and puts the visitor one tap from Reviews.
+    """
+    own = (l.get("review_url") or "").strip()
+    if own:
+        return own
+    q = quote_plus(f"Square Peg Pizzeria {l['street']} {l['city']} {l['state']} {l['zip']}")
+    return f"https://www.google.com/maps/search/?api=1&query={q}"
 
 def hours_rows(loc):
     """(day, full name, hours text, kitchen text or None).
@@ -722,7 +737,7 @@ T["home"] = """
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Catering, big groups & the food truck</span><h2>You host. We’ll make the pizza.</h2></div>
     <div class="tiles tiles--3">
-      <a class="tile on-dark" href="{{ u('/catering/') }}">{{ img('table-spread', 'A catering spread of wings, meatballs, salads and drinks', sizes='(min-width:900px) 50vw, 100vw')|safe }}
+      <a class="tile on-dark" href="{{ u('/catering/') }}">{{ img('catering-table', 'A table of wood-fired pizzas on stands, ready for a party', sizes='(min-width:900px) 50vw, 100vw')|safe }}
         <div class="tile-body"><span class="eyebrow">Catering</span><h3 style="font-size:clamp(34px,4vw,48px)">Enough pizza for everyone. We promise.</h3><p>Tell us your headcount and date, and we’ll make sure there’s enough wood-fired pizza for everyone, ready when you pick it up.</p><span class="btn">Plan my catering {{ icons.arrow|safe }}</span></div></a>
       <a class="tile on-dark" href="{{ u('/large-party-reservations/') }}">{{ img('friends-holiday', 'A group of friends celebrating over pizza', sizes='(min-width:1000px) 33vw, 100vw')|safe }}
         <div class="tile-body"><span class="eyebrow">Large parties</span><h3 style="font-size:clamp(34px,4vw,48px)">Bring the whole crew.</h3><p>Birthdays, team dinners and reunions. We’ll save the tables and plan the food so it lands together.</p><span class="btn">Reserve for a group {{ icons.arrow|safe }}</span></div></a>
@@ -911,6 +926,15 @@ T["location"] = """
 
       <div class="btn-row"><a class="btn btn--sm btn--line" href="{{ maps(l) }}" rel="noopener"{{ ext|safe }}>Get directions</a><a class="btn btn--sm btn--dark" href="{{ u('/catering/') }}?location={{ l.slug }}">Catering from {{ l.short or l.name }}</a><a class="btn btn--sm btn--dark" href="{{ u('/large-party-reservations/') }}?location={{ l.slug }}">Large party here</a></div>
     </div>
+  </div>
+  <div class="wrap">
+    <aside class="review-cta">
+      <div>
+        <span class="eyebrow">Been in lately?</span>
+        <p><strong>Tell people how we did.</strong> <span>A minute of your time helps neighbors find {{ l.short or l.name }} — good or bad, we read every one.</span></p>
+      </div>
+      <a class="btn btn--sm" href="{{ review(l) }}" rel="noopener"{{ ext|safe }} data-track="review_click" data-src="{{ l.slug }}">Leave a review</a>
+    </aside>
   </div>
 </section>
 
@@ -1730,7 +1754,7 @@ def main():
                       f"fbq('init','{SITE['meta_pixel_id']}');fbq('track','PageView');</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
