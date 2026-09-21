@@ -1915,8 +1915,11 @@ def write_extras(pages):
     bots = ["Googlebot", "Bingbot", "Applebot", "Google-Extended", "Applebot-Extended", "GPTBot", "OAI-SearchBot", "ChatGPT-User",
             "ClaudeBot", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User", "CCBot", "Amazonbot", "DuckAssistBot"]
     robots = "# Search engines and AI assistants are welcome to read this site.\n"
-    robots += "".join(f"User-agent: {b}\n" for b in bots) + "Allow: /\nDisallow: /thanks/\n\n"
-    robots += "User-agent: *\nAllow: /\nDisallow: /thanks/\n\n" + f"Sitemap: {abs_url('/sitemap.xml')}\n"
+    # /thanks/ is kept out of search by its own noindex tag, not by robots.txt. Blocking it here
+    # too would stop Google reading that tag, which is how a "blocked" URL ends up indexed anyway
+    # and shows up in Search Console as "Blocked by robots.txt".
+    robots += "".join(f"User-agent: {b}\n" for b in bots) + "Allow: /\n\n"
+    robots += "User-agent: *\nAllow: /\n\n" + f"Sitemap: {abs_url('/sitemap.xml')}\n"
     (OUT / "robots.txt").write_text(robots)
     order = SITE["order_base"]
     # Old Toast-site URLs -> new pages, and old ordering links -> the Toast ordering subdomain.

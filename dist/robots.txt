@@ -16,10 +16,8 @@ User-agent: CCBot
 User-agent: Amazonbot
 User-agent: DuckAssistBot
 Allow: /
-Disallow: /thanks/
 
 User-agent: *
 Allow: /
-Disallow: /thanks/
 
 Sitemap: https://squarepegpizzeria.com/sitemap.xml
