@@ -164,16 +164,6 @@
       "permanent": true
     },
     {
-      "source": "/menu/:path*",
-      "destination": "https://order.squarepegpizzeria.com/menu/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/menu/:path*/",
-      "destination": "https://order.squarepegpizzeria.com/menu/:path*",
-      "permanent": true
-    },
-    {
       "source": "/account/:path*",
       "destination": "https://order.squarepegpizzeria.com/account/:path*",
       "permanent": true
@@ -254,12 +244,52 @@
       "permanent": true
     },
     {
+      "source": "/menu/square-peg-pizzeria",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzeria/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzeria/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzeria/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria",
+      "permanent": true
+    },
+    {
       "source": "/menu-east-hartford",
       "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzera-east-hartford",
       "permanent": true
     },
     {
       "source": "/menu-east-hartford/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzera-east-hartford",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzera-east-hartford",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzera-east-hartford",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzera-east-hartford/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzera-east-hartford",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzera-east-hartford/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzera-east-hartford",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzera-east-hartford/:path*/",
       "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzera-east-hartford",
       "permanent": true
     },
@@ -274,12 +304,52 @@
       "permanent": true
     },
     {
+      "source": "/menu/square-peg-pizzeria-vernon-226-talcottville-rd",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-vernon-226-talcottville-rd",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzeria-vernon-226-talcottville-rd/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-vernon-226-talcottville-rd",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzeria-vernon-226-talcottville-rd/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-vernon-226-talcottville-rd",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzeria-vernon-226-talcottville-rd/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-vernon-226-talcottville-rd",
+      "permanent": true
+    },
+    {
       "source": "/menu-bolton",
       "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street",
       "permanent": true
     },
     {
       "source": "/menu-bolton/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzeria-bolton-270-west-street",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzeria-bolton-270-west-street/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzeria-bolton-270-west-street/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizzeria-bolton-270-west-street/:path*/",
       "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street",
       "permanent": true
     },
@@ -294,12 +364,52 @@
       "permanent": true
     },
     {
+      "source": "/menu/squarepegwindsor",
+      "destination": "https://order.squarepegpizzeria.com/order/squarepegwindsor",
+      "permanent": true
+    },
+    {
+      "source": "/menu/squarepegwindsor/",
+      "destination": "https://order.squarepegpizzeria.com/order/squarepegwindsor",
+      "permanent": true
+    },
+    {
+      "source": "/menu/squarepegwindsor/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/squarepegwindsor",
+      "permanent": true
+    },
+    {
+      "source": "/menu/squarepegwindsor/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/order/squarepegwindsor",
+      "permanent": true
+    },
+    {
       "source": "/menu-preston",
       "destination": "https://order.squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165",
       "permanent": true
     },
     {
       "source": "/menu-preston/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-new-preston-353-connecticut-165",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-new-preston-353-connecticut-165/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-new-preston-353-connecticut-165/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-new-preston-353-connecticut-165/:path*/",
       "destination": "https://order.squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165",
       "permanent": true
     },
@@ -314,12 +424,52 @@
       "permanent": true
     },
     {
+      "source": "/menu/square-peg-plainville-400-new-britain-avenue",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-plainville-400-new-britain-avenue",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-plainville-400-new-britain-avenue/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-plainville-400-new-britain-avenue",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-plainville-400-new-britain-avenue/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-plainville-400-new-britain-avenue",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-plainville-400-new-britain-avenue/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-plainville-400-new-britain-avenue",
+      "permanent": true
+    },
+    {
       "source": "/menu-berlin",
       "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road",
       "permanent": true
     },
     {
       "source": "/menu-berlin/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizza-berlin-119-webster-square-road",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizza-berlin-119-webster-square-road/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizza-berlin-119-webster-square-road/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-pizza-berlin-119-webster-square-road/:path*/",
       "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road",
       "permanent": true
     },
@@ -334,12 +484,52 @@
       "permanent": true
     },
     {
+      "source": "/menu/square-peg-shelton-310-howe-avenue-unit-6",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-shelton-310-howe-avenue-unit-6",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-shelton-310-howe-avenue-unit-6/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-shelton-310-howe-avenue-unit-6",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-shelton-310-howe-avenue-unit-6/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-shelton-310-howe-avenue-unit-6",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-shelton-310-howe-avenue-unit-6/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-shelton-310-howe-avenue-unit-6",
+      "permanent": true
+    },
+    {
       "source": "/menu-delray-beach",
       "destination": "https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue",
       "permanent": true
     },
     {
       "source": "/menu-delray-beach/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-delray-beach-4957-west-atlantic-avenue",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-delray-beach-4957-west-atlantic-avenue/",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-delray-beach-4957-west-atlantic-avenue/:path*",
+      "destination": "https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue",
+      "permanent": true
+    },
+    {
+      "source": "/menu/square-peg-delray-beach-4957-west-atlantic-avenue/:path*/",
       "destination": "https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue",
       "permanent": true
     },
@@ -401,6 +591,46 @@
     {
       "source": "/dishes/:path*/",
       "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/items",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/items/",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/items/:path*",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/items/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/menu/:path*",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/menu/:path*/",
+      "destination": "https://order.squarepegpizzeria.com/menu",
+      "permanent": true
+    },
+    {
+      "source": "/food-trucks",
+      "destination": "/food-truck/",
+      "permanent": true
+    },
+    {
+      "source": "/food-trucks/",
+      "destination": "/food-truck/",
       "permanent": true
     },
     {

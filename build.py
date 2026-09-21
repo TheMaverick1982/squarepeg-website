@@ -1985,7 +1985,7 @@ def redirect_map():
         ("/privacy-policy", "/privacy/"),
         # Toast-powered pages -> Toast on the order subdomain (same paths, so every deep link keeps working)
         ("/order", ORDER_HOST + "/order"), ("/order/*", ORDER_HOST + "/order/:splat"),
-        ("/menu", ORDER_HOST + "/menu"), ("/menu/*", ORDER_HOST + "/menu/:splat"),
+        ("/menu", ORDER_HOST + "/menu"),
         ("/account/*", ORDER_HOST + "/account/:splat"), ("/checkout/*", ORDER_HOST + "/checkout/:splat"),
         ("/cart/*", ORDER_HOST + "/cart/:splat"), ("/confirm/*", ORDER_HOST + "/confirm/:splat"),
     ]
@@ -1995,12 +1995,22 @@ def redirect_map():
     for l in LOCATIONS:
         town = l["city"].lower().replace(" ", "-")
         m.append((f"/menu-{town}", ORDER_HOST + "/order/" + l["toast"]))
+        # Old deep menu URLs: /menu/<toast slug>/group_.../item-... . Those exact paths 404 on the
+        # subdomain now, so land the guest on that store's ordering page rather than a dead end.
+        m.append((f"/menu/{l['toast']}", ORDER_HOST + "/order/" + l["toast"]))
+        m.append((f"/menu/{l['toast']}/*", ORDER_HOST + "/order/" + l["toast"]))
     gc = SITE["gift_cards_url"]
     target = gc if not gc.startswith((SITE["domain"], ORDER_HOST)) else ORDER_HOST + TOAST_PATHS["gift_cards"]
     m += [("/gift-card", target), ("/gift-cards", target)]
     # Older (Popmenu-era) URLs still in Google's index, e.g. www.squarepegpizzeria.com/popmenu-digital-gift-cards
     m += [("/popmenu-digital-gift-cards", target),
           ("/menus", ORDER_HOST + "/menu"), ("/menus/*", ORDER_HOST + "/menu"), ("/dishes/*", ORDER_HOST + "/menu"),
+          # Old Toast item pages, e.g. /items/bud-heavy?location=glastonbury — no way to map the
+          # store from a static rule, so the menu picker is the honest landing place.
+          ("/items", ORDER_HOST + "/menu"), ("/items/*", ORDER_HOST + "/menu"),
+          # anything under /menu/ we haven't matched above
+          ("/menu/*", ORDER_HOST + "/menu"),
+          ("/food-trucks", "/food-truck/"),
           ("/reviews", "/about/"), ("/jobs", "/careers/")]
     return m
 
