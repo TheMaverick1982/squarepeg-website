@@ -667,13 +667,11 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .gd-strip p{font-size:15px;line-height:1.4}
 .gd-strip p span{color:#c9c0b9}
 @media (max-width:600px){.gd-strip p span{display:block}}
-/* Game Day: the drink glass sits on its own dark tile at the top of each card */
-.gd-card{padding:0;overflow:hidden}
-.gd-pic{background:var(--oven);line-height:0}
-.gd-pic img{width:100%;height:auto;aspect-ratio:5/4;object-fit:cover}
-.gd-card header{margin:0;padding:16px 20px 0}
-.gd-card ul{padding:12px 20px 0}
-.gd-garnish{padding:12px 20px 18px}
+/* Game Day pizzas: real photo on top, copy beneath */
+.gd-pizza{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.gd-pizza-pic{line-height:0;background:var(--oven)}
+.gd-pizza-pic img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+.gd-pizza-body{padding:clamp(20px,3.4vw,30px)}
 /* NFL Sunday Ticket */
 .gd-st{display:grid;gap:26px;align-items:center}
 @media (min-width:860px){.gd-st{grid-template-columns:1fr 420px}}

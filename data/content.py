@@ -424,24 +424,24 @@ GAME_DAY = {
     ],
     "cocktails_price": "$7 each",
     "cocktails": [
-        ("The Blitz", "drink-blitz", "Transfusion", ["Vodka", "Grape juice", "Fresh lime", "Ginger ale"], "Cherry garnish"),
-        ("The Hail Mary", "drink-hail-mary", "Dark 'n' Stormy", ["Captain spiced rum", "Fresh lime", "Ginger beer"], "Lime garnish"),
-        ("Sack Attack", "drink-sack-attack", "Blue margarita", ["Tequila", "Triple sec", "Fresh lime juice", "Blue curaçao"], "Lime garnish"),
-        ("Touchdown Tea", "drink-touchdown-tea", "John Daly", ["Vodka", "Iced tea", "Lemonade"], "Lemon garnish"),
+        ("The Blitz", "Transfusion", ["Vodka", "Grape juice", "Fresh lime", "Ginger ale"], "Cherry garnish"),
+        ("The Hail Mary", "Dark 'n' Stormy", ["Captain spiced rum", "Fresh lime", "Ginger beer"], "Lime garnish"),
+        ("Sack Attack", "Blue margarita", ["Tequila", "Triple sec", "Fresh lime juice", "Blue curaçao"], "Lime garnish"),
+        ("Touchdown Tea", "John Daly", ["Vodka", "Iced tea", "Lemonade"], "Lemon garnish"),
     ],
     "mocktails_price": "$5 each",
     "mocktails": [
-        ("The Extra Point", "drink-extra-point", "", ["Orange juice", "Pineapple juice", "Fresh lemon juice", "Club soda", "Grenadine"], "Cherry garnish"),
-        ("The Rookie", "drink-rookie", "", ["Orange juice", "Cranberry", "Pineapple juice", "Sprite"], "Lime garnish"),
+        ("The Extra Point", "", ["Orange juice", "Pineapple juice", "Fresh lemon juice", "Club soda", "Grenadine"], "Cherry garnish"),
+        ("The Rookie", "", ["Orange juice", "Cranberry", "Pineapple juice", "Sprite"], "Lime garnish"),
     ],
     # NFL Sunday Ticket for Business, via EverPass. Add "sunday_ticket": True to a location
     # in LOCATIONS as each store's equipment goes in.
     "sunday_ticket_note": "More Square Pegs will have the Sunday Ticket soon.",
     "pizza_price": "$15 small · $26 large",
     "pizzas": [
-        ("The White Out", "Chicken bacon ranch",
+        ("The White Out", "gd-white-out", "Chicken bacon ranch",
          ["Parm cream", "Mozzarella", "Chicken", "Bacon", "Ranch drizzle", "Green onions"]),
-        ("The Red Zone", "Loaded red",
+        ("The Red Zone", "gd-red-zone", "Loaded red",
          ["Red sauce", "Mozzarella", "Pepperoni", "Sausage", "Roasted red peppers", "Ricotta"]),
     ],
 }

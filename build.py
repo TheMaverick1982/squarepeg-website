@@ -1457,8 +1457,7 @@ T["game_day"] = """
 <section class="section" id="cocktails">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">{{ gd.cocktails_price }}</span><h2>Game day cocktails</h2></div>
-    <div class="gd-grid">{% for name, pic, style, parts, garnish in gd.cocktails %}<article class="gd-card">
-      <div class="gd-pic">{{ img(pic, name ~ ' cocktail', sizes='(min-width:900px) 280px, 46vw')|safe }}</div>
+    <div class="gd-grid">{% for name, style, parts, garnish in gd.cocktails %}<article class="gd-card">
       <header><h3>{{ name }}</h3>{% if style %}<span class="gd-style">{{ style }}</span>{% endif %}</header>
       <ul>{% for p in parts %}<li>{{ p }}</li>{% endfor %}</ul>
       <p class="gd-garnish">{{ garnish }}</p>
@@ -1469,8 +1468,7 @@ T["game_day"] = """
 <section class="section section--paper" id="mocktails">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">{{ gd.mocktails_price }} · no alcohol</span><h2>Mocktails</h2></div>
-    <div class="gd-grid gd-grid--two">{% for name, pic, style, parts, garnish in gd.mocktails %}<article class="gd-card gd-card--zero">
-      <div class="gd-pic">{{ img(pic, name ~ ' mocktail', sizes='(min-width:900px) 340px, 46vw')|safe }}</div>
+    <div class="gd-grid gd-grid--two">{% for name, style, parts, garnish in gd.mocktails %}<article class="gd-card gd-card--zero">
       <header><h3>{{ name }}</h3>{% if style %}<span class="gd-style">{{ style }}</span>{% endif %}</header>
       <ul>{% for p in parts %}<li>{{ p }}</li>{% endfor %}</ul>
       <p class="gd-garnish">{{ garnish }}</p>
@@ -1481,10 +1479,13 @@ T["game_day"] = """
 <section class="section section--dark on-dark" id="pizzas">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">{{ gd.pizza_price }} · same price on both</span><h2>Game day pizzas</h2></div>
-    <div class="gd-pizzas">{% for name, style, parts in gd.pizzas %}<article class="gd-pizza">
-      <span class="gd-pizza-kicker">{{ style }}</span>
-      <h3>{{ name }}</h3>
-      <p class="gd-pizza-parts">{{ parts|join(' · ') }}</p>
+    <div class="gd-pizzas">{% for name, pic, style, parts in gd.pizzas %}<article class="gd-pizza">
+      <div class="gd-pizza-pic">{{ img(pic, name ~ ' — ' ~ style ~ ' pizza at Square Peg', sizes='(min-width:760px) 50vw, 100vw')|safe }}</div>
+      <div class="gd-pizza-body">
+        <span class="gd-pizza-kicker">{{ style }}</span>
+        <h3>{{ name }}</h3>
+        <p class="gd-pizza-parts">{{ parts|join(' · ') }}</p>
+      </div>
     </article>{% endfor %}</div>
     <div class="btn-row gd-order"><a class="btn" href="{{ site.order_picker_toast }}" rel="noopener" data-track="order_click" data-src="game-day"{{ ext|safe }}>Order a game day pie</a><a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the full menu</a></div>
   </div>
