@@ -1586,6 +1586,20 @@ T["entertainment"] = """
     <div class="btn-row"><a class="btn" href="#lineup">See the weekly lineup</a><a class="btn btn--ghost" href="{{ u('/large-party-reservations/') }}">Reserve for a group</a></div>
   </div>
 </section>
+{% if events_all %}<section class="section ev-band" id="tickets" data-season-from="2000-01-01" data-season-to="{{ events_all[-1].date }}" hidden>
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Buy a ticket</span><h2>Special events</h2></div>
+    <div class="ev-grid">{% for e in events_all %}<article class="ev-card" data-season-from="{{ e.announce }}" data-season-to="{{ e.date }}" hidden>
+      <div class="ev-when"><span class="mo">{{ e.mon }}</span><b>{{ e.day }}</b><span class="dow">{{ e.weekday[:3] }}</span></div>
+      <div class="ev-body">
+        <h3>{{ e.title }}</h3>
+        <p class="note">Square Peg {{ e.loc.short or e.loc.name }} · {{ e.loc.city }}, {{ e.loc.state }}</p>
+        <ul class="ev-meta">{% for m in e.meta %}<li>{{ m }}</li>{% endfor %}</ul>
+        <a class="link-arrow" href="{{ e.url }}" rel="noopener"{{ ext|safe }} data-track="event_ticket_click" data-src="{{ e.loc.slug }}-entertainment">{{ e.cta or 'Get tickets' }} →</a>
+      </div>
+    </article>{% endfor %}</div>
+  </div>
+</section>{% endif %}
 <section class="section section--paper" id="tonight">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Happening today</span><h2>Tonight at Square Peg</h2></div>
@@ -1599,6 +1613,7 @@ T["entertainment"] = """
       <header><h3><a href="{{ u('/locations/' ~ slug ~ '/') }}">{{ l.short or l.name }}</a></h3><span class="note">{{ l.city }}, {{ l.state }}</span></header>
       {% for d, e, t, fr in ent.get(slug, []) %}<div class="ent-row" data-ent-day="{{ d }}"{% if fr %} data-ent-from="{{ fr }}"{% endif %}><b>{{ day_names[d] }}</b><span>{{ e }}{% if fr %} <i class="ent-soon">from {{ ent_from(fr) }}</i>{% endif %}</span><em>{{ t }}</em></div>{% endfor %}
       {% for iso, what, when, label in ent_dates_all.get(slug, []) %}<div class="ent-row is-dated" data-season-from="2000-01-01" data-season-to="{{ iso }}" hidden><b>{{ label }}</b><span>{{ what }} <i class="ent-once">one night</i></span><em>{{ when }}</em></div>{% endfor %}
+      {% for e in events_by_slug.get(slug, []) %}<div class="ent-row is-ticketed" data-season-from="{{ e.announce }}" data-season-to="{{ e.date }}" hidden><b>{{ e.weekday[:3] }} {{ e.mon }} {{ e.day }}</b><span><a href="{{ e.url }}" rel="noopener"{{ ext|safe }} data-track="event_ticket_click" data-src="{{ slug }}-lineup">{{ e.title }}</a> <i class="ent-ticket">tickets</i></span><em>{{ e.meta[0] }}</em></div>{% endfor %}
       <a class="btn btn--sm btn--line" href="{{ u('/locations/' ~ slug ~ '/') }}" aria-label="Hours & directions: Square Peg {{ l.short or l.name }}">Hours & directions</a>
     </article>{% endfor %}</div>
     <p class="note" style="margin-top:20px">Schedules can change for holidays and special events. Call your location to confirm.</p>
@@ -1814,7 +1829,7 @@ def main():
                       f"fbq('init','{SITE['meta_pixel_id']}');fbq('track','PageView');</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
