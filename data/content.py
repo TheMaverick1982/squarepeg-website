@@ -476,3 +476,20 @@ EVENTS = {
         },
     ],
 }
+
+# ---------------------------------------------------------------------------
+# One-off entertainment on specific dates (a guest host, a holiday night).
+#
+# Unlike ENTERTAINMENT above, these don't recur — each is a single date and
+# each card hides itself in the browser the day after it happens, so a passed
+# date never sits on the page. Keyed by location slug.
+#
+#   (ISO date, what it is, time)
+# ---------------------------------------------------------------------------
+ENT_DATES = {
+    "delray-beach-fl": [
+        ("2026-10-03", "Karaoke with Trish", "6–10pm"),
+        ("2026-10-16", "Karaoke with Trish", "6–10pm"),
+        ("2026-10-30", "Karaoke with Trish", "6–10pm"),
+    ],
+}

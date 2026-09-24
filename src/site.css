@@ -11,6 +11,9 @@
   --bar-h:0px;
 }
 *,*::before,*::after{box-sizing:border-box}
+/* The hidden attribute must win over any display we set — the date-gated blocks
+   (Game Day, events, one-off entertainment) are hidden this way from JS. */
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:84px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 body{margin:0;font-family:var(--body);font-size:17px;line-height:1.55;color:var(--ink);background:var(--white)}
@@ -723,3 +726,9 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .loc-event-cta{display:grid;gap:10px;justify-items:start}
 @media (min-width:880px){.loc-event-cta{justify-items:center;text-align:center;max-width:230px}}
 .loc-event-cta .note{font-size:13px;line-height:1.45}
+
+/* One-off dated entertainment: same cards, flame accent, each hides after its date */
+.ent-dated{display:grid;gap:10px;margin-top:4px}
+.ent-dated-label{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--flame)}
+.ent-card-sm.is-dated{border-left-color:var(--flame)}
+.ent-card-sm.is-dated .d{color:#fff;opacity:.72}
