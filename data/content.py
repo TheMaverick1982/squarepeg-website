@@ -445,3 +445,34 @@ GAME_DAY = {
          ["Red sauce", "Mozzarella", "Pepperoni", "Sausage", "Roasted red peppers", "Ricotta"]),
     ],
 }
+
+# ---------------------------------------------------------------------------
+# Ticketed events at a single location (paint nights, tastings, fundraisers).
+#
+# Keyed by location slug. Each event shows on that location's page from
+# `announce` until the end of `date` (Eastern time), then hides itself — no
+# rebuild, no one having to remember to take it down. Delete the entry
+# whenever you're next in here.
+#
+#   date     ISO date of the event. Also the last day the block shows.
+#   announce ISO date the block starts showing. Omit to show immediately.
+#   meta     Short facts shown as a row: time, price, what's included.
+#   url      Where tickets are sold. cta is the button label.
+#   host     Optional credit for an outside host/partner.
+# ---------------------------------------------------------------------------
+EVENTS = {
+    "shelton-ct": [
+        {
+            "title": "Charcuterie Board Paint & Sip",
+            "date": "2026-10-21",
+            "announce": "2026-09-24",
+            "blurb": "Pick a design, paint your own wooden serving board, and take it home the "
+                     "same night. Multiple designs to choose from and every material you need is "
+                     "on the table — just bring yourself.",
+            "meta": ["6:30 PM", "$35 per person", "Drink included", "Multiple designs"],
+            "url": "https://paintsquarepeg.eventbrite.com",
+            "cta": "Get tickets",
+            "host": "Hosted with Paint Bar CT (@paintbarct)",
+        },
+    ],
+}

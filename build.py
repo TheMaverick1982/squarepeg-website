@@ -17,7 +17,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY  # noqa
+from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -488,6 +488,27 @@ def ent_from(iso):
     d = date.fromisoformat(iso)
     return f'{["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"][d.month - 1]} {d.day}'
 
+
+_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
+_WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+
+def location_events(loc):
+    """Ticketed events for one location, with the date pre-formatted for the card.
+
+    The block hides itself in the browser the day after the event (see
+    paintSeason in site.js), so nobody has to remember to pull it down."""
+    out = []
+    for e in EVENTS.get(loc["slug"], []):
+        d = date.fromisoformat(e["date"])
+        out.append(dict(e,
+                        mon=_MONTHS[d.month - 1],
+                        day=d.day,
+                        weekday=_WEEKDAYS[d.weekday()],
+                        long_date=f"{_WEEKDAYS[d.weekday()]}, {_MONTHS[d.month - 1]} {d.day}",
+                        announce=e.get("announce", "2000-01-01")))
+    return out
+
 T = {}
 
 T["head"] = """<title>{{ title }}</title>
@@ -900,6 +921,26 @@ T["location"] = """
   </div>
 </section>
 
+{% for e in events %}<section class="section section--paper loc-event-wrap" aria-label="{{ e.title }} at Square Peg {{ l.short or l.name }}" data-season-from="{{ e.announce }}" data-season-to="{{ e.date }}" hidden>
+  <div class="wrap">
+    <article class="loc-event">
+      <div class="loc-event-when">
+        <span class="mo">{{ e.mon }}</span><b>{{ e.day }}</b><span class="dow">{{ e.weekday }}</span>
+      </div>
+      <div class="loc-event-body">
+        <span class="eyebrow">Ticketed event · {{ l.city }}</span>
+        <h2>{{ e.title }}</h2>
+        <p>{{ e.blurb }}</p>
+        <ul class="loc-event-meta">{% for m in e.meta %}<li>{{ m }}</li>{% endfor %}</ul>
+        {% if e.host %}<p class="note">{{ e.host }}</p>{% endif %}
+      </div>
+      <div class="loc-event-cta">
+        <a class="btn" href="{{ e.url }}" rel="noopener"{{ ext|safe }} data-track="event_ticket_click" data-src="{{ l.slug }}">{{ e.cta or 'Get tickets' }}</a>
+        <span class="note">{{ e.long_date }} · Square Peg {{ l.short or l.name }}</span>
+      </div>
+    </article>
+  </div>
+</section>{% endfor %}
 {% if ent.get(l.slug) %}<section class="ent-strip on-dark" aria-label="Weekly entertainment at Square Peg {{ l.short or l.name }}">
   <div class="wrap">
     <div class="ent-strip-head"><span class="eyebrow">Weekly entertainment</span><a href="{{ u('/entertainment/') }}">All locations →</a></div>
@@ -1782,7 +1823,7 @@ def main():
         title = f"Italian Restaurant & Pizza in {l['city']}, {l['state']} | Square Peg"
         desc = f"Italian restaurant and wood-fired pizza at {l['street']}, {l['city']}, {l['state']}: pasta, chicken parm, wings and kids' meals. Hours, {l['phone']}, order online."
         pages.append((f"/locations/{l['slug']}/", title, desc, "location",
-                      dict(l=l, lm=loc_menu(l), rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs), schema, l["photo"], l["photo"]))
+                      dict(l=l, lm=loc_menu(l), rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs, events=location_events(l)), schema, l["photo"], l["photo"]))
 
     menu_schema = {"@type": "Menu", "@id": abs_url("/our-menu/#menu"), "name": "Square Peg Pizzeria menu", "url": abs_url("/our-menu/"),
                    "inLanguage": "en", "hasMenuSection": [

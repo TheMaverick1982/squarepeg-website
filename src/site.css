@@ -702,3 +702,24 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .review-cta p{font-size:16px;line-height:1.45;margin-top:6px;max-width:62ch}
 .review-cta p span{color:var(--smoke)}
 .review-cta .btn{flex:none}
+
+/* ---------- Ticketed event on a location page ---------- */
+.loc-event-wrap{padding-block:clamp(26px,4vw,40px)}
+.loc-event{display:grid;gap:clamp(18px,2.6vw,28px);background:var(--white);
+  border:1px solid var(--line);border-left:6px solid var(--ember);
+  padding:clamp(22px,3.2vw,34px);box-shadow:0 14px 40px rgba(20,17,16,.09)}
+@media (min-width:880px){.loc-event{grid-template-columns:auto 1fr auto;align-items:center}}
+.loc-event-when{display:grid;justify-items:center;align-content:center;gap:2px;
+  background:var(--ember);color:#fff;padding:14px 20px 16px;min-width:114px;justify-self:start}
+.loc-event-when .mo{font-family:var(--display);font-weight:800;font-size:19px;
+  text-transform:uppercase;letter-spacing:.1em;line-height:1}
+.loc-event-when b{font-family:var(--display);font-weight:900;font-size:clamp(46px,6vw,58px);line-height:.88}
+.loc-event-when .dow{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;opacity:.92}
+.loc-event-body h2{margin-top:4px;font-size:clamp(27px,3.6vw,36px);line-height:1.02}
+.loc-event-body p{margin-top:10px;max-width:62ch}
+.loc-event-meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;padding:0;list-style:none}
+.loc-event-meta li{border:1px solid var(--line);padding:6px 12px;font-weight:700;font-size:14px;background:var(--paper)}
+.loc-event-body .note{margin-top:12px}
+.loc-event-cta{display:grid;gap:10px;justify-items:start}
+@media (min-width:880px){.loc-event-cta{justify-items:center;text-align:center;max-width:230px}}
+.loc-event-cta .note{font-size:13px;line-height:1.45}
