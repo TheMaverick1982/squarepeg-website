@@ -732,3 +732,8 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .ent-dated-label{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--flame)}
 .ent-card-sm.is-dated{border-left-color:var(--flame)}
 .ent-card-sm.is-dated .d{color:#fff;opacity:.72}
+
+/* One-off dated nights on the entertainment page */
+.ent-row.is-dated b{color:var(--ember-deep)}
+.ent-once{font-style:normal;font-weight:800;font-size:.78em;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--char);background:var(--flame);padding:2px 7px;border-radius:3px;margin-left:4px;white-space:nowrap}

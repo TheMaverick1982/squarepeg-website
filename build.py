@@ -1595,9 +1595,10 @@ T["entertainment"] = """
 <section class="section" id="lineup">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Every week</span><h2>What’s happening at each Square Peg</h2></div>
-    <div class="ent-grid">{% for slug, rows in ent.items() %}{% set l = loc_by_slug[slug] %}<article class="ent-card">
+    <div class="ent-grid">{% for slug in ent_slugs %}{% set l = loc_by_slug[slug] %}<article class="ent-card">
       <header><h3><a href="{{ u('/locations/' ~ slug ~ '/') }}">{{ l.short or l.name }}</a></h3><span class="note">{{ l.city }}, {{ l.state }}</span></header>
-      {% for d, e, t, fr in rows %}<div class="ent-row" data-ent-day="{{ d }}"{% if fr %} data-ent-from="{{ fr }}"{% endif %}><b>{{ day_names[d] }}</b><span>{{ e }}{% if fr %} <i class="ent-soon">from {{ ent_from(fr) }}</i>{% endif %}</span><em>{{ t }}</em></div>{% endfor %}
+      {% for d, e, t, fr in ent.get(slug, []) %}<div class="ent-row" data-ent-day="{{ d }}"{% if fr %} data-ent-from="{{ fr }}"{% endif %}><b>{{ day_names[d] }}</b><span>{{ e }}{% if fr %} <i class="ent-soon">from {{ ent_from(fr) }}</i>{% endif %}</span><em>{{ t }}</em></div>{% endfor %}
+      {% for iso, what, when, label in ent_dates_all.get(slug, []) %}<div class="ent-row is-dated" data-season-from="2000-01-01" data-season-to="{{ iso }}" hidden><b>{{ label }}</b><span>{{ what }} <i class="ent-once">one night</i></span><em>{{ when }}</em></div>{% endfor %}
       <a class="btn btn--sm btn--line" href="{{ u('/locations/' ~ slug ~ '/') }}" aria-label="Hours & directions: Square Peg {{ l.short or l.name }}">Hours & directions</a>
     </article>{% endfor %}</div>
     <p class="note" style="margin-top:20px">Schedules can change for holidays and special events. Call your location to confirm.</p>
@@ -1813,10 +1814,10 @@ def main():
                       f"fbq('init','{SITE['meta_pixel_id']}');fbq('track','PageView');</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
-        year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
+        year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and,
         event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
     )

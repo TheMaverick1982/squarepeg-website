@@ -368,8 +368,12 @@
     $$("[data-tonight]").forEach(function (box) {
       var html = "";
       Object.keys(ENT).forEach(function (slug) {
-        ENT[slug].events.forEach(function (ev) {
+        (ENT[slug].events || []).forEach(function (ev) {
           if (ev[0] === today && started(ev[3])) html += '<a class="tonight-card" href="' + ENT[slug].url + '"><span>' + ENT[slug].name + "</span><b>" + ev[1] + "</b><span>" + ev[2] + "</span></a>";
+        });
+        // One-off nights: match on the actual date, not the weekday.
+        (ENT[slug].dates || []).forEach(function (ev) {
+          if (ev[0] === iso) html += '<a class="tonight-card" href="' + ENT[slug].url + '"><span>' + ENT[slug].name + "</span><b>" + ev[1] + "</b><span>" + ev[2] + "</span></a>";
         });
       });
       box.innerHTML = html || '<p class="note">No trivia, bingo or DJ tonight. Check the weekly lineup, or come in for pizza anyway.</p>';
