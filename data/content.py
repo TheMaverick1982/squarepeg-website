@@ -130,7 +130,7 @@ LOCATIONS = [
         "photo": "pizza-boxes",
     },
     {
-        "slug": "storrs-ct", "review_url": "https://g.page/r/CVgVzNCipW3ZEAE/review",
+        "slug": "storrs-ct", "review_url": "https://g.page/r/CVgVzNCipW3ZEAE/review", "sunday_ticket": True,
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Sun": "21:00", "Wed": "21:00", "Thu": "22:00", "Fri": "23:00", "Sat": "23:00"}, "name": "Storrs", "region": "Eastern CT",
         "street": "9 Dog Ln", "city": "Storrs", "state": "CT", "zip": "06268",
