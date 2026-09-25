@@ -934,6 +934,10 @@ T["location"] = """
   </div>
 </section>
 
+{% if l.get('bar', True) %}<aside class="hh-bar" aria-label="Happy hour at Square Peg {{ l.short or l.name }}"><div class="wrap">
+  <span class="hh-tag">Happy hour</span>
+  <p><b>{{ promos.happy_hour.days }}, {{ promos.happy_hour.time }}</b>{% if promos.happy_hour.deals %} · {{ promos.happy_hour.deals|join(' · ') }}{% else %} <span>at the bar in {{ l.city }}. Ask your bartender what’s running.</span>{% endif %}</p>
+</div></aside>{% endif %}
 {% if l.sunday_ticket %}<section class="st-strip" aria-label="NFL Sunday Ticket at Square Peg {{ l.short or l.name }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}" hidden>
   <div class="wrap">
     <figure class="st-strip-art">{{ img('sunday-ticket', 'NFL Sunday Ticket for Business from EverPass', sizes='180px')|safe }}</figure>
@@ -1453,7 +1457,7 @@ T["promotions"] = """
 <section class="section section--dark on-dark" id="lunch">
   <div class="wrap two-col">
     <div class="stack">
-      <span class="eyebrow">Monday–Friday · dine-in</span>
+      <span class="eyebrow">Monday–Friday · 11am–2pm · dine-in</span>
       <h2>Lunch specials. Only $10.</h2>
       <p class="prose" style="color:#e6ddd6">Drink included. Clean. Fast. Tasty. That’s lunch done right.</p>
       <p class="note" style="color:#cfc6bf">{{ promos.lunch_note }}</p>

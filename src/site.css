@@ -770,3 +770,11 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .st-strip-copy p{margin-top:8px;color:#d9d2cc;max-width:62ch}
 .st-strip-copy .link-arrow{margin-top:12px;color:var(--flame)}
 .st-strip .eyebrow{color:var(--flame)}
+
+/* ---------- Happy hour bar on a location page ---------- */
+.hh-bar{background:var(--oven-2);border-top:1px solid var(--line-dark);color:#fff}
+.hh-bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-block:13px}
+.hh-tag{flex:none;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--char);background:var(--flame);padding:5px 10px}
+.hh-bar p{font-size:15px;line-height:1.4;min-width:0}
+.hh-bar p span{color:#c9c0b9}

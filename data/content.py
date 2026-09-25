@@ -391,7 +391,11 @@ PROMOS = {
         ("2 slices + drink", "Cheese or pepperoni."),
         ("1 slice + salad + drink", "Cheese or pepperoni, with a fresh salad."),
     ],
-    "lunch_note": "$10 each. Monday–Friday, dine-in, lunchtime only.",
+    "lunch_note": "$10 each. Monday–Friday, 11am–2pm, dine-in.",
+    # Happy hour runs at every location with a bar (Bolton has none yet, so it's
+    # gated on the location's "bar" flag). Deals aren't published yet — when they
+    # are, add them as a list here and they'll render under the times.
+    "happy_hour": {"days": "Every day", "time": "2–6pm", "deals": []},
     "app": [
         ("Refer a friend, get $10", "Invite a friend through the Square Peg app. When they join, a $10 reward lands in your app wallet. Limit one referral reward per month."),
         ("Rewards Club: $10 a month", "Pay $10 a month and get $20 in Square Peg credit, loaded automatically. Sign up in the app. Monthly credits expire in 30 days."),
