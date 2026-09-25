@@ -389,8 +389,7 @@ PROMOS = {
     ],
     "lunch": [
         ("2 slices + drink", "Cheese or pepperoni."),
-        ("Half sandwich + salad + drink", "Any sandwich on the menu with a fresh salad."),
-        ("Pasta + salad + drink", "Your choice from the daily pasta lineup, with a garden salad."),
+        ("1 slice + salad + drink", "Cheese or pepperoni, with a fresh salad."),
     ],
     "lunch_note": "$10 each. Monday–Friday, dine-in, lunchtime only.",
     "app": [
