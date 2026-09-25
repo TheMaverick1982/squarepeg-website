@@ -934,6 +934,17 @@ T["location"] = """
   </div>
 </section>
 
+{% if l.sunday_ticket %}<section class="st-strip" aria-label="NFL Sunday Ticket at Square Peg {{ l.short or l.name }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}" hidden>
+  <div class="wrap">
+    <figure class="st-strip-art">{{ img('sunday-ticket', 'NFL Sunday Ticket for Business from EverPass', sizes='180px')|safe }}</figure>
+    <div class="st-strip-copy">
+      <span class="eyebrow">Sundays here</span>
+      <h2>NFL Sunday Ticket in {{ l.city }}</h2>
+      <p>Every live out-of-market Sunday afternoon game is on our screens. Watch your team in {{ l.city }} even when the local channels aren’t carrying it — with a pie and a cold one in front of you.</p>
+      <a class="link-arrow" href="{{ u('/game-day/') }}">Game day specials &amp; pizzas →</a>
+    </div>
+  </div>
+</section>{% endif %}
 {% for e in events %}<section class="section section--paper loc-event-wrap" aria-label="{{ e.title }} at Square Peg {{ l.short or l.name }}" data-season-from="{{ e.announce }}" data-season-to="{{ e.date }}" hidden>
   <div class="wrap">
     <article class="loc-event">
