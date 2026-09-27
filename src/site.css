@@ -796,3 +796,7 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .points li:last-child{border-bottom:0}
 .points li b{font-family:var(--display);font-weight:800;font-size:20px;white-space:nowrap}
 .caught-fine{margin-top:26px;font-size:13px;line-height:1.55;max-width:60ch}
+.already{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);display:grid;gap:4px;font-size:15px}
+.already b{font-size:16px}
+.already span{color:var(--smoke)}
+.already .link-arrow{justify-self:start;margin-top:4px}

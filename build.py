@@ -525,7 +525,7 @@ def location_events(loc):
 # The three photos the /what-you-did/ flyer promises. Real shots, evidence captions.
 CAUGHT_SHOTS = [
     ("sp-pies-board", "Exhibit A", "The board",
-     "Margherita and prosciutto arugula, side by side, in broad daylight. No attempt to hide it."),
+     "Two of them. Side by side, in broad daylight. No attempt whatsoever to hide it."),
     ("sp-wings", "Exhibit B", "Garlic parm wings",
      "You told someone you were “just grabbing a salad.” The plate tells a different story."),
     ("sp-drinks", "Exhibit C", "Two o'clock",
@@ -1683,6 +1683,7 @@ T["caught"] = """
         <a class="btn btn--line" href="{{ site.app_link }}" rel="noopener"{{ ext|safe }} data-track="app_click" data-src="caught">Get the app</a>
       </div>
       <p class="note">New members only. One welcome reward per person, because we&rsquo;ve been burned before.</p>
+      <div class="already"><b>Already a member?</b> <span>Your points are sitting right there, quietly judging you.</span> <a class="link-arrow" href="{{ site.loyalty_signin }}" rel="noopener"{{ ext|safe }} data-track="rewards_signin" data-src="caught">Check your balance &rarr;</a></div>
     </div>
     <div class="stack">
       <div class="points-card">
