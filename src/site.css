@@ -778,3 +778,21 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
   color:var(--char);background:var(--flame);padding:5px 10px}
 .hh-bar p{font-size:15px;line-height:1.4;min-width:0}
 .hh-bar p span{color:#c9c0b9}
+
+/* ---------- /what-you-did/ — the QR flyer landing page ---------- */
+.caught-head h1{font-size:clamp(46px,8.5vw,104px);line-height:.88}
+.caught-sub{margin-top:14px;font-weight:800;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--flame)}
+.shots{display:grid;gap:18px;grid-template-columns:1fr}
+@media (min-width:820px){.shots{grid-template-columns:repeat(3,1fr)}}
+.shot{margin:0;background:var(--oven-2);border:1px solid var(--line-dark);display:flex;flex-direction:column}
+.shot img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;display:block}
+.shot figcaption{padding:16px 18px 18px;display:grid;gap:5px}
+.shot figcaption b{font-family:var(--display);font-weight:800;font-size:21px;text-transform:uppercase;letter-spacing:.01em}
+.shot figcaption span{font-size:14.5px;line-height:1.5;color:#cfc6bf}
+.caught-note{margin-top:20px;color:#c9c0b9}
+.points-card{background:var(--white);border:1px solid var(--line);border-top:5px solid var(--ember);padding:clamp(22px,3vw,30px)}
+.points{list-style:none;margin:14px 0 0;padding:0;display:grid}
+.points li{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--line);font-size:16px}
+.points li:last-child{border-bottom:0}
+.points li b{font-family:var(--display);font-weight:800;font-size:20px;white-space:nowrap}
+.caught-fine{margin-top:26px;font-size:13px;line-height:1.55;max-width:60ch}
