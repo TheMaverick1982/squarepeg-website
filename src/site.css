@@ -846,13 +846,10 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .lto-drink h3{font-family:var(--display);font-weight:800;font-size:clamp(25px,3.2vw,34px);text-transform:uppercase;line-height:1.02}
 .lto-drink p{margin-top:12px;font-size:16px;line-height:1.55;color:#d9d2cc}
 .lto-note{margin-top:18px;color:#9d948c}
-.section--ember{background:var(--ember);color:#fff}
-.lto-cta{text-align:center}
-.lto-cta h2{font-size:clamp(34px,5.5vw,62px);text-transform:uppercase;line-height:.98}
-.lto-cta p{margin-top:14px;font-size:18px;max-width:60ch;margin-inline:auto;color:#ffe3e5}
-.lto-cta .btn-row{justify-content:center;margin-top:24px}
-.btn--white{background:#fff;color:var(--ember-deep);border-color:#fff}
-.btn--white:hover{background:#ffeaec}
-.btn--outline-white{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.7)}
-.btn--outline-white:hover{background:rgba(255,255,255,.12)}
+/* Closing CTA sits on white so it doesn't fight the red footer directly below */
+.lto-cta{text-align:center;background:var(--white);border-top:6px solid var(--ember)}
+.lto-cta h2{font-size:clamp(34px,5.5vw,62px);text-transform:uppercase;line-height:.98;color:var(--ink)}
+.lto-cta h2 em{font-style:normal;color:var(--ember)}
+.lto-cta p{margin-top:14px;font-size:18px;max-width:60ch;margin-inline:auto;color:var(--smoke)}
+.lto-cta .btn-row{justify-content:center;margin-top:26px}
 .lto-gone h2{font-size:clamp(30px,4.6vw,52px);line-height:1.02;margin-top:6px}

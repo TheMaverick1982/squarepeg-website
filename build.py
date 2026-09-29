@@ -464,13 +464,13 @@ ICONS = {
 
 NAV = [("Menu", "MENU"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Catering", "/catering/"),
        ("Entertainment", "/entertainment/")]
-MORE = [("Large Parties", "/large-party-reservations/"),
+MORE = [("LTO Menu", "/monthly-specials/"), ("Large Parties", "/large-party-reservations/"),
         ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/"),
         ("Rewards & Monthly Deals", "/deals/"), ("Gift Cards", "GIFT"), ("Roll the Dice", "/roll-the-dice/"),
         ("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]
 DRAWER_EXTRA = []
 DRAWER_GROUPS = [
-    ("Eat", [("Menu", "MENU"), ("What’s on the Menu", "/our-menu/"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
+    ("Eat", [("Menu", "MENU"), ("LTO Menu", "/monthly-specials/"), ("What’s on the Menu", "/our-menu/"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
     ("Plan", [("Catering", "/catering/"), ("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
     ("Fun", [("Entertainment", "/entertainment/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
@@ -1823,13 +1823,13 @@ T["lto"] = """
   </div>
 </section>
 
-<section class="section section--ember lto-cta">
+<section class="section lto-cta">
   <div class="wrap">
-    <h2>Gone on the {{ lto.ends[-2:]|int }}{{ 'st' if lto.ends[-2:]|int in [1,21,31] else 'nd' if lto.ends[-2:]|int in [2,22] else 'rd' if lto.ends[-2:]|int in [3,23] else 'th' }}.</h2>
+    <h2>Gone on the <em>{{ lto.ends[-2:]|int }}{{ 'st' if lto.ends[-2:]|int in [1,21,31] else 'nd' if lto.ends[-2:]|int in [2,22] else 'rd' if lto.ends[-2:]|int in [3,23] else 'th' }}</em>.</h2>
     <p>Ten Square Pegs across Connecticut and Delray Beach. Order it, or come sit down and have the whole thing.</p>
     <div class="btn-row">
-      <a class="btn btn--white" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="lto-footer">{{ icons.bag|safe }}Order online</a>
-      <a class="btn btn--outline-white" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a>
+      <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="lto-footer">{{ icons.bag|safe }}Order online</a>
+      <a class="btn btn--line" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a>
     </div>
   </div>
 </section>
