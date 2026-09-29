@@ -208,14 +208,29 @@ LOCATIONS = [
 
 REGIONS = ["Greater Hartford", "Central CT", "Eastern CT", "Fairfield & New Haven", "Florida"]
 
-# Current deal — update monthly.
-DEAL = {
-    "eyebrow": "Loyalty members only",
-    "headline": "$6 off when you spend $36+",
-    "detail": "Monday–Friday, dine-in. One use per member. Not valid with other offers. Tax & gratuity not included.",
-    "expires": "2026-09-30",
-    "expires_label": "Ends Sept 30",
-}
+# Monthly member deal. Each entry is date-gated in the browser (Eastern time,
+# both ends inclusive), so next month's promo can be staged ahead of its start
+# date and swaps itself in overnight. Keep them in chronological order and make
+# sure the windows don't overlap — two live at once would both render.
+DEALS = [
+    {
+        "eyebrow": "Loyalty members only",
+        "headline": "$6 off when you spend $36+",
+        "detail": "Monday–Friday, dine-in. One use per member. Not valid with other offers. Tax & gratuity not included.",
+        "starts": "2000-01-01",
+        "expires": "2026-09-30",
+        "expires_label": "Ends Sept 30",
+    },
+    {
+        "eyebrow": "Loyalty members only",
+        "headline": "$8 off when you spend $38+",
+        "detail": "Monday–Friday, dine-in. One use per member. Not valid with other offers. Tax & gratuity not included.",
+        "starts": "2026-10-01",
+        "expires": "2026-10-31",
+        "expires_label": "Ends Oct 31",
+    },
+]
+DEAL = DEALS[0]  # legacy single-deal reference
 
 POINTS = [
     (100, "Free cookie"), (200, "$5 off"), (300, "Free appetizer", "excludes wings"),

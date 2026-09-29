@@ -17,7 +17,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO  # noqa
+from content import DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -686,10 +686,10 @@ T["home"] = """
   </div>
 </section>
 
-<div class="ribbon"><div class="wrap">
-  <strong>{{ deal.headline }}</strong><span>{{ deal.eyebrow }} · Mon–Fri dine-in · {{ deal.expires_label }}</span>
+{% for d in deals %}<div class="ribbon" data-season-from="{{ d.starts }}" data-season-to="{{ d.expires }}" hidden><div class="wrap">
+  <strong>{{ d.headline }}</strong><span>{{ d.eyebrow }} · Mon–Fri dine-in · {{ d.expires_label }}</span>
   <a href="{{ u('/deals/') }}">See all deals →</a>
-</div></div>
+</div></div>{% endfor %}
 
 <aside class="gd-strip" aria-label="Game day specials" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}"><div class="wrap">
   <div class="gd-strip-copy">
@@ -1058,8 +1058,8 @@ T["location"] = """
     <div class="tiles">
       <a class="tile on-dark" href="{{ u('/fundraisers/') }}" style="min-height:360px">{{ img('team-kids', 'A youth team at a Square Peg Tuesday fundraiser', sizes='(min-width:900px) 50vw, 100vw')|safe }}
         <div class="tile-body"><span class="eyebrow">Tuesday fundraisers</span><h3 style="font-size:40px">20% back to your cause</h3><p>Book a Tuesday night at {{ l.short or l.name }} for your school, team or nonprofit.</p><span class="btn">Request a Tuesday {{ icons.arrow|safe }}</span></div></a>
-      <a class="tile on-dark" href="{{ u('/deals/') }}" style="min-height:360px">{{ img('pizza-boxes', 'Stacked Square Peg pizza boxes', sizes='(min-width:900px) 50vw, 100vw')|safe }}
-        <div class="tile-body"><span class="eyebrow">{{ deal.eyebrow }}</span><h3 style="font-size:40px">{{ deal.headline }}</h3><p>Join free in the Square Peg app and start earning points on every visit.</p><span class="btn">See deals {{ icons.arrow|safe }}</span></div></a>
+      {% for d in deals %}<a class="tile on-dark" href="{{ u('/deals/') }}" style="min-height:360px" data-season-from="{{ d.starts }}" data-season-to="{{ d.expires }}" hidden>{{ img('pizza-boxes', 'Stacked Square Peg pizza boxes', sizes='(min-width:900px) 50vw, 100vw')|safe }}
+        <div class="tile-body"><span class="eyebrow">{{ d.eyebrow }}</span><h3 style="font-size:40px">{{ d.headline }}</h3><p>Join free in the Square Peg app and start earning points on every visit.</p><span class="btn">See deals {{ icons.arrow|safe }}</span></div></a>{% endfor %}
     </div>
   </div>
 </section>
@@ -1300,12 +1300,14 @@ T["deals"] = """
 </section>
 <section class="section">
   <div class="wrap two-col">
-    <div class="form" style="gap:14px">
-      <span class="eyebrow">{{ deal.eyebrow }}</span>
-      <h2 style="font-size:clamp(48px,7vw,80px)">{{ deal.headline }}</h2>
-      <p style="font-weight:700">{{ deal.expires_label }}, 2026</p>
-      <p class="note">{{ deal.detail }}</p>
-      <div class="btn-row"><a class="btn" href="{{ site.app_link }}" rel="noopener" data-track="app_click" data-src="deal-card"{{ ext|safe }}>Get the app to unlock</a></div>
+    <div>{% for d in deals %}
+      <div class="form" style="gap:14px" data-season-from="{{ d.starts }}" data-season-to="{{ d.expires }}" hidden>
+        <span class="eyebrow">{{ d.eyebrow }}</span>
+        <h2 style="font-size:clamp(48px,7vw,80px)">{{ d.headline }}</h2>
+        <p style="font-weight:700">{{ d.expires_label }}, 2026</p>
+        <p class="note">{{ d.detail }}</p>
+        <div class="btn-row"><a class="btn" href="{{ site.app_link }}" rel="noopener" data-track="app_click" data-src="deal-card"{{ ext|safe }}>Get the app to unlock</a></div>
+      </div>{% endfor %}
     </div>
     <div class="stack">
       <span class="eyebrow">Not a member yet?</span>
@@ -2044,7 +2046,7 @@ def main():
 
     base_ctx = dict(
         u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
-        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, points=POINTS, perks=APP_PERKS,
+        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, deals=DEALS, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and,
@@ -2115,7 +2117,7 @@ def main():
                   "Book the Square Peg Pizzeria wood-fired pizza food truck for backyard parties, weddings, schools, breweries and corporate events in Connecticut.",
                   "truck", {}, graph(breadcrumbs([("Home", "/"), ("Food Truck", "/food-truck/")])), "food-truck", "food-truck"))
     pages.append(("/deals/", "Pizza Deals & Rewards | Square Peg Pizzeria",
-                  f"This month at Square Peg: {DEAL['headline']} for loyalty members. Join free in the app and earn points toward free pizza, pasta and reward cards.",
+                  "Square Peg Pizzeria deals and rewards: a members-only dine-in offer every month, points on every visit, and rewards you redeem in the app. Joining is free.",
                   "deals", {}, graph(breadcrumbs([("Home", "/"), ("Deals & Rewards", "/deals/")])), "pizza-boxes", "pizza-boxes"))
     pages.append(("/fundraisers/", "Tuesday Night Restaurant Fundraisers | Square Peg Pizzeria",
                   "Earn 20% of dine-in food sales for your school, team or nonprofit with a Square Peg Pizzeria Tuesday Night Fundraiser. Request your date.",
