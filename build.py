@@ -17,7 +17,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES  # noqa
+from content import TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -1770,6 +1770,72 @@ T["evidence"] = """
 </section>
 """
 
+T["lto"] = """
+<section class="page-head on-dark lto-head">
+  {{ img(lto.sections[2][1][0][2], lto.sections[2][1][0][0] ~ ' pizza at Square Peg Pizzeria', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Monthly specials</span></nav>
+    <span class="eyebrow">{{ lto.month }} {{ lto.year }} &middot; limited time</span>
+    <h1>{{ lto.month }}<br>specials</h1>
+    <p class="lede">{{ lto.blurb }}</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="lto">{{ icons.bag|safe }}Order online</a>
+      <a class="btn btn--ghost" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find a table</a>
+    </div>
+  </div>
+</section>
+
+<div data-season-from="2000-01-01" data-season-to="{{ lto.ends }}" data-season-invert hidden>
+  <section class="section section--paper">
+    <div class="wrap lto-gone">
+      <span class="eyebrow">Between menus</span>
+      <h2>Next month&rsquo;s specials are on the way.</h2>
+      <p class="prose">{{ lto.month }}&rsquo;s run has ended. The new menu lands in a few days &mdash; in the meantime, the full menu is very much open.</p>
+      <div class="btn-row"><a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="lto-gone">{{ icons.bag|safe }}Order online</a><a class="btn btn--line" href="{{ u('/our-menu/') }}">See the full menu</a></div>
+    </div>
+  </section>
+</div>
+
+<div data-season-from="2000-01-01" data-season-to="{{ lto.ends }}" hidden>
+{% for title, items in lto.sections %}
+<section class="section {{ 'section--dark on-dark' if loop.index is odd else 'section--paper' }}">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">{{ lto.month }} only</span><h2>{{ title }}</h2></div>
+    <div class="lto-grid{{ ' lto-grid--two' if items|length > 1 else '' }}">{% for name, price, pic, desc in items %}<article class="lto-item">
+      <div class="lto-pic">{{ img(pic, name ~ ' at Square Peg Pizzeria', sizes='(min-width:900px) 50vw, 100vw')|safe }}</div>
+      <div class="lto-body">
+        <h3>{{ name }}</h3>
+        <span class="lto-price">{{ price }}</span>
+        <p>{{ desc }}</p>
+      </div>
+    </article>{% endfor %}</div>
+  </div>
+</section>
+{% endfor %}
+
+<section class="section section--dark on-dark">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">{{ lto.month }} only &middot; at the bar</span><h2>Cocktails</h2></div>
+    <div class="lto-drinks">{% for name, price, desc in lto.cocktails %}<article class="lto-drink">
+      <h3>{{ name }}</h3><span class="lto-price">{{ price }}</span><p>{{ desc }}</p>
+    </article>{% endfor %}</div>
+    <p class="note lto-note">Cocktails at locations with a full bar.</p>
+  </div>
+</section>
+
+<section class="section section--ember lto-cta">
+  <div class="wrap">
+    <h2>Gone on the {{ lto.ends[-2:]|int }}{{ 'st' if lto.ends[-2:]|int in [1,21,31] else 'nd' if lto.ends[-2:]|int in [2,22] else 'rd' if lto.ends[-2:]|int in [3,23] else 'th' }}.</h2>
+    <p>Ten Square Pegs across Connecticut and Delray Beach. Order it, or come sit down and have the whole thing.</p>
+    <div class="btn-row">
+      <a class="btn btn--white" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="lto-footer">{{ icons.bag|safe }}Order online</a>
+      <a class="btn btn--outline-white" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a>
+    </div>
+  </div>
+</section>
+</div>
+"""
+
 T["private_events"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in items %}<figure class="{{ 'b-main' if loop.first else 'b-side' }}">{{ img(p, a, sizes=('(min-width:800px) 60vw, 100vw' if loop.first else '(min-width:800px) 36vw, 50vw'))|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endfor %}</div>{% endmacro %}
 {% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
 
@@ -2070,6 +2136,10 @@ def main():
                   "Wood-fired pizza, pasta, parm subs and wings from Square Peg Pizzeria. Order online for pickup or delivery from ten locations in Connecticut and Delray Beach, FL.",
                   "evidence", dict(sigs=SIGNATURES, menu_bits=evidence_menu),
                   graph(breadcrumbs([("Home", "/"), ("Order", "/evidence/")])), "sp-three-pies", "sp-three-pies"))
+    pages.append(("/monthly-specials/", f"{LTO['month']} Specials | Square Peg Pizzeria",
+                  f"Square Peg Pizzeria's {LTO['month']} {LTO['year']} limited-time menu: new pizzas, starters, dessert and seasonal cocktails. Order online or dine in at ten locations.",
+                  "lto", dict(lto=LTO), graph(breadcrumbs([("Home", "/"), ("Monthly specials", "/monthly-specials/")])),
+                  LTO["sections"][2][1][0][2], LTO["sections"][2][1][0][2]))
     pages.append(("/sms-terms/", "SMS Terms | Square Peg Pizzeria", "Terms for the Square Peg Pizzeria text message program: frequency, costs, how to opt out, and support.",
                   "sms", dict(sms=SMS_TERMS), None, None, None))
     pages.append(("/thanks/", "Thank You | Square Peg Pizzeria", "Thanks for reaching out to Square Peg Pizzeria.", "simple",

@@ -496,3 +496,51 @@ ENT_DATES = {
         ("2026-10-30", "Karaoke with Trish", "6–10pm"),
     ],
 }
+
+# ---------------------------------------------------------------------------
+# Limited-time offer menu — the monthly specials page at /monthly-specials/.
+#
+# The URL never changes, so every QR code, link and post keeps working. Each
+# month: swap `month`, `ends`, the blurb and the items, drop the new photos in
+# assets/img-src as lto-<slug>.webp, and rebuild.
+#
+# `ends` is the last day the menu shows. After that the page swaps itself to a
+# short "next month is coming" message (checked in the browser, Eastern time),
+# so a stale menu never sits there if the update runs late.
+# ---------------------------------------------------------------------------
+LTO = {
+    "month": "October",
+    "year": "2026",
+    "ends": "2026-10-31",
+    "blurb": "Five things our kitchen only makes in October, plus two cocktails that taste "
+             "like the season. Here until the 31st, then they're gone.",
+    "sections": [
+        ("Starter", [
+            ("Fried Eggplant", "$12", "lto-eggplant",
+             "Golden fried eggplant dusted in our Peg seasonings dry rub, with marinara for dipping."),
+        ]),
+        ("Sandwich", [
+            ("Burrata Bliss", "$16", "lto-burrata",
+             "Toasted garlic bread, fig jam, arugula and melted burrata. Our Italian take on a better grilled cheese."),
+        ]),
+        ("Signature brick oven pizza", [
+            ("I Yuv You", "$18 small · $28 large", "lto-i-yuv-you",
+             "The pizza our head chef makes for his own family. Red pie with mozzarella, pepperoni, "
+             "fried eggplant, sliced roma tomatoes, red onions and parm."),
+            ("The Bianca Bella", "$17 small · $27 large", "lto-bianca-bella",
+             "A white pizza with mozzarella, parm cream, sausage, caramelized onions and fresh basil. "
+             "Lives up to its name."),
+        ]),
+        ("Dessert", [
+            ("Deep Fried Sandwich Cookies", "$12", "lto-cookies",
+             "Five deep fried sandwich cookies, powdered sugar, chocolate sauce and a scoop of vanilla ice cream."),
+        ]),
+    ],
+    # No photos for these — they render as copy-only cards.
+    "cocktails": [
+        ("Pumpkin Spice Martini", "$9",
+         "Vanilla vodka, Kahlúa, Baileys, RumChata, pumpkin spice and cold brew, chilled, with whipped cream and caramel drizzle."),
+        ("Fall Sangria", "$9",
+         "Gooseneck Pinot Grigio, pear liqueur and apple cider in a salted caramel and cinnamon sugar rimmed glass."),
+    ],
+}
