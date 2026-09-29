@@ -1707,7 +1707,7 @@ T["caught"] = """
 
 T["evidence"] = """
 <section class="page-head on-dark ev-head">
-  {{ img('sp-hero-board', 'Wood-fired pizzas on a board at Square Peg Pizzeria', eager=True, cls='bg')|safe }}
+  {{ img('sp-three-pies', 'Three wood-fired pizzas on a board at Square Peg Pizzeria', eager=True, cls='bg')|safe }}
   <div class="wrap">
     <span class="eyebrow">Case closed</span>
     <h1>Here&rsquo;s the<br>evidence.</h1>
@@ -2069,7 +2069,7 @@ def main():
     pages.append(("/evidence/", "Order Square Peg Pizzeria | Wood-Fired Pizza, Pasta & Subs",
                   "Wood-fired pizza, pasta, parm subs and wings from Square Peg Pizzeria. Order online for pickup or delivery from ten locations in Connecticut and Delray Beach, FL.",
                   "evidence", dict(sigs=SIGNATURES, menu_bits=evidence_menu),
-                  graph(breadcrumbs([("Home", "/"), ("Order", "/evidence/")])), "sp-hero-board", "sp-hero-board"))
+                  graph(breadcrumbs([("Home", "/"), ("Order", "/evidence/")])), "sp-three-pies", "sp-three-pies"))
     pages.append(("/sms-terms/", "SMS Terms | Square Peg Pizzeria", "Terms for the Square Peg Pizzeria text message program: frequency, costs, how to opt out, and support.",
                   "sms", dict(sms=SMS_TERMS), None, None, None))
     pages.append(("/thanks/", "Thank You | Square Peg Pizzeria", "Thanks for reaching out to Square Peg Pizzeria.", "simple",
