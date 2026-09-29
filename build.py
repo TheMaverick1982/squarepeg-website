@@ -1705,6 +1705,71 @@ T["caught"] = """
 </section>
 """
 
+T["evidence"] = """
+<section class="page-head on-dark ev-head">
+  {{ img('sp-hero-board', 'Wood-fired pizzas on a board at Square Peg Pizzeria', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <span class="eyebrow">Case closed</span>
+    <h1>Here&rsquo;s the<br>evidence.</h1>
+    <p class="lede">Your motivation to cook is not coming back. It has been gone since about 5:30. We checked, and honestly we didn&rsquo;t look that hard, because the alternative is right here.</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="evidence">{{ icons.bag|safe }}Order now</a>
+      <a class="btn btn--ghost" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark on-dark">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Exhibit one</span><h2>The pizza</h2></div>
+    <p class="prose ev-sub">Dough made from scratch that morning, never frozen. Eighty seconds in a wood fire. Red or white, Neo-Neapolitan rounds or crispy-edged Detroit style, gluten-free 12&Prime; crust and vegan cheese on anything.</p>
+    <div class="ev-pies">{% for n, d, pic in sigs %}<figure class="ev-pie">
+      {{ img(pic, n ~ ' pizza at Square Peg Pizzeria', sizes='(min-width:900px) 25vw, 50vw')|safe }}
+      <figcaption><b>{{ n }}</b><span>{{ d }}</span></figcaption>
+    </figure>{% endfor %}</div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Exhibit two</span><h2>Everything else</h2></div>
+    <p class="prose">Not in a pizza mood? Nobody has to know what you ordered.</p>
+    <div class="ev-menu">{% for title, items in menu_bits %}<div class="ev-col">
+      <h3>{{ title }}</h3>
+      <ul>{% for n, d in items %}<li><b>{{ n }}</b><span>{{ d }}</span></li>{% endfor %}</ul>
+    </div>{% endfor %}</div>
+    <div class="btn-row ev-order">
+      <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="evidence-menu">{{ icons.bag|safe }}Start an order</a>
+      <a class="btn btn--line" href="{{ u('/our-menu/') }}">See the full menu</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark on-dark">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">While you&rsquo;re not cooking</span>
+      <h2>Get $5 for showing up.</h2>
+      <p class="prose" style="color:#e6ddd6">Join Square Peg Rewards and a <b>$5 welcome reward</b> lands in your account. Free, takes a minute, and you earn points every visit after that.</p>
+      <div class="btn-row">
+        <a class="btn" href="{{ site.loyalty_signup }}" rel="noopener"{{ ext|safe }} data-track="rewards_join" data-src="evidence">Claim my $5</a>
+        <a class="btn btn--ghost" href="{{ site.app_link }}" rel="noopener"{{ ext|safe }} data-track="app_click" data-src="evidence">Get the app</a>
+      </div>
+      <p class="note" style="color:#cfc6bf">Already a member? <a href="{{ site.loyalty_signin }}" rel="noopener"{{ ext|safe }} data-track="rewards_signin" data-src="evidence">Check your balance &rarr;</a></p>
+    </div>
+    <div class="stack">
+      <div class="ev-box">
+        <span class="eyebrow">Ten locations</span>
+        <h3>Pickup, delivery or a table</h3>
+        <p>Nine across Connecticut and one in Delray Beach, Florida. Order online, or come sit down and let someone else do the dishes too.</p>
+        <div class="btn-row"><a class="btn btn--sm" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find the closest one</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap"><p class="note ev-fine">No motivation was recovered in the making of this page. We&rsquo;re not looking for it either.</p></div>
+</section>
+"""
+
 T["private_events"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in items %}<figure class="{{ 'b-main' if loop.first else 'b-side' }}">{{ img(p, a, sizes=('(min-width:800px) 60vw, 100vw' if loop.first else '(min-width:800px) 36vw, 50vw'))|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endfor %}</div>{% endmacro %}
 {% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
 
@@ -1999,6 +2064,12 @@ def main():
                   "Join Square Peg Rewards free and get a $5 welcome reward, points on every visit and members-only deals at all ten Square Peg Pizzeria locations.",
                   "caught", dict(shots=CAUGHT_SHOTS, app_perks=APP_PERKS, points=POINTS),
                   graph(breadcrumbs([("Home", "/"), ("Square Peg Rewards", "/what-you-did/")])), "sp-hero-board", "sp-hero-board"))
+    _m = dict((k, v) for _, k, v in MENU["sections"])
+    evidence_menu = [("Pasta", _m["pasta"][:4]), ("Parm & subs", _m["sandwiches"][:4]), ("Starters & wings", _m["starters"][:4])]
+    pages.append(("/evidence/", "Order Square Peg Pizzeria | Wood-Fired Pizza, Pasta & Subs",
+                  "Wood-fired pizza, pasta, parm subs and wings from Square Peg Pizzeria. Order online for pickup or delivery from ten locations in Connecticut and Delray Beach, FL.",
+                  "evidence", dict(sigs=SIGNATURES, menu_bits=evidence_menu),
+                  graph(breadcrumbs([("Home", "/"), ("Order", "/evidence/")])), "sp-hero-board", "sp-hero-board"))
     pages.append(("/sms-terms/", "SMS Terms | Square Peg Pizzeria", "Terms for the Square Peg Pizzeria text message program: frequency, costs, how to opt out, and support.",
                   "sms", dict(sms=SMS_TERMS), None, None, None))
     pages.append(("/thanks/", "Thank You | Square Peg Pizzeria", "Thanks for reaching out to Square Peg Pizzeria.", "simple",
@@ -2050,7 +2121,7 @@ def main():
             doc = external_new_tab(doc)
             if path == "/404.html":
                 doc = doc.replace('<meta name="description"', '<meta name="robots" content="noindex"><meta name="description"', 1)
-            if path in ("/thanks/", "/what-you-did/"):
+            if path in ("/thanks/", "/what-you-did/", "/evidence/"):
                 doc = doc.replace('<meta name="description"', '<meta name="robots" content="noindex"><meta name="description"', 1)
             dest = OUT / (path.lstrip("/") if path.endswith(".html") else path.lstrip("/") + "index.html")
             dest.parent.mkdir(parents=True, exist_ok=True)
@@ -2066,7 +2137,7 @@ def main():
             (OUT / "site.js").write_text(mini.stdout if mini.returncode == 0 and mini.stdout.strip() else js)
         except Exception:
             (OUT / "site.js").write_text(js)
-        write_extras([p for p in pages if p[0] not in ("/404.html", "/thanks/", "/what-you-did/")])
+        write_extras([p for p in pages if p[0] not in ("/404.html", "/thanks/", "/what-you-did/", "/evidence/")])
     if PREV.exists():
         shutil.rmtree(PREV)
     print(f"  pages: {len(rendered)} -> {OUT}")
