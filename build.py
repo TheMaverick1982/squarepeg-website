@@ -489,6 +489,15 @@ def ent_from(iso):
     return f'{["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"][d.month - 1]} {d.day}'
 
 
+_NUMS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+
+def _count(n):
+    """Small numbers read better spelled out in share-card copy."""
+    return _NUMS[n] if 0 <= n <= 10 else str(n)
+
+def _qty(n, one, many):
+    return f"{_count(n)} {one if n == 1 else many}"
+
 _MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
 _WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
@@ -2172,7 +2181,21 @@ def main():
                 l = extra["l"]; eyebrow = f"Wood-fired pizza · {l['city']}, {l['state']}"; sub = f"{l['street']}, {l['city']} · {l['phone']}"
             if path == "/":
                 head_txt, eyebrow, sub = "Pizza worth remembering.", "Wood-fired pizza · CT & Delray Beach", "10 locations · Order pickup or delivery"
+            if path == "/monthly-specials/":
+                y, mo, dy = LTO["ends"].split("-")
+                head_txt = f"{LTO['month']} Limited Time Menu"
+                eyebrow = f"Limited time · through {_MONTHS[int(mo) - 1]} {int(dy)}"
+                nf = sum(len(i) for _, i in LTO["sections"])
+                nd = len(LTO["cocktails"])
+                sub = _qty(nf, "dish", "dishes").capitalize()
+                if nd:
+                    sub += " and " + _qty(nd, "cocktail", "cocktails")
+                sub += f", only in {LTO['month']}."
             key = "home" if path == "/" else path.strip("/").replace("/", "-")
+            # Month-stamped so each month's card gets a fresh URL — Facebook and
+            # LinkedIn cache share images by URL and will not re-scrape the old one.
+            if path == "/monthly-specials/":
+                key += "-" + LTO["ends"][:7]
             og_url = make_og(key, og or "margherita-board", eyebrow, head_txt, sub)
             og_alt = head_txt if "Square Peg" in head_txt else f"{head_txt} | Square Peg Pizzeria"
         ctx.update(title=title, desc=desc, body=body, canonical=abs_url(path if path != "/404.html" else "/"),
