@@ -1005,6 +1005,7 @@ T["location"] = """
       <table class="hours"><caption class="sr-only">Opening hours for Square Peg Pizzeria {{ l.name }}</caption>
         <tbody>{% for d, name, v, kit in rows %}<tr data-day="{{ d }}"><th scope="row">{{ name }}</th><td>{{ v }}{% if kit %}<span class="kitchen-note">{{ kit }}</span>{% endif %}</td></tr>{% endfor %}</tbody></table>
       {% if specials %}<div class="special-hours" role="note"><h3>Holiday &amp; special hours</h3><ul>{% for iso, label, v in specials %}<li data-date="{{ iso }}"><span>{{ label }}</span><b>{{ v }}</b></li>{% endfor %}</ul></div>{% endif %}
+      {% if l.get('bar', True) %}<p class="hours-flag" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}" hidden><b>Hours extended during football games.</b> We stay open while the game is on.</p>{% endif %}
       <p class="note">{% if l.hours_note %}{{ l.hours_note }} {% endif %}{% if l.hours_source == 'google' %}Hours update daily from our Google listing, including holidays.{% else %}Holiday hours may vary.{% endif %} Online ordering shows live availability.</p>
     </div>
     <div class="map">

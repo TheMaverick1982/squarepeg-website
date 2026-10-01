@@ -772,6 +772,12 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .st-strip .eyebrow{color:var(--flame)}
 
 /* ---------- Happy hour bar on a location page ---------- */
+/* "open later for the game" note under a location's hours table; date-gated to
+   the football season in site.js, and skipped at Bolton (no bar). */
+.hours-flag{margin-top:14px;padding:11px 14px;border-left:4px solid var(--flame);background:rgba(214,27,36,.08);font-size:15px;line-height:1.45;border-radius:0 4px 4px 0}
+.hours-flag b{color:var(--flame)}
+.section--paper .hours-flag b{color:var(--ember-deep)}
+
 .hh-bar{background:var(--oven-2);border-top:1px solid var(--line-dark);color:#fff}
 .hh-bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-block:13px}
 .hh-tag{flex:none;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
