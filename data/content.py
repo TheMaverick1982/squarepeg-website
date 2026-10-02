@@ -99,7 +99,7 @@ LOCATIONS = [
         "lat": 41.790362, "lng": -72.594171, "geo_exact": True,  # US Census geocoder
         "hours": h(*(("11:00","22:00"),("11:00","20:30"),("11:00","20:30"),("11:00","22:00"),("11:00","20:30"),("07:00","20:30"),("07:00","22:00"))),
         "tag": "Breakfast on weekends",
-        "blurb": "East Hartford is home base: our commissary kitchen here makes the dough and sauce for every Connecticut Square Peg, fresh and never frozen. It’s also the one Peg serving breakfast, with omelettes and the Pegg & Cheese from 7am on weekends.",
+        "blurb": "East Hartford is the one Peg serving breakfast: omelettes and the Pegg & Cheese from 7am on weekends. The rest of the week it’s the full Square Peg — wood-fired pizza, handmade pasta, parm sandwiches and a bar — on Long Hill Street, an easy stop off Route 2 or the Charter Oak Bridge.",
         "nearby": ["Hartford", "Manchester", "South Windsor", "Wethersfield", "Glastonbury"],
         "same_as": ["https://www.yelp.com/biz/square-peg-pizzeria-east-hartford"],
         "photo": "dough",
