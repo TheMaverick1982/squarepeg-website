@@ -35,7 +35,9 @@ def reuse(path):
     if not REUSE:
         return False
     old = PREV / path.relative_to(OUT)
-    if not old.exists():
+    # A zero-byte file means the previous encode failed part way. Treat it as missing
+    # so the asset is rebuilt instead of being copied forward run after run.
+    if not old.exists() or old.stat().st_size == 0:
         return False
     path.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(old, path)
@@ -1864,9 +1866,9 @@ T["pizzafaq"] = """
 {% endfor %}
 
 <section class="section section--paper">
-  <div class="wrap" style="text-align:center">
+  <div class="wrap cta-foot">
     <h2>Still working out how much to order?</h2>
-    <div class="btn-row" style="justify-content:center">
+    <div class="btn-row">
       <a class="btn" href="{{ u('/pizza-calculator/') }}">Use the pizza calculator</a>
       <a class="btn btn--line" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="faq">{{ icons.bag|safe }}Order online</a>
     </div>
@@ -1904,10 +1906,10 @@ T["trivia"] = """
 </section>
 
 <section class="section section--dark on-dark">
-  <div class="wrap" style="text-align:center">
+  <div class="wrap cta-foot">
     <h2>Settle it over a pizza.</h2>
-    <p class="prose" style="margin-inline:auto">Bingo and trivia nights run at most of our locations &mdash; and yes, pizza questions come up.</p>
-    <div class="btn-row" style="justify-content:center">
+    <p class="prose">Bingo and trivia nights run at most of our locations &mdash; and yes, pizza questions come up.</p>
+    <div class="btn-row">
       <a class="btn" href="{{ u('/entertainment/') }}">See what&rsquo;s on</a>
       <a class="btn btn--ghost" href="{{ u('/what-pizza-are-you/') }}">What pizza are you?</a>
     </div>
@@ -1960,9 +1962,9 @@ T["datenight"] = """
 </section>
 
 <section class="section section--dark on-dark">
-  <div class="wrap" style="text-align:center">
+  <div class="wrap cta-foot">
     <h2>Pick a night.</h2>
-    <div class="btn-row dn-cta" style="justify-content:center">
+    <div class="btn-row">
       <a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a>
       <a class="btn btn--ghost" href="{{ u('/large-party-reservations/') }}">Bringing more than two?</a>
     </div>
@@ -1991,9 +1993,9 @@ T["quiz"] = """
 </section>
 
 <section class="section">
-  <div class="wrap" style="text-align:center">
+  <div class="wrap cta-foot">
     <h2>Or skip the quiz.</h2>
-    <div class="btn-row" style="justify-content:center">
+    <div class="btn-row">
       <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="quiz">{{ icons.bag|safe }}Order online</a>
       <a class="btn btn--line" href="{{ u('/our-menu/') }}">See the whole menu</a>
     </div>
@@ -2069,10 +2071,10 @@ T["calculator"] = """
 </section>
 
 <section class="section section--dark on-dark">
-  <div class="wrap" style="text-align:center">
+  <div class="wrap cta-foot">
     <h2>Got your number?</h2>
-    <p class="prose" style="margin-inline:auto">Order online for pickup or delivery, or book catering for {{ calc.catering_threshold }} or more.</p>
-    <div class="btn-row" style="justify-content:center">
+    <p class="prose">Order online for pickup or delivery, or book catering for {{ calc.catering_threshold }} or more.</p>
+    <div class="btn-row">
       <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="calculator-foot">{{ icons.bag|safe }}Order online</a>
       <a class="btn btn--ghost" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find a location</a>
     </div>
@@ -2141,10 +2143,10 @@ T["pairing"] = """
 </section>
 
 <section class="section section--paper">
-  <div class="wrap" style="text-align:center">
+  <div class="wrap cta-foot">
     <h2>Found your drink?</h2>
-    <p class="prose" style="margin-inline:auto">Everything on the bar is better with something out of the oven next to it.</p>
-    <div class="btn-row" style="justify-content:center">
+    <p class="prose">Everything on the bar is better with something out of the oven next to it.</p>
+    <div class="btn-row">
       <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="pairing">{{ icons.bag|safe }}Order online</a>
       <a class="btn btn--line" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find a table</a>
       <a class="btn btn--line" href="{{ u('/monthly-specials/') }}">This month&rsquo;s specials</a>
@@ -2809,7 +2811,7 @@ SAFE_CLASSES = {"open", "is-past", "menu-open", "is-open", "is-closed", "is-soon
                 "pick", "pick-name", "pick-addr", "pick-meta", "pick-call", "tonight-card", "note", "status", "btn", "btn--sm", "sp-embed", "today",
                 # injected by the quiz and the pizza calculator after load
                 "quiz-prog", "quiz-bar", "quiz-q", "quiz-opts", "quiz-opt", "quiz-back",
-                "quiz-result", "quiz-eyebrow", "quiz-pic", "btn--line", "btn-row", "dn-cta",
+                "quiz-result", "quiz-eyebrow", "quiz-pic", "btn--line", "btn-row",
                 "calc-answer", "calc-eyebrow", "calc-big", "calc-sub", "calc-detail", "calc-empty"}
 
 def split_rules(css):
