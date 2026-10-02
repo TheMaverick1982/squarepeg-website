@@ -206,6 +206,74 @@ LOCATIONS = [
     },
 ]
 
+# "Sal" — the pairing assistant. The widget is a third-party embed (same SDK as the
+# floating chat, different widget id), so the page suppresses the floating one to
+# avoid two instances of the SDK on one page. Everything below the widget is real
+# content: the page has to be worth landing on even if the widget fails to load.
+PAIRING = {
+    "widget_id": "ea5ec150-73e8-11f1-b4c7-6291690b83e2",
+    "lede": "Tell Sal what you\u2019re ordering, who\u2019s at the table, or just what kind of night "
+            "it is. You\u2019ll get a drink that actually fits \u2014 not a list of everything we pour.",
+    "asks": [
+        "What should I drink with a pepperoni pizza?",
+        "We\u2019re splitting a white pizza and wings \u2014 one bottle for the table?",
+        "Something that isn\u2019t beer, but isn\u2019t sweet either.",
+        "First date. Don\u2019t let me order wrong.",
+        "What goes with the fried eggplant?",
+        "I like bourbon. Build me a dinner around that.",
+    ],
+    "steps": [
+        ("Tell Sal what\u2019s on the table",
+         "A pizza, a pasta, a whole order for four. However you\u2019d say it out loud."),
+        ("Get a real recommendation",
+         "One or two options, with the reason behind them \u2014 not a wine list dumped on your lap."),
+        ("Order it",
+         "Bring the answer to your server, or start an order online and work from there."),
+    ],
+    # House pairings, written as guidance rather than specific bottles, because the
+    # list varies by location. Keep these honest — they are the SEO content here.
+    "classics": [
+        ("Pepperoni", "A hoppy IPA",
+         "Pepperoni renders out a lot of fat and a fair amount of heat. Hop bitterness scrubs the "
+         "fat off your palate between bites, so the last slice tastes like the first one did."),
+        ("Margherita", "A dry Italian red, or a dry ros\u00e9",
+         "A simple pie lives or dies on the tomato. You want acid to meet acid \u2014 a wine with "
+         "some bite keeps the sauce bright instead of flattening it out."),
+        ("A white pizza", "A crisp, unoaked white",
+         "No tomato means no acid on the plate, so the glass has to bring it. Something lean and "
+         "cold cuts through the cream and cheese rather than piling richness on richness."),
+        ("Anything with chili or hot honey", "An off-dry white, or a cold lager",
+         "A touch of sweetness takes the edge off capsaicin. High alcohol does the opposite \u2014 "
+         "it makes heat burn hotter, which is why a big red is the wrong move here."),
+        ("Wings", "A cold lager",
+         "Carbonation and cold are doing the work. You want something that resets your mouth and "
+         "gets out of the way, not a beer that competes with the sauce."),
+        ("Handmade pasta", "A medium-bodied red",
+         "Enough structure to stand next to a long-cooked sauce, enough acidity to keep a heavy "
+         "bowl from turning into a nap."),
+    ],
+}
+
+# The link-in-bio page. Ordered by what actually earns a tap from a social profile:
+# ordering first, then the thing being promoted right now, then the booking paths.
+# Keep this under about a dozen rows — a long list gets scrolled past, not read.
+# ("Label", "destination", "sub-label or empty", "accent" True for the primary rows)
+LINKS = [
+    ("Order Online", "ORDER", "Pickup or delivery from any location", True),
+    ("Find a Location", "/locations/", "Ten spots across CT and Delray Beach", False),
+    ("This Month\u2019s Specials", "/monthly-specials/", "The limited-time menu, gone at the end of the month", True),
+    ("Ask Sal: What Should I Drink?", "/pairing/", "Our pairing guide, free to use", False),
+    ("Deals & Rewards", "/deals/", "Join free and start with $5 off", True),
+    ("Gift Card Giveaway", "https://go.squarepegpizzeria.com/GC", "Enter this month\u2019s $50 drawing", False),
+    ("Ongoing Promotions", "/promotions/", "Pasta, wings, wine and happy hour", False),
+    ("Catering", "/catering/", "Office lunches, parties, game days", False),
+    ("Tuesday Night Fundraisers", "/fundraisers/", "20% back to your school, team or cause", False),
+    ("Large Party Reservations", "/large-party-reservations/", "Tables for eight or more", False),
+    ("Food Truck Rentals", "/food-truck/", "Wood-fired pizza at your event", False),
+    ("Gift Cards", "GIFT", "Send one in a minute", False),
+    ("We\u2019re Hiring", "/careers/", "Every location, every shift", False),
+]
+
 REGIONS = ["Greater Hartford", "Central CT", "Eastern CT", "Fairfield & New Haven", "Florida"]
 
 # Monthly member deal. Each entry is date-gated in the browser (Eastern time,

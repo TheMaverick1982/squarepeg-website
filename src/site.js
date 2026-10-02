@@ -240,6 +240,9 @@
   /* ---------- Chat widget: load after the page is idle so it never slows first paint ---------- */
   function loadChat() {
     if (!CFG.chatSrc || window.__spChat) return;
+    // The pairing page embeds its own widget from the same SDK. Running both would
+    // load the SDK twice on one page, so the embedded one wins there.
+    if (document.getElementById("embedded-widget-container")) return;
     window.__spChat = true;
     var s = document.createElement("script");
     s.src = CFG.chatSrc; s.defer = true;

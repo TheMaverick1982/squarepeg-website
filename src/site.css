@@ -778,6 +778,49 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hours-flag b{color:var(--flame)}
 .section--paper .hours-flag b{color:var(--ember-deep)}
 
+/* ---- pairing page ---- */
+.pair-widget{border:1px solid var(--line);border-radius:6px;background:var(--white);overflow:hidden}
+.pair-note{margin-top:14px;text-align:center}
+.pair-asks{display:grid;gap:12px;grid-template-columns:1fr;margin-top:8px}
+@media (min-width:700px){.pair-asks{grid-template-columns:1fr 1fr}}
+.pair-asks li{list-style:none;padding:15px 18px;border:1px solid var(--line-dark);border-left:4px solid var(--flame);background:rgba(255,255,255,.05);font-size:17px;line-height:1.45}
+.section--paper .pair-asks li{background:var(--white);border-color:var(--line);border-left-color:var(--ember)}
+.pair-grid{display:grid;gap:20px;grid-template-columns:1fr;margin-top:10px}
+@media (min-width:760px){.pair-grid{grid-template-columns:1fr 1fr}}
+@media (min-width:1100px){.pair-grid{grid-template-columns:repeat(3,1fr)}}
+.pair-card{background:var(--white);border:1px solid var(--line);border-top:5px solid var(--ember);padding:clamp(20px,2.6vw,28px)}
+.pair-card h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(24px,3vw,30px);line-height:1}
+.pair-drink{display:block;margin-top:8px;font-weight:800;font-size:17px;color:var(--ember-deep)}
+.pair-card p{margin-top:12px;font-size:16px;line-height:1.55}
+.pair-steps{counter-reset:s;display:grid;gap:18px;grid-template-columns:1fr;margin-top:10px}
+@media (min-width:860px){.pair-steps{grid-template-columns:repeat(3,1fr)}}
+.pair-steps li{list-style:none;counter-increment:s;padding-top:16px;border-top:3px solid var(--flame)}
+.pair-steps li::before{content:counter(s);display:block;font-family:var(--display);font-weight:900;font-size:40px;line-height:1;color:var(--flame)}
+.pair-steps b{display:block;margin-top:10px;font-size:19px}
+.pair-steps span{display:block;margin-top:8px;color:#d9d2cc;font-size:16px;line-height:1.55}
+
+/* ---- link-in-bio page ---- */
+.linkpage{background:var(--oven);color:#fff;min-height:100vh;padding:clamp(34px,7vw,70px) 0 60px}
+.linkpage .wrap{max-width:620px}
+.link-logo{display:block;width:clamp(200px,52vw,260px);margin:0 auto}
+.link-logo img{width:100%;height:auto;display:block}
+.link-lede{margin-top:20px;text-align:center;color:#cfc7c1;font-size:16px;line-height:1.6}
+.link-list{list-style:none;margin:clamp(26px,4vw,38px) 0 0;padding:0;display:grid;gap:12px}
+.link-row{display:grid;grid-template-columns:1fr 26px;align-items:center;column-gap:14px;row-gap:0;padding:17px 20px;background:rgba(255,255,255,.06);border:1px solid var(--line-dark);border-radius:6px;text-decoration:none;color:#fff;transition:background .14s ease,border-color .14s ease,transform .14s ease}
+.link-row:hover,.link-row:focus-visible{background:rgba(255,255,255,.12);border-color:#5d534d;transform:translateY(-1px)}
+.link-row.is-hot{background:var(--ember);border-color:var(--ember)}
+.link-row.is-hot:hover,.link-row.is-hot:focus-visible{background:var(--flame);border-color:var(--flame)}
+.link-row>*{grid-column:1}
+.link-label{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(20px,3.6vw,25px);line-height:1.05;letter-spacing:.01em}
+.link-sub{grid-column:1;font-size:14px;line-height:1.4;color:#c9c1bb;margin-top:4px}
+.link-row.is-hot .link-sub{color:rgba(255,255,255,.85)}
+.link-arrow{grid-column:2!important;grid-row:1/3;align-self:center;display:flex;opacity:.65}
+.link-arrow svg{width:22px;height:22px}
+.link-social{margin-top:30px;display:flex;justify-content:center;gap:22px;flex-wrap:wrap}
+.link-social a{color:#cfc7c1;font-weight:700;font-size:15px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.25);padding-bottom:2px}
+.link-social a:hover{color:#fff;border-bottom-color:#fff}
+.link-foot{margin-top:26px;text-align:center;color:#8d847e;font-size:13px;letter-spacing:.04em}
+
 .hh-bar{background:var(--oven-2);border-top:1px solid var(--line-dark);color:#fff}
 .hh-bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-block:13px}
 .hh-tag{flex:none;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;

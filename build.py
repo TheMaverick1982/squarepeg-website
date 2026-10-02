@@ -17,7 +17,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO  # noqa
+from content import DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -464,13 +464,13 @@ ICONS = {
 
 NAV = [("Menu", "MENU"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Catering", "/catering/"),
        ("Entertainment", "/entertainment/")]
-MORE = [("LTO Menu", "/monthly-specials/"), ("Large Parties", "/large-party-reservations/"),
+MORE = [("LTO Menu", "/monthly-specials/"), ("Pairing Guide", "/pairing/"), ("Large Parties", "/large-party-reservations/"),
         ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/"),
         ("Rewards & Monthly Deals", "/deals/"), ("Gift Cards", "GIFT"), ("Roll the Dice", "/roll-the-dice/"),
         ("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]
 DRAWER_EXTRA = []
 DRAWER_GROUPS = [
-    ("Eat", [("Menu", "MENU"), ("LTO Menu", "/monthly-specials/"), ("What’s on the Menu", "/our-menu/"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
+    ("Eat", [("Menu", "MENU"), ("LTO Menu", "/monthly-specials/"), ("Pairing Guide", "/pairing/"), ("What’s on the Menu", "/our-menu/"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
     ("Plan", [("Catering", "/catering/"), ("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
     ("Fun", [("Entertainment", "/entertainment/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
@@ -663,9 +663,9 @@ T["page"] = """{% if not preview %}<!doctype html>
 {% endif %}{% include "head" %}{% if not preview %}
 {{ analytics|safe }}
 </head><body>{% endif %}
-{% include "header" %}
+{% if not bare %}{% include "header" %}{% endif %}
 <main id="main">{{ body|safe }}</main>
-{% include "footer" %}
+{% if not bare %}{% include "footer" %}{% endif %}
 {% if not preview %}<script src="/site.js?v={{ jsv }}" defer></script>
 </body></html>{% endif %}"""
 
@@ -1782,6 +1782,97 @@ T["evidence"] = """
 </section>
 """
 
+T["links"] = """
+<section class="linkpage">
+  <div class="wrap">
+    <a class="link-logo" href="{{ u('/') }}" aria-label="Square Peg Pizzeria home">
+      <img src="{{ imgbase }}logo-on-dark-280.webp" srcset="{{ imgbase }}logo-on-dark-280.webp 280w, {{ imgbase }}logo-on-dark-480.webp 480w" sizes="260px" width="280" height="{{ (280 * logo_ratio)|round|int }}" alt="Square Peg Pizzeria">
+    </a>
+    <p class="link-lede">Wood-fired pizza, ten locations, dough made from scratch every morning.<br>Everything you might be looking for is right here.</p>
+
+    <ul class="link-list">{% for label, dest, sub, hot in links_rows %}
+      <li><a class="link-row{{ ' is-hot' if hot }}"
+             href="{% if dest == 'ORDER' %}{{ site.order_picker_toast }}{% elif dest == 'GIFT' %}{{ site.gift_cards_url }}{% elif dest.startswith('http') %}{{ dest }}{% else %}{{ u(dest) }}{% endif %}"
+             {% if dest in ('ORDER', 'GIFT') or dest.startswith('http') %}rel="noopener"{{ ext|safe }}{% endif %}
+             data-track="link_click" data-src="{{ label|lower|replace(' ', '-') }}">
+        <span class="link-label">{{ label }}</span>
+        {% if sub %}<span class="link-sub">{{ sub }}</span>{% endif %}
+        <span class="link-arrow" aria-hidden="true">{{ icons.arrow|safe }}</span>
+      </a></li>{% endfor %}
+    </ul>
+
+    <div class="link-social">
+      <a href="{{ site.facebook }}" rel="noopener"{{ ext|safe }}>Facebook</a>
+      <a href="{{ site.instagram }}" rel="noopener"{{ ext|safe }}>Instagram</a>
+      <a href="{{ u('/contact/') }}">Contact</a>
+    </div>
+    <p class="link-foot">Be Nice. &mdash; Square Peg Pizzeria</p>
+  </div>
+</section>
+"""
+
+T["pairing"] = """
+<section class="page-head on-dark">
+  {{ img('pie-spicy-margherita', 'A Square Peg pizza fresh from the wood-fired oven', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Pairing guide</span></nav>
+    <span class="eyebrow">Ask Sal</span>
+    <h1>What should I<br>drink with this?</h1>
+    <p class="lede">{{ pairing.lede }}</p>
+  </div>
+</section>
+
+<section class="section section--paper pair-wrap">
+  <div class="wrap">
+    <div id="embedded-widget-container" class="pair-widget" style="height:600px;width:100%;margin:0 auto"></div>
+    <noscript><p class="note">Sal needs JavaScript to run. The pairings below work either way &mdash; or just ask your server, they know.</p></noscript>
+    <p class="note pair-note">Sal is an assistant, not a sommelier with a tasting note for every bottle. Pours vary by location; your server has the current list.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Try asking</span><h2>However you&rsquo;d say it out loud</h2></div>
+    <ul class="pair-asks">{% for a in pairing.asks %}<li>{{ a }}</li>{% endfor %}</ul>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">House rules</span><h2>Six pairings we stand behind</h2></div>
+    <p class="prose">You don&rsquo;t need an app to get these right. This is most of what we&rsquo;d tell you at the table anyway.</p>
+    <div class="pair-grid">{% for dish, drink, why in pairing.classics %}
+      <article class="pair-card">
+        <h3>{{ dish }}</h3>
+        <b class="pair-drink">{{ drink }}</b>
+        <p>{{ why }}</p>
+      </article>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark on-dark">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">How it works</span><h2>Three steps, no account</h2></div>
+    <ol class="pair-steps">{% for t, d in pairing.steps %}<li><b>{{ t }}</b><span>{{ d }}</span></li>{% endfor %}</ol>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap" style="text-align:center">
+    <h2>Found your drink?</h2>
+    <p class="prose" style="margin-inline:auto">Everything on the bar is better with something out of the oven next to it.</p>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="pairing">{{ icons.bag|safe }}Order online</a>
+      <a class="btn btn--line" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find a table</a>
+      <a class="btn btn--line" href="{{ u('/monthly-specials/') }}">This month&rsquo;s specials</a>
+    </div>
+  </div>
+</section>
+
+<script src="{{ site.chat_src }}" data-widget-id="{{ pairing.widget_id }}" data-embed-mode="embedded" data-embed-target="embedded-widget-container" defer></script>
+"""
+
 T["lto"] = """
 <section class="page-head on-dark lto-head">
   {{ img(lto.sections[2][1][0][2], lto.sections[2][1][0][0] ~ ' pizza at Square Peg Pizzeria', eager=True, cls='bg')|safe }}
@@ -2056,7 +2147,7 @@ def main():
 
     base_ctx = dict(
         u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
-        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, deals=DEALS, points=POINTS, perks=APP_PERKS,
+        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and,
@@ -2148,6 +2239,13 @@ def main():
                   "Wood-fired pizza, pasta, parm subs and wings from Square Peg Pizzeria. Order online for pickup or delivery from ten locations in Connecticut and Delray Beach, FL.",
                   "evidence", dict(sigs=SIGNATURES, menu_bits=evidence_menu),
                   graph(breadcrumbs([("Home", "/"), ("Order", "/evidence/")])), "sp-three-pies", "sp-three-pies"))
+    pages.append(("/links/", "Square Peg Pizzeria | All Our Links",
+                  "Order online, find a location, see this month's specials, book catering or a fundraiser, and join the Square Peg Pizzeria rewards app.",
+                  "links", {}, "", "margherita-board", "margherita-board"))
+    pages.append(("/pairing/", "What to Drink With Pizza | Ask Sal | Square Peg Pizzeria",
+                  "Tell Sal what you're ordering and get a drink that actually fits. Plus six pizza and drink pairings worth knowing, from the team at Square Peg Pizzeria.",
+                  "pairing", {}, graph(breadcrumbs([("Home", "/"), ("Pairing guide", "/pairing/")])),
+                  "pie-spicy-margherita", "pie-spicy-margherita"))
     pages.append(("/monthly-specials/", f"{LTO['month']} Specials | Square Peg Pizzeria",
                   f"Square Peg Pizzeria's {LTO['month']} {LTO['year']} limited-time menu: new pizzas, starters, dessert and seasonal cocktails. Order online or dine in at ten locations.",
                   "lto", dict(lto=LTO), graph(breadcrumbs([("Home", "/"), ("Monthly specials", "/monthly-specials/")])),
@@ -2199,7 +2297,7 @@ def main():
                 key += "-" + LTO["ends"][:7]
             og_url = make_og(key, og or "margherita-board", eyebrow, head_txt, sub)
             og_alt = head_txt if "Square Peg" in head_txt else f"{head_txt} | Square Peg Pizzeria"
-        ctx.update(title=title, desc=desc, body=body, canonical=abs_url(path if path != "/404.html" else "/"),
+        ctx.update(bare=(path == "/links/"), title=title, desc=desc, body=body, canonical=abs_url(path if path != "/404.html" else "/"),
                    og_image=og_url, og_alt=og_alt, schema=ld(schema) if schema else "",
                    preload_tag="")
         if path == "/" and not PREVIEW and IMG_META.get("margherita-board") and IMG_META.get("oven-fire"):
@@ -2217,7 +2315,7 @@ def main():
             doc = external_new_tab(doc)
             if path == "/404.html":
                 doc = doc.replace('<meta name="description"', '<meta name="robots" content="noindex"><meta name="description"', 1)
-            if path in ("/thanks/", "/what-you-did/", "/evidence/"):
+            if path in ("/thanks/", "/what-you-did/", "/evidence/", "/links/"):
                 doc = doc.replace('<meta name="description"', '<meta name="robots" content="noindex"><meta name="description"', 1)
             dest = OUT / (path.lstrip("/") if path.endswith(".html") else path.lstrip("/") + "index.html")
             dest.parent.mkdir(parents=True, exist_ok=True)
@@ -2233,7 +2331,7 @@ def main():
             (OUT / "site.js").write_text(mini.stdout if mini.returncode == 0 and mini.stdout.strip() else js)
         except Exception:
             (OUT / "site.js").write_text(js)
-        write_extras([p for p in pages if p[0] not in ("/404.html", "/thanks/", "/what-you-did/", "/evidence/")])
+        write_extras([p for p in pages if p[0] not in ("/404.html", "/thanks/", "/what-you-did/", "/evidence/", "/links/")])
     if PREV.exists():
         shutil.rmtree(PREV)
     print(f"  pages: {len(rendered)} -> {OUT}")
