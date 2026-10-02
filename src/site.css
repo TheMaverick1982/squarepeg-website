@@ -778,6 +778,35 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hours-flag b{color:var(--flame)}
 .section--paper .hours-flag b{color:var(--ember-deep)}
 
+/* ---- pizza calculator ---- */
+.calc{background:var(--white);border:1px solid var(--line);border-top:5px solid var(--ember);padding:clamp(20px,3vw,30px)}
+.calc-grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:700px){.calc-grid{grid-template-columns:1fr 1fr 1.4fr}}
+.calc-f{display:flex;flex-direction:column;gap:7px}
+.calc-f>span{font-weight:800;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--smoke)}
+.calc-f input,.calc-f select{font:inherit;font-size:19px;font-weight:700;padding:12px 14px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);width:100%}
+.calc-f input:focus,.calc-f select:focus{outline:3px solid var(--ember);outline-offset:-1px}
+.calc-check{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:16px;cursor:pointer}
+.calc-check input{width:20px;height:20px;accent-color:var(--ember);flex:none}
+.calc-out{display:block;margin-top:18px}
+.calc-answer{background:var(--oven);color:#fff;padding:clamp(22px,3vw,30px);text-align:center;border-radius:4px}
+.calc-eyebrow{display:block;font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--flame)}
+.calc-big{display:block;margin-top:8px;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(34px,6vw,62px);line-height:1}
+.calc-sub{display:block;margin-top:10px;color:#cfc7c1;font-size:17px}
+.calc-detail{margin-top:14px;font-size:16px;line-height:1.55;color:var(--smoke)}
+.calc-detail a{color:var(--ember-deep);font-weight:700}
+.calc-empty{margin-top:14px;color:var(--smoke)}
+.calc-cta{margin-top:22px}
+.calc-table{border:1px solid var(--line-dark);margin-top:6px}
+.calc-row{display:grid;grid-template-columns:2fr 1fr 1.6fr;gap:12px;padding:14px 16px;align-items:center}
+.calc-row+.calc-row{border-top:1px solid var(--line-dark)}
+.calc-head{font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#9d948c}
+.calc-notes{display:grid;gap:20px;grid-template-columns:1fr;margin-top:6px}
+@media (min-width:760px){.calc-notes{grid-template-columns:1fr 1fr}}
+.calc-notes article{background:var(--white);border:1px solid var(--line);border-left:5px solid var(--ember);padding:clamp(18px,2.4vw,26px)}
+.calc-notes h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(21px,2.6vw,26px);line-height:1.05}
+.calc-notes p{margin-top:10px;font-size:16px;line-height:1.55}
+
 /* ---- pairing page ---- */
 .pair-intro{display:grid;gap:clamp(18px,3vw,34px);grid-template-columns:1fr;align-items:center;margin-bottom:clamp(22px,3vw,30px)}
 @media (min-width:820px){.pair-intro{grid-template-columns:300px 1fr}}

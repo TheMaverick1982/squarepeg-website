@@ -17,7 +17,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS  # noqa
+from content import DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -372,6 +372,11 @@ def preload(name, sizes="100vw"):
 # ---------------------------------------------------------------- schema
 def ld(obj):
     return '<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False, separators=(",", ":")) + "</script>"
+
+def ld_raw(obj):
+    """JSON for a page to read at runtime (not schema). Escaped so a '<' in the data
+    can't close the script tag early."""
+    return json.dumps(obj, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
 
 ORG_ID = abs_url("/#org")
 
@@ -1811,6 +1816,87 @@ T["links"] = """
 </section>
 """
 
+T["calculator"] = """
+<section class="page-head on-dark">
+  {{ img('pizza-boxes', 'Stacked Square Peg pizza boxes', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Pizza calculator</span></nav>
+    <span class="eyebrow">Stop guessing</span>
+    <h1>How many pizzas<br>do I need?</h1>
+    <p class="lede">Tell us who&rsquo;s eating. We&rsquo;ll tell you what to order &mdash; based on how much pizza is actually on the pie, not a flat slices-per-person rule.</p>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <form class="calc" id="pizza-calc" novalidate>
+      <div class="calc-grid">
+        <label class="calc-f"><span>Adults</span>
+          <input type="number" id="calc-adults" min="0" max="400" step="1" value="4" inputmode="numeric"></label>
+        <label class="calc-f"><span>Kids</span>
+          <input type="number" id="calc-kids" min="0" max="400" step="1" value="0" inputmode="numeric"></label>
+        <label class="calc-f"><span>Appetite</span>
+          <select id="calc-appetite">{% for key, label, area in calc.appetites %}<option value="{{ area }}"{{ ' selected' if key == 'normal' }}>{{ label }}</option>{% endfor %}</select></label>
+      </div>
+      <label class="calc-check"><input type="checkbox" id="calc-sides"><span>We&rsquo;re also getting appetizers, wings or salads</span></label>
+    </form>
+
+    {#- A real answer for the default inputs, so the page works without JS and so the
+        answer styles are in the stylesheet the page inlines. JS replaces it on input. -#}
+    {% set need = 4 * calc.appetites[1][2] %}
+    {% set larges = (need / calc.sizes[0][3])|round(0, 'ceil')|int %}
+    <output class="calc-out" id="calc-out" for="pizza-calc" aria-live="polite">
+      <div class="calc-answer"><span class="calc-eyebrow">Order about</span>
+        <b class="calc-big">{{ larges }} large pizza{{ '' if larges == 1 else 's' }}</b>
+        <span class="calc-sub">{{ larges * calc.sizes[0][2] }} slices for 4 people</span></div>
+      <p class="calc-detail">Tighter option: <b>{{ larges - 1 }} large + 1 small</b>.</p>
+    </output>
+
+    <div class="btn-row calc-cta">
+      <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="calculator">{{ icons.bag|safe }}Order online</a>
+      <a class="btn btn--line" href="{{ u('/catering/') }}">Feeding a crowd? See catering</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">The sizes</span><h2>What you&rsquo;re actually ordering</h2></div>
+    <div class="calc-table" role="table" aria-label="Pizza sizes and slice counts">
+      <div class="calc-row calc-head" role="row"><span role="columnheader">Size</span><span role="columnheader">Slices</span><span role="columnheader">Feeds</span></div>
+      {% for label, dim, slices, area in calc.sizes %}<div class="calc-row" role="row">
+        <span role="cell"><b>{{ label }}</b></span>
+        <span role="cell">{{ slices }}</span>
+        <span role="cell">{{ (area / 70)|round(1) }}&ndash;{{ (area / 48)|round(1) }} adults</span>
+      </div>{% endfor %}
+    </div>
+    <p class="note" style="margin-top:16px">Feeds assumes pizza is the whole meal. With appetizers on the table, each pie stretches about 20% further.</p>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Worth knowing</span><h2>Four things that change the answer</h2></div>
+    <div class="calc-notes">{% for head, body in calc.notes %}
+      <article><h3>{{ head }}</h3><p>{{ body }}</p></article>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark on-dark">
+  <div class="wrap" style="text-align:center">
+    <h2>Got your number?</h2>
+    <p class="prose" style="margin-inline:auto">Order online for pickup or delivery, or book catering for {{ calc.catering_threshold }} or more.</p>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="calculator-foot">{{ icons.bag|safe }}Order online</a>
+      <a class="btn btn--ghost" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find a location</a>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="calc-cfg">{{ calc_json|safe }}</script>
+"""
+
 T["pairing"] = """
 <section class="page-head on-dark">
   {{ img('pie-spicy-margherita', 'A Square Peg pizza fresh from the wood-fired oven', eager=True, cls='bg')|safe }}
@@ -2158,7 +2244,7 @@ def main():
 
     base_ctx = dict(
         u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
-        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, points=POINTS, perks=APP_PERKS,
+        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, calc=CALC, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and,
@@ -2253,6 +2339,10 @@ def main():
     pages.append(("/links/", "Square Peg Pizzeria | All Our Links",
                   "Order online, find a location, see this month's specials, book catering or a fundraiser, and join the Square Peg Pizzeria rewards app.",
                   "links", {}, "", "margherita-board", "margherita-board"))
+    pages.append(("/pizza-calculator/", "Pizza Calculator: How Many Pizzas Do I Need? | Square Peg Pizzeria",
+                  "How many pizzas for your party? Enter adults and kids and get the answer, based on how much pizza is actually on a 12-inch and an 18-inch pie. From Square Peg Pizzeria.",
+                  "calculator", dict(calc_json=ld_raw(CALC)), graph(breadcrumbs([("Home", "/"), ("Pizza calculator", "/pizza-calculator/")])),
+                  "pizza-boxes", "pizza-boxes"))
     pages.append(("/pairing/", "What to Drink With Pizza | Ask Sal | Square Peg Pizzeria",
                   "Tell Sal what you're ordering and get a drink that actually fits. Plus six pizza and drink pairings worth knowing, from the team at Square Peg Pizzeria.",
                   "pairing", {}, graph(breadcrumbs([("Home", "/"), ("Pairing guide", "/pairing/")])),

@@ -237,6 +237,71 @@
     });
   }
 
+  /* ---------- Pizza calculator ---------- */
+  (function () {
+    var form = document.getElementById("pizza-calc");
+    var cfgEl = document.getElementById("calc-cfg");
+    var out = document.getElementById("calc-out");
+    if (!form || !cfgEl || !out) return;
+    var C;
+    try { C = JSON.parse(cfgEl.textContent); } catch (e) { return; }
+
+    var big = C.sizes[0];                       // 18" large round: [label, dim, slices, area]
+    var small = C.sizes[1];
+
+    function num(id, max) {
+      var v = parseInt(document.getElementById(id).value, 10);
+      if (isNaN(v) || v < 0) v = 0;
+      return Math.min(v, max);
+    }
+
+    function plural(n, word) { return n + " " + word + (n === 1 ? "" : "s"); }
+
+    function paint() {
+      var adults = num("calc-adults", 400);
+      var kids = num("calc-kids", 400);
+      var area = parseInt(document.getElementById("calc-appetite").value, 10) || 70;
+      var sides = document.getElementById("calc-sides").checked;
+
+      if (adults + kids === 0) {
+        out.innerHTML = '<p class="calc-empty">Add at least one person and we\u2019ll do the maths.</p>';
+        return;
+      }
+
+      var need = adults * area + kids * C.kid_area;
+      if (sides) need *= C.sides_discount;
+
+      var larges = Math.ceil(need / big[3]);
+      // If one small round covers the remainder, that's less pizza and less money.
+      var alt = "";
+      var remainder = need - (larges - 1) * big[3];
+      if (larges > 0 && remainder > 0 && remainder <= small[3]) {
+        alt = (larges - 1 > 0 ? plural(larges - 1, "large") + " + 1 small" : "1 small round");
+      }
+
+      var slices = larges * big[2];
+      var people = adults + kids;
+
+      var html = '<div class="calc-answer"><span class="calc-eyebrow">Order about</span>' +
+        '<b class="calc-big">' + plural(larges, "large pizza") + '</b>' +
+        '<span class="calc-sub">' + slices + ' slices for ' + plural(people, "person").replace("persons", "people") + '</span></div>';
+
+      var bits = [];
+      if (alt) bits.push("Tighter option: <b>" + alt + "</b>.");
+      if (sides) bits.push("Trimmed for the appetizers and salads.");
+      if (people >= C.catering_threshold) {
+        bits.push('At ' + people + ' people, <a href="/catering/">catering</a> is usually cheaper and arrives hot together.');
+      }
+      if (bits.length) html += '<p class="calc-detail">' + bits.join(" ") + '</p>';
+      out.innerHTML = html;
+    }
+
+    form.addEventListener("input", paint);
+    form.addEventListener("change", paint);
+    form.addEventListener("submit", function (e) { e.preventDefault(); });
+    paint();
+  })();
+
   /* ---------- Chat widget: load after the page is idle so it never slows first paint ---------- */
   function loadChat() {
     if (!CFG.chatSrc || window.__spChat) return;

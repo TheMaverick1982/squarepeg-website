@@ -274,6 +274,39 @@ LINKS = [
     ("We\u2019re Hiring", "/careers/", "Every location, every shift", False),
 ]
 
+# Pizza calculator. Sizes and slice counts come from MENU["pizza_styles"] — keep them
+# in step. The maths is area-based rather than a flat "3 slices each" rule, because an
+# 18" slice is roughly 1.7x the area of a 12" slice and a flat rule badly under-orders
+# for big pies. Appetite values are in square inches of pizza per person.
+CALC = {
+    "sizes": [
+        # label, diameter/description, slices, area in square inches
+        ("18\u2033 large round", "18\u2033", 8, 254),
+        ("12\u2033 small round", "12\u2033", 6, 113),
+        ("Detroit-style pan", "10\u00d714\u2033", 6, 140),
+    ],
+    "appetites": [
+        ("light", "Light \u2014 a slice or two", 48),
+        ("normal", "Normal \u2014 most people", 70),
+        ("hearty", "Hearty \u2014 teenagers, game day", 95),
+    ],
+    "kid_area": 36,          # a child eats roughly half an adult portion
+    "sides_discount": 0.80,  # apps, salads and wings take ~20% off the pizza needed
+    "catering_threshold": 20,
+    "notes": [
+        ("Rounds come two ways", "A 12\u2033 round cuts into 6 slices, an 18\u2033 into 8. The large isn\u2019t "
+         "just two more slices \u2014 it\u2019s more than twice the pizza, because area grows with the square "
+         "of the diameter."),
+        ("Detroit sits in between", "The 10\u00d714\u2033 pan is 6 thick, crispy-edged squares. It eats heavier "
+         "than a round of the same area, so it goes further than the numbers suggest. Available at every "
+         "location except Bolton."),
+        ("Order one more than feels right", "Leftover pizza is a feature. Running out in front of your "
+         "guests is not, and a second round of ordering adds half an hour to the night."),
+        ("Mixed crowds round up", "Kids eat about half an adult portion, but they also eat unpredictably. "
+         "If the split is close, take the larger number."),
+    ],
+}
+
 REGIONS = ["Greater Hartford", "Central CT", "Eastern CT", "Fairfield & New Haven", "Florida"]
 
 # Monthly member deal. Each entry is date-gated in the browser (Eastern time,
