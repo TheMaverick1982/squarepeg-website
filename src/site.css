@@ -779,6 +779,17 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .section--paper .hours-flag b{color:var(--ember-deep)}
 
 /* ---- pairing page ---- */
+.pair-intro{display:grid;gap:clamp(18px,3vw,34px);grid-template-columns:1fr;align-items:center;margin-bottom:clamp(22px,3vw,30px)}
+@media (min-width:820px){.pair-intro{grid-template-columns:300px 1fr}}
+.pair-sal{margin:0;line-height:0}
+.pair-sal img{width:150px;max-width:100%;height:auto;border-radius:6px;display:block;background:var(--oven)}
+@media (min-width:820px){.pair-sal img{width:300px}}
+.pair-intro-copy h2{font-size:clamp(30px,4.4vw,46px);line-height:1.02;margin-top:6px}
+.pair-intro-copy .prose{margin-top:12px}
+.pair-cue{display:flex;align-items:center;gap:10px;margin-top:18px;font-weight:800;font-size:17px;color:var(--ember-deep);text-transform:uppercase;letter-spacing:.04em}
+.pair-cue svg{width:26px;height:26px;color:var(--ember);animation:pair-nudge 1.9s ease-in-out infinite}
+@keyframes pair-nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@media (prefers-reduced-motion:reduce){.pair-cue svg{animation:none}}
 .pair-widget{border:1px solid var(--line);border-radius:6px;background:var(--white);overflow:hidden}
 .pair-note{margin-top:14px;text-align:center}
 .pair-asks{display:grid;gap:12px;grid-template-columns:1fr;margin-top:8px}

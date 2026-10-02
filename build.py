@@ -1824,6 +1824,17 @@ T["pairing"] = """
 
 <section class="section section--paper pair-wrap">
   <div class="wrap">
+    <div class="pair-intro">
+      <figure class="pair-sal">{{ img('sal-pairing-guide', 'Sal, the Square Peg Pizzeria pairing guide', sizes='(min-width:900px) 300px, 150px')|safe }}</figure>
+      <div class="pair-intro-copy">
+        <span class="eyebrow">Meet Sal</span>
+        <h2>He knows what goes with what.</h2>
+        <p class="prose">No account, no app, no waiting on a sommelier. Tell him what you&rsquo;re eating and he&rsquo;ll tell you what to drink &mdash; and why that one.</p>
+        <p class="pair-cue"><span>Ask him right here</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4v14m0 0l-6-6m6 6l6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </p>
+      </div>
+    </div>
     <div id="embedded-widget-container" class="pair-widget" style="height:600px;width:100%;margin:0 auto"></div>
     <noscript><p class="note">Sal needs JavaScript to run. The pairings below work either way &mdash; or just ask your server, they know.</p></noscript>
     <p class="note pair-note">Sal is an assistant, not a sommelier with a tasting note for every bottle. Pours vary by location; your server has the current list.</p>
