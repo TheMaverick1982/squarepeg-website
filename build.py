@@ -469,10 +469,22 @@ ICONS = {
 
 NAV = [("Menu", "MENU"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Catering", "/catering/"),
        ("Entertainment", "/entertainment/")]
-MORE = [("LTO Menu", "/monthly-specials/"), ("Pairing Guide", "/pairing/"), ("Pizza Calculator", "/pizza-calculator/"), ("Pizza FAQ", "/pizza-faq/"), ("Date Night", "/date-night/"), ("Large Parties", "/large-party-reservations/"),
-        ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/"),
-        ("Rewards & Monthly Deals", "/deals/"), ("Gift Cards", "GIFT"), ("Roll the Dice", "/roll-the-dice/"),
-        ("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]
+# The desktop "More" dropdown, grouped into columns. A flat list of eighteen links is
+# a wall; the grouping mirrors the mobile drawer so the site reads the same either way.
+# Game Day is injected into "Fun" by the template because it is season-gated.
+MORE_GROUPS = [
+    ("Eat", [("LTO Menu", "/monthly-specials/"), ("What\u2019s on the Menu", "/our-menu/"),
+             ("Pairing Guide", "/pairing/"), ("Rewards & Monthly Deals", "/deals/")]),
+    ("Plan", [("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"),
+              ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
+    ("Fun", [("Roll the Dice", "/roll-the-dice/"), ("Date Night", "/date-night/"),
+             ("What Pizza Are You?", "/what-pizza-are-you/"), ("Pizza Trivia", "/pizza-trivia/")]),
+    ("Helpful", [("Pizza Calculator", "/pizza-calculator/"), ("Pizza FAQ", "/pizza-faq/"),
+                 ("Gift Cards", "GIFT")]),
+    ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
+]
+# Flat list kept for anything that still wants every "more" destination in one go.
+MORE = [item for _, items in MORE_GROUPS for item in items]
 DRAWER_EXTRA = []
 DRAWER_GROUPS = [
     ("Eat", [("Menu", "MENU"), ("LTO Menu", "/monthly-specials/"), ("Pairing Guide", "/pairing/"), ("What’s on the Menu", "/our-menu/"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
@@ -572,7 +584,11 @@ T["header"] = """<a class="skip" href="#main">Skip to content</a>
       <img src="{{ imgbase }}logo-on-dark-280.webp" srcset="{{ imgbase }}logo-on-dark-160.webp 160w, {{ imgbase }}logo-on-dark-280.webp 280w, {{ imgbase }}logo-on-dark-480.webp 480w" sizes="(min-width:980px) 153px, 135px" width="160" height="{{ (160 * logo_ratio)|round|int }}" alt="Square Peg Pizzeria">
     </a>
     <nav class="nav" aria-label="Main">{% for n, p in nav %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
-      <details class="more"><summary>More</summary><div class="more-menu"><a class="nav-gd" href="{{ u('/game-day/') }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}"{% if path == '/game-day/' %} aria-current="page"{% endif %}>Game Day</a>{% for n, p in more %}{% if p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}</div></details></nav>
+      <details class="more"><summary>More</summary><div class="more-menu more-mega">{% for group, items in more_groups %}<div class="more-col">
+        <span class="more-h">{{ group }}</span>
+        {% if group == 'Fun' %}<a class="nav-gd" href="{{ u('/game-day/') }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}"{% if path == '/game-day/' %} aria-current="page"{% endif %}>Game Day</a>{% endif %}
+        {% for n, p in items %}{% if p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
+      </div>{% endfor %}</div></details></nav>
     <details class="more signin"><summary>Sign in</summary><div class="more-menu more-menu--right">
       <a href="{{ site.toast_account }}" rel="noopener"{{ ext|safe }}>Ordering account <span>Toast: saved cards &amp; past orders</span></a>
       <a href="{{ site.loyalty_signin }}" rel="noopener"{{ ext|safe }}>Rewards account <span>Points, offers &amp; rewards</span></a>
@@ -1946,7 +1962,7 @@ T["datenight"] = """
 <section class="section section--dark on-dark">
   <div class="wrap" style="text-align:center">
     <h2>Pick a night.</h2>
-    <div class="btn-row" style="justify-content:center">
+    <div class="btn-row dn-cta" style="justify-content:center">
       <a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a>
       <a class="btn btn--ghost" href="{{ u('/large-party-reservations/') }}">Bringing more than two?</a>
     </div>
@@ -2413,7 +2429,7 @@ def main():
 
     base_ctx = dict(
         u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
-        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
+        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=MORE_GROUPS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and,
@@ -2791,7 +2807,7 @@ SAFE_CLASSES = {"open", "is-past", "menu-open", "is-open", "is-closed", "is-soon
                 "pick", "pick-name", "pick-addr", "pick-meta", "pick-call", "tonight-card", "note", "status", "btn", "btn--sm", "sp-embed", "today",
                 # injected by the quiz and the pizza calculator after load
                 "quiz-prog", "quiz-bar", "quiz-q", "quiz-opts", "quiz-opt", "quiz-back",
-                "quiz-result", "quiz-eyebrow", "quiz-pic", "btn--line", "btn-row",
+                "quiz-result", "quiz-eyebrow", "quiz-pic", "btn--line", "btn-row", "dn-cta",
                 "calc-answer", "calc-eyebrow", "calc-big", "calc-sub", "calc-detail", "calc-empty"}
 
 def split_rules(css):

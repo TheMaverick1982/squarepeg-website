@@ -90,6 +90,17 @@ body.menu-open .mbar{display:none}
 .more[open] summary{border-color:var(--ember)}
 .more-menu{position:absolute;right:-12px;top:calc(100% + 14px);min-width:250px;background:var(--char);border:1px solid var(--line-dark);border-top:3px solid var(--ember);box-shadow:0 24px 50px rgba(0,0,0,.45);padding:8px;display:grid}
 .nav .more-menu a{padding:10px 12px;border:0;font-size:15px}
+/* Grouped "More" panel: columns with headings, so eighteen links read as five short
+   lists instead of one long one. Mirrors how the mobile drawer is organised. */
+.more-mega{right:-12px;min-width:min(640px,calc(100vw - 48px));grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 10px;padding:16px 14px}
+.more-col{display:grid;align-content:start}
+.more-h{display:block;padding:6px 12px 7px;font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--flame);border-bottom:1px solid var(--line-dark);margin-bottom:4px}
+.nav .more-mega a{padding:8px 12px;line-height:1.3}
+/* the Game Day "in season" dot hangs outside the link; inside a column that put it in
+   the gutter, so bring it in and pad the link to make room */
+.nav .more-mega .nav-gd{padding-left:26px}
+.more-mega .nav-gd::before{left:12px}
+@media (max-width:1120px){.more-mega{grid-template-columns:repeat(2,minmax(0,1fr));min-width:min(470px,calc(100vw - 40px))}}
 .nav .more-menu a:hover{background:var(--oven-2);color:var(--flame)}
 @media (min-width:980px){
   .nav{display:flex;align-items:center;gap:22px;margin-right:12px}
@@ -817,6 +828,8 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .dn-card{background:var(--white);border:1px solid var(--line);border-top:5px solid var(--ember);padding:clamp(18px,2.4vw,26px)}
 .dn-card h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(20px,2.5vw,25px);line-height:1.05}
 .dn-card p{margin-top:10px;font-size:16px;line-height:1.55}
+/* the closing CTA has two big buttons side by side — the global 12px gap reads cramped */
+.dn-cta{gap:20px;margin-top:26px}
 .dn-price{display:block;margin-top:6px;font-weight:800;font-size:20px;color:var(--ember-deep)}
 .dn-steps{counter-reset:d;list-style:none;display:grid;gap:18px;margin-top:6px;grid-template-columns:1fr}
 @media (min-width:860px){.dn-steps{grid-template-columns:repeat(4,1fr)}}
