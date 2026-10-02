@@ -963,8 +963,8 @@ T["location"] = """
   <div class="wrap loc-top">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/locations/') }}">Locations</a><span aria-hidden="true">/</span><span>{{ l.name }}</span></nav>
     <span class="eyebrow">{{ l.tag }}</span>
-    <h1>Square Peg Pizzeria {{ l.name }}<span class="h1-sub">Italian restaurant &amp; wood-fired pizza in {{ l.city }}, {{ l.state }}</span></h1>
-    <p class="lede">Wood-fired pizza, {{ lm.words[0] }}, {{ lm.words[1] }}, wings and more at {{ l.street }} in {{ l.city }}, {{ l.state }}. Dine in with family and friends, or order online for pickup or delivery.</p>
+    <h1>Square Peg Pizzeria {{ l.name }}<span class="h1-sub">Italian restaurant &amp; {% if lm.wood %}wood-fired {% endif %}pizza in {{ l.city }}, {{ l.state }}</span></h1>
+    <p class="lede">{% if lm.wood %}Wood-fired pizza{% else %}Pizza{% endif %}, {{ lm.words[0] }}, {{ lm.words[1] }}, wings and more at {{ l.street }} in {{ l.city }}, {{ l.state }}. Dine in with family and friends, or order online for pickup or delivery.</p>
     <div><span class="status" data-status="{{ l.slug }}">{{ l.summary[0] }}</span></div>
     <div class="loc-actions">
       <a class="btn" href="{{ order(l) }}" data-pick="{{ l.slug }}" data-track="order_click" data-src="loc-hero" rel="noopener">{{ icons.bag|safe }}Order {{ l.short or l.name }} online</a>
@@ -1056,7 +1056,7 @@ T["location"] = """
   <div class="wrap two-col">
     <div class="stack local">
       <span class="eyebrow">About this Peg</span>
-      <h2>Italian food &amp; wood-fired pizza in {{ l.city }}</h2>
+      <h2>Italian food &amp; {% if lm.wood %}wood-fired {% endif %}pizza in {{ l.city }}</h2>
       <p>{{ l.blurb }}</p>
       <p>Every pie starts with dough made fresh daily and never frozen. Choose a red or white {% if lm.detroit %}Neo-Neapolitan round or a crispy-edged Detroit-style pie{% else %}signature pie{% endif %}, build your own, or go gluten-free with our 12″ crust. Vegan cheese is available on any pizza.</p>
       <p>Not in a pizza mood? The kitchen turns out Italian-American comfort food too: {{ join_and(lm.words + lm.rest) }}.{% if lm.bar %} Pair it with a cocktail, a glass of wine or a cold beer.{% endif %}{% if lm.extra %} Also here: {{ lm.extra|join('; ')|lower }}.{% endif %}</p>
@@ -2294,9 +2294,10 @@ def loc_menu(l):
     words = [("eggplant parm" if p == "The Bella Parmigiana" else p.lower()) for p in pastas]
     kids, salads = l.get("kids_menu", True), l.get("salads", True)
     parm = l.get("parm_line", "chicken and meatball parm sandwiches")
-    rest = [parm] + (["salads"] if salads else []) + ["wood-fired wings"] + (["a kids’ menu"] if kids else [])
+    wood = l.get("wood", True)
+    rest = [parm] + (["salads"] if salads else []) + [("wood-fired wings" if wood else "wings")] + (["a kids’ menu"] if kids else [])
     return {"pastas": pastas, "words": words, "extra": l.get("menu_extra", []), "detroit": l.get("detroit", True), "bar": l.get("bar", True),
-            "kids": kids, "rest": rest, "parm": parm}
+            "kids": kids, "rest": rest, "parm": parm, "wood": wood}
 
 def join_and(items):
     items = list(items)
@@ -2308,7 +2309,7 @@ def location_faqs(l):
     return [
         (f"What are Square Peg {name}’s hours?", f"{lines}. " + ("Holiday hours are posted on this page as soon as they change." if l.get("hours_source") == "google" else "Holiday hours may vary; online ordering always shows live availability.")),
         (f"Is Square Peg {name} an Italian restaurant?",
-         f"Yes. Along with wood-fired pizza, Square Peg {name} serves Italian-American favorites like {join_and(loc_menu(l)['words'][:4])}, plus {join_and([r for r in loc_menu(l)['rest'] if 'kids' not in r] + ['desserts'])}."),
+         f"Yes. Along with {'wood-fired ' if l.get('wood', True) else ''}pizza, Square Peg {name} serves Italian-American favorites like {join_and(loc_menu(l)['words'][:4])}, plus {join_and([r for r in loc_menu(l)['rest'] if 'kids' not in r] + ['desserts'])}."),
     ] + ([
         (f"Is Square Peg {name} a good restaurant for families?",
          f"Yes. There’s a kids’ menu (pasta, spaghetti and meatballs, chicken fingers, mac and cheese), room for big groups, and large party reservations for birthdays and team dinners."),
@@ -2453,7 +2454,8 @@ def main():
         faqs = location_faqs(l)
         schema = graph(restaurant_schema(l), breadcrumbs([("Home", "/"), ("Locations", "/locations/"), (l["name"], f"/locations/{l['slug']}/")]), faq_schema(faqs))
         title = f"Italian Restaurant & Pizza in {l['city']}, {l['state']} | Square Peg"
-        desc = f"Italian restaurant and wood-fired pizza at {l['street']}, {l['city']}, {l['state']}: pasta, chicken parm, wings and kids' meals. Hours, {l['phone']}, order online."
+        oven = "wood-fired " if l.get("wood", True) else ""
+        desc = f"Italian restaurant and {oven}pizza at {l['street']}, {l['city']}, {l['state']}: pasta, chicken parm, wings and kids' meals. Hours, {l['phone']}, order online."
         pages.append((f"/locations/{l['slug']}/", title, desc, "location",
                       dict(l=l, lm=loc_menu(l), rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs, events=location_events(l), ent_dates=ent_dated(l)), schema, l["photo"], l["photo"]))
 

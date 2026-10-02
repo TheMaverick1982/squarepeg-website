@@ -119,13 +119,14 @@ LOCATIONS = [
     },
     {
         # "bar": False = no beer/wine/cocktails yet (liquor license pending); "detroit": False = no Detroit-style pizza yet. Remove each once available.
-        "slug": "bolton-ct", "review_url": "https://g.page/r/CWYf9GcLXaLlEBM/review", "bar": False, "detroit": False, "pastas": ["Chicken Parmesan", "Pasta alla Vodka", "Spaghetti & Meatballs", "The Bella Parmigiana"], "menu_extra": ["Burgers"], "name": "Bolton", "region": "Greater Hartford",
+        # "wood": False = this is the one kitchen that is not wood-fired, so no page here says wood-fired.
+        "slug": "bolton-ct", "review_url": "https://g.page/r/CWYf9GcLXaLlEBM/review", "bar": False, "detroit": False, "wood": False, "pastas": ["Chicken Parmesan", "Pasta alla Vodka", "Spaghetti & Meatballs", "The Bella Parmigiana"], "menu_extra": ["Burgers"], "name": "Bolton", "region": "Greater Hartford",
         "street": "270 West St", "city": "Bolton", "state": "CT", "zip": "06043",
         "phone": "(860) 791-7109", "toast": "square-peg-pizzeria-bolton-270-west-street",
         "lat": 41.742106, "lng": -72.436706, "geo_exact": True,  # US Census geocoder
         "hours": h(*(None,("11:00","20:00"),("11:00","21:00"),("11:00","21:00"),("11:00","21:00"),("11:00","21:00"),("11:00","20:00"))),
         "tag": "Newest Peg",
-        "blurb": "Our newest home, in the space Liz and Brody made special for six years as Parkside Pizza & Ice Cream. Most of the Parkside crew stayed on, so you’ll see the same familiar faces. We’re here to add to this place, not erase it.",
+        "blurb": "Our newest Peg, on West Street in Bolton. Dough made from scratch every morning, never frozen, plus handmade pasta, parm sandwiches, wings and salads. A straightforward neighborhood spot — weeknight dinner with the family, or a pickup on the way through town.",
         "nearby": ["Manchester", "Coventry", "Andover", "Vernon", "Hebron"],
         "photo": "pizza-boxes",
     },
@@ -546,7 +547,7 @@ SIGNATURES = [
 # No prices here: Toast has the live menu and prices for each location.
 MENU = {
     "pizza_styles": [
-        ("Neo-Neapolitan rounds", "Wood-fired, 12″ (6 slices) or 18″ (8 slices), red or white."),
+        ("Neo-Neapolitan rounds", "12″ (6 slices) or 18″ (8 slices), red or white. Wood-fired at every location except Bolton."),
         ("Detroit-style", "Thick, crispy-edged 10×14″ pan pizza (6 slices). At every location except Bolton."),
         ("Gluten-free", "12″ gluten-free crust on any round pie. Vegan cheese on any pizza."),
     ],
