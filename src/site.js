@@ -264,7 +264,7 @@
       var sides = document.getElementById("calc-sides").checked;
 
       if (adults + kids === 0) {
-        out.innerHTML = '<p class="calc-empty">Add at least one person and we\u2019ll do the maths.</p>';
+        out.innerHTML = '<p class="calc-empty">Add at least one person and we\u2019ll do the math.</p>';
         return;
       }
 
@@ -300,6 +300,85 @@
     form.addEventListener("change", paint);
     form.addEventListener("submit", function (e) { e.preventDefault(); });
     paint();
+  })();
+
+  /* ---------- "What pizza are you?" quiz ---------- */
+  (function () {
+    var root = document.getElementById("quiz");
+    var cfgEl = document.getElementById("quiz-cfg");
+    if (!root || !cfgEl) return;
+    var Q;
+    try { Q = JSON.parse(cfgEl.textContent); } catch (e) { return; }
+
+    var step = 0, scores = {};
+    Object.keys(Q.results).forEach(function (k) { scores[k] = 0; });
+
+    function esc(t) {
+      return String(t).replace(/[&<>"]/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+      });
+    }
+
+    function paintQuestion() {
+      var q = Q.questions[step];
+      var html = '<div class="quiz-prog"><span>Question ' + (step + 1) + ' of ' + Q.questions.length + '</span>' +
+        '<span class="quiz-bar"><i style="width:' + Math.round((step / Q.questions.length) * 100) + '%"></i></span></div>' +
+        '<h2 class="quiz-q">' + esc(q[0]) + '</h2><div class="quiz-opts">';
+      q[1].forEach(function (opt, i) {
+        html += '<button type="button" class="quiz-opt" data-i="' + i + '">' + esc(opt[0]) + '</button>';
+      });
+      html += '</div>';
+      if (step > 0) html += '<button type="button" class="quiz-back" data-back="1">Back</button>';
+      root.innerHTML = html;
+      var h = root.querySelector(".quiz-q");
+      if (h && step > 0) h.focus();
+    }
+
+    var history = [];
+    function paintResult() {
+      var best = null;
+      Object.keys(scores).forEach(function (k) {
+        if (best === null || scores[k] > scores[best]) best = k;
+      });
+      var r = Q.results[best];
+      var pic = (Q.photos || {})[best];
+      root.innerHTML =
+        '<div class="quiz-result">' +
+        (pic ? '<img class="quiz-pic" src="' + esc(pic) + '" alt="' + esc(r[0]) + ' pizza at Square Peg Pizzeria" width="800" height="600" loading="lazy" decoding="async">' : '') +
+        '<span class="quiz-eyebrow">You are a</span>' +
+        '<h2>' + esc(r[0]) + '</h2>' +
+        '<p>' + esc(r[2]) + '</p>' +
+        '<div class="btn-row">' +
+        '<a class="btn" href="' + esc(root.dataset.order || "/locations/") + '" rel="noopener" target="_blank" data-track="order_click" data-src="quiz-result">Order one</a>' +
+        '<button type="button" class="btn btn--line" data-restart="1">Take it again</button>' +
+        '</div></div>';
+    }
+
+    root.addEventListener("click", function (e) {
+      var opt = e.target.closest("[data-i]");
+      if (opt) {
+        var picks = Q.questions[step][1][+opt.dataset.i][1];
+        history.push(picks);
+        Object.keys(picks).forEach(function (k) { scores[k] += picks[k]; });
+        step++;
+        if (step >= Q.questions.length) paintResult(); else paintQuestion();
+        return;
+      }
+      if (e.target.closest("[data-back]")) {
+        var prev = history.pop();
+        if (prev) Object.keys(prev).forEach(function (k) { scores[k] -= prev[k]; });
+        step = Math.max(0, step - 1);
+        paintQuestion();
+        return;
+      }
+      if (e.target.closest("[data-restart]")) {
+        step = 0; history = [];
+        Object.keys(scores).forEach(function (k) { scores[k] = 0; });
+        paintQuestion();
+      }
+    });
+
+    paintQuestion();
   })();
 
   /* ---------- Chat widget: load after the page is idle so it never slows first paint ---------- */

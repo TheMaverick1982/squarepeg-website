@@ -275,7 +275,7 @@ LINKS = [
 ]
 
 # Pizza calculator. Sizes and slice counts come from MENU["pizza_styles"] — keep them
-# in step. The maths is area-based rather than a flat "3 slices each" rule, because an
+# in step. The math is area-based rather than a flat "3 slices each" rule, because an
 # 18" slice is roughly 1.7x the area of a 12" slice and a flat rule badly under-orders
 # for big pies. Appetite values are in square inches of pizza per person.
 CALC = {
@@ -304,6 +304,200 @@ CALC = {
          "guests is not, and a second round of ordering adds half an hour to the night."),
         ("Mixed crowds round up", "Kids eat about half an adult portion, but they also eat unpredictably. "
          "If the split is close, take the larger number."),
+    ],
+}
+
+# FAQ hub. Every answer has to be true for US — sizes come from MENU["pizza_styles"],
+# food-safety numbers from USDA guidance. Generic pizza-blog filler loses to pizza blogs;
+# the only edge here is answering as the people who actually make it.
+PIZZA_FAQ = [
+    ("Sizes & servings", [
+        ("How many slices are in a large pizza?",
+         "Ours is an 18\u2033 round cut into 8 slices. The 12\u2033 round is cut into 6, and the Detroit-style "
+         "pan is 6 squares. Slice counts vary wildly between pizzerias \u2014 always ask by diameter, not by "
+         "the word \u201clarge.\u201d"),
+        ("How many people does a large pizza feed?",
+         "Three to five adults if pizza is the whole meal, and more if there are appetizers on the table. "
+         "An 18\u2033 pie is about 254 square inches, so each of its 8 slices is roughly 70% bigger than a "
+         "slice off a 12\u2033. Our <a href=\"/pizza-calculator/\">pizza calculator</a> does the arithmetic."),
+        ("Is a large pizza twice the size of a small?",
+         "No \u2014 it\u2019s more than twice. Area grows with the square of the diameter, so going from a "
+         "12\u2033 to an 18\u2033 gives you about 2.25 times the pizza, not 1.5 times. Two smalls are less "
+         "food than one large."),
+    ]),
+    ("Reheating & leftovers", [
+        ("Can you reheat wood-fired pizza?",
+         "Yes, and a skillet beats a microwave every time. Put the slice in a dry pan over medium heat for "
+         "about three minutes, then add a few drops of water to the pan away from the slice and cover it for "
+         "another minute. The base re-crisps while the steam melts the cheese. A microwave does the opposite: "
+         "it steams the crust soft."),
+        ("How long does leftover pizza keep?",
+         "USDA guidance for cooked leftovers is three to four days refrigerated, within two hours of coming "
+         "off the table. Pizza is no exception, however convincing it looks on the counter the next morning."),
+        ("Can you freeze pizza?",
+         "You can. Wrap slices individually so they don\u2019t fuse, and reheat from frozen in a skillet or a "
+         "hot oven rather than thawing first \u2014 thawed crust goes limp."),
+    ]),
+    ("Cheese, sauce & styles", [
+        ("What\u2019s the difference between mozzarella and fresh mozzarella?",
+         "Low-moisture mozzarella is aged and drier, so it browns, stretches and behaves predictably under "
+         "high heat. Fresh mozzarella is packed in water or brine, has a milkier flavor and a softer texture, "
+         "and releases moisture as it melts \u2014 which is why a Margherita made with it has those wet, "
+         "creamy pools rather than an even blanket. Neither is better; they do different jobs."),
+        ("What is a white pizza?",
+         "A pizza built without tomato sauce. The base is usually cheese, cream, oil or garlic, which means "
+         "there\u2019s no acidity on the plate to cut the richness \u2014 worth knowing when you pick a drink "
+         "to go with it."),
+        ("What is Detroit-style pizza?",
+         "A thick rectangular pan pizza with cheese taken right to the edges, so it caramelizes against the "
+         "hot pan and forms a crisp, chewy border. Ours is a 10\u00d714\u2033 pan cut into 6, available at "
+         "every location except Bolton."),
+        ("What does wood-fired actually change?",
+         "Heat and speed. A wood-fired oven runs far hotter than a home oven and cooks a pie in minutes rather "
+         "than tens of minutes, which puts char on the crust before the inside dries out. That\u2019s where the "
+         "leopard-spotting and the chew come from."),
+    ]),
+    ("Ordering", [
+        ("Do you have gluten-free pizza?",
+         "We make a 12\u2033 gluten-free crust, and vegan cheese can go on any pizza. One honest caveat: our "
+         "kitchens handle wheat flour all day, so we can\u2019t promise a coeliac-safe environment. If you "
+         "have a serious allergy, tell your server and they\u2019ll walk you through what we can and can\u2019t "
+         "guarantee."),
+        ("How far ahead should I order for a party?",
+         "For a handful of pies, the same day is usually fine. For a crowd, or anything on a Friday or "
+         "Saturday evening, give us a day \u2014 and for twenty people or more, <a href=\"/catering/\">catering</a> "
+         "is normally cheaper and arrives hot together rather than in waves."),
+        ("Can I order a half-and-half pizza?",
+         "On a round, yes \u2014 ask when you order. The Detroit pan is built differently and doesn\u2019t "
+         "split as cleanly."),
+    ]),
+]
+
+# Pizza trivia. Where a well-known story is disputed, say so — being the page that gets it
+# right is more useful than being the hundredth page repeating the myth.
+PIZZA_TRIVIA = {
+    "facts": [
+        ("The word is older than the dish you\u2019re picturing",
+         "\u201cPizza\u201d turns up in a Latin document from Gaeta, in southern Italy, dated 997 AD \u2014 "
+         "nearly eight centuries before tomatoes appeared on one. It referred to a flatbread.",
+         True),
+        ("Naples got UNESCO status for it",
+         "In 2017 UNESCO added the art of the Neapolitan \u201cpizzaiuolo\u201d to its list of intangible "
+         "cultural heritage \u2014 protecting the craft of making it, not the recipe.",
+         True),
+        ("Tomatoes were considered dangerous",
+         "Europeans grew tomatoes as ornamental plants for two centuries before eating them, partly because "
+         "the acid leached lead out of pewter plates and poisoned wealthy diners. The poor ate off wood, and "
+         "ate tomatoes.",
+         True),
+        ("Pepperoni is an American invention",
+         "Order pepperoni in Italy and you may get peppers \u2014 \u201cpeperoni\u201d is the Italian for "
+         "bell peppers. The spicy cured sausage is Italian-American, and it is comfortably the most ordered "
+         "topping in the United States.",
+         True),
+    ],
+    "myths": [
+        ("Queen Margherita inspired the Margherita",
+         "The story \u2014 that Raffaele Esposito built a red, white and green pizza for Queen Margherita of "
+         "Savoy in 1889 \u2014 is repeated everywhere, including by us until we looked into it. The supporting "
+         "document has been challenged by historians as a likely forgery, and pizzas with those toppings were "
+         "already being sold in Naples. Lovely story. Probably not history."),
+        ("Pineapple is an Italian outrage",
+         "Hawaiian pizza was invented in Ontario, Canada, in 1962, by a Greek-born restaurateur. Italy was "
+         "never consulted and has nothing to do with it either way."),
+        ("Authentic pizza must be thin and crispy",
+         "A true Neapolitan base is soft and foldable in the middle with a puffed, blistered rim \u2014 not "
+         "cracker-crisp. The crisp-throughout style is a later, largely American development."),
+    ],
+}
+
+# "What pizza are you?" — results map to real menu items only, so every result can link
+# straight to an order. Each answer carries a score for each result key.
+QUIZ = {
+    "results": {
+        "spicy-margherita": ("Spicy Margherita", "pie-spicy-margherita",
+            "You like a little trouble. Cherry peppers, spicy capicola, fresh mozzarella and basil \u2014 "
+            "familiar enough to be comforting, hot enough to keep you honest."),
+        "margherita": ("Margherita", "pie-margherita",
+            "You have nothing to prove. Fresh mozzarella, tomato and basil, fire-kissed. The one that exposes "
+            "a bad pizzeria and rewards a good one."),
+        "prince": ("Prince of Paramus", "pie-prince-of-paramus",
+            "You order like you mean it. House pork meatballs, mushrooms, mozzarella and tomato sauce \u2014 "
+            "dinner, not a snack."),
+        "bianco": ("Bianco", "pie-bianco",
+            "You read the whole menu before deciding. Goat cheese, ricotta, garlic, maple and Calabrian chili "
+            "oil \u2014 sweet, sharp and a bit contrary."),
+        "detroit": ("Detroit-style", "pie-detroit",
+            "You\u2019re in it for the edges. A thick 10\u00d714\u2033 pan with the cheese taken right to the "
+            "rim so it caramelizes against the metal. At every location except Bolton."),
+    },
+    "questions": [
+        ("It\u2019s Friday at 7pm. Where are you?", [
+            ("At the bar, ordering a second one", {"spicy-margherita": 2, "detroit": 1}),
+            ("A corner table with one other person", {"margherita": 2, "bianco": 1}),
+            ("At home, box on the coffee table", {"detroit": 2, "prince": 1}),
+            ("Somewhere loud with six friends", {"prince": 2, "spicy-margherita": 1}),
+        ]),
+        ("Pick a problem with most pizza.", [
+            ("Not enough heat", {"spicy-margherita": 3}),
+            ("Too much going on", {"margherita": 3}),
+            ("Not enough food", {"prince": 2, "detroit": 1}),
+            ("Too predictable", {"bianco": 3}),
+        ]),
+        ("The best part of the slice is\u2026", [
+            ("The crust", {"detroit": 2, "margherita": 1}),
+            ("The cheese pull", {"detroit": 1, "bianco": 2}),
+            ("Whatever\u2019s on top", {"prince": 2, "spicy-margherita": 1}),
+            ("The char", {"margherita": 2, "spicy-margherita": 1}),
+        ]),
+        ("Your drink order says a lot.", [
+            ("Cold lager, no thinking required", {"detroit": 2, "prince": 1}),
+            ("Whatever the bartender suggests", {"bianco": 2, "margherita": 1}),
+            ("A red with some backbone", {"prince": 2, "margherita": 1}),
+            ("Something with a kick in it", {"spicy-margherita": 2}),
+        ]),
+        ("Someone suggests splitting a pizza. You\u2026", [
+            ("Agree, then order your own anyway", {"prince": 2, "detroit": 1}),
+            ("Suggest two and leftovers", {"detroit": 2, "prince": 1}),
+            ("Happily \u2014 you want room for dessert", {"margherita": 2, "bianco": 1}),
+            ("Only if they let you pick", {"spicy-margherita": 2, "bianco": 1}),
+        ]),
+        ("Last one. A night out should be\u2026", [
+            ("Easy", {"margherita": 2, "detroit": 1}),
+            ("Interesting", {"bianco": 3}),
+            ("Loud", {"spicy-margherita": 2, "prince": 1}),
+            ("Filling", {"prince": 3}),
+        ]),
+    ],
+}
+
+# Date night page. Everything here is true of our own rooms — no recommending other
+# businesses, which is what makes a local guide a maintenance burden and a liability.
+DATE_NIGHT = {
+    "lede": "No reservation anxiety, no tasting menu, no performance. A fire, a bottle and "
+            "something that came out of the oven four minutes ago.",
+    "reasons": [
+        ("The oven does the talking",
+         "Wood-fired pies cook in minutes, so food arrives while you\u2019re still on the first drink \u2014 "
+         "not forty minutes into a conversation that had started to flag."),
+        ("Splitting is the point",
+         "A pizza, a pasta and something fried in the middle of the table beats two plates and a silence. "
+         "Order three things and share all of them."),
+        ("It costs what it costs",
+         "You can have a very good night here for the price of two entr\u00e9es somewhere with a tasting menu, "
+         "and nobody has to pretend to be impressed."),
+        ("Nobody is rushing you",
+         "The kitchen runs late most nights, and longer on football days. Stay for dessert."),
+    ],
+    "order": [
+        ("Start", "Something fried to share while you look at the rest of the menu. It buys you ten minutes "
+                  "of not deciding anything."),
+        ("Middle", "One round pizza between two is plenty if you\u2019ve started with an appetizer. Pick one "
+                   "red and one white if you\u2019re getting two \u2014 they taste different enough to be worth it."),
+        ("Drink", "Friday is half-price bottles after 5pm. Happy hour runs 2\u20136pm every day at every "
+                  "location with a bar. Not sure what goes with what? "
+                  "<a href=\"/pairing/\">Ask Sal</a>."),
+        ("End", "Dessert, and the argument about who\u2019s paying."),
     ],
 }
 

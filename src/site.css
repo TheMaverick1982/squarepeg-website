@@ -778,6 +778,72 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hours-flag b{color:var(--flame)}
 .section--paper .hours-flag b{color:var(--ember-deep)}
 
+/* ---- FAQ hub ---- */
+.faq-jump{display:flex;flex-wrap:wrap;gap:10px}
+.faq-jump a{padding:9px 15px;border:1px solid var(--line);border-radius:999px;background:var(--white);font-weight:700;font-size:14.5px;text-decoration:none;color:var(--ink)}
+.faq-jump a:hover{border-color:var(--ember);color:var(--ember-deep)}
+.faq-list{display:grid;gap:12px;margin-top:6px}
+.faq-item{border:1px solid var(--line-dark);background:rgba(255,255,255,.05)}
+.section--paper .faq-item{background:var(--white);border-color:var(--line)}
+.faq-item>summary{list-style:none;cursor:pointer;display:flex;align-items:flex-start;gap:14px;padding:16px 18px}
+.faq-item>summary::-webkit-details-marker{display:none}
+.faq-item h3{font-size:clamp(17px,2.1vw,21px);line-height:1.3;font-weight:800;flex:1}
+.faq-mark{flex:none;width:20px;height:20px;position:relative;margin-top:3px}
+.faq-mark::before,.faq-mark::after{content:"";position:absolute;background:var(--flame);inset:9px 0 auto;height:2.5px}
+.section--paper .faq-mark::before,.section--paper .faq-mark::after{background:var(--ember)}
+.faq-mark::after{transform:rotate(90deg);transition:transform .16s ease}
+.faq-item[open] .faq-mark::after{transform:rotate(0)}
+.faq-body{padding:0 18px 18px 52px}
+.faq-body p{font-size:16.5px;line-height:1.6}
+.faq-body a{color:var(--flame);font-weight:700}
+.section--paper .faq-body a{color:var(--ember-deep)}
+@media (max-width:560px){.faq-body{padding-left:18px}}
+
+/* ---- trivia ---- */
+.triv-grid{display:grid;gap:20px;grid-template-columns:1fr;margin-top:6px}
+@media (min-width:760px){.triv-grid{grid-template-columns:1fr 1fr}}
+.triv-card{background:rgba(255,255,255,.05);border:1px solid var(--line-dark);padding:clamp(20px,2.6vw,28px)}
+.section--paper .triv-card{background:var(--white);border-color:var(--line)}
+.triv-tag{display:inline-block;font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border-radius:3px}
+.triv-true{background:#1f7a46;color:#fff}
+.triv-myth{background:var(--ember);color:#fff}
+.triv-card h3{margin-top:12px;font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(21px,2.7vw,27px);line-height:1.05}
+.triv-card p{margin-top:10px;font-size:16px;line-height:1.6}
+
+/* ---- date night ---- */
+.dn-grid{display:grid;gap:20px;grid-template-columns:1fr;margin-top:6px}
+@media (min-width:760px){.dn-grid{grid-template-columns:1fr 1fr}}
+@media (min-width:1100px){.dn-grid{grid-template-columns:repeat(4,1fr)}}
+.dn-card{background:var(--white);border:1px solid var(--line);border-top:5px solid var(--ember);padding:clamp(18px,2.4vw,26px)}
+.dn-card h3{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(20px,2.5vw,25px);line-height:1.05}
+.dn-card p{margin-top:10px;font-size:16px;line-height:1.55}
+.dn-price{display:block;margin-top:6px;font-weight:800;font-size:20px;color:var(--ember-deep)}
+.dn-steps{counter-reset:d;list-style:none;display:grid;gap:18px;margin-top:6px;grid-template-columns:1fr}
+@media (min-width:860px){.dn-steps{grid-template-columns:repeat(4,1fr)}}
+.dn-steps li{counter-increment:d;border-top:3px solid var(--flame);padding-top:14px}
+.dn-steps li::before{content:counter(d);display:block;font-family:var(--display);font-weight:900;font-size:38px;line-height:1;color:var(--flame)}
+.dn-steps b{display:block;margin-top:8px;font-size:19px}
+.dn-steps span{display:block;margin-top:8px;color:#d9d2cc;font-size:16px;line-height:1.55}
+.dn-steps a{color:var(--flame);font-weight:700}
+
+/* ---- quiz ---- */
+.quiz{background:var(--white);border:1px solid var(--line);border-top:5px solid var(--ember);padding:clamp(22px,3.4vw,40px);min-height:360px}
+.quiz-prog{display:flex;align-items:center;gap:14px;font-weight:800;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--smoke)}
+.quiz-bar{flex:1;height:5px;background:var(--line);border-radius:3px;overflow:hidden}
+.quiz-bar i{display:block;height:100%;background:var(--ember);transition:width .25s ease}
+.quiz-q{margin-top:18px;font-size:clamp(26px,4vw,42px);line-height:1.04}
+.quiz-opts{display:grid;gap:12px;margin-top:22px}
+@media (min-width:760px){.quiz-opts{grid-template-columns:1fr 1fr}}
+.quiz-opt{font:inherit;text-align:left;font-size:17px;font-weight:600;padding:17px 20px;border:1px solid var(--line);background:var(--paper);border-radius:4px;cursor:pointer;transition:border-color .13s ease,background .13s ease,transform .13s ease}
+.quiz-opt:hover,.quiz-opt:focus-visible{border-color:var(--ember);background:#fff;transform:translateY(-1px)}
+.quiz-back{margin-top:18px;font:inherit;font-weight:700;background:none;border:0;color:var(--smoke);cursor:pointer;text-decoration:underline;padding:4px 0}
+.quiz-result{text-align:center}
+.quiz-eyebrow{font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ember)}
+.quiz-pic{display:block;width:100%;max-width:420px;height:auto;aspect-ratio:4/3;object-fit:cover;margin:0 auto 20px;border-radius:4px}
+.quiz-result h2{margin-top:8px;font-size:clamp(34px,6vw,64px);line-height:1}
+.quiz-result p{margin:16px auto 0;max-width:56ch;font-size:17px;line-height:1.6;color:var(--smoke)}
+.quiz-result .btn-row{justify-content:center;margin-top:26px}
+
 /* ---- pizza calculator ---- */
 .calc{background:var(--white);border:1px solid var(--line);border-top:5px solid var(--ember);padding:clamp(20px,3vw,30px)}
 .calc-grid{display:grid;gap:16px;grid-template-columns:1fr}

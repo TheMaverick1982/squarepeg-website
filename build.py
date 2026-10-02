@@ -17,7 +17,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC  # noqa
+from content import DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -469,7 +469,7 @@ ICONS = {
 
 NAV = [("Menu", "MENU"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Catering", "/catering/"),
        ("Entertainment", "/entertainment/")]
-MORE = [("LTO Menu", "/monthly-specials/"), ("Pairing Guide", "/pairing/"), ("Large Parties", "/large-party-reservations/"),
+MORE = [("LTO Menu", "/monthly-specials/"), ("Pairing Guide", "/pairing/"), ("Pizza Calculator", "/pizza-calculator/"), ("Pizza FAQ", "/pizza-faq/"), ("Date Night", "/date-night/"), ("Large Parties", "/large-party-reservations/"),
         ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/"),
         ("Rewards & Monthly Deals", "/deals/"), ("Gift Cards", "GIFT"), ("Roll the Dice", "/roll-the-dice/"),
         ("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]
@@ -1816,6 +1816,175 @@ T["links"] = """
 </section>
 """
 
+T["pizzafaq"] = """
+<section class="page-head on-dark">
+  {{ img('oven-pizza', 'A pizza coming out of the wood-fired oven', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Pizza FAQ</span></nav>
+    <span class="eyebrow">Straight answers</span>
+    <h1>Pizza questions,<br>answered properly</h1>
+    <p class="lede">Slice counts, reheating, gluten-free, how much to order. Answered by the people who make it, not scraped off another pizzeria&rsquo;s site.</p>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <nav class="faq-jump" aria-label="Jump to a section">{% for group, items in faq_groups %}<a href="#{{ group|lower|replace(' ', '-')|replace('&', 'and') }}">{{ group }}</a>{% endfor %}</nav>
+  </div>
+</section>
+
+{% for group, items in faq_groups %}
+<section class="section {{ 'section--dark on-dark' if loop.index is odd else 'section--paper' }}" id="{{ group|lower|replace(' ', '-')|replace('&', 'and') }}">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">{{ loop.index }} of {{ loop.length }}</span><h2>{{ group }}</h2></div>
+    <div class="faq-list">{% for q, a in items %}
+      <details class="faq-item"{% if loop.first %} open{% endif %}>
+        <summary><h3>{{ q }}</h3><span class="faq-mark" aria-hidden="true"></span></summary>
+        <div class="faq-body"><p>{{ a|safe }}</p></div>
+      </details>{% endfor %}
+    </div>
+  </div>
+</section>
+{% endfor %}
+
+<section class="section section--paper">
+  <div class="wrap" style="text-align:center">
+    <h2>Still working out how much to order?</h2>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn" href="{{ u('/pizza-calculator/') }}">Use the pizza calculator</a>
+      <a class="btn btn--line" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="faq">{{ icons.bag|safe }}Order online</a>
+    </div>
+  </div>
+</section>
+"""
+
+T["trivia"] = """
+<section class="page-head on-dark">
+  {{ img('dough', 'Dough being made by hand at Square Peg', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Pizza trivia</span></nav>
+    <span class="eyebrow">Pizza trivia</span>
+    <h1>Things that are<br>true about pizza</h1>
+    <p class="lede">And three things everyone repeats that aren&rsquo;t. We checked before printing them, which is more than the internet usually manages.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Verified</span><h2>Actually true</h2></div>
+    <div class="triv-grid">{% for head, body, ok in trivia.facts %}
+      <article class="triv-card"><span class="triv-tag triv-true">True</span><h3>{{ head }}</h3><p>{{ body }}</p></article>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Hold on</span><h2>Three myths worth retiring</h2></div>
+    <div class="triv-grid">{% for head, body in trivia.myths %}
+      <article class="triv-card triv-card--myth"><span class="triv-tag triv-myth">Myth</span><h3>{{ head }}</h3><p>{{ body }}</p></article>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark on-dark">
+  <div class="wrap" style="text-align:center">
+    <h2>Settle it over a pizza.</h2>
+    <p class="prose" style="margin-inline:auto">Bingo and trivia nights run at most of our locations &mdash; and yes, pizza questions come up.</p>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn" href="{{ u('/entertainment/') }}">See what&rsquo;s on</a>
+      <a class="btn btn--ghost" href="{{ u('/what-pizza-are-you/') }}">What pizza are you?</a>
+    </div>
+  </div>
+</section>
+"""
+
+T["datenight"] = """
+<section class="page-head on-dark">
+  {{ img('friends-sharing', 'Sharing a wood-fired pizza at Square Peg', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Date night</span></nav>
+    <span class="eyebrow">Date night</span>
+    <h1>A good night out,<br>without the production</h1>
+    <p class="lede">{{ datenight.lede }}</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find a table</a>
+      <a class="btn btn--ghost" href="{{ u('/pairing/') }}">What should we drink?</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Why here</span><h2>Four reasons it works</h2></div>
+    <div class="dn-grid">{% for head, body in datenight.reasons %}
+      <article class="dn-card"><h3>{{ head }}</h3><p>{{ body }}</p></article>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">How to order</span><h2>A night, in four moves</h2></div>
+    <ol class="dn-steps">{% for label, body in datenight.order %}
+      <li><b>{{ label }}</b><span>{{ body|safe }}</span></li>{% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Worth timing</span><h2>Nights that are already good</h2></div>
+    <div class="dn-grid">
+      {% for d, name, price, note in promos.daily %}<article class="dn-card dn-card--deal"><span class="eyebrow">{{ d }}</span><h3>{{ name }}</h3><b class="dn-price">{{ price }}</b><p>{{ note }}</p></article>{% endfor %}
+      <article class="dn-card dn-card--deal"><span class="eyebrow">{{ promos.happy_hour.days }}</span><h3>Happy hour</h3><b class="dn-price">{{ promos.happy_hour.time }}</b><p>At every location with a bar. Bolton doesn&rsquo;t have one yet.</p></article>
+    </div>
+    <p class="note" style="margin-top:18px">Live music, trivia and bingo run most weeks too &mdash; the <a href="{{ u('/entertainment/') }}">entertainment page</a> has the current lineup by location.</p>
+  </div>
+</section>
+
+<section class="section section--dark on-dark">
+  <div class="wrap" style="text-align:center">
+    <h2>Pick a night.</h2>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a>
+      <a class="btn btn--ghost" href="{{ u('/large-party-reservations/') }}">Bringing more than two?</a>
+    </div>
+  </div>
+</section>
+"""
+
+T["quiz"] = """
+<section class="page-head on-dark">
+  {{ img('sp-three-pies', 'Three Square Peg pizzas on a board', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>What pizza are you?</span></nav>
+    <span class="eyebrow">Six questions</span>
+    <h1>What pizza<br>are you?</h1>
+    <p class="lede">Entirely unscientific. Takes about thirty seconds, and the answer is something you can actually order.</p>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div id="quiz" class="quiz" data-order="{{ site.order_picker_toast }}" data-total="{{ quiz.questions|length }}">
+      <noscript><p class="note">This one needs JavaScript. The <a href="{{ u('/our-menu/') }}">menu</a> works fine without it.</p></noscript>
+    </div>
+    <script type="application/json" id="quiz-cfg">{{ quiz_json|safe }}</script>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap" style="text-align:center">
+    <h2>Or skip the quiz.</h2>
+    <div class="btn-row" style="justify-content:center">
+      <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="quiz">{{ icons.bag|safe }}Order online</a>
+      <a class="btn btn--line" href="{{ u('/our-menu/') }}">See the whole menu</a>
+    </div>
+  </div>
+</section>
+"""
+
 T["calculator"] = """
 <section class="page-head on-dark">
   {{ img('pizza-boxes', 'Stacked Square Peg pizza boxes', eager=True, cls='bg')|safe }}
@@ -2244,7 +2413,7 @@ def main():
 
     base_ctx = dict(
         u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
-        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, calc=CALC, points=POINTS, perks=APP_PERKS,
+        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and,
@@ -2339,6 +2508,24 @@ def main():
     pages.append(("/links/", "Square Peg Pizzeria | All Our Links",
                   "Order online, find a location, see this month's specials, book catering or a fundraiser, and join the Square Peg Pizzeria rewards app.",
                   "links", {}, "", "margherita-board", "margherita-board"))
+    pages.append(("/pizza-faq/", "Pizza FAQ: Slices, Reheating, Sizes & More | Square Peg Pizzeria",
+                  "How many slices in a large pizza, how to reheat wood-fired pizza without ruining it, fresh vs low-moisture mozzarella, and how much to order. Answered by Square Peg Pizzeria.",
+                  "pizzafaq", {}, graph(faq_schema([(q, re.sub(r"<[^>]+>", "", a)) for _, items in PIZZA_FAQ for q, a in items]),
+                                        breadcrumbs([("Home", "/"), ("Pizza FAQ", "/pizza-faq/")])),
+                  "oven-pizza", "oven-pizza"))
+    pages.append(("/pizza-trivia/", "Pizza Trivia: Facts, Myths & History | Square Peg Pizzeria",
+                  "Pizza facts worth knowing and three myths worth retiring, including the truth about Queen Margherita. From the wood-fired ovens at Square Peg Pizzeria.",
+                  "trivia", {}, graph(breadcrumbs([("Home", "/"), ("Pizza trivia", "/pizza-trivia/")])),
+                  "dough", "dough"))
+    pages.append(("/date-night/", "Date Night Ideas: Dinner at Square Peg Pizzeria | CT & Delray Beach",
+                  "A good date night without the production. Wood-fired pizza, a proper bar, happy hour every day and half-price bottles on Fridays, at ten Square Peg Pizzeria locations.",
+                  "datenight", {}, graph(breadcrumbs([("Home", "/"), ("Date night", "/date-night/")])),
+                  "friends-sharing", "friends-sharing"))
+    pages.append(("/what-pizza-are-you/", "Quiz: What Pizza Are You? | Square Peg Pizzeria",
+                  "Six questions, one answer you can actually order. Take the Square Peg Pizzeria pizza personality quiz.",
+                  "quiz", dict(quiz_json=ld_raw(dict(QUIZ, photos={k: img_url(v[1], 800).replace(SITE["domain"], "") for k, v in QUIZ["results"].items()}))),
+                  graph(breadcrumbs([("Home", "/"), ("What pizza are you?", "/what-pizza-are-you/")])),
+                  "sp-three-pies", "sp-three-pies"))
     pages.append(("/pizza-calculator/", "Pizza Calculator: How Many Pizzas Do I Need? | Square Peg Pizzeria",
                   "How many pizzas for your party? Enter adults and kids and get the answer, based on how much pizza is actually on a 12-inch and an 18-inch pie. From Square Peg Pizzeria.",
                   "calculator", dict(calc_json=ld_raw(CALC)), graph(breadcrumbs([("Home", "/"), ("Pizza calculator", "/pizza-calculator/")])),
@@ -2601,7 +2788,11 @@ def llms_txt():
     return "\n".join(out)
 
 SAFE_CLASSES = {"open", "is-past", "menu-open", "is-open", "is-closed", "is-soon", "is-today", "is-near", "is-pref", "is-sized",
-                "pick", "pick-name", "pick-addr", "pick-meta", "pick-call", "tonight-card", "note", "status", "btn", "btn--sm", "sp-embed", "today"}
+                "pick", "pick-name", "pick-addr", "pick-meta", "pick-call", "tonight-card", "note", "status", "btn", "btn--sm", "sp-embed", "today",
+                # injected by the quiz and the pizza calculator after load
+                "quiz-prog", "quiz-bar", "quiz-q", "quiz-opts", "quiz-opt", "quiz-back",
+                "quiz-result", "quiz-eyebrow", "quiz-pic", "btn--line", "btn-row",
+                "calc-answer", "calc-eyebrow", "calc-big", "calc-sub", "calc-detail", "calc-empty"}
 
 def split_rules(css):
     """Top-level CSS blocks: plain rules, @media blocks (split further), and other @-rules kept as-is."""
