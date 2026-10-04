@@ -1533,10 +1533,11 @@ T["promotions"] = """
 <section class="section section--dark on-dark" id="lunch">
   <div class="wrap two-col">
     <div class="stack">
-      <span class="eyebrow">Monday–Friday · 11am–2pm · dine-in</span>
+      <span class="eyebrow">Monday–Friday · 11am–2pm where open · dine-in</span>
       <h2>Lunch specials. Only $10.</h2>
       <p class="prose" style="color:#e6ddd6">Drink included. Clean. Fast. Tasty. That’s lunch done right.</p>
       <p class="note" style="color:#cfc6bf">{{ promos.lunch_note }}</p>
+      <ul class="lunch-where">{% for w in lunch_where %}<li><a href="{{ u('/locations/' ~ w.slug ~ '/') }}">{{ w.name }}</a><span>{{ w.when }}, {{ w["from"] }}</span></li>{% endfor %}</ul>
       <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find a Square Peg</a><a class="btn btn--ghost" href="{{ u('/roll-the-dice/') }}">Roll the dice at lunch</a></div>
     </div>
     <div class="lunch-list">{% for n, dsc in promos.lunch %}<div class="lunch-item"><b>{{ n }}</b><span>{{ dsc }}</span><em>$10</em></div>{% endfor %}</div>
@@ -2351,6 +2352,54 @@ def happy_hour(l):
     return hh
 
 
+LUNCH_END = "14:00"   # the $10 lunch runs until 2pm
+
+
+def lunch_windows():
+    """Which locations can actually serve the $10 lunch, worked out from their own
+    opening times rather than typed by hand, so changing hours updates the list.
+
+    A store qualifies on a weekday when it opens before 2pm; the window starts at
+    11am or at opening, whichever is later."""
+    def mins(t):
+        hh, mm = map(int, t.split(":"))
+        return hh * 60 + mm
+
+    out = []
+    for l in LOCATIONS:
+        days = []
+        for d in DAYS[:5]:
+            v = l["hours"].get(d)
+            if v and mins(v[0]) < mins(LUNCH_END):
+                days.append((d, v[0] if mins(v[0]) > mins("11:00") else "11:00"))
+        if not days:
+            continue
+        # "Mon-Fri" when it is every weekday, otherwise name the days
+        names = [d for d, _ in days]
+        if names == DAYS[:5]:
+            when = "Monday\u2013Friday"
+        elif len(names) == 1:
+            when = DAY_NAMES[names[0]] + " only"
+        elif names == DAYS[:5][DAYS[:5].index(names[0]):]:
+            when = f"{DAY_NAMES[names[0]]}\u2013Friday"
+        else:
+            when = ", ".join(DAY_NAMES[d] for d in names)
+        # Lead with the latest opening so nobody turns up to a locked door, then
+        # name the days that open earlier.
+        by_start = {}
+        for d, st in days:
+            by_start.setdefault(st, []).append(d)
+        starts = sorted(by_start, key=mins)
+        frm = f"from {fmt_time(starts[-1])}"
+        for st in starts[:-1]:
+            ds = ", ".join(DAY_NAMES[d] for d in by_start[st])
+            frm += f" ({fmt_time(st)} {ds})"
+        out.append({"name": l.get("short") or l["name"], "slug": l["slug"],
+                    "when": when, "from": frm,
+                    "all_week": names == DAYS[:5]})
+    return out
+
+
 def loc_menu(l):
     pastas = l.get("pastas") or PASTA_NAMES
     words = [("eggplant parm" if p == "The Bella Parmigiana" else p.lower()) for p in pastas]
@@ -2495,7 +2544,7 @@ def main():
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=MORE_GROUPS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
-        ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group,
+        ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, lunch_where=lunch_windows(),
         event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
     )
 

@@ -111,7 +111,7 @@ LOCATIONS = [
         "street": "226 Talcottville Rd", "city": "Vernon", "state": "CT", "zip": "06066",
         "phone": "(860) 926-0088", "toast": "square-peg-pizzeria-vernon-226-talcottville-rd",
         "lat": 41.836661, "lng": -72.491494, "geo_exact": True,  # US Census geocoder
-        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:00","00:00"),("11:00","23:00"),("11:00","21:00"))),
+        "hours": h(*(("12:00","20:00"),("12:00","20:00"),("12:00","21:00"),("12:00","21:00"),("12:00","23:00"),("11:00","23:00"),("11:00","20:00"))),
         "tag": "Open till midnight Fridays",
         "blurb": "Right on Talcottville Road (Route 83), Vernon is the easy stop for Rockville, Ellington and Tolland: pickup on the way home, or a late one on Friday when the oven runs until midnight.",
         "nearby": ["Rockville", "Ellington", "Tolland", "Manchester", "South Windsor"],
@@ -137,7 +137,7 @@ LOCATIONS = [
         "street": "9 Dog Ln", "city": "Storrs", "state": "CT", "zip": "06268",
         "phone": "(860) 454-6038", "toast": "squarepegwindsor",
         "lat": 41.804999, "lng": -72.243305, "geo_exact": True,  # US Census geocoder
-        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","00:00"),("11:00","01:00"),("11:00","01:00"),("11:00","22:00"))),
+        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","21:00"),("11:30","00:00"),("11:00","00:00"),("11:00","23:00"),("11:00","21:00"))),
         "tag": "Steps from UConn",
         "blurb": "Our founders are UConn alumni, so Storrs Center feels like coming home. Dog Lane is where Husky fans land after the game and alumni reunions come together, and the oven runs until 1am on Fridays and Saturdays.",
         "nearby": ["Mansfield", "Coventry", "Willington", "Ashford", "Tolland"],
@@ -150,7 +150,7 @@ LOCATIONS = [
         "street": "353 CT-165", "city": "Preston", "state": "CT", "zip": "06365",
         "phone": "(860) 319-0930", "toast": "square-peg-new-preston-353-connecticut-165",
         "lat": 41.528840, "lng": -71.982108, "geo_exact": True,  # exact pin from Google Maps
-        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:00","23:00"),("11:00","23:00"),("11:00","21:00"))),
+        "hours": h(*(("16:00","20:00"),("16:00","20:00"),("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:30","20:00"))),
         "tag": "Southeastern CT",
         "blurb": "On Route 165, Preston brings wood-fired pies to Norwich, Ledyard and the rest of the southeast corner of the state. It’s an easy dinner stop before or after a night at the casinos.",
         "nearby": ["Norwich", "Ledyard", "Griswold", "Lisbon", "North Stonington"],
@@ -163,7 +163,7 @@ LOCATIONS = [
         "street": "400 New Britain Ave", "city": "Plainville", "state": "CT", "zip": "06062",
         "phone": "(860) 996-0363", "toast": "square-peg-plainville-400-new-britain-avenue",
         "lat": 41.671493, "lng": -72.833556, "geo_exact": True,  # US Census geocoder
-        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","22:00"),("11:30","22:00"),("11:00","23:00"),("11:00","23:00"),("11:00","21:00"))),
+        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","21:00"),("11:30","21:00"),("11:00","23:00"),("11:00","23:00"),("11:00","20:00"))),
         "tag": "Central Connecticut",
         "blurb": "Plainville is our Central CT kitchen, close to New Britain, Southington and Farmington. Drop in, pick up on the way home, or plan a party we can feed.",
         "nearby": ["New Britain", "Southington", "Farmington", "Bristol", "Berlin"],
@@ -188,7 +188,7 @@ LOCATIONS = [
         "street": "320 Howe Ave, Unit 6", "city": "Shelton", "state": "CT", "zip": "06484",
         "phone": "(203) 538-5044", "toast": "square-peg-shelton-310-howe-avenue-unit-6",
         "lat": 41.314898, "lng": -73.091125, "geo_exact": True,  # US Census geocoder
-        "hours": h(*(("12:00","21:00"),("12:00","21:00"),("12:00","22:00"),("12:00","22:00"),("12:00","23:00"),("11:00","23:00"),("11:00","21:00"))),
+        "hours": h(*(("16:00","21:00"),("16:00","21:00"),("16:00","21:00"),("16:00","21:00"),("12:00","23:00"),("11:30","22:00"),("11:30","20:00"))),
         "tag": "Downtown Shelton",
         "blurb": "Our Fairfield County outpost on Howe Avenue, a short walk from the Riverwalk. Shelton brings the Square Peg oven to Derby, Stratford and the Valley.",
         "nearby": ["Derby", "Ansonia", "Stratford", "Trumbull", "Monroe"],
@@ -199,7 +199,7 @@ LOCATIONS = [
         "street": "4957 W Atlantic Ave", "city": "Delray Beach", "state": "FL", "zip": "33445",
         "phone": "(561) 566-8828", "toast": "square-peg-delray-beach-4957-west-atlantic-avenue",
         "lat": 26.457838, "lng": -80.12169, "geo_exact": True,  # US Census geocoder
-        "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","21:00"),("11:30","21:00"),("11:00","22:00"),("11:00","22:00"),("11:00","21:00"))),
+        "hours": h(*(("12:00","21:00"),("12:00","21:00"),("12:00","21:00"),("12:00","21:00"),("12:00","22:00"),("12:00","22:00"),("12:00","20:00"))),
         "tag": "Connecticut pizza in Florida",
         "blurb": "Connecticut pizza, Florida sunshine. Delray Beach has its own kitchen making dough and sauce from scratch, the same way East Hartford does for our Connecticut Pegs. On West Atlantic Avenue, our Delray Peg feeds snowbirds who missed their Glastonbury pie and locals who are just finding out what the fuss is about.",
         "nearby": ["Boynton Beach", "Boca Raton", "Lake Worth Beach", "Highland Beach"],
@@ -687,7 +687,7 @@ ENTERTAINMENT = {
     "east-hartford-ct": [("Thu", "Bingo", "6:30–8:30pm"), ("Sat", "Bingo", "6:30–8:30pm")],
     "glastonbury-ct": [("Wed", "What Trivia", "6:30–9pm")],
     "preston-ct": [("Thu", "Trivia", "7–9pm"), ("Sun", "Bingo", "6pm")],
-    "storrs-ct": [("Wed", "Trivia", "6:30–8:30pm"), ("Fri", "DJ", "10pm–1am"), ("Sat", "DJ", "10pm–1am")],
+    "storrs-ct": [("Wed", "Trivia", "6:30–8:30pm"), ("Fri", "DJ", "10pm–close"), ("Sat", "DJ", "10pm–close")],
     "delray-beach-fl": [("Sun", "Jackpot Bingo", "4–6pm"), ("Mon", "Bingo", "6:30–8:30pm"), ("Wed", "Trivia", "7–9pm")],
 }
 
@@ -702,7 +702,7 @@ PROMOS = {
         ("2 slices + drink", "Cheese or pepperoni."),
         ("1 slice + salad + drink", "Cheese or pepperoni, with a fresh salad."),
     ],
-    "lunch_note": "$10 each. Monday–Friday, 11am–2pm, dine-in.",
+    "lunch_note": "$10 each. Monday–Friday, 11am–2pm where open, dine-in.",
     # Happy hour runs at every location with a bar (Bolton has none yet, so it's
     # gated on the location's "bar" flag). Deals aren't published yet — when they
     # are, add them as a list here and they'll render under the times.
@@ -831,7 +831,7 @@ ENT_DATES = {
 HAPPY_HOUR = {
     "delray-beach-fl": {
         "tagline": "Why limit happy to an hour?",
-        "hours": [("Every day", "2–6pm"), ("Fri & Sat", "8:30–11pm")],
+        "hours": [("Every day", "2–6pm"), ("Fri & Sat", "8:30pm–close")],
         "note": "Dine-in only.",
         "starts": "2026-10-05",
         "local": ["Funky Buddha Hop Gun IPA", "3 Sons Citrus Machine (hazy)", "3 Sons Lite Crispy Bois"],
