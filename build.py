@@ -9,7 +9,8 @@ Content lives in data/content.py. Styles in src/site.css. Behavior in src/site.j
 Photos: drop originals into assets/img-src/<name>.(webp|jpg|png) and rebuild.
 """
 import json, os, re, shutil, sys, html, hashlib
-from datetime import date
+from datetime import date, timedelta
+from html import escape
 from urllib.parse import quote_plus
 from pathlib import Path
 from jinja2 import Environment, DictLoader, select_autoescape
@@ -17,7 +18,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
+from content import HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -773,7 +774,7 @@ T["home"] = """
 <section class="section">
   <div class="wrap craft">
     <div class="craft-photo">{{ img('dough', 'A ball of fresh Square Peg pizza dough', sizes='(min-width:900px) 50vw, 100vw')|safe }}
-      <div class="stamp">Never<br>frozen<small>Dough made daily</small></div></div>
+      <div class="stamp">Never<br>frozen<small>Dough made fresh</small></div></div>
     <div class="stack">
       <span class="eyebrow">How we make it</span>
       <h2>Water. Flour. Time. Fire.</h2>
@@ -867,7 +868,7 @@ T["locations"] = """
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Locations</span></nav>
     <span class="eyebrow">Connecticut + Delray Beach, FL</span>
     <h1>Square Peg Pizzeria locations</h1>
-    <p class="lede">Ten Italian-American restaurants with wood-fired ovens, all making dough from scratch every day. Find the closest one, check if it’s open, and order in a tap.</p>
+    <p class="lede">Ten Italian-American restaurants with wood-fired ovens, all making their dough fresh from scratch. Find the closest one, check if it’s open, and order in a tap.</p>
     <div class="btn-row"><button class="btn btn--flame" type="button" id="geo-quick">{{ icons.pin|safe }}Sort by closest to me</button><a class="btn btn--ghost" href="{{ u('/locations/') }}" data-open-picker="order">{{ icons.bag|safe }}Order now</a></div>
   </div>
 </section>
@@ -978,8 +979,39 @@ T["location"] = """
 
 {% if l.get('bar', True) %}<aside class="hh-bar" aria-label="Happy hour at Square Peg {{ l.short or l.name }}"><div class="wrap">
   <span class="hh-tag">Happy hour</span>
-  <p><b>{{ promos.happy_hour.days }}, {{ promos.happy_hour.time }}</b>{% if promos.happy_hour.deals %} · {{ promos.happy_hour.deals|join(' · ') }}{% else %} <span>at the bar in {{ l.city }}. Ask your bartender what’s running.</span>{% endif %}</p>
+  {% if hh %}<p>{% for days, time in hh.hours %}<b>{{ days }}, {{ time }}</b>{% if not loop.last %} &middot; {% endif %}{% endfor %} <a href="#happy-hour">See the menu &rarr;</a></p>
+  {% else %}<p><b>{{ promos.happy_hour.days }}, {{ promos.happy_hour.time }}</b> <span>at the bar in {{ l.city }}. Ask your bartender what’s running.</span></p>{% endif %}
 </div></aside>{% endif %}
+{% if hh %}<section class="section section--paper hh" id="happy-hour" aria-label="Happy hour menu at Square Peg {{ l.short or l.name }}">
+  <div class="wrap">
+    {% if hh.starts %}<p class="hh-soon" data-season-to="{{ hh.starts_eve }}" hidden><b>Starts {{ hh.starts_long }}</b> &mdash; our new happy hour menu in {{ l.city }}.</p>{% endif %}
+    <div class="section-head">
+      <span class="eyebrow">Happy hour</span>
+      <h2>{{ hh.tagline }}</h2>
+    </div>
+
+    <div class="hh-when">
+      {% for days, time in hh.hours %}<div class="hh-when-row"><span>{{ days }}</span><b>{{ time }}</b></div>{% endfor %}
+      <p class="hh-note">{{ hh.note }}</p>
+    </div>
+
+    {% if hh.local %}<p class="hh-local"><span>Local on tap</span> {{ hh.local|join(' &middot; ')|safe }}</p>{% endif %}
+
+    <div class="hh-cols">
+      <div class="hh-col">
+        <h3 class="hh-side">Drinks</h3>
+        {% for head, blurb, items in hh.drinks %}{{ hh_group(head, blurb, items)|safe }}{% endfor %}
+      </div>
+      <div class="hh-col">
+        <h3 class="hh-side">Bites</h3>
+        {% for head, blurb, items in hh.food %}{{ hh_group(head, blurb, items)|safe }}{% endfor %}
+      </div>
+    </div>
+
+    <p class="hh-foot">Happy hour pricing is dine-in only at Square Peg {{ l.short or l.name }}, {{ l.street }}. Prices and selection can change &mdash; ask your bartender what&rsquo;s pouring.</p>
+  </div>
+</section>{% endif %}
+
 {% if l.sunday_ticket %}<section class="st-strip" aria-label="NFL Sunday Ticket at Square Peg {{ l.short or l.name }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}" hidden>
   <div class="wrap">
     <figure class="st-strip-art">{{ img('sunday-ticket', 'NFL Sunday Ticket for Business from EverPass', sizes='180px')|safe }}</figure>
@@ -1060,7 +1092,7 @@ T["location"] = """
       <span class="eyebrow">About this Peg</span>
       <h2>Italian food &amp; {% if lm.wood %}wood-fired {% endif %}pizza in {{ l.city }}</h2>
       <p>{{ l.blurb }}</p>
-      <p>Every pie starts with dough made fresh daily and never frozen. Choose a red or white {% if lm.detroit %}Neo-Neapolitan round or a crispy-edged Detroit-style pie{% else %}signature pie{% endif %}, build your own, or go gluten-free with our 12″ crust. Vegan cheese is available on any pizza.</p>
+      <p>Every pie starts with dough made fresh from scratch and never frozen. Choose a red or white {% if lm.detroit %}Neo-Neapolitan round or a crispy-edged Detroit-style pie{% else %}signature pie{% endif %}, build your own, or go gluten-free with our 12″ crust. Vegan cheese is available on any pizza.</p>
       <p>Not in a pizza mood? The kitchen turns out Italian-American comfort food too: {{ join_and(lm.words + lm.rest) }}.{% if lm.bar %} Pair it with a cocktail, a glass of wine or a cold beer.{% endif %}{% if lm.extra %} Also here: {{ lm.extra|join('; ')|lower }}.{% endif %}</p>
       <div><p class="note" style="font-weight:700;margin-bottom:6px">Close to</p><div class="chips">{% for n in l.nearby %}<span class="chip">{{ n }}</span>{% endfor %}</div></div>
     </div>
@@ -1434,7 +1466,7 @@ T["about"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in i
     <div class="prose">
       <p>Square Peg Pizzeria was started by UConn alumni who grew up in Hartford and came home to build the kind of place they’d want to hang out in. The first oven was lit in Glastonbury in 2020. Today there are ten Square Pegs, from Storrs Center to Shelton to Delray Beach, Florida.</p>
       <p class="pull">That moment is the product. The pizza is how we get there.</p>
-      <p>Every day, our team makes dough from scratch: in our commissary kitchen for the Connecticut Pegs, and in-house at Delray Beach. It’s never frozen. It isn’t the easy way to do it, but it’s the way that gets the head-tilt, the smile and the “wow.”</p>
+      <p>Our team makes dough fresh from scratch: in our commissary kitchen for the Connecticut Pegs, and in-house at Delray Beach. It’s never frozen. It isn’t the easy way to do it, but it’s the way that gets the head-tilt, the smile and the “wow.”</p>
       <p>We roast, stretch, simmer, press and season with purpose, turning simple ingredients into something that feels familiar and still special. Water. Flour. Time. Heat. Hands that care.</p>
       <p>So this page isn’t really about us. It’s about the families, friends, neighbors and regulars who turn a pizza night into a shared memory: victory slices after long games, first dates, Tuesday fundraisers, and the table that keeps getting bigger.</p>
       <p style="font-weight:800">Whether you’re here for a quick bite, a family tradition, or the start of something new: your table is ready.</p>
@@ -1702,7 +1734,7 @@ T["caught"] = """
         <figcaption><b>{{ ex }} &middot; {{ name }}</b><span>{{ line }}</span></figcaption>
       </figure>{% endfor %}
     </div>
-    <p class="note caught-note">Every pie wood-fired, on dough made from scratch that morning. Never frozen. That&rsquo;s the whole case.</p>
+    <p class="note caught-note">Every pie wood-fired, on dough made fresh from scratch. Never frozen. That&rsquo;s the whole case.</p>
   </div>
 </section>
 
@@ -1757,7 +1789,7 @@ T["evidence"] = """
 <section class="section section--dark on-dark">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Exhibit one</span><h2>The pizza</h2></div>
-    <p class="prose ev-sub">Dough made from scratch that morning, never frozen. Eighty seconds in a wood fire. Red or white, Neo-Neapolitan rounds or crispy-edged Detroit style, gluten-free 12&Prime; crust and vegan cheese on anything.</p>
+    <p class="prose ev-sub">Dough made fresh from scratch, never frozen. Eighty seconds in a wood fire. Red or white, Neo-Neapolitan rounds or crispy-edged Detroit style, gluten-free 12&Prime; crust and vegan cheese on anything.</p>
     <div class="ev-pies">{% for n, d, pic in sigs %}<figure class="ev-pie">
       {{ img(pic, n ~ ' pizza at Square Peg Pizzeria', sizes='(min-width:900px) 25vw, 50vw')|safe }}
       <figcaption><b>{{ n }}</b><span>{{ d }}</span></figcaption>
@@ -1811,7 +1843,7 @@ T["links"] = """
     <a class="link-logo" href="{{ u('/') }}" aria-label="Square Peg Pizzeria home">
       <img src="{{ imgbase }}logo-on-dark-280.webp" srcset="{{ imgbase }}logo-on-dark-280.webp 280w, {{ imgbase }}logo-on-dark-480.webp 480w" sizes="260px" width="280" height="{{ (280 * logo_ratio)|round|int }}" alt="Square Peg Pizzeria">
     </a>
-    <p class="link-lede">Wood-fired pizza, ten locations, dough made from scratch every morning.<br>Everything you might be looking for is right here.</p>
+    <p class="link-lede">Wood-fired pizza, ten locations, dough made fresh from scratch.<br>Everything you might be looking for is right here.</p>
 
     <ul class="link-list">{% for label, dest, sub, hot in links_rows %}
       <li><a class="link-row{{ ' is-hot' if hot }}"
@@ -2291,6 +2323,35 @@ env = Environment(loader=DictLoader(T), autoescape=select_autoescape(default_for
 # ---------------------------------------------------------------- build
 PASTA_NAMES = [n for n, _ in dict((k, v) for _, k, v in MENU["sections"])["pasta"]]
 
+def hh_group(head, blurb, items):
+    """One happy hour group: heading, optional blurb, then name / price / detail rows."""
+    rows = []
+    for name, price, detail, tag in items:
+        badge = f'<span class="hh-badge">{escape(tag)}</span>' if tag else ""
+        rows.append(
+            f'<li class="hh-item"><div class="hh-line"><span class="hh-name">{escape(name)}{badge}</span>'
+            f'<span class="hh-dot" aria-hidden="true"></span>'
+            f'<span class="hh-price">{escape(price)}</span></div>'
+            f'<p class="hh-desc">{escape(detail)}</p></li>')
+    lede = f'<p class="hh-blurb">{escape(blurb)}</p>' if blurb else ""
+    return (f'<div class="hh-group"><h4>{escape(head)}</h4>{lede}'
+            f'<ul class="hh-list">{"".join(rows)}</ul></div>')
+
+
+def happy_hour(l):
+    """Happy hour for one location, or None. Adds the display + gating dates for
+    the "starts <date>" flag, which hides itself the day the menu goes live."""
+    hh = HAPPY_HOUR.get(l["slug"])
+    if not hh:
+        return None
+    hh = dict(hh)
+    if hh.get("starts"):
+        d = date.fromisoformat(hh["starts"])
+        hh["starts_long"] = f"{d.strftime('%A')}, {d.strftime('%B')} {d.day}"
+        hh["starts_eve"] = (d - timedelta(days=1)).isoformat()
+    return hh
+
+
 def loc_menu(l):
     pastas = l.get("pastas") or PASTA_NAMES
     words = [("eggplant parm" if p == "The Bella Parmigiana" else p.lower()) for p in pastas]
@@ -2435,7 +2496,7 @@ def main():
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=MORE_GROUPS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
-        ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and,
+        ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group,
         event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
     )
 
@@ -2459,7 +2520,7 @@ def main():
         oven = "wood-fired " if l.get("wood", True) else ""
         desc = f"Italian restaurant and {oven}pizza at {l['street']}, {l['city']}, {l['state']}: pasta, chicken parm, wings and kids' meals. Hours, {l['phone']}, order online."
         pages.append((f"/locations/{l['slug']}/", title, desc, "location",
-                      dict(l=l, lm=loc_menu(l), rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs, events=location_events(l), ent_dates=ent_dated(l)), schema, l["photo"], l["photo"]))
+                      dict(l=l, lm=loc_menu(l), hh=happy_hour(l), rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs, events=location_events(l), ent_dates=ent_dated(l)), schema, l["photo"], l["photo"]))
 
     menu_schema = {"@type": "Menu", "@id": abs_url("/our-menu/#menu"), "name": "Square Peg Pizzeria menu", "url": abs_url("/our-menu/"),
                    "inLanguage": "en", "hasMenuSection": [
@@ -2510,7 +2571,7 @@ def main():
                   "Earn 20% of dine-in food sales for your school, team or nonprofit with a Square Peg Pizzeria Tuesday Night Fundraiser. Request your date.",
                   "fundraisers", dict(faqs=FUNDRAISER_FAQ), graph(faq_schema(FUNDRAISER_FAQ), breadcrumbs([("Home", "/"), ("Fundraisers", "/fundraisers/")])), "team-kids", "dining-room-kids"))
     pages.append(("/about/", "Our Story | Square Peg Pizzeria",
-                  "Square Peg Pizzeria was started by UConn alumni in Glastonbury in 2020. Dough made from scratch daily, never frozen, and a whole lot of Be Nice.",
+                  "Square Peg Pizzeria was started by UConn alumni in Glastonbury in 2020. Dough made fresh from scratch, never frozen, and a whole lot of Be Nice.",
                   "about", {}, graph(breadcrumbs([("Home", "/"), ("Our Story", "/about/")])), "dough", "dough"))
     pages.append(("/roll-the-dice/", "Roll the Dice: Win Free Pizza at Lunch | Square Peg Pizzeria",
                   "Order any appetizer Monday–Thursday before 4pm at Square Peg Pizzeria, roll two dice, and win a free small cheese pizza or a $20 gift card.",
@@ -2791,7 +2852,7 @@ def vercel_config():
             "redirects": redirects, "headers": headers}
 
 def llms_txt():
-    out = ["# Square Peg Pizzeria", "", "> Wood-fired pizza made from scratch daily, with 10 locations in Connecticut and Delray Beach, Florida. Online ordering for pickup and delivery, catering, a wood-fired food truck, Tuesday night fundraisers, and a rewards app.", "",
+    out = ["# Square Peg Pizzeria", "", "> Wood-fired pizza made fresh from scratch, with 10 locations in Connecticut and Delray Beach, Florida. Online ordering for pickup and delivery, catering, a wood-fired food truck, Tuesday night fundraisers, and a rewards app.", "",
            "## Locations"]
     for l in LOCATIONS:
         out.append(f"- [{l['name']}]({abs_url('/locations/' + l['slug'] + '/')}): {l['street']}, {l['city']}, {l['state']} {l['zip']} · {l['phone']} · order: {order_url(l)}")

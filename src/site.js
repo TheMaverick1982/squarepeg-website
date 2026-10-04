@@ -493,9 +493,11 @@
      the season turns itself on and off without anyone rebuilding or remembering. */
   function paintSeason() {
     var today = isoDay(nowET(), 0);
-    $$("[data-season-from]").forEach(function (el) {
+    // Either end may be left off: "from" only runs forever once it starts, "to"
+    // only shows until that day passes (both ends inclusive).
+    $$("[data-season-from],[data-season-to]").forEach(function (el) {
       var from = el.getAttribute("data-season-from"), to = el.getAttribute("data-season-to");
-      var inSeason = today >= from && (!to || today <= to);
+      var inSeason = (!from || today >= from) && (!to || today <= to);
       el.hidden = el.hasAttribute("data-season-invert") ? inSeason : !inSeason;
     });
   }

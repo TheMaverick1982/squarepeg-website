@@ -952,6 +952,43 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
   color:var(--char);background:var(--flame);padding:5px 10px}
 .hh-bar p{font-size:15px;line-height:1.4;min-width:0}
 .hh-bar p span{color:#c9c0b9}
+.hh-bar p a{color:var(--flame);font-weight:700;text-decoration:none;white-space:nowrap}
+.hh-bar p a:hover{text-decoration:underline}
+
+/* ---- happy hour menu ---- */
+.hh .section-head{margin-bottom:22px}
+.hh-soon{display:inline-block;margin:0 0 20px;padding:11px 16px;background:var(--ember);color:#fff;
+  font-size:15px;line-height:1.4;border-radius:2px}
+.hh-soon b{font-weight:800}
+.hh-when{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 30px;padding-block:16px;
+  border-top:2px solid var(--ink);border-bottom:1px solid var(--line)}
+.hh-when-row{display:flex;align-items:baseline;gap:9px}
+.hh-when-row span{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--smoke)}
+.hh-when-row b{font-size:clamp(20px,2.6vw,26px);font-weight:800;color:var(--ember-deep)}
+.hh-note{flex:none;margin:0;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.hh-local{margin:16px 0 0;font-size:14px;line-height:1.5;color:var(--ink)}
+.hh-local span{display:inline-block;margin-right:8px;font-size:11px;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ember-deep)}
+
+.hh-cols{display:grid;gap:34px 44px;margin-top:30px}
+@media (min-width:900px){.hh-cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hh-col{min-width:0;display:grid;gap:26px;align-content:start}
+.hh-side{margin:0;font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;background:var(--char);padding:8px 12px;justify-self:start}
+.hh-group h4{margin:0 0 4px;font-size:clamp(20px,2.3vw,24px);font-weight:800;letter-spacing:-.01em}
+.hh-blurb{margin:0 0 12px;font-size:14px;font-style:italic;color:var(--smoke)}
+.hh-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:14px}
+.hh-item{min-width:0}
+.hh-line{display:flex;align-items:baseline;gap:8px}
+.hh-name{font-size:16px;font-weight:800;min-width:0}
+.hh-dot{flex:1;min-width:14px;height:1px;border-bottom:1px dotted var(--line);transform:translateY(-3px)}
+.hh-price{flex:none;font-size:16px;font-weight:800;color:var(--ember-deep);font-variant-numeric:tabular-nums}
+.hh-badge{display:inline-block;margin-left:7px;padding:2px 7px;background:var(--ember);color:#fff;
+  font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;vertical-align:2px}
+.hh-desc{margin:3px 0 0;font-size:14.5px;line-height:1.5;color:var(--smoke);max-width:52ch}
+.hh-foot{margin:30px 0 0;padding-top:18px;border-top:1px solid var(--line);font-size:13.5px;
+  line-height:1.55;color:var(--smoke)}
+
 
 /* ---------- /what-you-did/ — the QR flyer landing page ---------- */
 .caught-head h1{font-size:clamp(46px,8.5vw,104px);line-height:.88}

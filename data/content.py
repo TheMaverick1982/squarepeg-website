@@ -126,7 +126,7 @@ LOCATIONS = [
         "lat": 41.742106, "lng": -72.436706, "geo_exact": True,  # US Census geocoder
         "hours": h(*(None,("11:00","20:00"),("11:00","21:00"),("11:00","21:00"),("11:00","21:00"),("11:00","21:00"),("11:00","20:00"))),
         "tag": "Newest Peg",
-        "blurb": "Our newest Peg, on West Street in Bolton. Dough made from scratch every morning, never frozen, plus handmade pasta, parm sandwiches, wings and salads. A straightforward neighborhood spot — weeknight dinner with the family, or a pickup on the way through town.",
+        "blurb": "Our newest Peg, on West Street in Bolton. Dough made fresh from scratch, never frozen, plus handmade pasta, parm sandwiches, wings and salads. A straightforward neighborhood spot — weeknight dinner with the family, or a pickup on the way through town.",
         "nearby": ["Manchester", "Coventry", "Andover", "Vernon", "Hebron"],
         "photo": "pizza-boxes",
     },
@@ -819,6 +819,60 @@ ENT_DATES = {
 # short "next month is coming" message (checked in the browser, Eastern time),
 # so a stale menu never sits there if the update runs late.
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------- happy hour
+# Keyed by location slug, so each Peg publishes its own menu as it's finalised.
+# A location with no entry here falls back to the "ask your bartender" strip.
+#
+#   hours   — (days, time) rows for the badge
+#   starts  — ISO date this menu goes live. A "starts <date>" flag shows on the
+#             page up to the day before, then disappears on its own. Drop the key
+#             once the menu has been running a while.
+#   groups  — (heading, blurb, [(item, price, detail)]) under "drinks" and "food"
+HAPPY_HOUR = {
+    "delray-beach-fl": {
+        "tagline": "Why limit happy to an hour?",
+        "hours": [("Every day", "2–6pm"), ("Fri & Sat", "8:30–11pm")],
+        "note": "Dine-in only.",
+        "starts": "2026-10-05",
+        "local": ["Funky Buddha Hop Gun IPA", "3 Sons Citrus Machine (hazy)", "3 Sons Lite Crispy Bois"],
+        "drinks": [
+            ("Our signatures", "The ones everybody orders twice.", [
+                ("Fruitful Peg-arita", "$9", "Classic + your pick: strawberry, watermelon, blueberry, dragon fruit, passion fruit or coconut", "Fan fave"),
+                ("Classic Peg-arita", "$7", "Tequila, triple sec, lemon, lime & agave", None),
+                ("Cold Brew Martini", "$9", "Cold brew, vodka & Kahlúa. Add Baileys +$2", None),
+            ]),
+            ("Well drinks", "", [
+                ("Well drinks", "$4", "Vodka · gin · rum · tequila · bourbon", None),
+                ("Treat yourself", "+$2", "Tito’s, Smirnoff, Tanqueray, Hendrick’s, Captain Morgan, Casamigos, Maker’s Mark, Woodford Reserve", None),
+            ]),
+            ("Beer & wine", "", [
+                ("Draft beer", "$4", "Miller Lite, Michelob Ultra, Peroni or 3 Sons Lite Crispy Bois", None),
+                ("Draft pitcher", "$16", "Miller Lite, Michelob Ultra, Peroni or 3 Sons Lite Crispy Bois", None),
+                ("Domestic bottles", "$4", "Budweiser, Coors Light, Michelob Ultra or Yuengling", None),
+                ("Local IPA on tap", "$7", "Funky Buddha Hop Gun or 3 Sons Citrus Machine (hazy)", "Local"),
+                ("House wine", "$6 / $9", "6oz or 9oz. Cabernet, Malbec, Pinot Noir, Pinot Grigio, Sauvignon Blanc or Chardonnay", None),
+            ]),
+        ],
+        "food": [
+            ("Wings", "Six wings, one flavor, zero regrets.", [
+                ("6 wings", "$11", "Pick a flavor: BBQ, Hot Honey, Buffalo, Carolina Gold Mustard, or Peg Seasoning or Sweet & Smokey dry rub. Bleu cheese or ranch on the side.", None),
+            ]),
+            ("Starters & sides", "", [
+                ("Loaded chips", "$8", "House-made chips with cheese, bacon & chives", None),
+                ("Cheesy dough bites", "$7", "Warm, cheesy bites + house marinara for dipping", None),
+                ("Fried mozzarella", "$8", "2 pieces, breaded & fried + house marinara for dipping", None),
+                ("Pork meatball", "$8", "One giant house-made meatball, Pecorino Romano + house marinara", None),
+                ("Pretzel", "$11", "Extra-large knot + queso or Carolina Gold mustard BBQ", None),
+                ("Side salad", "$5", "Choice of House or Caesar, with house-made dressing", None),
+            ]),
+            ("Small pizza", "Our classic pies, sized for one. Gluten-free crust +$6.", [
+                ("Small cheese pizza", "$8", "House-made red sauce, mozz + a sprinkle of Parm", None),
+                ("Small 1-topping pizza", "$10", "The cheese pizza + your favorite topping", None),
+            ]),
+        ],
+    },
+}
+
 LTO = {
     "month": "October",
     "year": "2026",

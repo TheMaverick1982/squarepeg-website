@@ -1,6 +1,6 @@
 # Square Peg Pizzeria
 
-> Wood-fired pizza made from scratch daily, with 10 locations in Connecticut and Delray Beach, Florida. Online ordering for pickup and delivery, catering, a wood-fired food truck, Tuesday night fundraisers, and a rewards app.
+> Wood-fired pizza made fresh from scratch, with 10 locations in Connecticut and Delray Beach, Florida. Online ordering for pickup and delivery, catering, a wood-fired food truck, Tuesday night fundraisers, and a rewards app.
 
 ## Locations
 - [Glastonbury](https://squarepegpizzeria.com/locations/glastonbury-ct/): 1001 Hebron Ave, Glastonbury, CT 06033 · (860) 286-0415 · order: https://order.squarepegpizzeria.com/order/square-peg-pizzeria
