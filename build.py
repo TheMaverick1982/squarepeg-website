@@ -982,36 +982,6 @@ T["location"] = """
   {% if hh %}<p>{% for days, time in hh.hours %}<b>{{ days }}, {{ time }}</b>{% if not loop.last %} &middot; {% endif %}{% endfor %} <a href="#happy-hour">See the menu &rarr;</a></p>
   {% else %}<p><b>{{ promos.happy_hour.days }}, {{ promos.happy_hour.time }}</b> <span>at the bar in {{ l.city }}. Ask your bartender what’s running.</span></p>{% endif %}
 </div></aside>{% endif %}
-{% if hh %}<section class="section section--paper hh" id="happy-hour" aria-label="Happy hour menu at Square Peg {{ l.short or l.name }}">
-  <div class="wrap">
-    {% if hh.starts %}<p class="hh-soon" data-season-to="{{ hh.starts_eve }}" hidden><b>Starts {{ hh.starts_long }}</b> &mdash; our new happy hour menu in {{ l.city }}.</p>{% endif %}
-    <div class="section-head">
-      <span class="eyebrow">Happy hour</span>
-      <h2>{{ hh.tagline }}</h2>
-    </div>
-
-    <div class="hh-when">
-      {% for days, time in hh.hours %}<div class="hh-when-row"><span>{{ days }}</span><b>{{ time }}</b></div>{% endfor %}
-      <p class="hh-note">{{ hh.note }}</p>
-    </div>
-
-    {% if hh.local %}<p class="hh-local"><span>Local on tap</span> {{ hh.local|join(' &middot; ')|safe }}</p>{% endif %}
-
-    <div class="hh-cols">
-      <div class="hh-col">
-        <h3 class="hh-side">Drinks</h3>
-        {% for head, blurb, items in hh.drinks %}{{ hh_group(head, blurb, items)|safe }}{% endfor %}
-      </div>
-      <div class="hh-col">
-        <h3 class="hh-side">Bites</h3>
-        {% for head, blurb, items in hh.food %}{{ hh_group(head, blurb, items)|safe }}{% endfor %}
-      </div>
-    </div>
-
-    <p class="hh-foot">Happy hour pricing is dine-in only at Square Peg {{ l.short or l.name }}, {{ l.street }}. Prices and selection can change &mdash; ask your bartender what&rsquo;s pouring.</p>
-  </div>
-</section>{% endif %}
-
 {% if l.sunday_ticket %}<section class="st-strip" aria-label="NFL Sunday Ticket at Square Peg {{ l.short or l.name }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}" hidden>
   <div class="wrap">
     <figure class="st-strip-art">{{ img('sunday-ticket', 'NFL Sunday Ticket for Business from EverPass', sizes='180px')|safe }}</figure>
@@ -1051,6 +1021,35 @@ T["location"] = """
       <span class="ent-dated-label">One night only</span>
       <div class="ent-cards">{% for iso, what, when, label in ent_dates %}<div class="ent-card-sm is-dated" data-season-from="2000-01-01" data-season-to="{{ iso }}" hidden><span class="d">{{ label }}</span><b>{{ what }}</b><span>{{ when }}</span></div>{% endfor %}</div>
     </div>{% endif %}
+  </div>
+</section>{% endif %}
+{% if hh %}<section class="section hh" id="happy-hour" aria-label="Happy hour menu at Square Peg {{ l.short or l.name }}">
+  <div class="wrap">
+    {% if hh.starts %}<p class="hh-soon" data-season-to="{{ hh.starts_eve }}" hidden><b>Starts {{ hh.starts_long }}</b> &mdash; our new happy hour menu in {{ l.city }}.</p>{% endif %}
+    <div class="section-head">
+      <span class="eyebrow">Happy hour</span>
+      <h2>{{ hh.tagline }}</h2>
+    </div>
+
+    <div class="hh-when">
+      {% for days, time in hh.hours %}<div class="hh-when-row"><span>{{ days }}</span><b>{{ time }}</b></div>{% endfor %}
+      <p class="hh-note">{{ hh.note }}</p>
+    </div>
+
+    {% if hh.local %}<p class="hh-local"><span>Local on tap</span> {{ hh.local|join(' &middot; ')|safe }}</p>{% endif %}
+
+    <div class="hh-cols">
+      <div class="hh-col">
+        <h3 class="hh-side">Drinks</h3>
+        {% for head, blurb, items in hh.drinks %}{{ hh_group(head, blurb, items)|safe }}{% endfor %}
+      </div>
+      <div class="hh-col">
+        <h3 class="hh-side">Bites</h3>
+        {% for head, blurb, items in hh.food %}{{ hh_group(head, blurb, items)|safe }}{% endfor %}
+      </div>
+    </div>
+
+    <p class="hh-foot">Happy hour pricing is dine-in only at Square Peg {{ l.short or l.name }}, {{ l.street }}. Prices and selection can change &mdash; ask your bartender what&rsquo;s pouring.</p>
   </div>
 </section>{% endif %}
 <section class="section section--paper">
