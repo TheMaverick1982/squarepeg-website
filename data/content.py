@@ -873,6 +873,78 @@ HAPPY_HOUR = {
     },
 }
 
+# ---------------------------------------------------------------- Halloween
+# Peg or Treat: the Monday of Halloween week through Halloween itself. In 2026
+# Halloween is a Saturday, so the $5 kids menu is what earns the weeknights and
+# Saturday mostly fills itself.
+#
+# The page reads these three dates and shows one of three states on its own:
+#   before "starts"      -> counting down
+#   starts .. ends       -> running now
+#   after "ends"         -> wrapped, winners coming
+# Nothing to switch on or off by hand.
+HALLOWEEN = {
+    "name": "Peg or Treat",
+    "year": 2026,
+    "starts": "2026-10-26",
+    "ends": "2026-10-31",
+    "when": "Monday, October 26 – Saturday, October 31",
+    "hashtag": "#PegOrTreat",
+    "lede": "Six days of it. Come in costume, eat something, and get your picture "
+            "taken in front of a wall of cheese pizza.",
+
+    "prize": "$25 gift card",
+    "prize_extra": "and your photo up on our TVs",
+    "winners": "One winner at every Square Peg.",
+    "judged": "Best costume, picked by the crew at your location after Halloween.",
+
+    # Two ways in, so the families who will never post still get to enter.
+    "enter": [
+        ("Take the photo", "Get in front of the Be Nice pizza wall, in costume. "
+                           "Any Square Peg, any day of the week."),
+        ("Post it or hand it over", "Share it with #PegOrTreat and tag your location — "
+                                    "or ask us and we’ll take it for you."),
+        ("That’s it", "We pick a best costume at each location once Halloween’s done, "
+                      "and get in touch to hand over the card."),
+    ],
+
+    # Specifics Brian is still settling. Each entry renders only once it is filled in.
+    "kids": {
+        "price": "$5",
+        "line": "Kids eat for $5 all six days.",
+        "note": "Full menu coming — ask your server when you’re in.",
+        "items": [],          # e.g. ["Cheese pizza", "Mac & cheese"]
+    },
+    # Renames of drinks already on the menu, so the bar learns nothing new and the
+    # kitchen orders nothing extra — only the name on the board changes.
+    # CONFIRM WITH THE BAR before this goes live.
+    "drinks": {
+        "note": "Same drinks you already like, wearing a costume for the week.",
+        "adults": [
+            ("Vampire’s Kiss", "The Fruitful Peg-arita, made with strawberry. Comes out blood red."),
+            ("Witch’s Brew", "The Fruitful Peg-arita, made with blueberry. Comes out deep purple."),
+            ("Zombie Cold Brew", "Our Cold Brew Martini. Cold brew, vodka and Kahlúa."),
+            ("Jack-o’-Lantern Martini", "October’s Pumpkin Spice Martini, already on the menu."),
+        ],
+        "kids": [
+            ("Swamp Juice", "Lemonade, gone an alarming shade of green."),
+            ("Monster Mash", "Lemonade and grenadine, over ice."),
+        ],
+    },
+
+    "rules": [
+        "Open to anyone who comes in during Peg or Treat week, October 26–31, 2026.",
+        "One winner per Square Peg location. Best costume, judged by our crew — "
+        "it isn’t a random drawing.",
+        "Entering means you’re OK with us sharing your photo on our screens, our "
+        "social accounts and this website. For anyone under 18, a parent or "
+        "guardian needs to be the one entering.",
+        "Winners are contacted after October 31. Prize is a $25 Square Peg gift card, "
+        "no cash value.",
+        "Not sponsored, endorsed or administered by Instagram or Facebook.",
+    ],
+}
+
 LTO = {
     "month": "October",
     "year": "2026",

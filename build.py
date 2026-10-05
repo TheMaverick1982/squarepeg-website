@@ -18,7 +18,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -461,6 +461,48 @@ def graph(*nodes):
     return {"@context": "https://schema.org", "@graph": list(nodes)}
 
 # ---------------------------------------------------------------- templates
+# ---------------------------------------------------------------- Halloween art
+# Drawn here rather than loaded as files: a handful of flat shapes that inherit
+# currentColor, so one CSS rule tints them per section. All decorative, so all
+# aria-hidden.
+HW_ART = {
+    "web": ('<svg class="hw-web" viewBox="0 0 100 100" fill="none" stroke="currentColor" '
+            'stroke-width="1.4" aria-hidden="true"><path d="@@WEB@@"/></svg>'),
+
+    "spider": ('<svg class="hw-spider-svg" viewBox="0 0 64 54" fill="none" aria-hidden="true">'
+               '<g stroke="currentColor" stroke-width="2.6" stroke-linecap="round">'
+               '<path d="M26 26 14 18 4 22"/><path d="M26 31 12 31 3 37"/>'
+               '<path d="M26 36 13 43 6 51"/><path d="M27 22 20 12 22 4"/>'
+               '<path d="M38 26 50 18 60 22"/><path d="M38 31 52 31 61 37"/>'
+               '<path d="M38 36 51 43 58 51"/><path d="M37 22 44 12 42 4"/></g>'
+               '<ellipse cx="32" cy="33" rx="11" ry="13" fill="currentColor"/>'
+               '<circle cx="32" cy="19" r="7" fill="currentColor"/>'
+               '<circle cx="29" cy="18" r="1.8" fill="#fff"/><circle cx="35" cy="18" r="1.8" fill="#fff"/>'
+               '</svg>'),
+
+    "ghost": ('<svg class="hw-ghost-svg" viewBox="0 0 100 110" aria-hidden="true">'
+              '<path fill="currentColor" d="M50 6c22 0 38 16 38 38v54c-5 0-8-6-12-6s-6 6-11 6-7-6-11-6'
+              '-6 6-10 6-6-6-10-6-7 6-12 6V44C22 22 28 6 50 6z"/>'
+              '<ellipse cx="38" cy="44" rx="6" ry="8" fill="#17120F"/>'
+              '<ellipse cx="62" cy="44" rx="6" ry="8" fill="#17120F"/>'
+              '<ellipse cx="50" cy="64" rx="7" ry="9" fill="#17120F" opacity=".75"/></svg>'),
+
+    "pumpkin": ('<svg class="hw-pumpkin-svg" viewBox="0 0 110 100" aria-hidden="true">'
+                '<path d="M55 20c3-9 10-14 18-13-3 7-8 11-14 13" fill="#3F7A2E"/>'
+                '<rect x="51" y="12" width="8" height="14" rx="3" fill="#3F7A2E"/>'
+                '<ellipse cx="30" cy="62" rx="24" ry="33" fill="currentColor" opacity=".82"/>'
+                '<ellipse cx="80" cy="62" rx="24" ry="33" fill="currentColor" opacity=".82"/>'
+                '<ellipse cx="55" cy="62" rx="31" ry="35" fill="currentColor"/>'
+                '<path d="M36 50l11 10H25zM74 50l11 10H63z" fill="#17120F"/>'
+                '<path d="M33 74h44l-6 9h-8l-5-6-5 6h-8z" fill="#17120F"/></svg>'),
+
+    "bat": ('<svg class="hw-bat-svg" viewBox="0 0 120 56" aria-hidden="true">'
+            '<path fill="currentColor" d="M60 12c4 0 7 3 8 7 7-9 17-14 28-15-5 5-7 11-6 18 5-3 11-3 16 0'
+            '-9 2-15 8-18 17-8-6-18-8-28-6-10-2-20 0-28 6-3-9-9-15-18-17 5-3 11-3 16 0-1-7 1-13-6-18'
+            '11 1 21 6 28 15 1-4 4-7 8-7z"/></svg>'),
+}
+HW_ART["web"] = HW_ART["web"].replace("@@WEB@@", "M0 0L100.0 0.0M0 0L95.1 30.9M0 0L80.9 58.8M0 0L58.8 80.9M0 0L30.9 95.1M0 0L0.0 100.0M26.0 0.0Q19.3 3.1 24.7 8.0M24.7 8.0Q17.4 8.9 21.0 15.3M21.0 15.3Q13.8 13.8 15.3 21.0M15.3 21.0Q8.9 17.4 8.0 24.7M8.0 24.7Q3.1 19.3 0.0 26.0M46.0 0.0Q34.2 5.4 43.7 14.2M43.7 14.2Q30.8 15.7 37.2 27.0M37.2 27.0Q24.5 24.5 27.0 37.2M27.0 37.2Q15.7 30.8 14.2 43.7M14.2 43.7Q5.4 34.2 0.0 46.0M66.0 0.0Q49.0 7.8 62.8 20.4M62.8 20.4Q44.2 22.5 53.4 38.8M53.4 38.8Q35.1 35.1 38.8 53.4M38.8 53.4Q22.5 44.2 20.4 62.8M20.4 62.8Q7.8 49.0 0.0 66.0M88.0 0.0Q65.4 10.4 83.7 27.2M83.7 27.2Q59.0 30.1 71.2 51.7M71.2 51.7Q46.8 46.8 51.7 71.2M51.7 71.2Q30.1 59.0 27.2 83.7M27.2 83.7Q10.4 65.4 0.0 88.0")
+
 ICONS = {
     "bag": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
     "phone": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>',
@@ -480,7 +522,7 @@ MORE_GROUPS = [
              ("Pairing Guide", "/pairing/"), ("Rewards & Monthly Deals", "/deals/")]),
     ("Plan", [("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"),
               ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
-    ("Fun", [("Roll the Dice", "/roll-the-dice/"), ("Date Night", "/date-night/"),
+    ("Fun", [("Halloween", "/halloween/"), ("Roll the Dice", "/roll-the-dice/"), ("Date Night", "/date-night/"),
              ("What Pizza Are You?", "/what-pizza-are-you/"), ("Pizza Trivia", "/pizza-trivia/")]),
     ("Helpful", [("Pizza Calculator", "/pizza-calculator/"), ("Pizza FAQ", "/pizza-faq/"),
                  ("Gift Cards", "GIFT")]),
@@ -2116,6 +2158,127 @@ T["calculator"] = """
 <script type="application/json" id="calc-cfg">{{ calc_json|safe }}</script>
 """
 
+T["halloween"] = """
+<section class="page-head on-dark hw-head">
+  {{ img('oven-fire', 'Pizza in the wood-fired oven at Square Peg', eager=True, cls='bg')|safe }}
+  <span class="hw-web-wrap hw-web-l">{{ hwart.web|safe }}</span>
+  <span class="hw-web-wrap hw-web-r">{{ hwart.web|safe }}</span>
+  <span class="hw-bat hw-bat-1">{{ hwart.bat|safe }}</span>
+  <span class="hw-bat hw-bat-2">{{ hwart.bat|safe }}</span>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Halloween</span></nav>
+
+    <p class="hw-state hw-soon" data-season-to="{{ hw.eve }}" hidden>Starts {{ hw.starts_long }}</p>
+    <p class="hw-state hw-now" data-season-from="{{ hw.starts }}" data-season-to="{{ hw.ends }}" hidden>On now &mdash; through Halloween</p>
+    <p class="hw-state hw-done" data-season-from="{{ hw.after }}" hidden>That&rsquo;s a wrap. Winners being picked now.</p>
+
+    <h1><span class="eyebrow h1-eyebrow"><span>{{ hw.when }}</span></span>{{ hw.name }}</h1>
+    <p class="lede">{{ hw.lede }}</p>
+    <div class="btn-row">
+      <a class="btn" href="#enter">{{ icons.arrow|safe }}How to enter</a>
+      <a class="btn btn--ghost" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Peg</a>
+    </div>
+  </div>
+</section>
+
+<section class="section hw-three">
+  <div class="wrap">
+    <div class="hw-grid">
+      <article class="hw-card">
+        <span class="hw-art">{{ hwart.ghost|safe }}</span>
+        <span class="hw-num">01</span>
+        <h2>Come in costume</h2>
+        <p>Any of the six days, not just Halloween. Kids, grown-ups, whole families in a group costume &mdash; we&rsquo;ve seen worse ideas.</p>
+      </article>
+      <article class="hw-card">
+        <span class="hw-art">{{ hwart.pumpkin|safe }}</span>
+        <span class="hw-num">02</span>
+        <h2>{{ hw.kids.price }} kids meals</h2>
+        <p>{{ hw.kids.line }} {{ hw.kids.note }}</p>
+      </article>
+      <article class="hw-card">
+        <span class="hw-art">{{ hwart.bat|safe }}</span>
+        <span class="hw-num">03</span>
+        <h2>Win {{ hw.prize }}</h2>
+        <p>Best costume at every location takes a {{ hw.prize }} &mdash; {{ hw.prize_extra }}.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper hw-spidered" id="enter">
+  <span class="hw-spider" aria-hidden="true"><i class="hw-thread"></i>{{ hwart.spider|safe }}</span>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">The costume contest</span>
+      <h2>Three steps. None of them hard.</h2>
+      <p>{{ hw.winners }} {{ hw.judged }}</p>
+    </div>
+    <ol class="hw-steps">
+      {% for head, body in hw.enter %}<li><b>{{ head }}</b><span>{{ body }}</span></li>{% endfor %}
+    </ol>
+    <p class="hw-tag">Tag it <b>{{ hw.hashtag }}</b></p>
+  </div>
+</section>
+
+<section class="section section--dark on-dark hw-wall">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">The photo op</span>
+      <h2>A wall of cheese pizza. In every location.</h2>
+      <p>Eight feet of molten mozzarella mid-stretch, with <em>Be Nice</em> across the top. It is, objectively, the best thing in the building to stand in front of in a costume.</p>
+      <p>Ask anyone working and they&rsquo;ll take the picture for you. No phone, no social account, no problem &mdash; we&rsquo;ll enter it for you.</p>
+      <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your closest Peg</a></div>
+    </div>
+    <div>{{ img('pizza-wall', 'The Be Nice pizza wall backdrop at Square Peg Pizzeria — a cheese pull across a red banner', sizes='(min-width:900px) 46vw, 100vw')|safe }}</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="hw-two">
+      <article class="hw-panel">
+        <span class="eyebrow">All six days</span>
+        <h2>Kids eat for {{ hw.kids.price }}</h2>
+        <p>{{ hw.kids.note }}</p>
+        {% if hw.kids.items %}<ul class="hw-list">{% for i in hw.kids['items'] %}<li>{{ i }}</li>{% endfor %}</ul>{% endif %}
+        <p class="note">Dine-in. One {{ hw.kids.price }} meal per child.</p>
+      </article>
+      <article class="hw-panel">
+        <span class="eyebrow">Behind the bar</span>
+        <h2>Same drinks, in costume</h2>
+        <p>{{ hw.drinks.note }}</p>
+        {% if hw.drinks.adults %}<h3 class="hw-sub">For the grown-ups</h3>
+        <ul class="hw-list">{% for n, d in hw.drinks.adults %}<li><b>{{ n }}</b><span>{{ d }}</span></li>{% endfor %}</ul>{% endif %}
+        {% if hw.drinks.kids %}<h3 class="hw-sub">For the kids</h3>
+        <ul class="hw-list">{% for n, d in hw.drinks.kids %}<li><b>{{ n }}</b><span>{{ d }}</span></li>{% endfor %}</ul>{% endif %}
+        <p class="note">At locations with a bar. Bolton doesn&rsquo;t have one yet.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap cta-foot">
+    <h2>See you in costume.</h2>
+    <p class="prose">{{ hw.when }}, at all ten Square Pegs.</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="halloween">{{ icons.bag|safe }}Order online</a>
+      <a class="btn btn--line" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Peg</a>
+      <a class="btn btn--line" href="{{ u('/monthly-specials/') }}">This month&rsquo;s menu</a>
+    </div>
+  </div>
+</section>
+
+<section class="section hw-rules">
+  <span class="hw-web-wrap hw-web-rules">{{ hwart.web|safe }}</span>
+  <div class="wrap">
+    <h2>The fine print</h2>
+    <ul>{% for r in hw.rules %}<li>{{ r }}</li>{% endfor %}</ul>
+  </div>
+</section>
+"""
+
 T["pairing"] = """
 <section class="page-head on-dark">
   {{ img('pie-spicy-margherita', 'A Square Peg pizza fresh from the wood-fired oven', eager=True, cls='bg')|safe }}
@@ -2322,6 +2485,18 @@ env = Environment(loader=DictLoader(T), autoescape=select_autoescape(default_for
 
 # ---------------------------------------------------------------- build
 PASTA_NAMES = [n for n, _ in dict((k, v) for _, k, v in MENU["sections"])["pasta"]]
+
+def halloween():
+    """Halloween week with the dates the page gates itself on: the day before it
+    starts, and the day after it ends."""
+    hw = dict(HALLOWEEN)
+    a = date.fromisoformat(hw["starts"])
+    b = date.fromisoformat(hw["ends"])
+    hw["eve"] = (a - timedelta(days=1)).isoformat()
+    hw["after"] = (b + timedelta(days=1)).isoformat()
+    hw["starts_long"] = f"{a.strftime('%A')}, {a.strftime('%B')} {a.day}"
+    return hw
+
 
 def hh_group(head, blurb, items):
     """One happy hour group: heading, optional blurb, then name / price / detail rows."""
@@ -2544,7 +2719,7 @@ def main():
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=MORE_GROUPS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
-        ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, lunch_where=lunch_windows(),
+        ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, hwart=HW_ART, lunch_where=lunch_windows(),
         event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
     )
 
@@ -2621,6 +2796,28 @@ def main():
     pages.append(("/about/", "Our Story | Square Peg Pizzeria",
                   "Square Peg Pizzeria was started by UConn alumni in Glastonbury in 2020. Dough made fresh from scratch, never frozen, and a whole lot of Be Nice.",
                   "about", {}, graph(breadcrumbs([("Home", "/"), ("Our Story", "/about/")])), "dough", "dough"))
+    hw = halloween()
+    pages.append(("/halloween/",
+                  f"{hw['name']}: Halloween at Square Peg Pizzeria | Costume Contest & $5 Kids Meals",
+                  f"{hw['when']}. Come in costume, {hw['kids']['price']} kids meals all week, and a "
+                  f"costume contest at every Square Peg — best costume wins a {hw['prize']}.",
+                  "halloween", dict(hw=hw),
+                  graph(breadcrumbs([("Home", "/"), (hw["name"], "/halloween/")]),
+                        {"@type": "Event", "name": f"{hw['name']} at Square Peg Pizzeria",
+                         "startDate": hw["starts"], "endDate": hw["ends"],
+                         "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                         "eventStatus": "https://schema.org/EventScheduled",
+                         "description": hw["lede"],
+                         "image": img_url("sp-three-pies", 1200),
+                         "location": [{"@type": "Restaurant", "name": f"Square Peg Pizzeria {l['name']}",
+                                       "address": {"@type": "PostalAddress", "streetAddress": l["street"],
+                                                   "addressLocality": l["city"], "addressRegion": l["state"],
+                                                   "postalCode": l["zip"], "addressCountry": "US"}}
+                                      for l in LOCATIONS],
+                         "organizer": {"@type": "Organization", "name": "Square Peg Pizzeria",
+                                       "url": abs_url("/")}}),
+                  "sp-three-pies", "oven-fire"))
+
     pages.append(("/roll-the-dice/", "Roll the Dice: Win Free Pizza at Lunch | Square Peg Pizzeria",
                   "Order any appetizer Monday–Thursday before 4pm at Square Peg Pizzeria, roll two dice, and win a free small cheese pizza or a $20 gift card.",
                   "dice", dict(dice=DICE), graph(breadcrumbs([("Home", "/"), ("Roll the Dice", "/roll-the-dice/")])), "table-spread", "table-spread"))

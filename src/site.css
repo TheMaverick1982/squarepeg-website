@@ -986,6 +986,87 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hh-badge{display:inline-block;margin-left:7px;padding:2px 7px;background:var(--ember);color:#fff;
   font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;vertical-align:2px}
 .hh-desc{margin:3px 0 0;font-size:14.5px;line-height:1.5;color:var(--smoke);max-width:52ch}
+/* ---- Halloween: Peg or Treat ---- */
+/* One page only. Orange is the guest here; Square Peg red still runs the room. */
+.hw-head,.hw-three,.hw-spidered,.hw-wall,.hw-rules,.hw-two,.cta-foot{--pumpkin:#F2761B;--pumpkin-deep:#D85F0A}
+.hw-head{position:relative;overflow:hidden}
+.hw-three,.hw-spidered,.hw-rules{position:relative;overflow:hidden}
+
+.hw-web-wrap{position:absolute;top:0;width:clamp(120px,17vw,210px);aspect-ratio:1;
+  color:#fff;opacity:.17;pointer-events:none;z-index:1}
+.hw-web-wrap svg{width:100%;height:100%;display:block}
+.hw-web-l{left:0}
+.hw-web-r{right:0;transform:scaleX(-1)}
+.hw-web-rules{right:0;top:0;color:var(--ink);opacity:.09;width:clamp(100px,12vw,150px)}
+
+.hw-bat{position:absolute;color:#fff;opacity:.3;pointer-events:none;z-index:1;
+  width:clamp(42px,5vw,70px)}
+.hw-bat svg{width:100%;height:auto;display:block}
+.hw-bat-1{top:18%;right:16%;animation:hw-drift 7s ease-in-out infinite}
+.hw-bat-2{top:34%;right:26%;width:clamp(28px,3.4vw,46px);opacity:.2;
+  animation:hw-drift 9s ease-in-out infinite reverse}
+@keyframes hw-drift{0%,100%{transform:translate(0,0) rotate(0)}
+  50%{transform:translate(-14px,-10px) rotate(-6deg)}}
+
+/* the spider hangs off the top edge of the contest section */
+.hw-spider{position:absolute;top:0;right:clamp(24px,9vw,140px);width:46px;
+  display:grid;justify-items:center;color:var(--ink);pointer-events:none;z-index:2;
+  transform-origin:top center;animation:hw-sway 5.5s ease-in-out infinite}
+.hw-thread{display:block;width:1px;height:clamp(34px,6vw,64px);background:var(--ink);opacity:.45}
+.hw-spider svg{width:100%;height:auto;display:block;margin-top:-2px}
+@keyframes hw-sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+
+.hw-card{position:relative;overflow:hidden}
+.hw-art{position:absolute;right:-12px;bottom:-14px;width:108px;opacity:.22;
+  color:var(--pumpkin,#F2761B);pointer-events:none}
+.hw-art svg{width:100%;height:auto;display:block}
+.hw-num{color:var(--pumpkin-deep,#D85F0A)}
+
+.hw-steps li::before{background:var(--pumpkin-deep,#D85F0A)}
+.hw-tag b{color:var(--pumpkin-deep,#D85F0A)}
+.hw-soon{background:var(--pumpkin,#F2761B);color:#17120F}
+.hw-three .hw-grid,.hw-spidered .wrap,.hw-rules .wrap{position:relative;z-index:2}
+.hw-panel .eyebrow{color:var(--pumpkin-deep,#D85F0A)}
+.hw-sub{color:var(--pumpkin-deep,#D85F0A)}
+
+@media (prefers-reduced-motion:reduce){
+  .hw-bat-1,.hw-bat-2,.hw-spider{animation:none}
+}
+
+.hw-state{display:inline-block;margin:0 0 14px;padding:8px 14px;font-size:14px;font-weight:800;
+  letter-spacing:.04em;border-radius:2px}
+.hw-soon{background:var(--flame);color:var(--char)}
+.hw-now{background:var(--ember);color:#fff}
+.hw-done{background:rgba(255,255,255,.14);color:#fff}
+.hw-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.hw-card{background:var(--white);border:1px solid var(--line);border-top:4px solid var(--pumpkin,#F2761B);
+  padding:22px 20px 24px;display:grid;gap:8px;align-content:start;min-width:0}
+.hw-num{font:800 11px/1 var(--body);letter-spacing:.22em;color:var(--ember-deep)}
+.hw-card h2{font-size:clamp(24px,3vw,30px);margin:0}
+.hw-card p{margin:0;color:var(--smoke);font-size:15px;line-height:1.55}
+.hw-steps{list-style:none;counter-reset:hw;margin:24px 0 0;padding:0;display:grid;gap:16px;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.hw-steps li{counter-increment:hw;position:relative;padding-left:46px;min-width:0}
+.hw-steps li::before{content:counter(hw);position:absolute;left:0;top:-2px;width:32px;height:32px;
+  display:grid;place-items:center;background:var(--char);color:#fff;font:800 15px/1 var(--body);border-radius:50%}
+.hw-steps b{display:block;font-size:17px;margin-bottom:3px}
+.hw-steps span{display:block;color:var(--smoke);font-size:14.5px;line-height:1.55}
+.hw-tag{margin:26px 0 0;font-size:16px;color:var(--smoke)}
+.hw-tag b{color:var(--ember-deep);font-weight:800;letter-spacing:.02em}
+.hw-two{display:grid;gap:22px}
+@media (min-width:880px){.hw-two{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.hw-panel{background:var(--paper);border:1px solid var(--line);padding:26px 24px 28px;min-width:0}
+.hw-panel h2{margin:6px 0 10px;font-size:clamp(26px,3.2vw,34px)}
+.hw-panel>p{color:var(--smoke);line-height:1.6}
+.hw-sub{margin:20px 0 8px;font:800 11px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;color:var(--ember-deep)}
+.hw-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.hw-list li{min-width:0}
+.hw-list b{display:block;font-size:16px}
+.hw-list span{display:block;color:var(--smoke);font-size:14px;line-height:1.5}
+.hw-panel .note{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.hw-rules h2{font-size:clamp(22px,2.6vw,28px);margin:0 0 14px}
+.hw-rules ul{margin:0;padding-left:20px;display:grid;gap:9px;max-width:72ch}
+.hw-rules li{color:var(--smoke);font-size:14px;line-height:1.6}
 .lunch-where{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:7px;font-size:14.5px}
 .lunch-where li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
 .lunch-where a{color:#fff;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
