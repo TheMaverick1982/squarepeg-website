@@ -894,16 +894,16 @@ HALLOWEEN = {
             "taken in front of a wall of cheese pizza.",
 
     "prize": "$25 gift card",
-    "prize_extra": "and your photo up on our TVs",
+    "prize_extra": "and your photo on our social media",
     "winners": "One winner at every Square Peg.",
     "judged": "Best costume, picked by the crew at your location after Halloween.",
 
     # Two ways in, so the families who will never post still get to enter.
     "enter": [
-        ("Take the photo", "Get in front of the Be Nice pizza wall, in costume. "
-                           "Any Square Peg, any day of the week."),
-        ("Post it or hand it over", "Share it with #PegOrTreat and tag your location — "
-                                    "or ask us and we’ll take it for you."),
+        ("Take the photo", "Get in front of the pizza wall, in costume. Any Square Peg, "
+                           "any day of the week. Ask us and we’ll take it for you."),
+        ("Post it and tag us", "Put it on Instagram or Facebook with #PegOrTreat and tag "
+                               "your Square Peg. Tagged posts are what we judge from."),
         ("That’s it", "We pick a best costume at each location once Halloween’s done, "
                       "and get in touch to hand over the card."),
     ],
@@ -912,7 +912,7 @@ HALLOWEEN = {
     "kids": {
         "price": "$5",
         "line": "Kids eat for $5 all six days.",
-        "note": "Full menu coming — ask your server when you’re in.",
+        "note": "Dine-in, all six days.",
         "items": [],          # e.g. ["Cheese pizza", "Mac & cheese"]
     },
     # Renames of drinks already on the menu, so the bar learns nothing new and the
@@ -934,13 +934,16 @@ HALLOWEEN = {
 
     "rules": [
         "Open to anyone who comes in during Peg or Treat week, October 26–31, 2026.",
+        "To be considered you have to post your photo and tag us — we judge from "
+        "tagged posts on Instagram and Facebook. A photo we take for you still has "
+        "to be posted and tagged by you.",
         "One winner per Square Peg location. Best costume, judged by our crew — "
         "it isn’t a random drawing.",
         "Entering means you’re OK with us sharing your photo on our screens, our "
         "social accounts and this website. For anyone under 18, a parent or "
         "guardian needs to be the one entering.",
         "Winners are contacted after October 31. Prize is a $25 Square Peg gift card, "
-        "no cash value.",
+        "no cash value, plus your photo on our social accounts.",
         "Not sponsored, endorsed or administered by Instagram or Facebook.",
     ],
 }

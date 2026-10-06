@@ -2188,13 +2188,14 @@ T["halloween"] = """
         <span class="hw-art">{{ hwart.ghost|safe }}</span>
         <span class="hw-num">01</span>
         <h2>Come in costume</h2>
-        <p>Any of the six days, not just Halloween. Kids, grown-ups, whole families in a group costume &mdash; we&rsquo;ve seen worse ideas.</p>
+        <p>Any of the six days, not just Halloween. Kids, grown-ups, whole families in a group costume.</p>
       </article>
       <article class="hw-card">
         <span class="hw-art">{{ hwart.pumpkin|safe }}</span>
         <span class="hw-num">02</span>
         <h2>{{ hw.kids.price }} kids meals</h2>
-        <p>{{ hw.kids.line }} {{ hw.kids.note }}</p>
+        <p>{{ hw.kids.line }}</p>
+        <a class="hw-jump" href="#kids">See the menu {{ icons.arrow|safe }}</a>
       </article>
       <article class="hw-card">
         <span class="hw-art">{{ hwart.bat|safe }}</span>
@@ -2209,10 +2210,16 @@ T["halloween"] = """
 <section class="section section--paper hw-spidered" id="enter">
   <span class="hw-spider" aria-hidden="true"><i class="hw-thread"></i>{{ hwart.spider|safe }}</span>
   <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">The costume contest</span>
-      <h2>Three steps. None of them hard.</h2>
-      <p>{{ hw.winners }} {{ hw.judged }}</p>
+    <div class="hw-head-row">
+      <div class="section-head">
+        <span class="eyebrow">The costume contest</span>
+        <h2>Three steps. None of them hard.</h2>
+        <p>{{ hw.winners }} {{ hw.judged }}</p>
+      </div>
+      <figure class="hw-gc">
+        {{ img('gift-card-25', 'A $25 Square Peg Pizzeria gift card', sizes='(min-width:900px) 32vw, 70vw')|safe }}
+        <figcaption>What the best costume at your Square Peg takes home.</figcaption>
+      </figure>
     </div>
     <ol class="hw-steps">
       {% for head, body in hw.enter %}<li><b>{{ head }}</b><span>{{ body }}</span></li>{% endfor %}
@@ -2226,18 +2233,24 @@ T["halloween"] = """
     <div class="stack">
       <span class="eyebrow">The photo op</span>
       <h2>A wall of cheese pizza. In every location.</h2>
-      <p>Eight feet of molten mozzarella mid-stretch, with <em>Be Nice</em> across the top. It is, objectively, the best thing in the building to stand in front of in a costume.</p>
-      <p>Ask anyone working and they&rsquo;ll take the picture for you. No phone, no social account, no problem &mdash; we&rsquo;ll enter it for you.</p>
+      <p>Eight feet of molten mozzarella mid-stretch. It is, objectively, the best thing in the building to stand in front of in a costume.</p>
+      <p>Ask anyone working and they&rsquo;ll take the picture for you &mdash; then post it and tag us.</p>
       <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your closest Peg</a></div>
     </div>
-    <div>{{ img('pizza-wall', 'The Be Nice pizza wall backdrop at Square Peg Pizzeria — a cheese pull across a red banner', sizes='(min-width:900px) 46vw, 100vw')|safe }}</div>
+    <div class="hw-wall-stage">
+      <span class="hw-lurk hw-lurk-ghost">{{ hwart.ghost|safe }}</span>
+      <span class="hw-lurk hw-lurk-bat">{{ hwart.bat|safe }}</span>
+      <span class="hw-lurk hw-lurk-web">{{ hwart.web|safe }}</span>
+      <span class="hw-lurk hw-lurk-pumpkin">{{ hwart.pumpkin|safe }}</span>
+      <div class="hw-wall-img">{{ img('pizza-wall', 'The pizza wall photo backdrop at Square Peg Pizzeria', sizes='(min-width:900px) 46vw, 100vw')|safe }}</div>
+    </div>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap">
     <div class="hw-two">
-      <article class="hw-panel">
+      <article class="hw-panel" id="kids">
         <span class="eyebrow">All six days</span>
         <h2>Kids eat for {{ hw.kids.price }}</h2>
         <p>{{ hw.kids.note }}</p>

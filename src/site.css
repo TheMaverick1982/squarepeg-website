@@ -1011,10 +1011,16 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 /* the spider hangs off the top edge of the contest section */
 .hw-spider{position:absolute;top:0;right:clamp(24px,9vw,140px);width:46px;
   display:grid;justify-items:center;color:var(--ink);pointer-events:none;z-index:2;
-  transform-origin:top center;animation:hw-sway 5.5s ease-in-out infinite}
-.hw-thread{display:block;width:1px;height:clamp(34px,6vw,64px);background:var(--ink);opacity:.45}
-.hw-spider svg{width:100%;height:auto;display:block;margin-top:-2px}
-@keyframes hw-sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+  transform-origin:top center;animation:hw-sway 6s ease-in-out infinite}
+/* the thread stretches and the spider rides it, so he drops and climbs */
+.hw-thread{display:block;width:1px;background:var(--ink);opacity:.45;
+  height:clamp(34px,6vw,64px);transform-origin:top center;
+  animation:hw-drop 6s ease-in-out infinite}
+.hw-spider svg{width:100%;height:auto;display:block;margin-top:-2px;
+  animation:hw-drop-move 6s ease-in-out infinite}
+@keyframes hw-sway{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@keyframes hw-drop{0%,100%{transform:scaleY(1)}45%{transform:scaleY(2.1)}}
+@keyframes hw-drop-move{0%,100%{transform:translateY(0)}45%{transform:translateY(clamp(30px,5vw,58px))}}
 
 .hw-card{position:relative;overflow:hidden}
 .hw-art{position:absolute;right:-12px;bottom:-14px;width:108px;opacity:.22;
@@ -1029,8 +1035,48 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hw-panel .eyebrow{color:var(--pumpkin-deep,#D85F0A)}
 .hw-sub{color:var(--pumpkin-deep,#D85F0A)}
 
+/* the jump down to the kids menu */
+.hw-jump{display:inline-flex;align-items:center;gap:7px;margin-top:4px;
+  font-size:14px;font-weight:800;color:var(--pumpkin-deep,#D85F0A);text-decoration:none}
+.hw-jump:hover{text-decoration:underline}
+.hw-jump svg{width:15px;height:15px}
+
+/* headline left, the prize itself on the right */
+.hw-head-row{display:grid;gap:30px;align-items:center}
+@media (min-width:900px){.hw-head-row{grid-template-columns:minmax(0,1fr) minmax(0,.78fr)}}
+.hw-head-row .section-head{margin-bottom:0}
+.hw-gc{margin:0;display:grid;justify-items:center;gap:12px;min-width:0}
+.hw-gc img{display:block;width:100%;height:auto;transform:rotate(-5deg);
+  transition:transform .3s ease}
+.hw-gc:hover img{transform:rotate(-2deg) scale(1.02)}
+.hw-gc figcaption{font-size:13px;line-height:1.5;color:var(--smoke);text-align:center;max-width:34ch}
+
+/* the wall sits at an angle, the way you'd actually see it across a room */
+.hw-wall-stage{position:relative;min-width:0;perspective:1100px}
+.hw-wall-img{transform:rotateY(-9deg) rotateX(1.5deg);transform-origin:right center;
+  box-shadow:0 26px 60px rgba(0,0,0,.45);border-radius:2px;overflow:hidden}
+.hw-wall-img img{display:block;width:100%;height:auto}
+.hw-lurk{position:absolute;pointer-events:none;z-index:2}
+.hw-lurk svg{width:100%;height:auto;display:block}
+.hw-lurk-ghost{width:clamp(44px,6vw,74px);color:#fff;opacity:.9;left:-18px;top:12%;
+  animation:hw-float 5s ease-in-out infinite}
+.hw-lurk-bat{width:clamp(40px,5vw,62px);color:#fff;opacity:.5;left:1%;top:56%;
+  animation:hw-drift 7.5s ease-in-out infinite}
+.hw-lurk-web{width:clamp(66px,8vw,104px);color:#fff;opacity:.3;right:0;top:0;transform:scaleX(-1)}
+.hw-lurk-pumpkin{width:clamp(48px,6vw,78px);color:var(--pumpkin,#F2761B);opacity:.95;
+  left:4%;bottom:-24px}
+@keyframes hw-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+/* on a phone the stage is nearly the full width, so keep the lurkers inside it */
+@media (max-width:700px){
+  .hw-lurk-ghost{left:4px;top:8%}
+  .hw-lurk-pumpkin{left:6px;bottom:-14px}
+  .hw-lurk-bat{left:auto;right:6px;top:auto;bottom:16%}
+}
+
 @media (prefers-reduced-motion:reduce){
-  .hw-bat-1,.hw-bat-2,.hw-spider{animation:none}
+  .hw-bat-1,.hw-bat-2,.hw-spider,.hw-thread,.hw-spider svg,
+  .hw-lurk-ghost,.hw-lurk-bat{animation:none}
+  .hw-gc img{transition:none}
 }
 
 .hw-state{display:inline-block;margin:0 0 14px;padding:8px 14px;font-size:14px;font-weight:800;
