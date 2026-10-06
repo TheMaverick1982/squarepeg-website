@@ -1035,6 +1035,10 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hw-panel .eyebrow{color:var(--pumpkin-deep,#D85F0A)}
 .hw-sub{color:var(--pumpkin-deep,#D85F0A)}
 
+/* costumes tiled behind the contest section — faint enough to read straight over */
+.hw-costumes{position:absolute;inset:0;width:100%;height:100%;
+  color:var(--ink);opacity:.055;pointer-events:none;z-index:0}
+
 /* the jump down to the kids menu */
 .hw-jump{display:inline-flex;align-items:center;gap:7px;margin-top:4px;
   font-size:14px;font-weight:800;color:var(--pumpkin-deep,#D85F0A);text-decoration:none}
