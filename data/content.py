@@ -132,6 +132,9 @@ LOCATIONS = [
     },
     {
         "slug": "storrs-ct", "review_url": "https://g.page/r/CVgVzNCipW3ZEAE/review", "sunday_ticket": True,
+        # UConn campus payment, Storrs only. Flagged per location so no other
+        # Peg ever advertises something it cannot take.
+        "husky_bucks": True,
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Sun": "21:00", "Wed": "21:00", "Thu": "22:00", "Fri": "23:00", "Sat": "23:00"}, "name": "Storrs", "region": "Eastern CT",
         "street": "9 Dog Ln", "city": "Storrs", "state": "CT", "zip": "06268",
@@ -139,7 +142,7 @@ LOCATIONS = [
         "lat": 41.804999, "lng": -72.243305, "geo_exact": True,  # US Census geocoder
         "hours": h(*(("11:30","21:00"),("11:30","21:00"),("11:30","21:00"),("11:30","00:00"),("11:00","00:00"),("11:00","23:00"),("11:00","21:00"))),
         "tag": "Steps from UConn",
-        "blurb": "Our founders are UConn alumni, so Storrs Center feels like coming home. Dog Lane is where Husky fans land after the game and alumni reunions come together, and the oven runs until 1am on Fridays and Saturdays.",
+        "blurb": "Our founders are UConn alumni, so Storrs Center feels like coming home. Dog Lane is where Husky fans land after the game and alumni reunions come together, and the kitchen runs late Thursday through Saturday.",
         "nearby": ["Mansfield", "Coventry", "Willington", "Ashford", "Tolland"],
         "photo": "friends-holiday",
     },

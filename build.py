@@ -1012,7 +1012,7 @@ T["location"] = """
     <span class="eyebrow">{{ l.tag }}</span>
     <h1>Square Peg Pizzeria {{ l.name }}<span class="h1-sub">Italian restaurant &amp; {% if lm.wood %}wood-fired {% endif %}pizza in {{ l.city }}, {{ l.state }}</span></h1>
     <p class="lede">{% if lm.wood %}Wood-fired pizza{% else %}Pizza{% endif %}, {{ lm.words[0] }}, {{ lm.words[1] }}, wings and more at {{ l.street }} in {{ l.city }}, {{ l.state }}. Dine in with family and friends, or order online for pickup or delivery.</p>
-    <div><span class="status" data-status="{{ l.slug }}">{{ l.summary[0] }}</span></div>
+    <div class="loc-badges"><span class="status" data-status="{{ l.slug }}">{{ l.summary[0] }}</span>{% if l.get('husky_bucks') %}<span class="hb-badge">Husky Bucks accepted</span>{% endif %}</div>
     <div class="loc-actions">
       <a class="btn" href="{{ order(l) }}" data-pick="{{ l.slug }}" data-track="order_click" data-src="loc-hero" rel="noopener">{{ icons.bag|safe }}Order {{ l.short or l.name }} online</a>
       <a class="btn btn--ghost" href="tel:{{ tel(l.phone) }}" data-pick="{{ l.slug }}" data-track="call_click" data-loc="{{ l.slug }}">{{ icons.phone|safe }}<span class="narrow-only">Call</span><span class="wide-only">{{ l.phone }}</span></a>
@@ -1135,6 +1135,10 @@ T["location"] = """
       <span class="eyebrow">About this Peg</span>
       <h2>Italian food &amp; {% if lm.wood %}wood-fired {% endif %}pizza in {{ l.city }}</h2>
       <p>{{ l.blurb }}</p>
+      {% if l.get('husky_bucks') %}<div class="hb-row">
+        {{ img('husky-bucks', 'UConn One Card Husky Bucks accepted here', sizes='150px')|safe }}
+        <p><b>We take Husky Bucks.</b> Dine in or order ahead for pickup and pay with your UConn One Card, same as cash.</p>
+      </div>{% endif %}
       <p>Every pie starts with dough made fresh from scratch and never frozen. Choose a red or white {% if lm.detroit %}Neo-Neapolitan round or a crispy-edged Detroit-style pie{% else %}signature pie{% endif %}, build your own, or go gluten-free with our 12″ crust. Vegan cheese is available on any pizza.</p>
       <p>Not in a pizza mood? The kitchen turns out Italian-American comfort food too: {{ join_and(lm.words + lm.rest) }}.{% if lm.bar %} Pair it with a cocktail, a glass of wine or a cold beer.{% endif %}{% if lm.extra %} Also here: {{ lm.extra|join('; ')|lower }}.{% endif %}</p>
       <div><p class="note" style="font-weight:700;margin-bottom:6px">Close to</p><div class="chips">{% for n in l.nearby %}<span class="chip">{{ n }}</span>{% endfor %}</div></div>

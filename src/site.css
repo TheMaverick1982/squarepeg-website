@@ -955,6 +955,17 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hh-bar p a{color:var(--flame);font-weight:700;text-decoration:none;white-space:nowrap}
 .hh-bar p a:hover{text-decoration:underline}
 
+.hb-row{display:flex;gap:18px;align-items:center;margin:4px 0 2px}
+.hb-row img{width:116px;height:auto;flex:none;border-radius:4px}
+.hb-row p{margin:0}
+@media (max-width:560px){.hb-row{flex-wrap:wrap;gap:12px}.hb-row img{width:96px}}
+
+.loc-badges{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.hb-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;
+  border:1px solid rgba(255,255,255,.4);border-radius:999px;color:#fff;
+  font-size:13px;font-weight:700;letter-spacing:.02em}
+.hb-badge::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--flame)}
+
 /* ---- happy hour menu ---- */
 .hh .section-head{margin-bottom:22px}
 .hh-soon{display:inline-block;margin:0 0 20px;padding:11px 16px;background:var(--ember);color:#fff;
