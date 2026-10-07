@@ -2273,7 +2273,7 @@ T["halloween"] = """
         <ul class="hw-list">{% for n, d in hw.drinks.adults %}<li><b>{{ n }}</b><span>{{ d }}</span></li>{% endfor %}</ul>{% endif %}
         {% if hw.drinks.kids %}<h3 class="hw-sub">For the kids</h3>
         <ul class="hw-list">{% for n, d in hw.drinks.kids %}<li><b>{{ n }}</b><span>{{ d }}</span></li>{% endfor %}</ul>{% endif %}
-        <p class="note">At locations with a bar. Bolton doesn&rsquo;t have one yet.</p>
+        <p class="note">Cocktails at locations with a bar &mdash; Bolton doesn&rsquo;t have one yet.</p>
       </article>
     </div>
   </div>

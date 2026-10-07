@@ -935,9 +935,11 @@ HALLOWEEN = {
             ("Zombie Cold Brew", "Our Cold Brew Martini. Cold brew, vodka and Kahlúa."),
             ("Jack-o’-Lantern Martini", "October’s Pumpkin Spice Martini."),
         ],
+        # Nothing is added to either of these — same pour, different name on the
+        # board, so no store has to stock or mix anything for the week.
         "kids": [
-            ("Swamp Juice", "Lemonade, gone an alarming shade of green."),
-            ("Monster Mash", "Lemonade and grenadine, over ice."),
+            ("Ghost Juice", "Square Peg Lemonade."),
+            ("Monster Mash", "Any fountain soda. Mix them up!"),
         ],
     },
 
