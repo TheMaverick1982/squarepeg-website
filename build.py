@@ -2263,7 +2263,7 @@ T["halloween"] = """
         <p>{{ hw.kids.note }}</p>
         {% for group, items in hw.kids.get('menu', []) %}<h3 class="hw-sub">{{ group }}</h3>
         <ul class="hw-list hw-list--plain">{% for i in items %}<li>{{ i }}</li>{% endfor %}</ul>{% endfor %}
-        <p class="note">Dine-in. One {{ hw.kids.price }} meal per child.</p>
+        <p class="note">Dine-in, all six days.</p>
       </article>
       <article class="hw-panel">
         <span class="eyebrow">Behind the bar</span>

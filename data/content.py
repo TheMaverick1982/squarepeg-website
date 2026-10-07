@@ -911,11 +911,12 @@ HALLOWEEN = {
                       "and get in touch to hand over the card."),
     ],
 
-    # One pick for $5 — the groups are how it reads on the board, not three courses.
+    # Every item is $5 on its own — the groups are how it reads on the board, not a
+    # three-course set. A kid can order any of them.
     "kids": {
         "price": "$5",
         "line": "Kids eat for $5 all six days.",
-        "note": "Pick any one for $5. Dine-in, all six days.",
+        "note": "Every item below is $5 each — order any of them.",
         "menu": [
             ("Pizza", ["Two slices — cheese or pepperoni"]),
             ("Pasta, kid size", ["Mac and cheese", "Spaghetti with marinara",
