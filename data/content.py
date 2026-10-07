@@ -929,9 +929,10 @@ HALLOWEEN = {
     # CONFIRM WITH THE BAR before this goes live.
     "drinks": {
         "note": "Same drinks you already like, wearing a costume for the week.",
+        "adults_price": "$9",
         "adults": [
-            ("Vampire’s Kiss", "The Fruitful Peg-arita, made with strawberry. Comes out blood red."),
-            ("Witch’s Brew", "The Fruitful Peg-arita, made with blueberry. Comes out deep purple."),
+            ("Vampire’s Kiss", "The Fruitful Peg-arita, made with strawberry."),
+            ("Witch’s Brew", "The Fruitful Peg-arita, made with blueberry."),
             ("Zombie Cold Brew", "Our Cold Brew Martini. Cold brew, vodka and Kahlúa."),
             ("Jack-o’-Lantern Martini", "October’s Pumpkin Spice Martini."),
         ],

@@ -2263,16 +2263,16 @@ T["halloween"] = """
         <p>{{ hw.kids.note }}</p>
         {% for group, items in hw.kids.get('menu', []) %}<h3 class="hw-sub">{{ group }}</h3>
         <ul class="hw-menu">{% for i in items %}<li><span class="hw-dish">{{ i }}</span><span class="hw-dots"></span><span class="hw-price">{{ hw.kids.price }}</span></li>{% endfor %}</ul>{% endfor %}
-        <p class="note">Dine-in, all six days.</p>
+        {% if hw.drinks.kids %}<h3 class="hw-sub">To drink</h3>
+        <ul class="hw-list">{% for n, d in hw.drinks.kids %}<li><b>{{ n }}</b><span>{{ d }}</span></li>{% endfor %}</ul>{% endif %}
+        <p class="note">Dine-in, all six days. Drinks priced as usual.</p>
       </article>
       <article class="hw-panel">
         <span class="eyebrow">Behind the bar</span>
         <h2>Same drinks, in costume</h2>
         <p>{{ hw.drinks.note }}</p>
-        {% if hw.drinks.adults %}<h3 class="hw-sub">For the grown-ups</h3>
-        <ul class="hw-list">{% for n, d in hw.drinks.adults %}<li><b>{{ n }}</b><span>{{ d }}</span></li>{% endfor %}</ul>{% endif %}
-        {% if hw.drinks.kids %}<h3 class="hw-sub">For the kids</h3>
-        <ul class="hw-list">{% for n, d in hw.drinks.kids %}<li><b>{{ n }}</b><span>{{ d }}</span></li>{% endfor %}</ul>{% endif %}
+        {% if hw.drinks.adults %}<h3 class="hw-sub">Cocktails</h3>
+        <ul class="hw-list">{% for n, d in hw.drinks.adults %}<li><span class="hw-row"><span class="hw-dish">{{ n }}</span><span class="hw-dots"></span><span class="hw-price">{{ hw.drinks.adults_price }}</span></span><span>{{ d }}</span></li>{% endfor %}</ul>{% endif %}
         <p class="note">Cocktails at locations with a bar &mdash; Bolton doesn&rsquo;t have one yet.</p>
       </article>
     </div>

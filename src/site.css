@@ -1133,11 +1133,13 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hw-list b{display:block;font-family:var(--display);font-weight:800;
   text-transform:uppercase;letter-spacing:.012em;line-height:1.05;
   font-size:clamp(19px,2.2vw,23px)}
-.hw-list span{display:block;color:var(--smoke);font-size:15px;line-height:1.5;margin-top:4px}
+/* the description line only — not the name/leader/price spans inside .hw-row */
+.hw-list>li>span:not(.hw-row){display:block;color:var(--smoke);font-size:15px;
+  line-height:1.5;margin-top:4px}
 
 /* the kids menu: dish on the left, price on the right, dotted leader between */
 .hw-menu{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.hw-menu li{display:flex;align-items:baseline;gap:9px;min-width:0}
+.hw-menu li,.hw-row{display:flex;align-items:baseline;gap:9px;min-width:0}
 .hw-dish,.hw-price{font-family:var(--display);font-weight:800;line-height:1.05;
   text-transform:uppercase;letter-spacing:.012em;font-size:clamp(19px,2.2vw,23px)}
 .hw-dish{min-width:0}
