@@ -2268,12 +2268,12 @@ T["halloween"] = """
         <p class="note">Dine-in, all six days. Drinks priced as usual.</p>
       </article>
       <article class="hw-panel">
-        <span class="eyebrow">Behind the bar</span>
-        <h2>Same drinks, in costume</h2>
+        <span class="eyebrow">For the grown-ups</span>
+        <h2>Adult drinks, in costume</h2>
         <p>{{ hw.drinks.note }}</p>
         {% if hw.drinks.adults %}<h3 class="hw-sub">Cocktails</h3>
         <ul class="hw-list">{% for n, d in hw.drinks.adults %}<li><span class="hw-row"><span class="hw-dish">{{ n }}</span><span class="hw-dots"></span><span class="hw-price">{{ hw.drinks.adults_price }}</span></span><span>{{ d }}</span></li>{% endfor %}</ul>{% endif %}
-        <p class="note">Cocktails at locations with a bar &mdash; Bolton doesn&rsquo;t have one yet.</p>
+        <p class="note">21 and over. At locations with a bar &mdash; Bolton doesn&rsquo;t have one yet.</p>
       </article>
     </div>
   </div>
