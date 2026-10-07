@@ -1021,7 +1021,7 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 
 /* the spider hangs off the top edge of the contest section */
 .hw-spider{position:absolute;top:0;right:clamp(24px,9vw,140px);width:46px;
-  display:grid;justify-items:center;color:var(--ink);pointer-events:none;z-index:2;
+  display:grid;justify-items:center;color:var(--ink);pointer-events:none;z-index:3;
   transform-origin:top center;animation:hw-sway 6s ease-in-out infinite}
 /* the thread stretches and the spider rides it, so he drops and climbs */
 .hw-thread{display:block;width:1px;background:var(--ink);opacity:.45;
