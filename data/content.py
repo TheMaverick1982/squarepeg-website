@@ -911,12 +911,17 @@ HALLOWEEN = {
                       "and get in touch to hand over the card."),
     ],
 
-    # Specifics Brian is still settling. Each entry renders only once it is filled in.
+    # One pick for $5 — the groups are how it reads on the board, not three courses.
     "kids": {
         "price": "$5",
         "line": "Kids eat for $5 all six days.",
-        "note": "Dine-in, all six days.",
-        "items": [],          # e.g. ["Cheese pizza", "Mac & cheese"]
+        "note": "Pick any one for $5. Dine-in, all six days.",
+        "menu": [
+            ("Pizza", ["Two slices — cheese or pepperoni"]),
+            ("Pasta, kid size", ["Mac and cheese", "Spaghetti with marinara",
+                                 "Pasta alla vodka"]),
+            ("Dessert", ["Fried dough with Nutella"]),
+        ],
     },
     # Renames of drinks already on the menu, so the bar learns nothing new and the
     # kitchen orders nothing extra — only the name on the board changes.

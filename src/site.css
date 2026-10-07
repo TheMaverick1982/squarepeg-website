@@ -1123,6 +1123,11 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hw-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .hw-list li{min-width:0}
 .hw-list b{display:block;font-size:16px}
+/* the kids menu: one line per dish, no description under it */
+.hw-list--plain{gap:7px}
+.hw-list--plain li{position:relative;padding-left:16px;font-size:16px;line-height:1.45}
+.hw-list--plain li::before{content:"";position:absolute;left:0;top:.56em;width:6px;height:6px;
+  border-radius:50%;background:var(--pumpkin-deep,#D85F0A);opacity:.6}
 .hw-list span{display:block;color:var(--smoke);font-size:14px;line-height:1.5}
 .hw-panel .note{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
 .hw-rules h2{font-size:clamp(22px,2.6vw,28px);margin:0 0 14px}
