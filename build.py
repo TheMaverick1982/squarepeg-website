@@ -18,7 +18,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, CATERING, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -1276,10 +1276,10 @@ T["catering"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap i
       <h2>One less thing to worry about.</h2>
       <p class="prose">Hosting is enough work already. Order wood-fired pizza, wings, salads and desserts from us, pick it up hot from your closest Square Peg, and spend the party with your guests instead of in the kitchen.</p>
       <ul class="checks">
-        <li>Wood-fired pizzas, wings, salads, pasta & desserts</li>
+        <li>Trays of pasta, wings, salads, sandwiches &amp; dessert &mdash; plus wood-fired pizza</li>
         <li>Ready for pickup at your closest Square Peg</li>
-        <li>Gluten-free crust & vegan cheese on request</li>
-        <li>Headcount help, so you never run short</li>
+        <li>No minimum order and no headcount we can&rsquo;t take on</li>
+        <li>Gluten-free crust &amp; vegan cheese on request</li>
         <li>Available from every Square Peg location</li>
       </ul>
       {{ feature('friends-sharing', 'Friends sharing a Square Peg pizza', 'Wood-fired pies, sized for a crowd') }}
@@ -1287,6 +1287,93 @@ T["catering"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap i
     {% with form_title='Get a catering quote', fid='cat', embed_key='catering', submit='Send my request', default_type='Catering pickup' %}{% include "booking_form" %}{% endwith %}
   </div>
 </section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Three steps</span>
+      <h2>How catering works</h2>
+      <p>No portal, no account, no guessing. A person calls you back.</p>
+    </div>
+    <ol class="steps steps--row">
+      {% for head, body in cat.steps %}<li><div><b>{{ head }}</b><span>{{ body }}</span></div></li>{% endfor %}
+    </ol>
+    <p class="cat-note"><b>Give us {{ cat.lead_time }} where you can.</b> It isn&rsquo;t a rule &mdash;
+      if your date is sooner than that, call and we&rsquo;ll tell you honestly whether we can do it
+      justice. We&rsquo;d rather say no than hand you a rushed order.</p>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">The question everyone asks</span>
+      <h2>How much food do I need?</h2>
+      <p>Catering comes in trays. A <b>half tray feeds {{ cat.tray_half }}</b> and a
+        <b>full tray feeds {{ cat.tray_full }}</b> &mdash; so the maths is mostly a
+        question of how many dishes you want on the table, not how many trays.</p>
+    </div>
+    <div class="cat-table-wrap">
+      <table class="cat-table">
+        <thead><tr><th scope="col">Guests</th><th scope="col">Order</th><th scope="col">In practice</th></tr></thead>
+        <tbody>{% for n, size, extra in cat.feeds %}<tr><th scope="row">{{ n }}</th><td><b>{{ size }}</b></td><td>{{ extra }}</td></tr>{% endfor %}</tbody>
+      </table>
+    </div>
+    <p class="cat-note"><b>Adding pizza?</b> One 18&Prime; round feeds about three and a half
+      adults, so fifty people is around fourteen pies. Make it one for every two and a
+      half if it&rsquo;s teenagers or a game-day crowd.
+      <a class="link-arrow" href="{{ u('/pizza-calculator/') }}">Run your own numbers</a></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">What it costs</span>
+      <h2>About {{ cat.per_head }} a head.</h2>
+      <p class="prose">{{ cat.per_head_note }} You&rsquo;ll get a real number before you commit
+        to anything &mdash; our catering manager sends an estimate once they&rsquo;ve been
+        through the menu with you.</p>
+      <p class="prose">There&rsquo;s no minimum order and no headcount we won&rsquo;t take on with
+        enough notice. Ten people in an office or a hundred at a graduation party,
+        it&rsquo;s the same conversation.</p>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">What you can order</span>
+      <h2>Beyond the pizza.</h2>
+      <ul class="def-list">
+        {% for name, note in cat.menu %}<li><b>{{ name }}</b><span>{{ note }}</span></li>{% endfor %}
+      </ul>
+      <p class="note"><b>Wing flavours:</b> {{ cat.wing_flavors }}.<br>
+        Gluten-free 12&Prime; crust and vegan cheese on request &mdash; say so in the notes
+        and we&rsquo;ll plan for it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">Worth saying plainly</span>
+      <h2>We don&rsquo;t deliver.</h2>
+      <p class="prose">Every catering order is pickup, from whichever Square Peg you choose.
+        No van, no chafing dishes, no setup crew &mdash; we&rsquo;d rather tell you that now than
+        promise it and let you down on the day.</p>
+      <p class="prose">What you get instead is the thing a host is actually anxious about:
+        it&rsquo;s made fresh, it&rsquo;s boxed, and it&rsquo;s waiting at the time we agreed. Pull up,
+        load up, go.</p>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Unless you want the truck</span>
+      <h2>The one that comes to you.</h2>
+      <p class="prose">{{ cat.truck }} It runs a real wood-fired oven, so guests get pizza
+        out of the fire rather than out of a box &mdash; parties, schools, corporate days
+        and fundraisers.</p>
+      <div class="btn-row"><a class="btn btn--line" href="{{ u('/food-truck/') }}">See the food truck</a></div>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Planning questions</span><h2>Catering FAQ</h2></div>
@@ -2837,7 +2924,7 @@ def main():
                   "areas", dict(towns=dir_towns), graph(breadcrumbs([("Home", "/"), ("Locations", "/locations/"), ("Towns we serve", "/areas-we-serve/")])), "oven-pizza", None))
     pages.append(("/catering/", "Pizza Catering in Connecticut | Square Peg Pizzeria",
                   "Wood-fired pizza catering for parties, offices, schools and events from all 10 Square Peg Pizzeria locations. Get a quote in 60 seconds.",
-                  "catering", dict(faqs=CATERING_FAQ), graph(faq_schema(CATERING_FAQ), breadcrumbs([("Home", "/"), ("Catering", "/catering/")])), "table-spread", "table-spread"))
+                  "catering", dict(faqs=CATERING_FAQ, cat=CATERING), graph(faq_schema(CATERING_FAQ), breadcrumbs([("Home", "/"), ("Catering", "/catering/")])), "table-spread", "table-spread"))
     pages.append(("/large-party-reservations/", "Large Party & Group Reservations | Square Peg Pizzeria",
                   "Reserve for a big group at any Square Peg Pizzeria in CT or Delray Beach, FL. Birthdays, team dinners, showers and reunions with wood-fired pizza.",
                   "parties", dict(faqs=LARGE_PARTY_FAQ), graph(faq_schema(LARGE_PARTY_FAQ), breadcrumbs([("Home", "/"), ("Large Parties", "/large-party-reservations/")])), "friends-holiday", "friends-holiday"))

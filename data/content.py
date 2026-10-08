@@ -616,11 +616,76 @@ FUNDRAISER_FAQ = [
     ("What do we get to promote it?", "A custom digital flyer and social-ready graphics made by our team. Server tracking and sales reporting are handled by us."),
 ]
 
+# ---------------------------------------------------------------- Catering
+# Square Peg does NOT deliver and does NOT set up. Everything is pickup, from any
+# of the ten locations. Nothing on the site may imply otherwise — see
+# Catering_Launch_Runbook_Fall2026.md, where the ads were rewritten for the same
+# reason. The food truck is the one exception: it travels, and it is booked
+# through the same form.
+CATERING = {
+    # ⚠ CONFIRM BEFORE PUSHING. Worked from the real tray prices on the catering
+    # sheet, not guessed: a full tray feeds 40–50, so pasta ($151) + salad ($116)
+    # + wings ($151) + cookies ($203) is $621, i.e. $12.42–15.53 a head. Swap the
+    # pasta for chicken parm and it is $13.64–17.05. A lighter spread — pasta,
+    # salad, garlic bread — comes in at $7.20–9.00.
+    "per_head": "$12–18",
+    "per_head_note": "That is a full spread — a pasta, a salad, wings and dessert. "
+                     "Keep it lighter and it lands nearer $8.",
+    "lead_time": "48 hours",
+    "tray_half": "20–25",
+    "tray_full": "40–50",
+    "steps": [
+        ("Send the form",
+         "Date, headcount, which Square Peg, and anything we should know — allergies, "
+         "a vegetarian table, a crowd of teenagers."),
+        ("Our catering manager calls you",
+         "One person, for all ten locations. They go through the menu with you, size "
+         "the trays to your headcount and send an estimate."),
+        ("Pick it up hot",
+         "Boxed and waiting at the time you agreed, at the location you chose. "
+         "Nothing to set up, nothing to send back."),
+    ],
+    # His own sheet: HALF TRAY serves 20–25, FULL TRAY serves 40–50.
+    "feeds": [
+        ("20–25", "Half trays", "Two or three dishes plus a dessert covers it"),
+        ("40–50", "Full trays", "Same spread, one size up"),
+        ("75–100", "Two full trays of each", "Worth a call — this one we plan properly"),
+    ],
+    "menu": [
+        ("Starters", "Bone-in wings and boneless tenders in six flavours, cheesy garlic "
+                     "bread, fried mozzarella, house-made pork meatballs, shrimp cocktail."),
+        ("Salads", "House, Caesar, chef, market greens, and the Beet Dropper with goat "
+                   "cheese, pistachios and crispy prosciutto."),
+        ("Pastas", "Pasta alla vodka, spaghetti & marinara, Bolognese, shrimp scampi, "
+                   "macaroni & cheese."),
+        ("Add a protein", "Chicken parm, eggplant parm, roasted or fried chicken, "
+                          "meatballs, salmon, shrimp — on top of any pasta tray."),
+        ("Sandwich platters", "Ten or twenty on toasted rolls, up to four kinds: chicken "
+                              "parm, Italian combo, meatball parm, turkey, BLT, hot honey "
+                              "eggplant and more."),
+        ("Desserts", "Cookie platters, fudge brownies, New York cheesecake, and fried "
+                     "dough bites with Nutella."),
+        ("Pizza", "Added from the regular menu. One 18″ round feeds about three and a "
+                  "half adults, so a crowd of 50 is around fourteen pies."),
+    ],
+    "wing_flavors": "BBQ · Hot Honey · Buffalo · Peg Seasoning (garlic parm) · "
+                    "Sweet & Smoky Dry Rub · Carolina Gold Mustard",
+    "truck": "The food truck is the one thing that does come to you. Same form, "
+             "choose Food truck as the event type.",
+}
+
 CATERING_FAQ = [
     ("How far ahead should I book catering?", "The earlier the better, especially October through December. Send the form with your date and headcount and we’ll confirm availability."),
     ("Can you cater at every location?", "Yes. Catering is available from all Square Peg locations. Choose the one closest to you, and your order will be ready for pickup there."),
     ("Do you have gluten-free or dairy-free options?", "Yes. We offer a 12″ gluten-free crust and vegan cheese. Tell us in the notes and we’ll plan for it."),
     ("Can the food truck come to our event?", "Yes. Book the Square Peg food truck for parties, schools, corporate events and fundraisers using the same form. Choose “Food truck” as the event type."),
+    ("Do you deliver catering?", "No. Every catering order is pickup, from the Square Peg you choose. We’d rather tell you that up front than promise a van and a chafing dish we don’t have. If you need us on site, book the food truck instead — that one really does come to you."),
+    ("Is there a minimum order?", "No minimum and no headcount floor. Ten people or a hundred, we’ll size it with you."),
+    ("What’s the largest order you can do?", "There’s no hard ceiling with enough notice. Tell us the date and the number and we’ll tell you straight away whether that kitchen can take it on that day."),
+    ("How many pizzas do I need?", "About one 18″ pie for every three and a half adults, which is where the table on this page comes from. If it’s a teenage or game-day crowd, work on two and a half. Our pizza calculator will do the arithmetic for you."),
+    ("What does catering cost?", "Most orders land somewhere around $12–18 a head once you add wings, salad and dessert; pizza on its own is closer to $7. Your estimate comes from our catering manager after you send the form, so you see a real number before you commit to anything."),
+    ("How do I pay?", "Our catering manager goes through it with you when they send the estimate."),
+    ("Can I change the headcount after I book?", "Yes, within reason and with notice. Numbers move — tell us as soon as you know and we’ll adjust the order."),
 ]
 
 SMS_TERMS = [

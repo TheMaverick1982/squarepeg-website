@@ -259,6 +259,29 @@ body.menu-open .mbar{display:none}
 .steps li::before{content:counter(step);width:40px;height:40px;display:grid;place-items:center;background:var(--char);color:#fff;font-family:var(--display);font-weight:900;font-size:22px}
 .steps b{display:block}
 .steps span{color:var(--smoke);font-size:15px}
+/* three short steps read better side by side than stacked */
+@media (min-width:860px){.steps--row{grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}}
+
+/* name on one line, the explanation under it — used by the catering menu */
+.def-list{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:14px}
+.def-list li{min-width:0}
+.def-list b{display:block;font-family:var(--display);font-weight:800;text-transform:uppercase;
+  letter-spacing:.012em;line-height:1.05;font-size:clamp(18px,2vw,21px)}
+.def-list span{display:block;color:var(--smoke);font-size:15px;line-height:1.5;margin-top:3px}
+
+/* the headcount table: scrolls rather than squeezing on a phone */
+.cat-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0 18px}
+.cat-table{width:100%;border-collapse:collapse;min-width:460px;text-align:left}
+.cat-table th,.cat-table td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.cat-table thead th{font:800 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ember-deep);border-bottom-width:2px}
+.cat-table tbody th{font-family:var(--display);font-weight:800;font-size:clamp(20px,2.3vw,26px);
+  line-height:1;white-space:nowrap}
+.cat-table td b{font-weight:800}
+.cat-table tbody tr:last-child th,.cat-table tbody tr:last-child td{border-bottom:0}
+.cat-note{color:var(--smoke);font-size:15px;line-height:1.6;max-width:68ch}
+.cat-note b{color:var(--ink)}
+.section--dark .cat-note b{color:#fff}
 @media (min-width:900px){.band{grid-template-columns:.8fr 1.2fr}}
 
 /* ---------- Reviews ---------- */
