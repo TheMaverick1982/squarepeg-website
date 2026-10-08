@@ -23,6 +23,9 @@ from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBD
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
 OUT = ROOT / ("preview" if PREVIEW else "dist-staging" if STAGING else "dist")
+# How long analytics waits before loading itself when the visitor does nothing at
+# all. Lower it to lose fewer three-second bounces; raise it for a better score.
+TAG_DELAY = 5000
 IMG_SRC = ROOT / "assets" / "img-src"
 WIDTHS = [360, 480, 640, 800, 1200, 1600]
 TODAY = date.today().isoformat()
@@ -238,10 +241,17 @@ def build_brand():
     dest.mkdir(parents=True, exist_ok=True)
     src = Image.open(ROOT / "src" / "brand" / "logo-on-dark.png").convert("RGBA")
     orig = Image.open(ROOT / "src" / "brand" / "logo-src.png").convert("RGBA")
-    for w in (160, 280, 480):
-        if reuse(dest / f"logo-on-dark-{w}.webp"):
-            continue
-        src.resize((w, round(src.height * w / src.width)), Image.LANCZOS).save(dest / f"logo-on-dark-{w}.webp", "WEBP", quality=72, method=6)
+    # 360 is the size a 2.6x phone actually needs for the 135px header slot; without
+    # it the browser jumps to 480. AVIF carries this logo's soft alpha edges in about
+    # 60% of WebP's bytes, so it leads the picture element.
+    for w in (160, 280, 360, 480):
+        r = None
+        if not reuse(dest / f"logo-on-dark-{w}.webp"):
+            r = src.resize((w, round(src.height * w / src.width)), Image.LANCZOS)
+            r.save(dest / f"logo-on-dark-{w}.webp", "WEBP", quality=72, method=6)
+        if not PREVIEW and not reuse(dest / f"logo-on-dark-{w}.avif"):
+            r = r or src.resize((w, round(src.height * w / src.width)), Image.LANCZOS)
+            r.save(dest / f"logo-on-dark-{w}.avif", "AVIF", quality=50, speed=6)
     if not PREVIEW and not all(reuse(p) for p in (dest / "logo.png", OUT / "favicon-32.png", OUT / "apple-touch-icon.png", OUT / "icon-512.png")):
         orig.resize((1200, round(orig.height * 1200 / orig.width)), Image.LANCZOS).save(dest / "logo.png", optimize=True)
         fav = Image.open(ROOT / "src" / "brand" / "favicon-512.png")
@@ -341,6 +351,30 @@ def make_og(key, photo, eyebrow, headline, sub):
     d.rectangle((0, H - 14, W, H), fill=(214, 27, 36))
     canvas.save(out_dir / f"{key}.jpg", "JPEG", quality=84, optimize=True, progressive=True)
     return abs_url(f"/img/og/{key}.jpg")
+
+# filled in by build_brand(), which measures the wordmark
+LOGO_RATIO = [0.339]
+
+
+def logo_img(sizes, width, widths=(160, 280, 360, 480), cls="", lazy=False, alt="Square Peg Pizzeria", ratio=None):
+    """The wordmark as a <picture>, so browsers that take AVIF get the small file.
+
+    It is the one image on every page, so its bytes are worth the extra markup."""
+    base = "img/" if PREVIEW else "/img/"
+    h = round(width * (ratio if ratio is not None else LOGO_RATIO[0]))
+    c = f' class="{cls}"' if cls else ""
+    ld = ' loading="lazy" decoding="async"' if lazy else ""
+    webp = ", ".join(f"{base}logo-on-dark-{w}.webp {w}w" for w in widths)
+    fallback = f"{base}logo-on-dark-{widths[min(len(widths) - 1, 1)]}.webp"
+    out = ["<picture>"]
+    if not PREVIEW:
+        avif = ", ".join(f"{base}logo-on-dark-{w}.avif {w}w" for w in widths)
+        out.append(f'<source type="image/avif" srcset="{avif}" sizes="{sizes}">')
+    out.append(f'<source type="image/webp" srcset="{webp}" sizes="{sizes}">')
+    out.append(f'<img{c} src="{fallback}" width="{width}" height="{h}" alt="{html.escape(alt)}"{ld}>')
+    out.append("</picture>")
+    return "".join(out)
+
 
 def img_url(name, width=1200):
     m = IMG_META.get(name)
@@ -501,7 +535,7 @@ HW_ART = {
     "bat": ('<svg class="hw-bat-svg" viewBox="0 0 120 56" aria-hidden="true">'
             '<path fill="currentColor" d="M60 12c4 0 7 3 8 7 7-9 17-14 28-15-5 5-7 11-6 18 5-3 11-3 16 0'
             '-9 2-15 8-18 17-8-6-18-8-28-6-10-2-20 0-28 6-3-9-9-15-18-17 5-3 11-3 16 0-1-7 1-13-6-18'
-            '11 1 21 6 28 15 1-4 4-7 8-7z"/></svg>'),
+            ' 11 1 21 6 28 15 1-4 4-7 8-7z"/></svg>'),
 }
 HW_ART["web"] = HW_ART["web"].replace("@@WEB@@", "M0 0L100.0 0.0M0 0L95.1 30.9M0 0L80.9 58.8M0 0L58.8 80.9M0 0L30.9 95.1M0 0L0.0 100.0M26.0 0.0Q19.3 3.1 24.7 8.0M24.7 8.0Q17.4 8.9 21.0 15.3M21.0 15.3Q13.8 13.8 15.3 21.0M15.3 21.0Q8.9 17.4 8.0 24.7M8.0 24.7Q3.1 19.3 0.0 26.0M46.0 0.0Q34.2 5.4 43.7 14.2M43.7 14.2Q30.8 15.7 37.2 27.0M37.2 27.0Q24.5 24.5 27.0 37.2M27.0 37.2Q15.7 30.8 14.2 43.7M14.2 43.7Q5.4 34.2 0.0 46.0M66.0 0.0Q49.0 7.8 62.8 20.4M62.8 20.4Q44.2 22.5 53.4 38.8M53.4 38.8Q35.1 35.1 38.8 53.4M38.8 53.4Q22.5 44.2 20.4 62.8M20.4 62.8Q7.8 49.0 0.0 66.0M88.0 0.0Q65.4 10.4 83.7 27.2M83.7 27.2Q59.0 30.1 71.2 51.7M71.2 51.7Q46.8 46.8 51.7 71.2M51.7 71.2Q30.1 59.0 27.2 83.7M27.2 83.7Q10.4 65.4 0.0 88.0")
 
@@ -628,7 +662,7 @@ T["header"] = """<a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap">
     <a class="logo" href="{{ u('/') }}" aria-label="Square Peg Pizzeria home">
-      <img src="{{ imgbase }}logo-on-dark-280.webp" srcset="{{ imgbase }}logo-on-dark-160.webp 160w, {{ imgbase }}logo-on-dark-280.webp 280w, {{ imgbase }}logo-on-dark-480.webp 480w" sizes="(min-width:980px) 153px, 135px" width="160" height="{{ (160 * logo_ratio)|round|int }}" alt="Square Peg Pizzeria">
+      {{ logo_img("(min-width:980px) 153px, 135px", 160)|safe }}
     </a>
     <nav class="nav" aria-label="Main">{% for n, p in nav %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
       <details class="more"><summary>More</summary><div class="more-menu more-mega">{% for group, items in more_groups %}<div class="more-col">
@@ -678,7 +712,7 @@ T["footer"] = """<section class="cta-band">
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <img class="foot-logo" src="{{ imgbase }}logo-on-dark-480.webp" width="480" height="{{ (480 * logo_ratio)|round|int }}" alt="Square Peg Pizzeria" loading="lazy">
+        {{ logo_img("220px", 480, cls="foot-logo", lazy=True)|safe }}
         <p class="foot-title">10 Square Pegs</p>
         <div class="foot-locs">
           {% for l in locs %}<div><a href="{{ u('/locations/' ~ l.slug ~ '/') }}">{{ l.name }}</a><span>{{ l.street }}, {{ l.city }}, {{ l.state }}</span><a class="ph" href="tel:{{ tel(l.phone) }}">{{ l.phone }}</a></div>{% endfor %}
@@ -795,7 +829,7 @@ T["home"] = """
     </div>
     <div class="sigs">
       {% for n, d, p in sigs %}<article class="sig">
-        <div class="sig-photo">{{ img(p, n ~ ' pizza from Square Peg Pizzeria', sizes='(min-width:900px) 25vw, 78vw')|safe }}<span class="sig-size">12″ · 18″</span></div>
+        <div class="sig-photo">{{ img(p, n ~ ' pizza from Square Peg Pizzeria', sizes='(min-width:900px) 22vw, 63vw')|safe }}<span class="sig-size">12″ · 18″</span></div>
         <div class="sig-body"><h3>{{ n }}</h3><p>{{ d }}</p><a class="btn btn--sm" href="{{ u('/locations/') }}" data-open-picker="order" aria-label="Order this: {{ n }}">Order this</a></div>
       </article>{% endfor %}
     </div>
@@ -858,11 +892,11 @@ T["home"] = """
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Catering, big groups & the food truck</span><h2>You host. We’ll make the pizza.</h2></div>
     <div class="tiles tiles--3">
-      <a class="tile on-dark" href="{{ u('/catering/') }}">{{ img('catering-table', 'A table of wood-fired pizzas on stands, ready for a party', sizes='(min-width:900px) 50vw, 100vw')|safe }}
+      <a class="tile on-dark" href="{{ u('/catering/') }}">{{ img('catering-table', 'A table of wood-fired pizzas on stands, ready for a party', sizes='(min-width:900px) 30vw, 95vw')|safe }}
         <div class="tile-body"><span class="eyebrow">Catering</span><h3 style="font-size:clamp(34px,4vw,48px)">Enough pizza for everyone. We promise.</h3><p>Tell us your headcount and date, and we’ll make sure there’s enough wood-fired pizza for everyone, ready when you pick it up.</p><span class="btn">Plan my catering {{ icons.arrow|safe }}</span></div></a>
       <a class="tile on-dark" href="{{ u('/large-party-reservations/') }}">{{ img('friends-holiday', 'A group of friends celebrating over pizza', sizes='(min-width:1000px) 33vw, 100vw')|safe }}
         <div class="tile-body"><span class="eyebrow">Large parties</span><h3 style="font-size:clamp(34px,4vw,48px)">Bring the whole crew.</h3><p>Birthdays, team dinners and reunions. We’ll save the tables and plan the food so it lands together.</p><span class="btn">Reserve for a group {{ icons.arrow|safe }}</span></div></a>
-      <a class="tile on-dark" href="{{ u('/food-truck/') }}">{{ img('food-truck', 'The Square Peg Pizzeria wood-fired food truck', sizes='(min-width:900px) 50vw, 100vw')|safe }}
+      <a class="tile on-dark" href="{{ u('/food-truck/') }}">{{ img('food-truck', 'The Square Peg Pizzeria wood-fired food truck', sizes='(min-width:900px) 30vw, 95vw')|safe }}
         <div class="tile-body"><span class="eyebrow">Food truck</span><h3 style="font-size:clamp(34px,4vw,48px)">We bring the oven to you.</h3><p>A wood-fired oven on wheels for backyard parties, schools, breweries and corporate events.</p><span class="btn">Book the truck {{ icons.arrow|safe }}</span></div></a>
     </div>
   </div>
@@ -870,7 +904,7 @@ T["home"] = """
 
 <section class="section section--paper">
   <div class="wrap band">
-    <div class="band-media">{{ img('team-kids', 'A youth sports team celebrating their fundraiser night at Square Peg', sizes='(min-width:900px) 40vw, 100vw')|safe }}<div class="band-num"><div class="big-num" aria-hidden="true">20<sup>%</sup></div><p>of dine-in food sales, back to your cause</p></div></div>
+    <div class="band-media">{{ img('team-kids', 'A youth sports team celebrating their fundraiser night at Square Peg', sizes='(min-width:900px) 35vw, 95vw')|safe }}<div class="band-num"><div class="big-num" aria-hidden="true">20<sup>%</sup></div><p>of dine-in food sales, back to your cause</p></div></div>
     <div class="stack">
       <span class="eyebrow">Tuesday Night Fundraisers</span>
       <h2>Turn Tuesday into a fundraiser.</h2>
@@ -1889,7 +1923,7 @@ T["links"] = """
 <section class="linkpage">
   <div class="wrap">
     <a class="link-logo" href="{{ u('/') }}" aria-label="Square Peg Pizzeria home">
-      <img src="{{ imgbase }}logo-on-dark-280.webp" srcset="{{ imgbase }}logo-on-dark-280.webp 280w, {{ imgbase }}logo-on-dark-480.webp 480w" sizes="260px" width="280" height="{{ (280 * logo_ratio)|round|int }}" alt="Square Peg Pizzeria">
+      {{ logo_img("260px", 280, widths=(280, 360, 480))|safe }}
     </a>
     <p class="link-lede">Wood-fired pizza, ten locations, dough made fresh from scratch.<br>Everything you might be looking for is right here.</p>
 
@@ -2705,6 +2739,7 @@ def main():
     print(f"  hours: {g} of {len(LOCATIONS)} locations from Google" if g else "  hours: from data/content.py")
     build_images()
     logo_ratio = build_brand()
+    LOGO_RATIO[0] = logo_ratio
     css = (ROOT / "src" / "site.css").read_text()
     if not PREVIEW:
         faces = [("Big Shoulders Display", "big-shoulders-display", w) for w in (800, 900)] + [("Figtree", "figtree", w) for w in (400, 600, 700, 800)]
@@ -2726,19 +2761,42 @@ def main():
                            "supabaseUrl": SITE.get("supabase_url", ""), "supabaseKey": SITE.get("supabase_anon_key", ""), "thanksUrl": url("/thanks/"),
                            "contactEndpoint": "" if PREVIEW else SITE.get("contact_endpoint", "")})
 
+    # gtag.js is about a megabyte of JavaScript and costs roughly a second of
+    # main-thread time on a mid-range phone — it was the whole gap between the
+    # desktop and mobile PageSpeed scores. The stub and the dataLayer queue stay
+    # inline, so gtag() calls from site.js are recorded from the first paint; only
+    # the download waits, for the first sign of a real visitor or TAG_DELAY,
+    # whichever comes first. gtag.js replays the queue when it lands, so nothing
+    # queued is lost — only a visitor who leaves within TAG_DELAY without
+    # touching the page goes uncounted.
     analytics = ""
+    tags = []
     if SITE["ga4_id"]:
-        analytics += f'<script async src="https://www.googletagmanager.com/gtag/js?id={SITE["ga4_id"]}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag("js",new Date());gtag("config","{SITE["ga4_id"]}");</script>'
+        analytics += ('<script>window.dataLayer=window.dataLayer||[];'
+                      'function gtag(){dataLayer.push(arguments)}'
+                      'gtag("js",new Date());'
+                      f'gtag("config","{SITE["ga4_id"]}");</script>')
+        tags.append(f'https://www.googletagmanager.com/gtag/js?id={SITE["ga4_id"]}')
     if SITE["meta_pixel_id"]:
         analytics += ("<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};"
-                      "if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];"
-                      "s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');"
+                      "if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[]}(window,document,'script');"
                       f"fbq('init','{SITE['meta_pixel_id']}');fbq('track','PageView');</script>")
+        tags.append("https://connect.facebook.net/en_US/fbevents.js")
+    if tags:
+        analytics += ("<script>(function(){var T=" + json.dumps(tags) + ",d=0,"
+                      "E=['pointerdown','keydown','touchstart','scroll','mousemove'];"
+                      "function go(){if(d)return;d=1;clearTimeout(t);"
+                      "E.forEach(function(e){removeEventListener(e,go)});"
+                      "T.forEach(function(u){var s=document.createElement('script');"
+                      "s.async=!0;s.src=u;document.head.appendChild(s)})}"
+                      f"var t=setTimeout(go,{TAG_DELAY});"
+                      "E.forEach(function(e){addEventListener(e,go,{passive:!0})});"
+                      "})();</script>")
 
     base_ctx = dict(
         u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=MORE_GROUPS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
-        sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
+        sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, hwart=HW_ART, lunch_where=lunch_windows(),
         event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
@@ -2775,7 +2833,7 @@ def main():
                   "our_menu", dict(menu=MENU), graph(menu_schema, breadcrumbs([("Home", "/"), ("Menu", "/our-menu/")])), "table-spread", "table-spread"))
     dir_towns = town_directory()
     pages.append(("/areas-we-serve/", "Towns We Serve in CT, RI & South FL | Square Peg Pizzeria",
-                  f"Find the closest Square Peg Pizzeria to your town. {TOWN_COUNT} towns in Connecticut, Rhode Island and South Florida are within 15 miles of one of our 10 wood-fired pizza kitchens.",
+                  f"Find the closest Square Peg Pizzeria to your town. {TOWN_COUNT} towns in Connecticut, Rhode Island and South Florida are within 15 miles of one of our kitchens.",
                   "areas", dict(towns=dir_towns), graph(breadcrumbs([("Home", "/"), ("Locations", "/locations/"), ("Towns we serve", "/areas-we-serve/")])), "oven-pizza", None))
     pages.append(("/catering/", "Pizza Catering in Connecticut | Square Peg Pizzeria",
                   "Wood-fired pizza catering for parties, offices, schools and events from all 10 Square Peg Pizzeria locations. Get a quote in 60 seconds.",
@@ -2819,7 +2877,7 @@ def main():
                   "about", {}, graph(breadcrumbs([("Home", "/"), ("Our Story", "/about/")])), "dough", "dough"))
     hw = halloween()
     pages.append(("/halloween/",
-                  f"{hw['name']}: Halloween at Square Peg Pizzeria | Costume Contest & $5 Kids Meals",
+                  f"{hw['name']}: Halloween at Square Peg Pizzeria",
                   f"{hw['when']}. Come in costume, {hw['kids']['price']} kids meals all week, and a "
                   f"costume contest at every Square Peg — best costume wins a {hw['prize']}.",
                   "halloween", dict(hw=hw),
@@ -2856,7 +2914,7 @@ def main():
                   "Order online, find a location, see this month's specials, book catering or a fundraiser, and join the Square Peg Pizzeria rewards app.",
                   "links", {}, "", "margherita-board", "margherita-board"))
     pages.append(("/pizza-faq/", "Pizza FAQ: Slices, Reheating, Sizes & More | Square Peg Pizzeria",
-                  "How many slices in a large pizza, how to reheat wood-fired pizza without ruining it, fresh vs low-moisture mozzarella, and how much to order. Answered by Square Peg Pizzeria.",
+                  "How many slices in a large pizza, how to reheat wood-fired pizza without ruining it, and how much to order. Answered by Square Peg Pizzeria.",
                   "pizzafaq", {}, graph(faq_schema([(q, re.sub(r"<[^>]+>", "", a)) for _, items in PIZZA_FAQ for q, a in items]),
                                         breadcrumbs([("Home", "/"), ("Pizza FAQ", "/pizza-faq/")])),
                   "oven-pizza", "oven-pizza"))
@@ -2864,17 +2922,17 @@ def main():
                   "Pizza facts worth knowing and three myths worth retiring, including the truth about Queen Margherita. From the wood-fired ovens at Square Peg Pizzeria.",
                   "trivia", {}, graph(breadcrumbs([("Home", "/"), ("Pizza trivia", "/pizza-trivia/")])),
                   "dough", "dough"))
-    pages.append(("/date-night/", "Date Night Ideas: Dinner at Square Peg Pizzeria | CT & Delray Beach",
-                  "A good date night without the production. Wood-fired pizza, a proper bar, happy hour every day and half-price bottles on Fridays, at ten Square Peg Pizzeria locations.",
+    pages.append(("/date-night/", "Date Night Ideas in CT & Delray Beach | Square Peg",
+                  "A good date night without the production. Wood-fired pizza, a proper bar, happy hour every day and half-price bottles on Fridays, at ten Square Pegs.",
                   "datenight", {}, graph(breadcrumbs([("Home", "/"), ("Date night", "/date-night/")])),
                   "friends-sharing", "friends-sharing"))
     pages.append(("/what-pizza-are-you/", "Quiz: What Pizza Are You? | Square Peg Pizzeria",
-                  "Six questions, one answer you can actually order. Take the Square Peg Pizzeria pizza personality quiz.",
+                  "Six questions, one answer you can actually order. Take the Square Peg Pizzeria pizza personality quiz and find the pie that matches you.",
                   "quiz", dict(quiz_json=ld_raw(dict(QUIZ, photos={k: img_url(v[1], 800).replace(SITE["domain"], "") for k, v in QUIZ["results"].items()}))),
                   graph(breadcrumbs([("Home", "/"), ("What pizza are you?", "/what-pizza-are-you/")])),
                   "sp-three-pies", "sp-three-pies"))
-    pages.append(("/pizza-calculator/", "Pizza Calculator: How Many Pizzas Do I Need? | Square Peg Pizzeria",
-                  "How many pizzas for your party? Enter adults and kids and get the answer, based on how much pizza is actually on a 12-inch and an 18-inch pie. From Square Peg Pizzeria.",
+    pages.append(("/pizza-calculator/", "Pizza Calculator: How Many Pizzas? | Square Peg Pizzeria",
+                  "How many pizzas for your party? Enter adults and kids and get the answer, based on what is actually on a 12-inch and an 18-inch pie.",
                   "calculator", dict(calc_json=ld_raw(CALC)), graph(breadcrumbs([("Home", "/"), ("Pizza calculator", "/pizza-calculator/")])),
                   "pizza-boxes", "pizza-boxes"))
     pages.append(("/pairing/", "What to Drink With Pizza | Ask Sal | Square Peg Pizzeria",
@@ -2885,14 +2943,14 @@ def main():
                   f"Square Peg Pizzeria's {LTO['month']} {LTO['year']} limited-time menu: new pizzas, starters, dessert and seasonal cocktails. Order online or dine in at ten locations.",
                   "lto", dict(lto=LTO), graph(breadcrumbs([("Home", "/"), ("Monthly specials", "/monthly-specials/")])),
                   LTO["sections"][2][1][0][2], LTO["sections"][2][1][0][2]))
-    pages.append(("/sms-terms/", "SMS Terms | Square Peg Pizzeria", "Terms for the Square Peg Pizzeria text message program: frequency, costs, how to opt out, and support.",
+    pages.append(("/sms-terms/", "SMS Terms | Square Peg Pizzeria", "Terms for the Square Peg Pizzeria text message program: message frequency, carrier costs, how to opt out at any time, and where to get help.",
                   "sms", dict(sms=SMS_TERMS), None, None, None))
     pages.append(("/thanks/", "Thank You | Square Peg Pizzeria", "Thanks for reaching out to Square Peg Pizzeria.", "simple",
                   dict(eyebrow="Request received", h1="Thank you!", lede="We got your request and will get back to you within one business day. While you wait, there’s pizza.", prose=""), None, None, None))
     pages.append(("/privacy/", "Privacy Policy | Square Peg Pizzeria", "How Square Peg Pizzeria collects, uses and protects the information you share on this website, in our rewards program and by text.", "simple",
                   dict(eyebrow="Privacy", h1="Privacy policy", lede="What we collect, how we use it, and the choices you have.",
                        prose=PRIVACY_TEXT), None, None, None))
-    pages.append(("/terms/", "Terms & Conditions | Square Peg Pizzeria", "The terms for using the Square Peg Pizzeria website, our offers and rewards, and our text message program.", "simple",
+    pages.append(("/terms/", "Terms & Conditions | Square Peg Pizzeria", "The terms for using the Square Peg Pizzeria website, our offers, promotions and rewards program, gift cards, and our text message program.", "simple",
                   dict(eyebrow="Terms", h1="Terms & conditions", lede="The rules for using this website, our offers and our text messages.",
                        prose=TERMS_TEXT), None, None, None))
     pages.append(("/404.html", "Page Not Found | Square Peg Pizzeria", "That page doesn’t exist.", "simple",
@@ -3008,6 +3066,8 @@ def write_extras(pages):
         "  Cache-Control: public, max-age=31536000, immutable",
         "/fonts/*",
         "  Cache-Control: public, max-age=31536000, immutable",
+        "/site.js",
+        "  Cache-Control: public, max-age=31536000, immutable",
         "/*.html",
         "  Cache-Control: public, max-age=0, must-revalidate",
         "",
@@ -3056,7 +3116,11 @@ def redirect_map():
           ("/events/*", "/entertainment/")]
     for l in LOCATIONS:
         town = l["city"].lower().replace(" ", "-")
-        m.append((f"/menu-{town}", ORDER_HOST + "/order/" + l["toast"]))
+        # /menu-<town> is what the old site's press coverage links to — CT Insider's
+        # Storrs piece (DR 80) points at /menu-storrs. Sending it off to Toast hands
+        # that link's value to Toast's domain, so it lands on our own location page,
+        # which carries the order button anyway.
+        m.append((f"/menu-{town}", f"/locations/{l['slug']}/"))
         # Old deep menu URLs: /menu/<toast slug>/group_.../item-... . Those exact paths 404 on the
         # subdomain now, so land the guest on that store's ordering page rather than a dead end.
         m.append((f"/menu/{l['toast']}", ORDER_HOST + "/order/" + l["toast"]))
@@ -3113,6 +3177,9 @@ def vercel_config():
             + ([{"key": "X-Robots-Tag", "value": "noindex, nofollow"}] if STAGING else [])},
         {"source": "/img/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
         {"source": "/fonts/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
+        # site.js is requested as /site.js?v=<hash of its contents>, so a new build
+        # is a new URL and the old one can be cached as long as the browser likes.
+        {"source": "/site.js", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
     ]
     return {"$schema": "https://openapi.vercel.sh/vercel.json", "trailingSlash": True, "cleanUrls": False,
             "redirects": redirects, "headers": headers}

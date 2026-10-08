@@ -235,12 +235,12 @@
     },
     {
       "source": "/menu-glastonbury",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria",
+      "destination": "/locations/glastonbury-ct/",
       "permanent": true
     },
     {
       "source": "/menu-glastonbury/",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria",
+      "destination": "/locations/glastonbury-ct/",
       "permanent": true
     },
     {
@@ -265,12 +265,12 @@
     },
     {
       "source": "/menu-east-hartford",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzera-east-hartford",
+      "destination": "/locations/east-hartford-ct/",
       "permanent": true
     },
     {
       "source": "/menu-east-hartford/",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzera-east-hartford",
+      "destination": "/locations/east-hartford-ct/",
       "permanent": true
     },
     {
@@ -295,12 +295,12 @@
     },
     {
       "source": "/menu-vernon",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-vernon-226-talcottville-rd",
+      "destination": "/locations/vernon-ct/",
       "permanent": true
     },
     {
       "source": "/menu-vernon/",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-vernon-226-talcottville-rd",
+      "destination": "/locations/vernon-ct/",
       "permanent": true
     },
     {
@@ -325,12 +325,12 @@
     },
     {
       "source": "/menu-bolton",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street",
+      "destination": "/locations/bolton-ct/",
       "permanent": true
     },
     {
       "source": "/menu-bolton/",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizzeria-bolton-270-west-street",
+      "destination": "/locations/bolton-ct/",
       "permanent": true
     },
     {
@@ -355,12 +355,12 @@
     },
     {
       "source": "/menu-storrs",
-      "destination": "https://order.squarepegpizzeria.com/order/squarepegwindsor",
+      "destination": "/locations/storrs-ct/",
       "permanent": true
     },
     {
       "source": "/menu-storrs/",
-      "destination": "https://order.squarepegpizzeria.com/order/squarepegwindsor",
+      "destination": "/locations/storrs-ct/",
       "permanent": true
     },
     {
@@ -385,12 +385,12 @@
     },
     {
       "source": "/menu-preston",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165",
+      "destination": "/locations/preston-ct/",
       "permanent": true
     },
     {
       "source": "/menu-preston/",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-new-preston-353-connecticut-165",
+      "destination": "/locations/preston-ct/",
       "permanent": true
     },
     {
@@ -415,12 +415,12 @@
     },
     {
       "source": "/menu-plainville",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-plainville-400-new-britain-avenue",
+      "destination": "/locations/plainville-ct/",
       "permanent": true
     },
     {
       "source": "/menu-plainville/",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-plainville-400-new-britain-avenue",
+      "destination": "/locations/plainville-ct/",
       "permanent": true
     },
     {
@@ -445,12 +445,12 @@
     },
     {
       "source": "/menu-berlin",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road",
+      "destination": "/locations/berlin-ct/",
       "permanent": true
     },
     {
       "source": "/menu-berlin/",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-pizza-berlin-119-webster-square-road",
+      "destination": "/locations/berlin-ct/",
       "permanent": true
     },
     {
@@ -475,12 +475,12 @@
     },
     {
       "source": "/menu-shelton",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-shelton-310-howe-avenue-unit-6",
+      "destination": "/locations/shelton-ct/",
       "permanent": true
     },
     {
       "source": "/menu-shelton/",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-shelton-310-howe-avenue-unit-6",
+      "destination": "/locations/shelton-ct/",
       "permanent": true
     },
     {
@@ -505,12 +505,12 @@
     },
     {
       "source": "/menu-delray-beach",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue",
+      "destination": "/locations/delray-beach-fl/",
       "permanent": true
     },
     {
       "source": "/menu-delray-beach/",
-      "destination": "https://order.squarepegpizzeria.com/order/square-peg-delray-beach-4957-west-atlantic-avenue",
+      "destination": "/locations/delray-beach-fl/",
       "permanent": true
     },
     {
@@ -703,6 +703,15 @@
     },
     {
       "source": "/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/site.js",
       "headers": [
         {
           "key": "Cache-Control",
