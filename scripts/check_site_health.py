@@ -23,7 +23,11 @@ MUST_HEADERS = {
 }
 REDIRECTS = [("/monthly-deals", "/deals/"), ("/tuesday-charity-night", "/fundraisers/"),
              ("/events/trivia-night", "/entertainment/"), ("/gift-cards", "/gift-cards"),
-             ("/menu-plainville", "/order/square-peg-plainville"),
+             # /menu-<town> now lands on our own location page rather than Toast, so a
+             # press link to it keeps its value on this domain (CT Insider’s Storrs piece
+             # pointed at /menu-storrs). Changed 8 Oct 2026.
+             ("/menu-plainville", "/locations/plainville-ct/"),
+             ("/menu-storrs", "/locations/storrs-ct/"),
              # Old ordering links from QR codes and Google, in both slash forms.
              ("/order/square-peg-plainville-400-new-britain-avenue", "/order/square-peg-plainville"),
              ("/order/square-peg-plainville-400-new-britain-avenue/", "/order/square-peg-plainville"),

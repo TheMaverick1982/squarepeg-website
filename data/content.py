@@ -161,6 +161,7 @@ LOCATIONS = [
     },
     {
         "slug": "plainville-ct", "review_url": "https://g.page/r/CRm0rKa4S61lEAE/review",
+        "sunday_ticket": True,   # added Oct 2026 — Brian
         # Kitchen closes before the bar on these days (from the store hours).
         "kitchen": {"Wed": "21:00", "Thu": "21:00"}, "name": "Plainville", "region": "Central CT",
         "street": "400 New Britain Ave", "city": "Plainville", "state": "CT", "zip": "06062",
@@ -643,30 +644,65 @@ EVENT_ROUTES = [
 TRUCK = {
     "party_min": "10 or more",
     "season": "May through October",
+    # PRIVATE EVENTS ONLY. Square Peg no longer carries itinerant vending licenses,
+    # so the truck cannot sell to the public at festivals, markets or brewery
+    # events — Carla, Oct 2026. Nothing on the site may imply otherwise.
+    "private_only": "The truck does private events only. We don\u2019t carry the vending "
+                    "licence to sell to the public at festivals, markets or brewery "
+                    "events, so every booking is a private party, school, company or "
+                    "wedding.",
     "events": ["Weddings and rehearsal dinners", "Graduation parties",
                "School and team events", "Corporate days and office parties",
-               "Breweries, festivals and markets", "Block parties and backyard birthdays"],
-    # Deliberately no radius and no minimum on the page: both are decided job by
-    # job, and publishing a number we'd have to break is worse than publishing none.
+               "Block parties and backyard birthdays", "Anniversaries and reunions"],
+    # NO PER-PERSON PRICING ON THE SITE — Brian, Oct 2026. The packages are listed by
+    # what is on them so a guest can picture the event; the numbers come from the
+    # catering manager's estimate after the form, which is also how leads stay in our
+    # system. The $1,000 minimum is the one figure Brian approved publishing, because
+    # it saves everyone a conversation that was never going to work.
+    "min_guests": "50",
+    "small_min": "20",
+    "small_charge": "$1,000",
+    "packages": [
+        ("2 hours",
+         "A house or Caesar salad, meatballs, and an all-you-can-eat buffet of three "
+         "pizza varieties."),
+        ("3 hours",
+         "A salad, a charcuterie board and meatballs, and four pizza varieties."),
+        ("3\u00bd hours",
+         "Both salads, charcuterie, meatballs, caprese and shrimp skewers, and four "
+         "pizza varieties."),
+        ("4 hours",
+         "All of the above plus two pastas \u2014 marinara, alla vodka, Bolognese or mac "
+         "and cheese \u2014 and bite-size sea salt chocolate chip cookies."),
+    ],
+    "small_party": "Under 50 guests we run a 20-guest package with a $1,000 minimum "
+                   "charge: a salad and an all-you-can-eat pizza buffet \u2014 cheese, "
+                   "pepperoni, margherita and one specialty of your choice.",
+    "addons": "Meatballs, crostini, wings and bite-size cookies.",
+    "price_note": "Pricing is per person and depends on the package, the headcount and "
+                  "the date. Send the form and our catering manager will come back with "
+                  "the menus and a written estimate.",
+    "custom": "Don\u2019t see something you like? We can customize anything.",
     "steps": [
         ("Send the form",
          "Date, where it is, and roughly how many people. Choose Food truck "
          "private service when the form asks."),
-        ("We build the menu with you",
-         "The truck menu isn’t fixed. We put it together around your crowd, your "
-         "timing and what you want to spend."),
-        ("The oven rolls up",
-         "We park, fire up and cook in front of your guests. Pies come out of the "
-         "flame and onto the plate."),
+        ("We email you the menus",
+         "Our catering manager sends the packages and the pizza list first, so you "
+         "have the detail in front of you before anyone picks up the phone."),
+        ("We plan it, then the oven rolls up",
+         "We go through the package, the timing and any dietary needs, then we park, "
+         "fire up and cook in front of your guests."),
     ],
     # The comparison people actually need. Both columns are true, which is the point.
     "vs": [
         ("Where the food is made", "In our kitchen", "In front of your guests"),
         ("How it arrives", "You collect it, boxed and hot", "We drive it to you"),
-        ("What’s on it", "The full tray menu plus pizza", "Built around your event"),
-        ("Minimum order", "None", "Depends on the job"),
+        ("What\u2019s on it", "The full tray menu plus pizza",
+         "Set packages, customizable"),
+        ("Minimum", "None", "50 guests, or 20 with a $1,000 minimum"),
         ("Best for", "Offices, parties, anything on a schedule",
-         "Weddings, festivals, anywhere the food is part of the show"),
+         "Weddings, graduations and private parties where the food is part of the show"),
     ],
 }
 
@@ -678,18 +714,24 @@ TRUCK_FAQ = [
      "As early as you have a date. May through October is the busy stretch and "
      "Saturdays go first — summer weekends are often spoken for months out. Off "
      "season there is usually more room, so it is always worth asking."),
+    ("Can you come to a festival, a market or a brewery?",
+     "No. The truck is for private events only — we don’t carry the vending license "
+     "needed to sell to the public, so we can’t take a spot at a public event. A "
+     "private party at that venue is a different thing, and that we can do."),
     ("How far will the truck travel?",
      "It depends on the date and the job, so we would rather not publish a radius "
      "we would have to break. Send the form with where you are and when, and we "
      "will give you a straight answer."),
     ("Is there a minimum number of guests?",
-     "Nothing fixed. Whether the truck makes sense for your event depends on the "
-     "headcount, the date and what you want to spend, and that is the conversation "
-     "we will have when we call you back."),
+     "Yes. The standard packages start at 50 guests. Below that we run a 20-guest "
+     "package with a $1,000 minimum charge, so a smaller party is still possible — "
+     "it just has a floor."),
     ("What is on the truck menu?",
-     "Whatever we build with you. It is a real wood-fired oven, so pizza is the "
-     "heart of it, and we put the rest of the menu together around your crowd and "
-     "your budget rather than handing you a fixed package."),
+     "Set packages, from a two-hour buffet with a salad, meatballs and three pizza "
+     "varieties up to a four-hour spread with charcuterie, skewers, pastas and "
+     "dessert. Pizza is wood-fired Neo-Neapolitan, red or white, and we can "
+     "customize anything — our catering manager emails you the full menus when "
+     "you send the form."),
     ("Can you handle gluten-free or vegan guests?",
      "Yes. We have a 12″ gluten-free crust and vegan cheese. Tell us the numbers "
      "when we talk and we will plan for them properly rather than improvising on "
@@ -1121,6 +1163,8 @@ HALLOWEEN = {
         "price": "$5",
         "line": "Kids eat for $5 all six days.",
         "note": "Every item below is $5 each — order any of them.",
+        # for print, where the dates sit in the header and each row shows its price
+        "note_short": "Dine-in, all six days.",
         "menu": [
             ("Pizza", ["Two slices — cheese or pepperoni"]),
             ("Pasta, kid size", ["Mac and cheese", "Spaghetti with marinara",
