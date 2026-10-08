@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -1660,6 +1660,30 @@ T["fundraisers"] = """
     </div>
   </div>
 </section>
+<section class="section">
+  <div class="wrap two-col" style="align-items:center">
+    <div class="stack">
+      <span class="eyebrow">Once your date is booked</span>
+      <h2>Send your people here.</h2>
+      <p class="prose">This page is for you &mdash; the people you&rsquo;re inviting need
+        something different. We&rsquo;ve written them their own: what to do on the night,
+        what counts and what doesn&rsquo;t, and how to find the right Square Peg.</p>
+      <p class="prose">Put the link in your newsletter, on your website or in the
+        class group. Half the money a night leaves on the table is somebody ordering
+        takeout by mistake.</p>
+      <div class="btn-row"><a class="btn" href="{{ u('/fundraiser-night/') }}">See the page for supporters</a></div>
+    </div>
+    <div class="stack">
+      <div class="cat-note" style="padding:20px;background:var(--paper);border-left:3px solid var(--ember)">
+        <b>Ready to paste:</b><br>
+        Join us at Square Peg in [town] on [date]. Eat dinner, bring friends, and 20%
+        of what everyone spends on food comes back to us. Dine in only &mdash; just tell
+        your server you&rsquo;re with [group].<br>
+        What to know: {{ site.domain|replace('https://','') }}/fundraiser-night/
+      </div>
+    </div>
+  </div>
+</section>
 <section class="section" id="apply">
   <div class="wrap two-col">
     <div class="stack">
@@ -2164,6 +2188,73 @@ T["townpage"] = """
       <a class="btn" href="{{ order(store) }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="{{ tp.slug }}-foot">{{ icons.bag|safe }}Order from {{ store.name }}</a>
       <a class="btn btn--line" href="{{ u('/locations/' ~ store.slug ~ '/') }}">Hours &amp; directions</a>
       <a class="btn btn--line" href="{{ u('/our-menu/') }}">See the menu</a>
+    </div>
+  </div>
+</section>
+"""
+
+T["fundraiser_night"] = """
+<section class="page-head on-dark">
+  {{ img('team-kids', 'A group celebrating a Tuesday fundraiser at Square Peg', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/fundraisers/') }}">Fundraisers</a><span aria-hidden="true">/</span><span>Fundraiser night</span></nav>
+    <span class="eyebrow">Tuesdays &middot; {{ fn.window }}</span>
+    <h1>Fundraiser night at Square Peg</h1>
+    <p class="lede">Somebody sent you here because their group has a Tuesday with us.
+      Here&rsquo;s the whole thing: come in, eat dinner, mention them, and
+      <b>{{ fn.share }} of what you spend on food goes back to them</b>.</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ u('/locations/') }}" data-open-picker="order">{{ icons.pin|safe }}Find your Square Peg</a>
+      <a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the menu</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Three things, and that&rsquo;s it</span>
+      <h2>What to do on the night</h2>
+    </div>
+    <ol class="steps steps--row">
+      {% for head, body in fn.steps %}<li><div><b>{{ head }}</b><span>{{ body }}</span></div></li>{% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">Counts towards the total</span>
+      <h2>What raises money</h2>
+      <ul class="checks">{% for i in fn.counts %}<li>{{ i }}</li>{% endfor %}</ul>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Doesn&rsquo;t count</span>
+      <h2>What doesn&rsquo;t</h2>
+      <ul class="checks checks--no">{% for i in fn.excluded %}<li>{{ i }}</li>{% endfor %}</ul>
+      <p class="note">None of this is us being difficult &mdash; it&rsquo;s how the night gets
+        counted fairly at the end. The short version: eat in, and say the name.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Before you come</span><h2>Questions</h2></div>
+    <div class="faq">{% for q, a in fn.faq %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap cta-foot">
+    <span class="eyebrow">Run a group yourself?</span>
+    <h2>Book your own Tuesday.</h2>
+    <p class="prose">Schools, teams, clubs and nonprofits can claim a Tuesday at any
+      Square Peg. We handle the tracking and send the donation after the night.</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ u('/fundraisers/') }}">How fundraisers work</a>
+      <a class="btn btn--line" href="{{ u('/locations/') }}">Find a Square Peg</a>
     </div>
   </div>
 </section>
@@ -3106,6 +3197,14 @@ def main():
                             breadcrumbs([("Home", "/"), ("Locations", "/locations/"),
                                          (tp["h1"], f"/{tp['slug']}/")])),
                       tp["hero"], tp["hero"]))
+    pages.append(("/fundraiser-night/", "Fundraiser Night at Square Peg | How It Works for Guests",
+                  "Supporting a school, team or nonprofit at Square Peg Pizzeria? Dine in on "
+                  "their Tuesday, mention the group, and 20% of food sales goes back to them.",
+                  "fundraiser_night", dict(fn=FUNDRAISER_NIGHT),
+                  graph(faq_schema(FUNDRAISER_NIGHT["faq"]),
+                        breadcrumbs([("Home", "/"), ("Fundraisers", "/fundraisers/"),
+                                     ("Fundraiser night", "/fundraiser-night/")])),
+                  "team-kids", "team-kids"))
     pages.append(("/food-truck/", "Wood-Fired Pizza Food Truck for Events in CT | Square Peg",
                   "Book the Square Peg Pizzeria wood-fired pizza food truck for backyard parties, weddings, schools, breweries and corporate events in Connecticut.",
                   "truck", dict(truck=TRUCK, faqs=TRUCK_FAQ), graph(faq_schema(TRUCK_FAQ), breadcrumbs([("Home", "/"), ("Food Truck", "/food-truck/")])), "food-truck", "food-truck"))

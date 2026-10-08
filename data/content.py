@@ -704,6 +704,56 @@ TRUCK_FAQ = [
      "from the kitchen. Mention both on the form."),
 ]
 
+# The guest-facing half of the fundraiser program.
+#
+# /fundraisers/ sells the idea to the organiser: how it works, how to book a
+# Tuesday. The people that organiser then emails are supporters, and they need a
+# completely different page — what to do on the night, and what does and doesn't
+# count. This is the URL that goes in their newsletter and on their website,
+# which also makes it the page that collects the local backlinks.
+#
+# Rules here must stay identical to FUNDRAISER_FAQ. If one changes, change both.
+FUNDRAISER_NIGHT = {
+    "share": "20%",
+    "window": "4pm to close",
+    "steps": [
+        ("Come in on their Tuesday",
+         "Any time from 4pm to close, at the Square Peg your group booked. You "
+         "don’t need a ticket, a flyer or a reservation."),
+        ("Eat in the restaurant",
+         "Dine-in only. Takeout, delivery and the third-party apps don’t count "
+         "towards the total — this is the one that trips people up."),
+        ("Tell your server who you’re with",
+         "Say the group’s name when you order. That’s how your table gets counted."),
+    ],
+    "counts": ["Food, eaten in the restaurant",
+               "Any Tuesday booking, 4pm to close",
+               "Any size table — two people or twenty"],
+    "excluded": ["Takeout and curbside",
+                 "Delivery and third-party apps",
+                 "Alcohol",
+                 "Tax and tip"],
+    "faq": [
+        ("Do I need a flyer or a code?",
+         "No. Just tell your server which group you’re supporting when you order."),
+        ("Does takeout count?",
+         "No. Only food eaten in the restaurant counts, which is why it matters that "
+         "everyone comes in rather than ordering ahead for pickup."),
+        ("What time should we come?",
+         "Any time from 4pm to close on the Tuesday the group booked. Earlier is "
+         "usually quieter if you’re bringing small children."),
+        ("Does my drink count?",
+         "Soft drinks are food sales and count. Alcohol doesn’t, and neither does "
+         "tax or tip."),
+        ("How much goes to the group?",
+         "20% of qualifying dine-in food sales across the whole night. We total it "
+         "up after close and send the donation to the organisation."),
+        ("Can I come if I’m not part of the group?",
+         "Yes, and please do. Anyone who dines in that night and mentions the group "
+         "adds to their total."),
+    ],
+}
+
 CATERING = {
     # ⚠ CONFIRM BEFORE PUSHING. Worked from the real tray prices on the catering
     # sheet, not guessed: a full tray feeds 40–50, so pasta ($151) + salad ($116)
