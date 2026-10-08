@@ -905,13 +905,13 @@ T["home"] = """
 
 <section class="section section--paper">
   <div class="wrap band">
-    <div class="band-media">{{ img('team-kids', 'A youth sports team celebrating their fundraiser night at Square Peg', sizes='(min-width:900px) 35vw, 95vw')|safe }}<div class="band-num"><div class="big-num" aria-hidden="true">20<sup>%</sup></div><p>of dine-in food sales, back to your cause</p></div></div>
+    <div class="band-media">{{ img('team-kids', 'A youth sports team celebrating their fundraiser night at Square Peg', sizes='(min-width:900px) 35vw, 95vw')|safe }}<div class="band-num"><div class="big-num" aria-hidden="true">20<sup>%</sup></div><p>of food sales, back to your cause</p></div></div>
     <div class="stack">
       <span class="eyebrow">Tuesday Night Fundraisers</span>
       <h2>Turn Tuesday into a fundraiser.</h2>
       <ol class="steps">
         <li><div><b>Pick a Tuesday</b><span>One organization per night, per location.</span></div></li>
-        <li><div><b>Bring your supporters</b><span>They dine in from 4pm to close and mention your group.</span></div></li>
+        <li><div><b>Bring your supporters</b><span>They dine in or pick up from 4pm to close and mention your group.</span></div></li>
         <li><div><b>Earn 20% back</b><span>We total it up and donate 20% of qualifying food sales.</span></div></li>
       </ol>
       <div class="btn-row"><a class="btn" href="{{ u('/fundraisers/') }}#apply">Request a Tuesday</a><a class="btn btn--line" href="{{ u('/fundraisers/') }}">How it works</a></div>
@@ -1032,7 +1032,7 @@ T["areas"] = """
   <div class="wrap two-col">
     <div class="stack"><span class="eyebrow">Having a party?</span><h2>Catering &amp; the food truck</h2><p>Pick up a catering order from any Square Peg, or book our wood-fired food truck for backyard parties, schools, breweries and corporate events.</p>
       <div class="btn-row"><a class="btn" href="{{ u('/catering/') }}">Catering</a><a class="btn btn--line" href="{{ u('/food-truck/') }}">Food truck</a></div></div>
-    <div class="stack"><span class="eyebrow">For your school or team</span><h2>Tuesday fundraisers</h2><p>Groups from all of these towns can earn 20% of dine-in food sales with a Tuesday Night Fundraiser at their closest Square Peg.</p>
+    <div class="stack"><span class="eyebrow">For your school or team</span><h2>Tuesday fundraisers</h2><p>Groups from all of these towns can earn 20% of food sales with a Tuesday Night Fundraiser at their closest Square Peg.</p>
       <div class="btn-row"><a class="btn" href="{{ u('/fundraisers/') }}">Request a Tuesday</a></div></div>
   </div>
 </section>
@@ -1642,19 +1642,19 @@ T["fundraisers"] = """
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Fundraisers</span></nav>
     <span class="eyebrow">Every Tuesday · 4pm to close</span>
     <h1>Tuesday Night Fundraisers</h1>
-    <p class="lede">Partner with Square Peg and receive 20% of dine-in food sales from your supporters. Schools, teams, booster clubs, nonprofits: you promote, they dine in, we handle the rest.</p>
+    <p class="lede">Partner with Square Peg and receive 20% of food sales from your supporters. Schools, teams, booster clubs, nonprofits: you promote, they order, we handle the rest.</p>
     <div class="btn-row"><a class="btn" href="#apply">Request a Tuesday</a></div>
   </div>
 </section>
 <section class="section section--paper">
   <div class="wrap band">
-    <div><div class="big-num" aria-hidden="true">20<sup>%</sup></div><p class="note">of qualifying dine-in food sales, excluding tax & alcohol</p></div>
+    <div><div class="big-num" aria-hidden="true">20<sup>%</sup></div><p class="note">of qualifying food sales, excluding tax & alcohol</p></div>
     <div class="stack">
       <h2>How it works</h2>
       <ol class="steps">
         <li><div><b>Pick a Tuesday</b><span>We partner with one local organization per Tuesday at each location.</span></div></li>
-        <li><div><b>Bring your supporters</b><span>They dine in between 4pm and close and tell their server who they’re supporting.</span></div></li>
-        <li><div><b>Earn 20% back</b><span>We total qualifying dine-in food sales and donate 20% to your organization.</span></div></li>
+        <li><div><b>Bring your supporters</b><span>They dine in or pick up between 4pm and close and say who they’re supporting.</span></div></li>
+        <li><div><b>Earn 20% back</b><span>We total qualifying food sales and donate 20% to your organization.</span></div></li>
       </ol>
       <p style="font-weight:800">Included: a custom digital flyer, social-ready graphics, server tracking & reporting, and a donation issued after the event.</p>
     </div>
@@ -1670,15 +1670,15 @@ T["fundraisers"] = """
         what counts and what doesn&rsquo;t, and how to find the right Square Peg.</p>
       <p class="prose">Put the link in your newsletter, on your website or in the
         class group. Half the money a night leaves on the table is somebody ordering
-        takeout by mistake.</p>
+        through a delivery app by mistake.</p>
       <div class="btn-row"><a class="btn" href="{{ u('/fundraiser-night/') }}">See the page for supporters</a></div>
     </div>
     <div class="stack">
       <div class="cat-note" style="padding:20px;background:var(--paper);border-left:3px solid var(--ember)">
         <b>Ready to paste:</b><br>
         Join us at Square Peg in [town] on [date]. Eat dinner, bring friends, and 20%
-        of what everyone spends on food comes back to us. Dine in only &mdash; just tell
-        your server you&rsquo;re with [group].<br>
+        of what everyone spends on food comes back to us. Dine in or pick up &mdash; just
+        tell them you&rsquo;re with [group]. Delivery apps don&rsquo;t count.<br>
         What to know: {{ site.domain|replace('https://','') }}/fundraiser-night/
       </div>
     </div>
@@ -2201,8 +2201,9 @@ T["fundraiser_night"] = """
     <span class="eyebrow">Tuesdays &middot; {{ fn.window }}</span>
     <h1>Fundraiser night at Square Peg</h1>
     <p class="lede">Somebody sent you here because their group has a Tuesday with us.
-      Here&rsquo;s the whole thing: come in, eat dinner, mention them, and
-      <b>{{ fn.share }} of what you spend on food goes back to them</b>.</p>
+      Here&rsquo;s the whole thing: order from Square Peg that day &mdash; dine in or pick
+      it up &mdash; mention them, and <b>{{ fn.share }} of what you spend on food goes
+      back to them</b>.</p>
     <div class="btn-row">
       <a class="btn" href="{{ u('/locations/') }}" data-open-picker="order">{{ icons.pin|safe }}Find your Square Peg</a>
       <a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the menu</a>
@@ -2234,7 +2235,7 @@ T["fundraiser_night"] = """
       <h2>What doesn&rsquo;t</h2>
       <ul class="checks checks--no">{% for i in fn.excluded %}<li>{{ i }}</li>{% endfor %}</ul>
       <p class="note">None of this is us being difficult &mdash; it&rsquo;s how the night gets
-        counted fairly at the end. The short version: eat in, and say the name.</p>
+        counted fairly at the end. The short version: dine in or pick up, and say the name.</p>
     </div>
   </div>
 </section>
@@ -2813,7 +2814,7 @@ T["private_events"] = """{% macro bento(items) %}<div class="bento">{% for p, a,
       <a class="tile on-dark" href="{{ u('/large-party-reservations/') }}">{{ img('dining-room-kids', 'A group celebrating at Square Peg', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">At the restaurant</span><h3>Large party reservations</h3><p>Birthdays, team dinners, showers and reunions.</p><span class="btn">Request a date {{ icons.arrow|safe }}</span></div></a>
       <a class="tile on-dark" href="{{ u('/catering/') }}">{{ img('pizza-boxes', 'Stacked Square Peg pizza boxes', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">At your place</span><h3>Catering</h3><p>Wood-fired pizza for any headcount, ready for pickup.</p><span class="btn">Get a quote {{ icons.arrow|safe }}</span></div></a>
       <a class="tile on-dark" href="{{ u('/food-truck/') }}">{{ img('truck-tent', 'The Square Peg food truck at an event', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">Anywhere</span><h3>The food truck</h3><p>A wood-fired oven on wheels at your event.</p><span class="btn">Book the truck {{ icons.arrow|safe }}</span></div></a>
-      <a class="tile on-dark" href="{{ u('/fundraisers/') }}">{{ img('team-kids', 'A youth team at a Square Peg Tuesday fundraiser', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">For your cause</span><h3>Tuesday fundraisers</h3><p>20% of dine-in food sales back to your school, team or cause.</p><span class="btn">Pick a Tuesday {{ icons.arrow|safe }}</span></div></a>
+      <a class="tile on-dark" href="{{ u('/fundraisers/') }}">{{ img('team-kids', 'A youth team at a Square Peg Tuesday fundraiser', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">For your cause</span><h3>Tuesday fundraisers</h3><p>20% of food sales back to your school, team or cause.</p><span class="btn">Pick a Tuesday {{ icons.arrow|safe }}</span></div></a>
     </div>
   </div>
 </section>
@@ -2983,7 +2984,7 @@ def location_faqs(l):
         ("Do you have gluten-free or vegan options?", "Yes. We offer a 12″ gluten-free crust, and vegan cheese can be added to any pizza."),
         (f"Does Square Peg {name} do catering?", f"Yes. {name} caters birthdays, office lunches, team events and more. Send a quick request on our catering page, or call {l['phone']}."),
         (f"Is Square Peg {name} close to {l['nearby'][0]} and {l['nearby'][1]}?", f"Yes. Square Peg {name} at {l['street']} in {l['city']} is a short drive from {', '.join(l['nearby'][:-1])} and {l['nearby'][-1]}. Order ahead online for pickup, or check delivery availability at checkout."),
-        ("Can our group host a fundraiser here?", "Yes. Every Tuesday from 4pm to close, one organization earns 20% of dine-in food sales from its supporters."),
+        ("Can our group host a fundraiser here?", "Yes. Every Tuesday from 4pm to close, one organization earns 20% of food sales from its supporters — dine in or pickup."),
     ]
 
 PRIVACY_TEXT = """<p class="note">Last updated: April 13, 2026</p>
@@ -3198,8 +3199,9 @@ def main():
                                          (tp["h1"], f"/{tp['slug']}/")])),
                       tp["hero"], tp["hero"]))
     pages.append(("/fundraiser-night/", "Fundraiser Night at Square Peg | How It Works for Guests",
-                  "Supporting a school, team or nonprofit at Square Peg Pizzeria? Dine in on "
-                  "their Tuesday, mention the group, and 20% of food sales goes back to them.",
+                  "Supporting a school, team or nonprofit at Square Peg Pizzeria? Order on "
+                  "their Tuesday — dine in or pickup — mention the group, and 20% goes "
+                  "back to them.",
                   "fundraiser_night", dict(fn=FUNDRAISER_NIGHT),
                   graph(faq_schema(FUNDRAISER_NIGHT["faq"]),
                         breadcrumbs([("Home", "/"), ("Fundraisers", "/fundraisers/"),
@@ -3212,7 +3214,7 @@ def main():
                   "Square Peg Pizzeria deals and rewards: a members-only dine-in offer every month, points on every visit, and rewards you redeem in the app. Joining is free.",
                   "deals", {}, graph(breadcrumbs([("Home", "/"), ("Deals & Rewards", "/deals/")])), "pizza-boxes", "pizza-boxes"))
     pages.append(("/fundraisers/", "Tuesday Night Restaurant Fundraisers | Square Peg Pizzeria",
-                  "Earn 20% of dine-in food sales for your school, team or nonprofit with a Square Peg Pizzeria Tuesday Night Fundraiser. Request your date.",
+                  "Earn 20% of food sales for your school, team or nonprofit with a Square Peg Pizzeria Tuesday Night Fundraiser. Dine in or pickup. Request your date.",
                   "fundraisers", dict(faqs=FUNDRAISER_FAQ), graph(faq_schema(FUNDRAISER_FAQ), breadcrumbs([("Home", "/"), ("Fundraisers", "/fundraisers/")])), "team-kids", "dining-room-kids"))
     pages.append(("/about/", "Our Story | Square Peg Pizzeria",
                   "Square Peg Pizzeria was started by UConn alumni in Glastonbury in 2020. Dough made fresh from scratch, never frozen, and a whole lot of Be Nice.",

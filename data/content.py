@@ -609,9 +609,9 @@ REVIEWS = [
 ]
 
 FUNDRAISER_FAQ = [
-    ("Is the fundraiser dine-in only?", "Yes. Only dine-in food purchases count. Take-out, delivery and third-party apps are excluded."),
-    ("How do supporters make their purchase count?", "They dine in any Tuesday from 4pm to close at the location you booked and tell their server they’re supporting your organization."),
-    ("How much does our organization earn?", "20% of qualifying dine-in food sales, excluding tax and alcohol. We total everything at the end of the night and send the donation after the event."),
+    ("Does takeout count?", "Yes. Dine-in and pickup both count. The only thing excluded is ordering through a third-party delivery app — DoorDash, Uber Eats, Grubhub and the like."),
+    ("How do supporters make their purchase count?", "They dine in or pick up from the location you booked, any Tuesday from 4pm to close, and tell whoever takes their order that they’re supporting your organization."),
+    ("How much does our organization earn?", "20% of qualifying food sales, excluding tax and alcohol. We total everything at the end of the night and send the donation after the event."),
     ("How many organizations can book a night?", "One organization per location per Tuesday. If your date is taken, we’ll add you to our priority waiting list."),
     ("What do we get to promote it?", "A custom digital flyer and social-ready graphics made by our team. Server tracking and sales reporting are handled by us."),
 ]
@@ -636,8 +636,8 @@ EVENT_ROUTES = [
      "A real wood-fired oven on wheels, cooking pies in front of your guests. "
      "The only one of the three where we turn up.", "/food-truck/"),
     ("Your cause, our Tuesday", "Tuesday fundraiser",
-     "Bring your group in on a Tuesday and 20% of dine-in food sales goes back "
-     "to your school, team or cause.", "/fundraisers/"),
+     "Come in on a Tuesday and 20% of food sales goes back to your school, "
+     "team or cause.", "/fundraisers/"),
 ]
 
 TRUCK = {
@@ -721,42 +721,42 @@ FUNDRAISER_NIGHT = {
          "The one date and the one Square Peg your group named — not just any "
          "Tuesday, and not whichever location is closest. Any time from 4pm to "
          "close. No ticket, flyer or reservation needed."),
-        ("Eat in the restaurant",
-         "Dine-in only. Takeout, delivery and the third-party apps don’t count "
-         "towards the total — this is the one that trips people up."),
-        ("Tell your server who you’re with",
-         "Say the group’s name when you order. That’s how your table gets counted."),
+        ("Dine in or take it home",
+         "Both count. Eat with us or pick it up — the only orders that don’t count "
+         "are the ones placed through DoorDash, Uber Eats, Grubhub and the like."),
+        ("Say who you’re with",
+         "Tell your server, or whoever takes your order at the counter or on the "
+         "phone. That’s how it gets counted."),
     ],
-    "counts": ["Food, eaten in the restaurant",
+    "counts": ["Food — eaten in or picked up",
                "The one Tuesday your group booked, 4pm to close",
                "The Square Peg they named — each location runs its own night",
-               "Any size table — two people or twenty"],
-    "excluded": ["Takeout and curbside",
-                 "Delivery and third-party apps",
+               "Any size order — a table of twenty or one pizza"],
+    "excluded": ["DoorDash, Uber Eats, Grubhub and other delivery apps",
                  "A different Tuesday, or a different Square Peg",
                  "Alcohol",
                  "Tax and tip"],
     "faq": [
         ("Do I need a flyer or a code?",
-         "No. Just tell your server which group you’re supporting when you order."),
+         "No. Just say which group you’re supporting when you order."),
         ("Does takeout count?",
-         "No. Only food eaten in the restaurant counts, which is why it matters that "
-         "everyone comes in rather than ordering ahead for pickup."),
+         "Yes. Dine in or pick it up, either one counts. The only orders that don’t "
+         "are the ones that come through a delivery app."),
         ("What time should we come?",
          "Any time from 4pm to close, on the specific Tuesday the group booked. "
          "Earlier is usually quieter if you’re bringing small children."),
         ("What if I go on a different Tuesday, or to another location?",
-         "It won’t count. Each Square Peg hosts one organisation per Tuesday, so "
+         "It won’t count. Each Square Peg hosts one organization per Tuesday, so "
          "the donation is tied to that date at that restaurant. Check the invite "
          "for which one before you set off."),
         ("Does my drink count?",
          "Soft drinks are food sales and count. Alcohol doesn’t, and neither does "
          "tax or tip."),
         ("How much goes to the group?",
-         "20% of qualifying dine-in food sales across the whole night. We total it "
-         "up after close and send the donation to the organisation."),
+         "20% of qualifying food sales across the whole night. We total it "
+         "up after close and send the donation to the organization."),
         ("Can I come if I’m not part of the group?",
-         "Yes, and please do. Anyone who dines in that night and mentions the group "
+         "Yes, and please do. Anyone who orders that night and mentions the group "
          "adds to their total."),
     ],
 }
@@ -874,7 +874,7 @@ LARGE_PARTY_FAQ = [
     ("Can we plan the food ahead of time?", "Yes. Tell us what you have in mind in your request and we’ll plan it with you, so everything hits the table hot and together."),
     ("Do you have gluten-free or dairy-free options?", "Yes. We offer a 12″ gluten-free crust and vegan cheese. Mention any dietary needs in your request."),
     ("How far ahead should we book?", "As early as you can, especially for Friday and Saturday nights and during the holidays."),
-    ("Would a fundraiser work better for our group?", "If you’re raising money for a school, team or nonprofit, a Tuesday Night Fundraiser earns 20% of dine-in food sales for your cause."),
+    ("Would a fundraiser work better for our group?", "If you’re raising money for a school, team or nonprofit, a Tuesday Night Fundraiser earns 20% of food sales for your cause."),
 ]
 
 CONTACT_TOPICS = [

@@ -77,8 +77,8 @@ TOWN_PAGES = [
                 head="Tuesday fundraisers",
                 ctas=[("Pick your Tuesday", "/fundraisers/")],
                 paras=[
-                    "Bring your group in on a Tuesday and 20% of dine-in food sales goes "
-                    "back to your cause. It works for student organisations, club teams, "
+                    "Come in on a Tuesday and 20% of food sales goes back to your cause — "
+                    "dine in or pick up. It works for student organizations, club teams, "
                     "Greek chapters and anything else that needs to raise money without "
                     "running another bake sale.",
                     "Pick your Tuesday, we&rsquo;ll give you something to share, and your people "
@@ -101,7 +101,7 @@ TOWN_PAGES = [
              "Friday and Saturday. We also carry NFL Sunday Ticket."),
             ("Can we order for a club or a team?",
              "Yes, two ways. Catering is pickup from the Storrs kitchen for any headcount, "
-             "and Tuesday fundraisers give 20% of dine-in food sales back to your group."),
+             "and Tuesday fundraisers give 20% of food sales back to your group."),
         ],
     },
     {
