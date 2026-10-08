@@ -1,0 +1,166 @@
+{
+ "/": {
+  "date": "2026-10-08",
+  "hash": "dee49a969c1d653f4ffe5e713563e8ba"
+ },
+ "/about/": {
+  "date": "2026-10-08",
+  "hash": "3901611a1caa9bcc42d36c7a5da27dc8"
+ },
+ "/areas-we-serve/": {
+  "date": "2026-10-08",
+  "hash": "fbdf2851a74ce936e0135b56b4fbe6e8"
+ },
+ "/careers/": {
+  "date": "2026-10-08",
+  "hash": "6cc91df238749bfdb68514f3d0cbfbc0"
+ },
+ "/catering/": {
+  "date": "2026-10-08",
+  "hash": "1d5594d2100a2e8972d3872ec9f1978b"
+ },
+ "/contact/": {
+  "date": "2026-10-08",
+  "hash": "90a669a64d3e12c9a8ad0da2ce1b2d64"
+ },
+ "/date-night/": {
+  "date": "2026-10-08",
+  "hash": "011e6215bb4173aedc9f5825e00e7408"
+ },
+ "/deals/": {
+  "date": "2026-10-08",
+  "hash": "4f6eb9f17c7e59df8b165adb94dbbac4"
+ },
+ "/entertainment/": {
+  "date": "2026-10-08",
+  "hash": "435cb08f3dcbcd7ba9a8f10cef1c62e5"
+ },
+ "/food-truck/": {
+  "date": "2026-10-08",
+  "hash": "0c22bfe9f4e5fe5abfca3e404a1aa292"
+ },
+ "/fundraisers/": {
+  "date": "2026-10-08",
+  "hash": "a3d295d594c0fcc8ba80dbcfff35e95f"
+ },
+ "/game-day/": {
+  "date": "2026-10-08",
+  "hash": "27737fa8e575ce2fb7354c4373412ed4"
+ },
+ "/halloween/": {
+  "date": "2026-10-08",
+  "hash": "d50db3f1978ab53f0b0f7b9954efeb9e"
+ },
+ "/large-party-reservations/": {
+  "date": "2026-10-08",
+  "hash": "2b439efbe269aa0f40e9f935f5eda910"
+ },
+ "/locations/": {
+  "date": "2026-10-08",
+  "hash": "7704522c7319ce3ff2e780a380ac115a"
+ },
+ "/locations/berlin-ct/": {
+  "date": "2026-10-08",
+  "hash": "c4a5ea8e65b70f3112bf244d831b5fdc"
+ },
+ "/locations/bolton-ct/": {
+  "date": "2026-10-08",
+  "hash": "41a9e4f93f23b33ed2de047976148f55"
+ },
+ "/locations/delray-beach-fl/": {
+  "date": "2026-10-08",
+  "hash": "fd26eba5747eab61c21e70d9e78586a1"
+ },
+ "/locations/east-hartford-ct/": {
+  "date": "2026-10-08",
+  "hash": "fdfab88cd809c9edaa71be998469154e"
+ },
+ "/locations/glastonbury-ct/": {
+  "date": "2026-10-08",
+  "hash": "2b9e068180b78fbf95ce6011eca84fbd"
+ },
+ "/locations/plainville-ct/": {
+  "date": "2026-10-08",
+  "hash": "9edc9d40a0861455b40aaa82833f8523"
+ },
+ "/locations/preston-ct/": {
+  "date": "2026-10-08",
+  "hash": "6988b5c5d64284c2fedb4efbb039129e"
+ },
+ "/locations/shelton-ct/": {
+  "date": "2026-10-08",
+  "hash": "9ffd34fd785c9d70dd45127babc33f18"
+ },
+ "/locations/storrs-ct/": {
+  "date": "2026-10-08",
+  "hash": "704595e71175788882cbe7ae9bd1de27"
+ },
+ "/locations/vernon-ct/": {
+  "date": "2026-10-08",
+  "hash": "16cfb71e94f3a53bedcce110398ceaca"
+ },
+ "/monthly-specials/": {
+  "date": "2026-10-08",
+  "hash": "75c969e28fdf42f80a7e0ec7069debd6"
+ },
+ "/our-menu/": {
+  "date": "2026-10-08",
+  "hash": "238fd8a9fcd375aa9c9495d7f10d1efe"
+ },
+ "/pairing/": {
+  "date": "2026-10-08",
+  "hash": "dbacd1c28936d66c72a220fe9fafcb6c"
+ },
+ "/pizza-calculator/": {
+  "date": "2026-10-08",
+  "hash": "ea59ff388610ebea473242e6486cc3e9"
+ },
+ "/pizza-faq/": {
+  "date": "2026-10-08",
+  "hash": "a7f56843207c46ff5be4c2d904182b97"
+ },
+ "/pizza-near-boca-raton/": {
+  "date": "2026-10-08",
+  "hash": "83349035c002768fe9dda8df67626baa"
+ },
+ "/pizza-near-mohegan-sun/": {
+  "date": "2026-10-08",
+  "hash": "5da5a6f79c43319de788927c99569ecf"
+ },
+ "/pizza-near-uconn/": {
+  "date": "2026-10-08",
+  "hash": "7319073b8d1a8535914818618b041402"
+ },
+ "/pizza-trivia/": {
+  "date": "2026-10-08",
+  "hash": "d2b43f66630a09595cac1e508f802d20"
+ },
+ "/privacy/": {
+  "date": "2026-10-08",
+  "hash": "8adfcbb1785e0e6df60985b57a3ffe75"
+ },
+ "/private-events/": {
+  "date": "2026-10-08",
+  "hash": "e2f1f84e6b490939ad6476d51f1717a1"
+ },
+ "/promotions/": {
+  "date": "2026-10-08",
+  "hash": "e66f03614d9ee1b915dc36cceb2635ad"
+ },
+ "/roll-the-dice/": {
+  "date": "2026-10-08",
+  "hash": "45fd360f9d5943c185c4453e14040507"
+ },
+ "/sms-terms/": {
+  "date": "2026-10-08",
+  "hash": "be7373b2c51d8cff7a7f178778f41571"
+ },
+ "/terms/": {
+  "date": "2026-10-08",
+  "hash": "7704ce7f00e38b7ed238f8f7888806c4"
+ },
+ "/what-pizza-are-you/": {
+  "date": "2026-10-08",
+  "hash": "19bed1e3f98be26c9eafb425c1ab0613"
+ }
+}

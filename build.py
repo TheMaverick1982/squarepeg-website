@@ -3272,8 +3272,55 @@ def main():
         shutil.rmtree(PREV)
     print(f"  pages: {len(rendered)} -> {OUT}")
 
+# Google uses <lastmod> only where it looks consistently accurate, and stamping
+# every page with the build date on every build is exactly how a sitemap teaches
+# it to stop looking. This keeps a small ledger of when each page's content last
+# genuinely changed, so a date in the sitemap means something.
+LASTMOD_FILE = ROOT / "data" / "lastmod.json"
+
+
+def content_fingerprint(html):
+    """Hash what a reader would notice changing.
+
+    The inlined stylesheet and the cache-busting query on site.js are stripped
+    first: a CSS tweak or a JS rebuild is not a change to this page's content,
+    and letting either in would mark all 41 pages modified over a one-line fix."""
+    h = re.sub(r"(?is)<style>.*?</style>", "", html)
+    h = re.sub(r"site\.js\?v=[0-9a-f]+", "site.js", h)
+    return hashlib.md5(h.encode("utf-8")).hexdigest()
+
+
+def lastmod_dates(pages):
+    """path -> the date its content last changed, persisted across builds."""
+    try:
+        ledger = json.loads(LASTMOD_FILE.read_text())
+    except Exception:
+        ledger = {}
+    out, changed = {}, 0
+    for path, *_ in pages:
+        rel = path.lstrip("/") or "index.html"
+        f = OUT / (rel if rel.endswith(".html") else rel + "/index.html")
+        try:
+            fp = content_fingerprint(f.read_text(encoding="utf-8"))
+        except Exception:
+            out[path] = TODAY
+            continue
+        prev = ledger.get(path)
+        if prev and prev.get("hash") == fp:
+            out[path] = prev["date"]
+        else:
+            out[path] = TODAY
+            changed += 1
+        ledger[path] = {"hash": fp, "date": out[path]}
+    if not PREVIEW and not STAGING:
+        LASTMOD_FILE.write_text(json.dumps(ledger, indent=1, sort_keys=True))
+        print(f"  sitemap: {changed} of {len(pages)} pages changed today")
+    return out
+
+
 def write_extras(pages):
-    urls = "".join(f"<url><loc>{abs_url(p[0])}</loc><lastmod>{TODAY}</lastmod></url>" for p in pages)
+    mod = lastmod_dates(pages)
+    urls = "".join(f"<url><loc>{abs_url(p[0])}</loc><lastmod>{mod.get(p[0], TODAY)}</lastmod></url>" for p in pages)
     (OUT / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>')
     bots = ["Googlebot", "Bingbot", "Applebot", "Google-Extended", "Applebot-Extended", "GPTBot", "OAI-SearchBot", "ChatGPT-User",
             "ClaudeBot", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User", "CCBot", "Amazonbot", "DuckAssistBot"]
