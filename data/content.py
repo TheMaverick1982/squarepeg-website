@@ -622,6 +622,88 @@ FUNDRAISER_FAQ = [
 # Catering_Launch_Runbook_Fall2026.md, where the ads were rewritten for the same
 # reason. The food truck is the one exception: it travels, and it is booked
 # through the same form.
+# The three ways a group can eat with us, and the honest basis for choosing one.
+# This table is the most useful thing on any of the event pages: most people
+# arrive not knowing which of the three they actually want.
+EVENT_ROUTES = [
+    ("Come to us", "Large party reservation",
+     "Ten or more at one of our tables. We save the seats and plan the food so it "
+     "lands together instead of in waves.", "/large-party-reservations/"),
+    ("We cook, you collect", "Pickup catering",
+     "Trays of pasta, wings, salads, sandwiches and dessert, plus pizza. Ready "
+     "boxed at the time you agreed. No minimum.", "/catering/"),
+    ("We come to you", "The food truck",
+     "A real wood-fired oven on wheels, cooking pies in front of your guests. "
+     "The only one of the three where we turn up.", "/food-truck/"),
+    ("Your cause, our Tuesday", "Tuesday fundraiser",
+     "Bring your group in on a Tuesday and 20% of dine-in food sales goes back "
+     "to your school, team or cause.", "/fundraisers/"),
+]
+
+TRUCK = {
+    "party_min": "10 or more",
+    "season": "May through October",
+    "events": ["Weddings and rehearsal dinners", "Graduation parties",
+               "School and team events", "Corporate days and office parties",
+               "Breweries, festivals and markets", "Block parties and backyard birthdays"],
+    # Deliberately no radius and no minimum on the page: both are decided job by
+    # job, and publishing a number we'd have to break is worse than publishing none.
+    "steps": [
+        ("Send the form",
+         "Date, where it is, and roughly how many people. Choose Food truck "
+         "private service when the form asks."),
+        ("We build the menu with you",
+         "The truck menu isn’t fixed. We put it together around your crowd, your "
+         "timing and what you want to spend."),
+        ("The oven rolls up",
+         "We park, fire up and cook in front of your guests. Pies come out of the "
+         "flame and onto the plate."),
+    ],
+    # The comparison people actually need. Both columns are true, which is the point.
+    "vs": [
+        ("Where the food is made", "In our kitchen", "In front of your guests"),
+        ("How it arrives", "You collect it, boxed and hot", "We drive it to you"),
+        ("What’s on it", "The full tray menu plus pizza", "Built around your event"),
+        ("Minimum order", "None", "Depends on the job"),
+        ("Best for", "Offices, parties, anything on a schedule",
+         "Weddings, festivals, anywhere the food is part of the show"),
+    ],
+}
+
+# Only questions we can answer honestly. Radius, minimums, deposits and weather
+# are all decided job by job, so they route to the conversation rather than to a
+# number we would end up breaking.
+TRUCK_FAQ = [
+    ("How far ahead should I book the food truck?",
+     "As early as you have a date. May through October is the busy stretch and "
+     "Saturdays go first — summer weekends are often spoken for months out. Off "
+     "season there is usually more room, so it is always worth asking."),
+    ("How far will the truck travel?",
+     "It depends on the date and the job, so we would rather not publish a radius "
+     "we would have to break. Send the form with where you are and when, and we "
+     "will give you a straight answer."),
+    ("Is there a minimum number of guests?",
+     "Nothing fixed. Whether the truck makes sense for your event depends on the "
+     "headcount, the date and what you want to spend, and that is the conversation "
+     "we will have when we call you back."),
+    ("What is on the truck menu?",
+     "Whatever we build with you. It is a real wood-fired oven, so pizza is the "
+     "heart of it, and we put the rest of the menu together around your crowd and "
+     "your budget rather than handing you a fixed package."),
+    ("Can you handle gluten-free or vegan guests?",
+     "Yes. We have a 12″ gluten-free crust and vegan cheese. Tell us the numbers "
+     "when we talk and we will plan for them properly rather than improvising on "
+     "the day."),
+    ("What do you need from us on the day?",
+     "Somewhere to park and set up — a driveway, a lot or a flat piece of lawn. "
+     "We go through space and access with you before the date so there are no "
+     "surprises when the truck pulls in."),
+    ("Can we book the truck and pickup catering together?",
+     "Yes, and for bigger events it is often the right answer: the truck cooks "
+     "pizza in front of your guests while trays of salad, pasta and dessert come "
+     "from the kitchen. Mention both on the form."),
+]
+
 CATERING = {
     # ⚠ CONFIRM BEFORE PUSHING. Worked from the real tray prices on the catering
     # sheet, not guessed: a full tray feeds 40–50, so pasta ($151) + salad ($116)
@@ -730,7 +812,7 @@ EMBEDS = {
 EMBEDS["food_truck"] = EMBEDS["catering"]
 
 LARGE_PARTY_FAQ = [
-    ("What counts as a large party?", "If your group is bigger than a regular table, send a request. Birthdays, team dinners, showers, reunions, office parties: we’ll confirm what works for your group size and date."),
+    ("What counts as a large party?", "Ten or more. At that point tables have to be moved and the kitchen wants a heads-up, so send a request rather than turning up and hoping. Birthdays, team dinners, showers, reunions, office parties — we’ll confirm what works for your group size and date."),
     ("Do all locations take large party reservations?", "Yes. Space is different at every Square Peg, so we’ll confirm the best setup for your group at the location you choose."),
     ("Can we plan the food ahead of time?", "Yes. Tell us what you have in mind in your request and we’ll plan it with you, so everything hits the table hot and together."),
     ("Do you have gluten-free or dairy-free options?", "Yes. We offer a 12″ gluten-free crust and vegan cheese. Mention any dietary needs in your request."),

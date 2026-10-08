@@ -18,7 +18,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, CATERING, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -1252,6 +1252,7 @@ T["form_catering"] = """{% set fname = form_name|default('catering') %}<form cla
 </form>"""
 
 T["booking_form"] = """{% set e = embeds.get(embed_key) %}{% if e %}<div class="form-embed" id="{{ fid }}-booking" style="--h-m:{{ e.mobile }}px;--h-d:{{ e.desktop }}px;--crop:{{ e.crop }}px">
+  {% if pick %}<p class="embed-pick">Under <b>&ldquo;Where would you prefer your order?&rdquo;</b> choose <b>{{ pick }}</b>.</p>{% endif %}
   <div class="embed-frame"><iframe src="{{ e.src }}?embed=1" title="{{ e.title }}" loading="lazy" allow="clipboard-write"></iframe></div>
   <p class="embed-help">Trouble with the form? <a href="{{ e.src }}" rel="noopener" target="_blank">Open it in a new tab</a>, or call <a href="{{ u('/locations/') }}">any location</a>.</p>
 </div>{% else %}{% include "form_catering" %}{% endif %}"""
@@ -1284,7 +1285,7 @@ T["catering"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap i
       </ul>
       {{ feature('friends-sharing', 'Friends sharing a Square Peg pizza', 'Wood-fired pies, sized for a crowd') }}
     </div>
-    {% with form_title='Get a catering quote', fid='cat', embed_key='catering', submit='Send my request', default_type='Catering pickup' %}{% include "booking_form" %}{% endwith %}
+    {% with form_title='Get a catering quote', fid='cat', embed_key='catering', submit='Send my request', default_type='Catering pickup', pick='Pick-up catering' %}{% include "booking_form" %}{% endwith %}
   </div>
 </section>
 
@@ -1418,6 +1419,25 @@ T["parties"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in
     {% with form_title='Request a large party reservation', fid='party', embed_key='large_party', form_name='large_party', submit='Send my request', default_type='Party at the restaurant' %}{% include "booking_form" %}{% endwith %}
   </div>
 </section>
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">The simple rule</span>
+      <h2>Ten or more? Send the form.</h2>
+      <p>Below ten you can usually just walk in and we&rsquo;ll sort you out. At ten and
+        above, tables have to be moved and the kitchen wants a heads-up &mdash; so a
+        request beats turning up and hoping, especially on a Friday or Saturday.</p>
+    </div>
+    <div class="route-grid">
+      {% for when, name, blurb, href in routes %}
+      <a class="route" href="{{ u(href) }}">
+        <span class="eyebrow">{{ when }}</span>
+        <b>{{ name }}</b>
+        <span class="route-blurb">{{ blurb }}</span>
+      </a>{% endfor %}
+    </div>
+  </div>
+</section>
 <section class="section section--paper">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Planning questions</span><h2>Large party FAQ</h2></div>
@@ -1509,13 +1529,67 @@ T["truck"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in i
       <span class="eyebrow">How booking works</span>
       <h2>Tell us the when & where.</h2>
       <ol class="steps">
-        <li><div><b>Send the form</b><span>Date, location and a rough headcount.</span></div></li>
-        <li><div><b>We confirm & plan the menu</b><span>We’ll match the menu to your crowd and your budget.</span></div></li>
-        <li><div><b>The oven rolls up</b><span>We park, fire up and serve. You enjoy your event.</span></div></li>
+        {% for head, body in truck.steps %}<li><div><b>{{ head }}</b><span>{{ body }}</span></div></li>{% endfor %}
       </ol>
-      <p class="note">Truck dates fill fast from May through October. Book early.</p>
+      <p class="note">Truck dates fill fast from {{ truck.season }}. Book early.</p>
+      <p class="cat-note">We don&rsquo;t publish a travel radius or a minimum, because both
+        depend on the date and the job. Tell us where you are and when, and we&rsquo;ll give
+        you a straight answer rather than a policy.</p>
     </div>
-    {% with form_title='Book the food truck', fid='truck', embed_key='food_truck', submit='Check availability', default_type='Food truck' %}{% include "booking_form" %}{% endwith %}
+    {% with form_title='Book the food truck', fid='truck', embed_key='food_truck', submit='Check availability', default_type='Food truck', pick='Food truck private service' %}{% include "booking_form" %}{% endwith %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Truck or trays?</span>
+      <h2>Which one do you actually want?</h2>
+      <p>Most people come to us knowing they need food for a crowd and not much
+        else. Both of these are good answers &mdash; they&rsquo;re just good at different things.</p>
+    </div>
+    <div class="cat-table-wrap">
+      <table class="cat-table">
+        <thead><tr><th scope="col"></th><th scope="col">Pickup catering</th><th scope="col">The food truck</th></tr></thead>
+        <tbody>{% for label, a, b in truck.vs %}<tr><th scope="row">{{ label }}</th><td>{{ a }}</td><td>{{ b }}</td></tr>{% endfor %}</tbody>
+      </table>
+    </div>
+    <div class="btn-row"><a class="btn btn--line" href="{{ u('/catering/') }}">See pickup catering</a></div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">Where it goes</span>
+      <h2>What the truck turns up to.</h2>
+      <ul class="checks">{% for e in truck.events %}<li>{{ e }}</li>{% endfor %}</ul>
+      <p class="prose">It&rsquo;s a genuine wood-fired oven, not a warming cabinet with a
+        wrap on it. That means the pizza comes out of the fire about ninety seconds
+        after it goes in, and your guests watch it happen &mdash; which for a lot of
+        events is half the reason to book it.</p>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Worth knowing</span>
+      <h2>Before you book.</h2>
+      <ul class="def-list">
+        <li><b>The menu is yours</b><span>Nothing fixed. We build it around your crowd,
+          your timing and your budget when we talk.</span></li>
+        <li><b>Summer books out</b><span>{{ truck.season }} is the busy stretch, and
+          Saturdays go first. If you have a date, send it early.</span></li>
+        <li><b>We need somewhere to park</b><span>Driveway, lot or lawn. We&rsquo;ll go
+          through space and access with you before the day.</span></li>
+        <li><b>One form for everything</b><span>The truck shares the catering form.
+          Choose <i>Food truck private service</i> and we&rsquo;ll know.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Before you ask</span><h2>Food truck FAQ</h2></div>
+    <div class="faq">{% for q, a in faqs %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
   </div>
 </section>
 """
@@ -2575,11 +2649,20 @@ T["private_events"] = """{% macro bento(items) %}<div class="bento">{% for p, a,
 </section>
 <section class="section section--paper">
   <div class="wrap">
-    <div class="section-head"><span class="eyebrow">Pick your kind of party</span><h2>Three ways to celebrate</h2></div>
+    <div class="section-head">
+      <span class="eyebrow">Pick your kind of party</span>
+      <h2>Four ways to celebrate</h2>
+      <p>The one you want usually comes down to a single question: do you want to be
+        somewhere else, or do you want us somewhere else? Ten or more at our tables is a
+        large party. Food at your place is catering, which you collect. The truck is the
+        only one where we turn up. And if the point of the night is raising money, a
+        Tuesday fundraiser beats all three.</p>
+    </div>
     <div class="tiles tiles--3">
       <a class="tile on-dark" href="{{ u('/large-party-reservations/') }}">{{ img('dining-room-kids', 'A group celebrating at Square Peg', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">At the restaurant</span><h3>Large party reservations</h3><p>Birthdays, team dinners, showers and reunions.</p><span class="btn">Request a date {{ icons.arrow|safe }}</span></div></a>
       <a class="tile on-dark" href="{{ u('/catering/') }}">{{ img('pizza-boxes', 'Stacked Square Peg pizza boxes', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">At your place</span><h3>Catering</h3><p>Wood-fired pizza for any headcount, ready for pickup.</p><span class="btn">Get a quote {{ icons.arrow|safe }}</span></div></a>
       <a class="tile on-dark" href="{{ u('/food-truck/') }}">{{ img('truck-tent', 'The Square Peg food truck at an event', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">Anywhere</span><h3>The food truck</h3><p>A wood-fired oven on wheels at your event.</p><span class="btn">Book the truck {{ icons.arrow|safe }}</span></div></a>
+      <a class="tile on-dark" href="{{ u('/fundraisers/') }}">{{ img('team-kids', 'A youth team at a Square Peg Tuesday fundraiser', sizes='(min-width:1000px) 33vw, 100vw')|safe }}<div class="tile-body"><span class="eyebrow">For your cause</span><h3>Tuesday fundraisers</h3><p>20% of dine-in food sales back to your school, team or cause.</p><span class="btn">Pick a Tuesday {{ icons.arrow|safe }}</span></div></a>
     </div>
   </div>
 </section>
@@ -2927,7 +3010,7 @@ def main():
                   "catering", dict(faqs=CATERING_FAQ, cat=CATERING), graph(faq_schema(CATERING_FAQ), breadcrumbs([("Home", "/"), ("Catering", "/catering/")])), "table-spread", "table-spread"))
     pages.append(("/large-party-reservations/", "Large Party & Group Reservations | Square Peg Pizzeria",
                   "Reserve for a big group at any Square Peg Pizzeria in CT or Delray Beach, FL. Birthdays, team dinners, showers and reunions with wood-fired pizza.",
-                  "parties", dict(faqs=LARGE_PARTY_FAQ), graph(faq_schema(LARGE_PARTY_FAQ), breadcrumbs([("Home", "/"), ("Large Parties", "/large-party-reservations/")])), "friends-holiday", "friends-holiday"))
+                  "parties", dict(faqs=LARGE_PARTY_FAQ, routes=EVENT_ROUTES), graph(faq_schema(LARGE_PARTY_FAQ), breadcrumbs([("Home", "/"), ("Large Parties", "/large-party-reservations/")])), "friends-holiday", "friends-holiday"))
     pages.append(("/contact/", "Contact Us | Square Peg Pizzeria",
                   "Contact Square Peg Pizzeria: phone numbers for all 10 locations, email, and a message form for catering, large parties, gift cards, jobs and more.",
                   "contact", {}, graph({"@type": "ContactPage", "url": abs_url("/contact/"), "name": "Contact Square Peg Pizzeria",
@@ -2946,13 +3029,13 @@ def main():
                   "entertainment", {}, graph(breadcrumbs([("Home", "/"), ("Entertainment", "/entertainment/")])), "friends-holiday", "friends-holiday"))
     pages.append(("/private-events/", "Private Events & Pizza-Making Classes | Square Peg Pizzeria",
                   "Plan a private event at Square Peg Pizzeria, and join our monthly pizza-making classes for adults plus free kids' classes. Parties, catering and the food truck.",
-                  "private_events", {}, graph(breadcrumbs([("Home", "/"), ("Private Events & Classes", "/private-events/")])), "table-spread", "table-spread"))
+                  "private_events", dict(routes=EVENT_ROUTES), graph(breadcrumbs([("Home", "/"), ("Private Events & Classes", "/private-events/")])), "table-spread", "table-spread"))
     pages.append(("/careers/", "Careers: Now Hiring | Square Peg Pizzeria",
                   "Join the Square Peg Pizzeria crew. Now hiring managers, servers, bartenders, kitchen staff and pizza cooks at locations across Connecticut and Delray Beach, FL.",
                   "careers", {}, graph(breadcrumbs([("Home", "/"), ("Careers", "/careers/")])), "oven-fire", "oven-fire"))
     pages.append(("/food-truck/", "Wood-Fired Pizza Food Truck for Events in CT | Square Peg",
                   "Book the Square Peg Pizzeria wood-fired pizza food truck for backyard parties, weddings, schools, breweries and corporate events in Connecticut.",
-                  "truck", {}, graph(breadcrumbs([("Home", "/"), ("Food Truck", "/food-truck/")])), "food-truck", "food-truck"))
+                  "truck", dict(truck=TRUCK, faqs=TRUCK_FAQ), graph(faq_schema(TRUCK_FAQ), breadcrumbs([("Home", "/"), ("Food Truck", "/food-truck/")])), "food-truck", "food-truck"))
     pages.append(("/deals/", "Pizza Deals & Rewards | Square Peg Pizzeria",
                   "Square Peg Pizzeria deals and rewards: a members-only dine-in offer every month, points on every visit, and rewards you redeem in the app. Joining is free.",
                   "deals", {}, graph(breadcrumbs([("Home", "/"), ("Deals & Rewards", "/deals/")])), "pizza-boxes", "pizza-boxes"))
