@@ -718,8 +718,9 @@ FUNDRAISER_NIGHT = {
     "window": "4pm to close",
     "steps": [
         ("Come in on their Tuesday",
-         "Any time from 4pm to close, at the Square Peg your group booked. You "
-         "don’t need a ticket, a flyer or a reservation."),
+         "The one date and the one Square Peg your group named — not just any "
+         "Tuesday, and not whichever location is closest. Any time from 4pm to "
+         "close. No ticket, flyer or reservation needed."),
         ("Eat in the restaurant",
          "Dine-in only. Takeout, delivery and the third-party apps don’t count "
          "towards the total — this is the one that trips people up."),
@@ -727,10 +728,12 @@ FUNDRAISER_NIGHT = {
          "Say the group’s name when you order. That’s how your table gets counted."),
     ],
     "counts": ["Food, eaten in the restaurant",
-               "Any Tuesday booking, 4pm to close",
+               "The one Tuesday your group booked, 4pm to close",
+               "The Square Peg they named — each location runs its own night",
                "Any size table — two people or twenty"],
     "excluded": ["Takeout and curbside",
                  "Delivery and third-party apps",
+                 "A different Tuesday, or a different Square Peg",
                  "Alcohol",
                  "Tax and tip"],
     "faq": [
@@ -740,8 +743,12 @@ FUNDRAISER_NIGHT = {
          "No. Only food eaten in the restaurant counts, which is why it matters that "
          "everyone comes in rather than ordering ahead for pickup."),
         ("What time should we come?",
-         "Any time from 4pm to close on the Tuesday the group booked. Earlier is "
-         "usually quieter if you’re bringing small children."),
+         "Any time from 4pm to close, on the specific Tuesday the group booked. "
+         "Earlier is usually quieter if you’re bringing small children."),
+        ("What if I go on a different Tuesday, or to another location?",
+         "It won’t count. Each Square Peg hosts one organisation per Tuesday, so "
+         "the donation is tied to that date at that restaurant. Check the invite "
+         "for which one before you set off."),
         ("Does my drink count?",
          "Soft drinks are food sales and count. Alcohol doesn’t, and neither does "
          "tax or tip."),
