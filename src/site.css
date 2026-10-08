@@ -295,6 +295,18 @@ body.menu-open .mbar{display:none}
 .route b{display:block;margin:8px 0 8px;font-family:var(--display);font-weight:800;
   text-transform:uppercase;line-height:1.05;font-size:clamp(21px,2.4vw,26px)}
 .route-blurb{display:block;color:var(--smoke);font-size:15px;line-height:1.55}
+
+/* town pages: the practical strip under the hero, and the body copy */
+.loc-strip{display:grid;gap:18px}
+@media (min-width:760px){.loc-strip{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}}
+.loc-strip p{margin:6px 0 0;line-height:1.55}
+.loc-strip b{font-size:17px}
+.prose-block{max-width:68ch;display:grid;gap:14px}
+.prose-block p{margin:0;line-height:1.65;color:var(--smoke)}
+.prose-block b{color:var(--ink)}
+.local-link{margin:4px 0 0;color:var(--smoke);font-size:15.5px;line-height:1.55}
+.section--dark .prose-block p{color:#cfc6bf}
+.section--dark .prose-block b{color:#fff}
 .cat-note b{color:var(--ink)}
 .section--dark .cat-note b{color:#fff}
 @media (min-width:900px){.band{grid-template-columns:.8fr 1.2fr}}

@@ -18,6 +18,7 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
+from town_pages import TOWN_PAGES  # noqa
 from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
 
 PREVIEW = "--preview" in sys.argv
@@ -1173,6 +1174,7 @@ T["location"] = """
         {{ img('husky-bucks', 'UConn One Card Husky Bucks accepted here', sizes='150px')|safe }}
         <p><b>We take Husky Bucks.</b> Dine in or order ahead for pickup and pay with your UConn One Card, same as cash.</p>
       </div>{% endif %}
+      {% if local_page %}<p class="local-link"><a class="link-arrow" href="{{ u('/' ~ local_page.slug ~ '/') }}">{{ local_page.h1 }}</a> &mdash; what&rsquo;s here for you if that&rsquo;s where you&rsquo;re coming from.</p>{% endif %}
       <p>Every pie starts with dough made fresh from scratch and never frozen. Choose a red or white {% if lm.detroit %}Neo-Neapolitan round or a crispy-edged Detroit-style pie{% else %}signature pie{% endif %}, build your own, or go gluten-free with our 12″ crust. Vegan cheese is available on any pizza.</p>
       <p>Not in a pizza mood? The kitchen turns out Italian-American comfort food too: {{ join_and(lm.words + lm.rest) }}.{% if lm.bar %} Pair it with a cocktail, a glass of wine or a cold beer.{% endif %}{% if lm.extra %} Also here: {{ lm.extra|join('; ')|lower }}.{% endif %}</p>
       <div><p class="note" style="font-weight:700;margin-bottom:6px">Close to</p><div class="chips">{% for n in l.nearby %}<span class="chip">{{ n }}</span>{% endfor %}</div></div>
@@ -1515,7 +1517,7 @@ T["truck"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in i
     <span class="eyebrow">Let us bring the party to you</span>
     <h1>Wood-fired pizza food truck</h1>
     <p class="lede">A real wood-fired oven on wheels, cooking fresh pies on site for backyard parties, weddings, schools, breweries, festivals and corporate events across Connecticut.</p>
-    <div class="btn-row"><a class="btn" href="#book">Check truck availability</a><a class="btn btn--ghost" href="{{ u('/catering/') }}">Prefer drop-off catering?</a></div>
+    <div class="btn-row"><a class="btn" href="#book">Check truck availability</a><a class="btn btn--ghost" href="{{ u('/catering/') }}">Prefer pick-up catering?</a></div>
   </div>
 </section>
 <section class="section">
@@ -1550,7 +1552,7 @@ T["truck"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in i
     </div>
     <div class="cat-table-wrap">
       <table class="cat-table">
-        <thead><tr><th scope="col"></th><th scope="col">Pickup catering</th><th scope="col">The food truck</th></tr></thead>
+        <thead><tr><th scope="col"></th><th scope="col">Pick-up catering</th><th scope="col">The food truck</th></tr></thead>
         <tbody>{% for label, a, b in truck.vs %}<tr><th scope="row">{{ label }}</th><td>{{ a }}</td><td>{{ b }}</td></tr>{% endfor %}</tbody>
       </table>
     </div>
@@ -2105,6 +2107,60 @@ T["links"] = """
       <a href="{{ u('/contact/') }}">Contact</a>
     </div>
     <p class="link-foot">Be Nice. &mdash; Square Peg Pizzeria</p>
+  </div>
+</section>
+"""
+
+T["townpage"] = """
+<section class="page-head on-dark">
+  {{ img(tp.hero, tp.h1 ~ ' at Square Peg Pizzeria', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/locations/') }}">Locations</a><span aria-hidden="true">/</span><span>{{ tp.h1 }}</span></nav>
+    <span class="eyebrow">{{ tp.eyebrow }}</span>
+    <h1>{{ tp.h1 }}</h1>
+    <p class="lede">{{ tp.lede|safe }}</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ order(store) }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="{{ tp.slug }}">{{ icons.bag|safe }}Order from {{ store.name }}</a>
+      <a class="btn btn--ghost" href="tel:{{ store.tel }}" data-track="call_click" data-src="{{ tp.slug }}">{{ icons.phone|safe }}{{ store.phone }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="loc-strip">
+      <div><span class="eyebrow">Where</span><p><b>{{ store.street }}</b><br>{{ store.city }}, {{ store.state }} {{ store.zip }}</p></div>
+      <div><span class="eyebrow">Open now?</span><p><span class="status" data-status="{{ store.slug }}">Hours</span></p></div>
+      <div><span class="eyebrow">The full page</span><p><a class="link-arrow" href="{{ u('/locations/' ~ store.slug ~ '/') }}">{{ store.name }} hours, menu &amp; directions</a></p></div>
+    </div>
+  </div>
+</section>
+
+{% for eyebrow, head, paras in tp.sections %}
+<section class="section{{ ' section--paper' if loop.index0 % 2 else '' }}">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">{{ eyebrow|safe }}</span><h2>{{ head|safe }}</h2></div>
+    <div class="prose-block">{% for para in paras %}<p>{{ para|safe }}</p>{% endfor %}</div>
+  </div>
+</section>
+{% endfor %}
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Asked and answered</span><h2>{{ tp.h1 }}: the questions</h2></div>
+    <div class="faq">{% for q, a in tp.faq %}<details><summary>{{ q|safe }}</summary><p>{{ a|safe }}</p></details>{% endfor %}</div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap cta-foot">
+    <h2>Eat at {{ store.name }}.</h2>
+    <p class="prose">{{ store.street }}, {{ store.city }}, {{ store.state }} {{ store.zip }} &middot; {{ store.phone }}</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ order(store) }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="{{ tp.slug }}-foot">{{ icons.bag|safe }}Order from {{ store.name }}</a>
+      <a class="btn btn--line" href="{{ u('/locations/' ~ store.slug ~ '/') }}">Hours &amp; directions</a>
+      <a class="btn btn--line" href="{{ u('/our-menu/') }}">See the menu</a>
+    </div>
   </div>
 </section>
 """
@@ -2992,7 +3048,8 @@ def main():
         oven = "wood-fired " if l.get("wood", True) else ""
         desc = f"Italian restaurant and {oven}pizza at {l['street']}, {l['city']}, {l['state']}: pasta, chicken parm, wings and kids' meals. Hours, {l['phone']}, order online."
         pages.append((f"/locations/{l['slug']}/", title, desc, "location",
-                      dict(l=l, lm=loc_menu(l), hh=happy_hour(l), rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs, events=location_events(l), ent_dates=ent_dated(l)), schema, l["photo"], l["photo"]))
+                      dict(l=l, lm=loc_menu(l), hh=happy_hour(l), rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs, events=location_events(l), ent_dates=ent_dated(l),
+                           local_page=next((t for t in TOWN_PAGES if t["store"] == l["slug"]), None)), schema, l["photo"], l["photo"]))
 
     menu_schema = {"@type": "Menu", "@id": abs_url("/our-menu/#menu"), "name": "Square Peg Pizzeria menu", "url": abs_url("/our-menu/"),
                    "inLanguage": "en", "hasMenuSection": [
@@ -3033,6 +3090,18 @@ def main():
     pages.append(("/careers/", "Careers: Now Hiring | Square Peg Pizzeria",
                   "Join the Square Peg Pizzeria crew. Now hiring managers, servers, bartenders, kitchen staff and pizza cooks at locations across Connecticut and Delray Beach, FL.",
                   "careers", {}, graph(breadcrumbs([("Home", "/"), ("Careers", "/careers/")])), "oven-fire", "oven-fire"))
+    # The local pages. Each one is hand-written in data/town_pages.py and only
+    # exists because it says something its location page can't — Husky Bucks,
+    # the casinos, the Boca drive. Never generate these per town.
+    for tp in TOWN_PAGES:
+        store = next(l for l in LOCATIONS if l["slug"] == tp["store"])
+        pages.append((f"/{tp['slug']}/", tp["title"], tp["desc"], "townpage",
+                      dict(tp=tp, store=store),
+                      graph(faq_schema([(re.sub(r"<[^>]+>", "", q), re.sub(r"<[^>]+>", "", a))
+                                        for q, a in tp["faq"]]),
+                            breadcrumbs([("Home", "/"), ("Locations", "/locations/"),
+                                         (tp["h1"], f"/{tp['slug']}/")])),
+                      tp["hero"], tp["hero"]))
     pages.append(("/food-truck/", "Wood-Fired Pizza Food Truck for Events in CT | Square Peg",
                   "Book the Square Peg Pizzeria wood-fired pizza food truck for backyard parties, weddings, schools, breweries and corporate events in Connecticut.",
                   "truck", dict(truck=TRUCK, faqs=TRUCK_FAQ), graph(faq_schema(TRUCK_FAQ), breadcrumbs([("Home", "/"), ("Food Truck", "/food-truck/")])), "food-truck", "food-truck"))
