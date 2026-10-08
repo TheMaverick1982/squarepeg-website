@@ -2136,11 +2136,15 @@ T["townpage"] = """
   </div>
 </section>
 
-{% for eyebrow, head, paras in tp.sections %}
+{% for sec in tp.sections %}
 <section class="section{{ ' section--paper' if loop.index0 % 2 else '' }}">
-  <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ eyebrow|safe }}</span><h2>{{ head|safe }}</h2></div>
-    <div class="prose-block">{% for para in paras %}<p>{{ para|safe }}</p>{% endfor %}</div>
+  <div class="wrap{{ ' two-col' if sec.img else '' }}"{% if sec.img %} style="align-items:center"{% endif %}>
+    <div class="stack">
+      <div class="section-head"><span class="eyebrow">{{ sec.eyebrow|safe }}</span><h2>{{ sec.head|safe }}</h2></div>
+      <div class="prose-block">{% for para in sec.paras %}<p>{{ para|safe }}</p>{% endfor %}</div>
+      {% if sec.ctas %}<div class="btn-row">{% for label, href in sec.ctas %}<a class="btn{{ ' btn--line' if not loop.first else '' }}" href="{{ u(href) }}">{{ label }}</a>{% endfor %}</div>{% endif %}
+    </div>
+    {% if sec.img %}<figure class="feature-photo tp-art">{{ img(sec.img[0], sec.img[1], sizes='(min-width:960px) 380px, 70vw')|safe }}</figure>{% endif %}
   </div>
 </section>
 {% endfor %}

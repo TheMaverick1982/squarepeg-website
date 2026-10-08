@@ -305,6 +305,10 @@ body.menu-open .mbar{display:none}
 .prose-block p{margin:0;line-height:1.65;color:var(--smoke)}
 .prose-block b{color:var(--ink)}
 .local-link{margin:4px 0 0;color:var(--smoke);font-size:15.5px;line-height:1.55}
+/* the decal beside a town-page section — a whole graphic, not a cropped photo,
+   so it opts out of .feature-photo's 4:3 cover and its drop shadow */
+.feature-photo.tp-art{margin:0;max-width:300px;justify-self:center;overflow:visible;box-shadow:none}
+.feature-photo.tp-art img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain;display:block}
 .section--dark .prose-block p{color:#cfc6bf}
 .section--dark .prose-block b{color:#fff}
 .cat-note b{color:var(--ink)}
