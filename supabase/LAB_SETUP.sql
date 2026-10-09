@@ -33,7 +33,9 @@ create table if not exists public.lab_entries (
   -- moderation
   status      text        not null default 'pending'
                           check (status in ('pending', 'approved', 'rejected')),
-  round       text,                                        -- e.g. '2026-11', set when it goes to a vote
+  -- Unused. Kept in case the Lab ever does run a public vote; empty columns
+  -- cost nothing and dropping one cannot be undone.
+  round       text,
   votes       integer     not null default 0,
   note        text                                         -- why it was rejected, for our own records
 );
@@ -45,27 +47,13 @@ create index if not exists lab_entries_status_idx on public.lab_entries (status,
 
 alter table public.lab_entries enable row level security;
 
--- The public may read approved entries and nothing else. Pending and rejected
--- rows — the ones that might contain something we would not publish — are not
--- readable with the anon key at all.
-drop policy if exists "approved entries are public" on public.lab_entries;
-create policy "approved entries are public"
-  on public.lab_entries for select
-  to anon, authenticated
-  using (status = 'approved');
-
-grant select on public.lab_entries to anon, authenticated;
-
--- No insert policy: submissions come through the lab-submit Edge Function,
--- which holds the service-role key. The anon key cannot write here.
-
--- A view for the public vote, so the site never selects columns it shouldn't.
-create or replace view public.lab_public as
-  select id, name, by_name, sauce, cheese, toppings, finish, round, votes
-    from public.lab_entries
-   where status = 'approved';
-
-grant select on public.lab_public to anon, authenticated;
+-- No policies at all, deliberately. Nothing from the Lab is ever shown on the
+-- website: entries come to the kitchen, you pick one, it runs as an LTO. So the
+-- public key can read nothing here -- not pending, not approved, not rejected --
+-- and with RLS on and no policy, that is exactly what it gets.
+--
+-- Submissions come through the lab-submit Edge Function, which holds the
+-- service-role key. Reading is you in the Table Editor and the weekly digest.
 
 -- What's waiting to be read. Open this in the Table Editor to moderate.
 create or replace view public.lab_pending as
@@ -73,3 +61,41 @@ create or replace view public.lab_pending as
     from public.lab_entries
    where status = 'pending'
    order by created_at;
+
+
+-- ===========================================================================
+-- WEEKLY DIGEST — run this after deploying the lab-digest Edge Function
+-- ===========================================================================
+--
+-- Emails everything waiting for review to plainville@squarepegpizzeria.com
+-- every Monday at 9am Eastern, so nobody has to remember to check the queue.
+--
+-- This is scheduled inside Supabase rather than as a GitHub Action because
+-- pending entries cannot be read with the public anon key — that is the point
+-- of the queue — and the service-role key must never go into a workflow file.
+--
+-- Before running, replace BOTH placeholders:
+--   <PROJECT>         your project ref, e.g. tsrnpmkipdbtwyrlfbuy
+--   <LAB_DIGEST_KEY>  the same long random string you set as the function's
+--                     LAB_DIGEST_KEY secret, so only this schedule can fire it
+
+create extension if not exists pg_cron;
+create extension if not exists pg_net;
+
+-- 13:00 UTC is 9am Eastern in summer, 8am in winter. Postgres cron has no
+-- time zone, so rather than chase the clock twice a year this stays put — an
+-- hour either way does not matter for a weekly digest.
+select cron.schedule(
+  'pizza-lab-weekly-digest',
+  '0 13 * * 1',
+  $$
+  select net.http_post(
+    url := 'https://<PROJECT>.supabase.co/functions/v1/lab-digest?key=<LAB_DIGEST_KEY>',
+    headers := '{"Content-Type": "application/json"}'::jsonb
+  );
+  $$
+);
+
+-- Check it:    select * from cron.job;
+-- Last runs:   select * from cron.job_run_details order by start_time desc limit 5;
+-- Remove it:   select cron.unschedule('pizza-lab-weekly-digest');

@@ -552,7 +552,7 @@ ICONS = {
     # gets made. Same 24x24 stroke style as the rest, so they sit with the set.
     "lab_build": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="9.2" cy="10" r="1.3"/><circle cx="15" cy="9.4" r="1.3"/><circle cx="12.4" cy="15.2" r="1.3"/></svg>',
     "lab_name": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m14 6 4 4"/></svg>',
-    "lab_vote": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 20v-6M12 20V5M19 20v-9"/></svg>',
+    "lab_pick": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M9.5 3h5v3h-5z"/><path d="m9 13 2 2 4-4"/></svg>',
     "lab_win": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5.6"/><path d="M8.6 13.8 7.4 21l4.6-2.3 4.6 2.3-1.2-7.2"/></svg>',
 }
 
@@ -2949,12 +2949,9 @@ T["lab"] = """
       <ul class="hw-list">{% for r in lab.rules %}<li><span>{{ r }}</span></li>{% endfor %}</ul>
     </div>
     <div class="stack">
-      <span class="eyebrow">Before it goes anywhere</span>
-      <h2>A person reads every one.</h2>
-      <p class="prose">Nothing submitted here appears on the website
-        automatically. Every build and every name goes into a queue and one of
-        us approves it before anyone else sees it. That&rsquo;s slower, and it&rsquo;s the
-        only version of this we were willing to put our name on.</p>
+      <span class="eyebrow">What happens next</span>
+      <h2>Then we go and read them.</h2>
+      {% for para in lab.next %}<p class="prose">{{ para }}</p>{% endfor %}
     </div>
   </div>
 </section>

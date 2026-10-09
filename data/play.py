@@ -296,23 +296,26 @@ CONFESSIONS = {
 LAB = {
     "eyebrow": "The Square Peg Pizza Lab",
     "h1": "The next Square Peg pizza could be yours.",
-    "lede": "Build it from what’s actually in our kitchens, give it a name, and "
-            "put it in front of everyone else. The winner goes on the menu as a "
-            "limited-time special.",
+    "lede": "Build it from what’s actually in our kitchens and give it a name. "
+            "We read every one, and the one we pick goes on the menu next month "
+            "as a limited-time special.",
     # (icon key in ICONS, heading, body)
+    # No public vote: entries come to us, we choose, it runs as an LTO. The page
+    # must not promise a vote it does not hold.
     "how": [
         ("lab_build", "Build it",
          "Pick a sauce, a cheese, up to four toppings and a finish. Everything "
-         "on the list is something our kitchens already stock, so the winner is "
-         "a pizza we can actually make."),
+         "on the list is something our kitchens already stock, so the one we "
+         "pick is a pizza we can actually make."),
         ("lab_name", "Name it",
-         "This is the part people remember. Keep it clean — every entry is "
-         "read by a person before it goes anywhere."),
-        ("lab_vote", "Everyone votes",
-         "Approved builds go up for a public vote."),
-        ("lab_win", "The winner gets made",
-         "It runs as a limited-time special across all ten Square Pegs, with "
-         "your name on it if you want it there."),
+         "This is the part people remember. Keep it clean — a person reads "
+         "every entry."),
+        ("lab_pick", "We read every one",
+         "Entries come straight to the kitchen. No public vote, no popularity "
+         "contest — we pick the one we most want to make."),
+        ("lab_win", "It goes on the menu",
+         "The one we choose runs the following month as a limited-time special "
+         "across all ten Square Pegs, with your name on it if you want it there."),
     ],
     # ⚠ CONFIRM WITH THE KITCHEN — this list is drawn from the current menu and
     # the catering tray menu, but nobody on the line has signed off on it yet.
@@ -329,8 +332,21 @@ LAB = {
     "max_toppings": 4,
     "rules": [
         "Up to four toppings. Everything after that is a mess, not a pizza.",
-        "One entry per person per round, so the vote means something.",
-        "Nothing publishes until one of us has read it.",
-        "If yours wins, we’ll contact you before anything goes out with your name on it.",
+        "One entry per person a month, so everyone gets a fair shot.",
+        "Build it from the lists and it is a pizza we can actually make. That is "
+        "the whole reason the lists are there.",
+    ],
+    # Replaces a section that explained our moderation queue to the public. That
+    # only made sense while entries were going to be published and voted on;
+    # now nothing is published, it just raised a question it never answered.
+    "next": [
+        "Entries come straight to our kitchen team. They aren’t posted "
+        "anywhere and nobody is campaigning for likes — it’s just us reading "
+        "what came in.",
+        "At the start of each month we go through them and pick the one we most "
+        "want to make. It runs the following month as a limited-time special at "
+        "all ten Square Pegs.",
+        "If we pick yours, we’ll call you first — and your name goes on the "
+        "menu beside it if you want it there.",
     ],
 }
