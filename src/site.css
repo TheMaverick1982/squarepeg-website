@@ -92,15 +92,21 @@ body.menu-open .mbar{display:none}
 .nav .more-menu a{padding:10px 12px;border:0;font-size:15px}
 /* Grouped "More" panel: columns with headings, so eighteen links read as five short
    lists instead of one long one. Mirrors how the mobile drawer is organised. */
-.more-mega{right:-12px;min-width:min(640px,calc(100vw - 48px));grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 10px;padding:16px 14px}
-.more-col{display:grid;align-content:start}
+/* Multi-column, not grid. As a grid the five groups sat in two rows and the
+   row height was set by the tallest column, so a long "Fun" list left a gap
+   under the two groups that wrapped onto row two. Columns flow instead, so a
+   group getting longer never pushes anything else down. */
+.more-mega{right:-12px;min-width:min(640px,calc(100vw - 48px));display:block;
+  columns:3;column-gap:10px;padding:16px 14px}
+.more-col{display:grid;align-content:start;break-inside:avoid;margin-bottom:14px}
+.more-col:last-child{margin-bottom:0}
 .more-h{display:block;padding:6px 12px 7px;font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--flame);border-bottom:1px solid var(--line-dark);margin-bottom:4px}
 .nav .more-mega a{padding:8px 12px;line-height:1.3}
 /* the Game Day "in season" dot hangs outside the link; inside a column that put it in
    the gutter, so bring it in and pad the link to make room */
 .nav .more-mega .nav-gd{padding-left:26px}
 .more-mega .nav-gd::before{left:12px}
-@media (max-width:1120px){.more-mega{grid-template-columns:repeat(2,minmax(0,1fr));min-width:min(470px,calc(100vw - 40px))}}
+@media (max-width:1120px){.more-mega{columns:2;min-width:min(470px,calc(100vw - 40px))}}
 .nav .more-menu a:hover{background:var(--oven-2);color:var(--flame)}
 @media (min-width:980px){
   .nav{display:flex;align-items:center;gap:22px;margin-right:12px}
@@ -1320,13 +1326,10 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
   filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
 .wheel-lab{position:absolute;inset:0;display:flex;justify-content:center;align-items:flex-start;
   padding-top:16px;transform-origin:50% 50%;pointer-events:none}
-/* A wedge past the horizontal would read upside down. The label stays in its
-   own wedge — the container spans the whole disc, so moving it would land it in
-   the opposite one — and only the glyphs turn. */
-.wheel-lab.is-flip i{transform:rotate(180deg)}
-.wheel-lab i{font:800 12px/1.1 var(--body);font-style:normal;color:#fff;text-align:center;
-  max-width:8ch;letter-spacing:.01em;text-shadow:0 1px 2px rgba(0,0,0,.45)}
-@media (min-width:600px){.wheel-lab i{font-size:14px;max-width:10ch}}
+
+.wheel-lab i{font:800 14px/1.15 var(--body);font-style:normal;color:#fff;text-align:center;
+  max-width:9ch;letter-spacing:.01em;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+@media (min-width:600px){.wheel-lab i{font-size:17px;max-width:11ch}}
 .wheel-q{margin:0}
 .wheel-prompt{color:var(--smoke);margin:6px 0 0}
 .wheel-out{min-height:96px;margin:18px 0 6px;opacity:0;transform:translateY(6px);
@@ -1403,3 +1406,4 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .lab-done b{display:block;font-family:var(--display);font-weight:800;
   font-size:clamp(26px,4vw,38px);line-height:1;margin-bottom:8px}
 .lab-done span{color:var(--smoke)}
+.poll-thanks{font-weight:700;max-width:46ch;margin:22px 0 0}

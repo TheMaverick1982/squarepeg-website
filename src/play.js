@@ -70,13 +70,13 @@
       // Labels, each rotated to sit in the middle of its wedge.
       var html = "";
       for (var j = 0; j < n; j++) {
+        // Every label sits at the same angle as its wedge, so the top of the
+        // lettering always points out at the rim. Flipping the lower half would
+        // keep each one upright on its own but make the rotation change
+        // direction half way round, which reads as a mistake on a wheel that
+        // is about to spin anyway.
         var mid = j * slice + slice / 2;
-        // A label rotated past the horizontal would read upside down, so wedges
-        // in the lower half anchor to the bottom and flip. Nothing on the wheel
-        // is ever inverted, whatever the slice count.
-        var flip = mid > 90 && mid < 270;
-        html += '<span class="wheel-lab' + (flip ? " is-flip" : "") +
-                '" style="transform:rotate(' + mid + 'deg)">' +
+        html += '<span class="wheel-lab" style="transform:rotate(' + mid + 'deg)">' +
                 '<i>' + esc(current.items[j][0]) + "</i></span>";
       }
       disc.innerHTML = html;
@@ -170,17 +170,30 @@
     var endpoint = el.getAttribute("data-endpoint");
     var voteBox = $("#poll-vote");
     var results = $("#poll-results");
+    var thanks = $("#poll-thanks");
     var said = $("#poll-said");
     var key = "sp_poll_" + name;
 
-    function paint(totals) {
-      // totals: [{option, region, votes}]
-      var sum = 0, by = {};
-      totals.forEach(function (r) {
-        by[r.option] = (by[r.option] || 0) + (+r.votes || 0);
-        sum += +r.votes || 0;
-      });
-      if (!sum) return;
+    // The counts baked into the page by the nightly refresh. They are the
+    // fallback whenever the server does not answer.
+    var baked = {};
+    try { baked = JSON.parse(el.getAttribute("data-counts") || "{}"); } catch (e) {}
+
+    function total(by) {
+      var n = 0;
+      for (var k in by) if (Object.prototype.hasOwnProperty.call(by, k)) n += +by[k] || 0;
+      return n;
+    }
+
+    function paint(by) {
+      var sum = total(by);
+      if (!sum) {
+        // Nothing worth drawing. Never claim nobody has voted to somebody who
+        // just did — say their vote landed and leave the bars out of it.
+        results.hidden = true;
+        if (thanks) thanks.hidden = !store.get(key);
+        return;
+      }
       $$("li[data-option]", results).forEach(function (li) {
         var o = li.getAttribute("data-option");
         var pct = Math.round(((by[o] || 0) / sum) * 100);
@@ -189,21 +202,26 @@
       });
       if (said) {
         said.textContent = sum === 1 ? "One vote so far. Yours."
-                                     : sum.toLocaleString() + " votes so far.";
+                         : sum < 25 ? sum + " votes so far \u2014 early days, so take the split lightly."
+                         : sum.toLocaleString() + " votes so far.";
       }
+      if (thanks) thanks.hidden = true;
       results.hidden = false;
     }
 
-    function reveal() {
-      voteBox.classList.add("is-done");
-      results.hidden = false;
+    // totals: [{option, region, votes}] from the Edge Function — authoritative,
+    // so it replaces the baked numbers outright.
+    function fromServer(rows) {
+      var by = {};
+      rows.forEach(function (r) { by[r.option] = (by[r.option] || 0) + (+r.votes || 0); });
+      paint(by);
     }
 
     if (store.get(key)) {
-      // Already voted on this device. Show them the numbers, not the buttons.
-      reveal();
+      voteBox.classList.add("is-done");
       var prev = $(".poll-btn[data-option='" + store.get(key) + "']", voteBox);
       if (prev) prev.classList.add("is-mine");
+      paint(baked);
     }
 
     $$(".poll-btn", el).forEach(function (b) {
@@ -212,16 +230,24 @@
         var option = b.getAttribute("data-option");
         store.set(key, option);
         b.classList.add("is-mine");
-        reveal();
+        voteBox.classList.add("is-done");
         track("poll_vote", { poll: name, option: option });
+
+        // Count their own vote straight away so the page agrees with what they
+        // just did, even if the request is slow or there is no endpoint yet.
+        var optimistic = {};
+        for (var k in baked) if (Object.prototype.hasOwnProperty.call(baked, k)) optimistic[k] = baked[k];
+        optimistic[option] = (optimistic[option] || 0) + 1;
+        paint(total(baked) ? optimistic : {});
+
         if (!endpoint) return;
         fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ poll: name, option: option })
         }).then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (d) { if (d && d.totals) paint(d.totals); })
-          .catch(function () { /* the baked-in numbers are still on screen */ });
+          .then(function (d) { if (d && d.totals && d.totals.length) fromServer(d.totals); })
+          .catch(function () { /* whatever is on screen stays */ });
       });
     });
   })();

@@ -560,10 +560,11 @@ MORE_GROUPS = [
              ("Pairing Guide", "/pairing/"), ("Rewards & Monthly Deals", "/deals/")]),
     ("Plan", [("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"),
               ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
-    ("Fun", [("Halloween", "/halloween/"), ("The Playground", "/play/"), ("Pizza Wheel", "/play/wheel/"),
-             ("The Pizza Debate", "/play/debate/"), ("Roll the Dice", "/roll-the-dice/"),
-             ("Date Night", "/date-night/"), ("What Pizza Are You?", "/what-pizza-are-you/"),
-             ("Pizza Trivia", "/pizza-trivia/")]),
+    # One entry for the Playground, not three. The hub links to the wheel and the
+    # debate itself, and nine items under "Fun" unbalances the mega menu.
+    ("Fun", [("Halloween", "/halloween/"), ("The Playground", "/play/"),
+             ("Roll the Dice", "/roll-the-dice/"), ("Date Night", "/date-night/"),
+             ("What Pizza Are You?", "/what-pizza-are-you/"), ("Pizza Trivia", "/pizza-trivia/")]),
     ("Helpful", [("Pizza Calculator", "/pizza-calculator/"), ("Pizza FAQ", "/pizza-faq/"),
                  ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
@@ -2750,13 +2751,16 @@ T["debate"] = """
 
 <section class="section">
   <div class="wrap">
-    <div class="poll" id="poll" data-poll="debate:{{ d.slug }}" data-endpoint="{{ site.vote_endpoint }}">
+    <div class="poll" id="poll" data-poll="debate:{{ d.slug }}" data-endpoint="{{ site.vote_endpoint }}"
+         data-counts="{{ tally.counts|tojson }}">
       <div class="poll-vote" id="poll-vote">
         <p class="poll-ask">Cast your vote</p>
         <div class="btn-row">{% for key, label in d.options %}
           <button type="button" class="btn poll-btn" data-option="{{ key }}">{{ label }}</button>{% endfor %}
         </div>
       </div>
+      <p class="poll-thanks" id="poll-thanks" hidden>Your vote is in. We&rsquo;ll show the
+        split here once a few more people have weighed in.</p>
       <div class="poll-results" id="poll-results"{% if not tally.total %} hidden{% endif %}>
         <p class="poll-ask" id="poll-said">{{ tally_sentence }}</p>
         <ul class="bars">{% for key, label in d.options %}
@@ -4214,7 +4218,7 @@ SAFE_CLASSES = {"open", "is-past", "menu-open", "is-open", "is-closed", "is-soon
 # SAFE_CLASSES because the stylesheet is inlined into every page: holding these
 # globally would put the wheel's CSS into all 52 pages to serve 11 of them.
 PLAY_CLASSES = {"is-on", "is-in", "is-mine", "is-done", "is-off",
-                "wheel-lab", "is-flip", "wheel-win-eyebrow", "lab-done"}
+                "wheel-lab", "is-flip", "wheel-win-eyebrow", "lab-done", "poll-thanks"}
 
 def split_rules(css):
     """Top-level CSS blocks: plain rules, @media blocks (split further), and other @-rules kept as-is."""
