@@ -2752,7 +2752,7 @@ T["debate"] = """
     <div class="poll" id="poll" data-poll="debate:{{ d.slug }}" data-endpoint="{{ site.vote_endpoint }}"
          data-counts='{{ tally.counts|tojson }}'>
       <div class="poll-vote" id="poll-vote">
-        <p class="poll-ask">Cast your vote</p>
+        <p class="poll-ask" id="poll-ask">Cast your vote</p>
         <div class="btn-row">{% for key, label in d.options %}
           <button type="button" class="btn poll-btn" data-option="{{ key }}">{{ label }}</button>{% endfor %}
         </div>

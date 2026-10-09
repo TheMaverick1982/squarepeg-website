@@ -1349,8 +1349,11 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .poll{max-width:760px}
 .poll-ask{font:800 13px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;
   color:var(--ember);margin:0 0 14px}
-.poll-vote.is-done{opacity:.5;pointer-events:none}
-.poll-btn.is-mine{outline:3px solid var(--ember);outline-offset:3px}
+/* Fading the whole block, label and all, read as a broken form rather than a
+   cast vote. Only the road not taken dims. */
+.poll-vote.is-done{pointer-events:none}
+.poll-vote.is-done .poll-btn:not(.is-mine){opacity:.35}
+.poll-btn.is-mine{outline:3px solid var(--ink);outline-offset:3px}
 .poll-results{margin-top:30px}
 .bars{list-style:none;margin:0;padding:0;display:grid;gap:16px}
 .bars li{display:grid;grid-template-columns:1fr auto;gap:4px 14px;align-items:center}

@@ -171,6 +171,7 @@
     var voteBox = $("#poll-vote");
     var results = $("#poll-results");
     var said = $("#poll-said");
+    var ask = $("#poll-ask");
     var key = "sp_poll_" + name;
 
     // The counts baked into the page by the nightly refresh. They are the
@@ -212,11 +213,7 @@
       paint(by);
     }
 
-    if (store.get(key)) {
-      voteBox.classList.add("is-done");
-      var prev = $(".poll-btn[data-option='" + store.get(key) + "']", voteBox);
-      if (prev) prev.classList.add("is-mine");
-    }
+    if (store.get(key)) lock(store.get(key));
 
     // Live totals. The page already shows the numbers baked in at build time —
     // that is what a crawler reads — and this refreshes them to the minute.
@@ -236,30 +233,54 @@
     if (document.readyState === "complete") whenIdle(refresh);
     else addEventListener("load", function () { whenIdle(refresh); });
 
+    function lock(option) {
+      voteBox.classList.add("is-done");
+      var btn = $(".poll-btn[data-option='" + option + "']", voteBox);
+      if (btn) btn.classList.add("is-mine");
+      if (ask) ask.textContent = "Thanks \u2014 you voted";
+    }
+
+    function unlock() {
+      voteBox.classList.remove("is-done");
+      $$(".poll-btn", voteBox).forEach(function (x) { x.classList.remove("is-mine"); });
+      if (ask) ask.textContent = "Cast your vote";
+    }
+
     $$(".poll-btn", el).forEach(function (b) {
       b.addEventListener("click", function () {
-        if (store.get(key)) return;
+        if (voteBox.classList.contains("is-done")) return;
         var option = b.getAttribute("data-option");
-        store.set(key, option);
-        b.classList.add("is-mine");
-        voteBox.classList.add("is-done");
+        lock(option);
         track("poll_vote", { poll: name, option: option });
 
-        // Count their own vote straight away so the page agrees with what they
-        // just did, even if the request is slow or there is no endpoint yet.
+        // Show their own vote straight away so the page agrees with what they
+        // just did, rather than waiting on the round trip.
         var optimistic = {};
         for (var k in baked) if (Object.prototype.hasOwnProperty.call(baked, k)) optimistic[k] = baked[k];
         optimistic[option] = (optimistic[option] || 0) + 1;
         paint(optimistic);
 
-        if (!endpoint) return;
+        // With no endpoint there is nothing to confirm against, so remember it
+        // locally and leave it there.
+        if (!endpoint) { store.set(key, option); return; }
+
         fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ poll: name, option: option })
-        }).then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (d) { if (d && d.totals && d.totals.length) fromServer(d.totals); })
-          .catch(function () { /* whatever is on screen stays */ });
+        }).then(function (r) {
+          if (!r.ok) throw new Error(r.status);
+          return r.json();
+        }).then(function (d) {
+          // Only now is the vote real. Remembering it before this point is how
+          // a failed request used to lock someone out of a poll for good.
+          store.set(key, option);
+          if (d && d.totals && d.totals.length) fromServer(d.totals);
+        }).catch(function () {
+          unlock();
+          paint(baked);
+          if (said) said.textContent = "That didn\u2019t go through. Try again?";
+        });
       });
     });
   })();
