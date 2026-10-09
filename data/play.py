@@ -300,8 +300,9 @@ LAB = {
             "We read every one, and the one we pick goes on the menu next month "
             "as a limited-time special.",
     # (icon key in ICONS, heading, body)
-    # No public vote: entries come to us, we choose, it runs as an LTO. The page
-    # must not promise a vote it does not hold.
+    # Three steps, not four. The fourth was us reading the entries, which is not
+    # a step the reader takes and is covered properly further down the page.
+    # No public vote anywhere: the page must not promise one it does not hold.
     "how": [
         ("lab_build", "Build it",
          "Pick a sauce, a cheese, up to four toppings and a finish. Everything "
@@ -310,12 +311,9 @@ LAB = {
         ("lab_name", "Name it",
          "This is the part people remember. Keep it clean — a person reads "
          "every entry."),
-        ("lab_pick", "We read every one",
-         "Entries come straight to the kitchen. No public vote, no popularity "
-         "contest — we pick the one we most want to make."),
         ("lab_win", "It goes on the menu",
          "The one we choose runs the following month as a limited-time special "
-         "across all ten Square Pegs, with your name on it if you want it there."),
+         "across all ten Square Pegs, credited to whoever built it."),
     ],
     # ⚠ CONFIRM WITH THE KITCHEN — this list is drawn from the current menu and
     # the catering tray menu, but nobody on the line has signed off on it yet.
@@ -341,12 +339,12 @@ LAB = {
     # now nothing is published, it just raised a question it never answered.
     "next": [
         "Entries come straight to our kitchen team. They aren’t posted "
-        "anywhere and nobody is campaigning for likes — it’s just us reading "
-        "what came in.",
+        "anywhere — it’s just us reading what came in.",
         "At the start of each month we go through them and pick the one we most "
         "want to make. It runs the following month as a limited-time special at "
         "all ten Square Pegs.",
-        "If we pick yours, we’ll call you first — and your name goes on the "
-        "menu beside it if you want it there.",
+        "We won’t be in touch to tell you, so keep an eye on the monthly "
+        "specials. If yours is up there, it’ll have your first name and last "
+        "initial on it.",
     ],
 }

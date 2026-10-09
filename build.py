@@ -552,7 +552,6 @@ ICONS = {
     # gets made. Same 24x24 stroke style as the rest, so they sit with the set.
     "lab_build": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="9.2" cy="10" r="1.3"/><circle cx="15" cy="9.4" r="1.3"/><circle cx="12.4" cy="15.2" r="1.3"/></svg>',
     "lab_name": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m14 6 4 4"/></svg>',
-    "lab_pick": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M9.5 3h5v3h-5z"/><path d="m9 13 2 2 4-4"/></svg>',
     "lab_win": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5.6"/><path d="M8.6 13.8 7.4 21l4.6-2.3 4.6 2.3-1.2-7.2"/></svg>',
 }
 
@@ -2924,7 +2923,7 @@ T["lab"] = """
         <legend>Name it</legend>
         <input class="lab-name" id="lab-name" name="name" type="text" maxlength="40"
                placeholder="The Meat Monster 3000" autocomplete="off">
-        <label class="lab-by"><span>Your first name and last initial, if you want it on the menu</span>
+        <label class="lab-by"><span>First name and last initial &mdash; how we&rsquo;d credit you on the menu</span>
           <input id="lab-by" name="by" type="text" maxlength="40" placeholder="Optional" autocomplete="off"></label>
       </fieldset>
       </div>
