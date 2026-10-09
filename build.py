@@ -2750,7 +2750,7 @@ T["debate"] = """
 <section class="section">
   <div class="wrap">
     <div class="poll" id="poll" data-poll="debate:{{ d.slug }}" data-endpoint="{{ site.vote_endpoint }}"
-         data-counts="{{ tally.counts|tojson }}">
+         data-counts='{{ tally.counts|tojson }}'>
       <div class="poll-vote" id="poll-vote">
         <p class="poll-ask">Cast your vote</p>
         <div class="btn-row">{% for key, label in d.options %}
