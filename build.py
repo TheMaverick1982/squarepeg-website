@@ -19,7 +19,8 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE  # noqa
+from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
@@ -559,8 +560,10 @@ MORE_GROUPS = [
              ("Pairing Guide", "/pairing/"), ("Rewards & Monthly Deals", "/deals/")]),
     ("Plan", [("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"),
               ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
-    ("Fun", [("Halloween", "/halloween/"), ("Roll the Dice", "/roll-the-dice/"), ("Date Night", "/date-night/"),
-             ("What Pizza Are You?", "/what-pizza-are-you/"), ("Pizza Trivia", "/pizza-trivia/")]),
+    ("Fun", [("Halloween", "/halloween/"), ("The Playground", "/play/"), ("Pizza Wheel", "/play/wheel/"),
+             ("The Pizza Debate", "/play/debate/"), ("Roll the Dice", "/roll-the-dice/"),
+             ("Date Night", "/date-night/"), ("What Pizza Are You?", "/what-pizza-are-you/"),
+             ("Pizza Trivia", "/pizza-trivia/")]),
     ("Helpful", [("Pizza Calculator", "/pizza-calculator/"), ("Pizza FAQ", "/pizza-faq/"),
                  ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
@@ -571,7 +574,7 @@ DRAWER_EXTRA = []
 DRAWER_GROUPS = [
     ("Eat", [("Menu", "MENU"), ("LTO Menu", "/monthly-specials/"), ("Pairing Guide", "/pairing/"), ("What’s on the Menu", "/our-menu/"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
     ("Plan", [("Catering", "/catering/"), ("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
-    ("Fun", [("Entertainment", "/entertainment/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Cards", "GIFT")]),
+    ("Fun", [("Entertainment", "/entertainment/"), ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
 ]
 DAY_NAMES = {"Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"}
@@ -769,7 +772,8 @@ T["page"] = """{% if not preview %}<!doctype html>
 {% if not bare %}{% include "header" %}{% endif %}
 <main id="main">{{ body|safe }}</main>
 {% if not bare %}{% include "footer" %}{% endif %}
-{% if not preview %}<script src="/site.js?v={{ jsv }}" defer></script>
+{% if not preview %}<script src="/site.js?v={{ jsv }}" defer></script>{% if pagejs %}
+<script src="/{{ pagejs }}?v={{ pagejsv }}" defer></script>{% endif %}
 </body></html>{% endif %}"""
 
 # ---------- HOME
@@ -2537,6 +2541,424 @@ T["calculator"] = """
 <script type="application/json" id="calc-cfg">{{ calc_json|safe }}</script>
 """
 
+# ---------- THE PLAYGROUND
+# The interactive pages. Their behaviour lives in src/play.js, which loads only
+# on these pages — site.js is on every page on the site and stays lean.
+
+T["play"] = """
+<section class="page-head on-dark">
+  {{ img('oven-fire', 'The wood-fired oven at Square Peg Pizzeria', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Playground</span></nav>
+    <h1><span class="eyebrow h1-eyebrow"><span>{{ play.eyebrow }}</span></span>{{ play.h1 }}</h1>
+    <p class="lede">{{ play.lede }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="prose-block">{% for para in play.intro %}<p class="prose">{{ para }}</p>{% endfor %}</div>
+    <div class="route-grid play-grid">
+      <a class="route" href="{{ u('/play/wheel/') }}">
+        <span class="eyebrow">Can&rsquo;t decide</span>
+        <b>Spin the pizza wheel</b>
+        <span>Four wheels, one answer. Then a button that orders it.</span>
+      </a>
+      <a class="route" href="{{ u('/play/debate/') }}">
+        <span class="eyebrow">Settle it</span>
+        <b>The Great Pizza Debate</b>
+        <span>{{ debates|length }} arguments, live results, and where Connecticut
+          and Florida disagree.</span>
+      </a>
+      <a class="route" href="{{ u('/play/confessions/') }}">
+        <span class="eyebrow">Anonymous</span>
+        <b>The confession booth</b>
+        <span>Tick what you&rsquo;ve done. Find out how alone you really are.</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">While you&rsquo;re here</span>
+      <h2>The useful ones.</h2>
+      <p class="prose">These started as jokes too, and then people kept using them.</p>
+      <ul class="hw-list">
+        <li><b><a href="{{ u('/what-pizza-are-you/') }}">What pizza are you?</a></b><span>Six
+          questions, one answer you can actually order.</span></li>
+        <li><b><a href="{{ u('/pizza-calculator/') }}">The pizza calculator</a></b><span>How
+          many pies for your party, based on what is actually on a 12&Prime; and an 18&Prime;.</span></li>
+        <li><b><a href="{{ u('/pairing/') }}">Ask Sal what to drink</a></b><span>Tell him
+          what&rsquo;s on the table and get one answer, not a wine list.</span></li>
+      </ul>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">No catch</span>
+      <h2>Nothing to sign up for.</h2>
+      <p class="prose">No email, no account, no download. We count votes and
+        nothing else &mdash; no names, no profiles, no way back to you. The whole
+        point is that it takes ten seconds.</p>
+      <p class="prose">If you want the thing that does pay you back, that&rsquo;s the
+        app &mdash; rewards every visit, and {{ app_perks[0]|lower }} to start.</p>
+      <div class="btn-row">
+        <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="play-hub">{{ icons.bag|safe }}Order online</a>
+        <a class="btn btn--line" href="{{ site.app_link }}" rel="noopener"{{ ext|safe }} data-track="app_click" data-src="play-hub">Get the app</a>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+T["wheel"] = """
+<section class="page-head on-dark">
+  {{ img('pizza-boxes', 'Square Peg pizza boxes ready to go', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/play/') }}">Playground</a><span aria-hidden="true">/</span><span>The wheel</span></nav>
+    <h1><span class="eyebrow h1-eyebrow"><span>The pizza decision wheel</span></span>Can&rsquo;t decide? Let fate do it.</h1>
+    <p class="lede">Four wheels for the four arguments. Spin it, accept the
+      result, order the thing. The universe has spoken and it is not taking
+      questions.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="wheel-app" id="wheel-app" data-order="{{ site.order_picker_toast }}">
+      <div class="wheel-tabs" role="tablist" aria-label="Choose a wheel">{% for w in wheels %}
+        <button type="button" role="tab" class="wheel-tab{% if loop.first %} is-on{% endif %}"
+          data-wheel="{{ w.slug }}" id="tab-{{ w.slug }}" aria-selected="{{ 'true' if loop.first else 'false' }}"
+          aria-controls="panel-wheel">{{ w.short }}</button>{% endfor %}
+      </div>
+
+      <div class="wheel-stage" id="panel-wheel" role="tabpanel" aria-labelledby="tab-{{ wheels[0].slug }}">
+        <div class="wheel-wrap">
+          <div class="wheel-pin" aria-hidden="true"></div>
+          <div class="wheel-disc" id="wheel-disc"></div>
+        </div>
+        <div class="wheel-side">
+          <h2 class="wheel-q" id="wheel-q">{{ wheels[0].name }}</h2>
+          <p class="wheel-prompt" id="wheel-prompt">{{ wheels[0].prompt }}</p>
+          <div class="wheel-out" id="wheel-out" aria-live="polite"></div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="wheel-spin">Spin the wheel</button>
+            <a class="btn btn--line" id="wheel-order" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }}
+               data-track="order_click" data-src="wheel" hidden>Order this</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <noscript><p class="note">The wheel needs JavaScript. The lists it picks from
+      are below, so you can still let fate decide the old-fashioned way.</p></noscript>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">What&rsquo;s on the wheels</span>
+      <h2>Everything it can land on</h2>
+      <p>All of it is on the menu right now. A wheel that lands on something we
+        don&rsquo;t make would be a worse experience than no wheel.</p>
+    </div>
+    <div class="route-grid">{% for w in wheels %}
+      <div class="prose-block">
+        <h3>{{ w.name }}</h3>
+        <ul class="hw-list">{% for label, blurb in w['items'] %}
+          <li><b>{{ label|safe }}</b><span>{{ blurb }}</span></li>{% endfor %}
+        </ul>
+      </div>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark on-dark">
+  <div class="wrap cta-foot">
+    <h2>Decided?</h2>
+    <p class="prose">Ten Square Pegs across Connecticut and Delray Beach.</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="wheel-foot">{{ icons.bag|safe }}Order online</a>
+      <a class="btn btn--ghost" href="{{ u('/play/') }}">More from the Playground</a>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="wheel-cfg">{{ wheel_json|safe }}</script>
+"""
+
+T["debate_index"] = """
+<section class="page-head on-dark">
+  {{ img('friends-sharing', 'Friends sharing pizza at Square Peg', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/play/') }}">Playground</a><span aria-hidden="true">/</span><span>The Great Pizza Debate</span></nav>
+    <h1><span class="eyebrow h1-eyebrow"><span>The Great Pizza Debate</span></span>Settle the arguments that have divided families for generations.</h1>
+    <p class="lede">{{ debates|length }} questions our dining rooms have been
+      arguing about for twenty years. Vote, see where everyone else landed, and
+      read why we think one side has it.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="route-grid">{% for d in debates %}
+      <a class="route" href="{{ u('/play/debate/' + d.slug + '/') }}">
+        <span class="eyebrow">{{ tally_line(d) }}</span>
+        <b>{{ d.q }}</b>
+        <span>{{ d.options[0][1] }} &nbsp;vs&nbsp; {{ d.options[1][1] }}</span>
+      </a>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">How this works</span>
+      <h2>One vote, then the numbers.</h2>
+      <p class="prose">No sign-up and nothing saved to your name. We count the
+        vote and the state it came from, and that&rsquo;s the whole record &mdash; there
+        is no row in our database with you in it.</p>
+      <p class="prose">The state is the interesting part. Nine of our ten
+        pizzerias are in Connecticut and one is in Delray Beach, which makes
+        this an unusually clean test of whether Florida and Connecticut
+        actually disagree about food, or only think they do.</p>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Where the numbers come from</span>
+      <h2>Real votes, no padding.</h2>
+      <p class="prose">We didn&rsquo;t seed these with made-up results to make the
+        page look busy. Early on the counts will be small, and the page will
+        say so rather than dress it up.</p>
+      <div class="btn-row">
+        <a class="btn btn--line" href="{{ u('/play/') }}">Back to the Playground</a>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+T["debate"] = """
+<section class="page-head on-dark">
+  {{ img(hero_img, 'Wood-fired pizza at Square Peg Pizzeria', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/play/') }}">Playground</a><span aria-hidden="true">/</span><a href="{{ u('/play/debate/') }}">The Debate</a><span aria-hidden="true">/</span><span>{{ d.q }}</span></nav>
+    <h1><span class="eyebrow h1-eyebrow"><span>The Great Pizza Debate</span></span>{{ d.q }}</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="poll" id="poll" data-poll="debate:{{ d.slug }}" data-endpoint="{{ site.vote_endpoint }}">
+      <div class="poll-vote" id="poll-vote">
+        <p class="poll-ask">Cast your vote</p>
+        <div class="btn-row">{% for key, label in d.options %}
+          <button type="button" class="btn poll-btn" data-option="{{ key }}">{{ label }}</button>{% endfor %}
+        </div>
+      </div>
+      <div class="poll-results" id="poll-results"{% if not tally.total %} hidden{% endif %}>
+        <p class="poll-ask" id="poll-said">{{ tally_sentence }}</p>
+        <ul class="bars">{% for key, label in d.options %}
+          <li data-option="{{ key }}">
+            <span class="bar-label">{{ label }}</span>
+            <span class="bar"><i style="width:{{ tally.pct[key] }}%"></i></span>
+            <b class="bar-pct">{{ tally.pct[key] }}%</b>
+          </li>{% endfor %}
+        </ul>
+        {% if tally.split %}<p class="note" id="poll-split">{{ tally.split }}</p>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">{{ d.take }}</span>
+      <h2>The actual answer.</h2>
+      {% for para in d.prose %}<p class="prose">{{ para|safe }}</p>{% endfor %}
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Keep going</span>
+      <h2>The other arguments.</h2>
+      <ul class="hw-list">{% for o in others %}
+        <li><b><a href="{{ u('/play/debate/' + o.slug + '/') }}">{{ o.q }}</a></b></li>{% endfor %}
+      </ul>
+      <div class="btn-row">
+        <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="debate">{{ icons.bag|safe }}Order a pizza instead</a>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+T["confessions"] = """
+<section class="page-head on-dark">
+  {{ img('pizza-boxes', 'An open Square Peg pizza box', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/play/') }}">Playground</a><span aria-hidden="true">/</span><span>Confession booth</span></nav>
+    <h1><span class="eyebrow h1-eyebrow"><span>{{ conf.eyebrow }}</span></span>{{ conf.h1 }}</h1>
+    <p class="lede">{{ conf.lede }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <form class="conf" id="conf" data-poll="confession" data-endpoint="{{ site.vote_endpoint }}" onsubmit="return false">
+      <ul class="conf-list">{% for key, text in conf['items'] %}
+        <li data-option="{{ key }}">
+          <label><input type="checkbox" name="c" value="{{ key }}"> <span>{{ text }}</span></label>
+          <span class="conf-pct" data-pct>{% if tallies.confession and tallies.confession.get(key) %}{{ pct_of(key) }}% have{% endif %}</span>
+        </li>{% endfor %}
+      </ul>
+      <div class="btn-row">
+        <button type="button" class="btn" id="conf-go">Confess</button>
+        <span class="note" id="conf-note">{{ conf.note }}</span>
+      </div>
+      <div class="conf-verdict" id="conf-verdict" aria-live="polite" hidden></div>
+    </form>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">Why there&rsquo;s no text box</span>
+      <h2>We wrote them all ourselves.</h2>
+      <p class="prose">The obvious version of this page lets anyone type
+        anything and publishes it. We thought about it and decided against it,
+        for a boring reason: a word filter catches swearing and misses
+        everything that actually matters &mdash; somebody&rsquo;s name, somebody&rsquo;s
+        phone number, a thing about a competitor that isn&rsquo;t true.</p>
+      <p class="prose">So it&rsquo;s a list. Less chaotic, still honest, and nothing
+        appears here that one of us didn&rsquo;t write.</p>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Keep going</span>
+      <h2>Still here?</h2>
+      <ul class="hw-list">
+        <li><b><a href="{{ u('/play/debate/') }}">The Great Pizza Debate</a></b><span>Pineapple,
+          ranch, folding. Pick a side.</span></li>
+        <li><b><a href="{{ u('/play/wheel/') }}">The pizza wheel</a></b><span>For when
+          the table can&rsquo;t agree.</span></li>
+      </ul>
+      <div class="btn-row">
+        <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="confessions">{{ icons.bag|safe }}Order online</a>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+# The Pizza Lab is NOT linked anywhere on the site and carries noindex until the
+# kitchen has signed off on the ingredient list and agreed to actually run the
+# winner as an LTO. Brian is sharing the URL with them first. Flip LAB_LIVE in
+# data/content.py to put it in the nav, the hub and the sitemap.
+T["lab"] = """
+<section class="page-head on-dark">
+  {{ img('margherita-board', 'A wood-fired pizza on the board at Square Peg', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <h1><span class="eyebrow h1-eyebrow"><span>{{ lab.eyebrow }}</span></span>{{ lab.h1 }}</h1>
+    <p class="lede">{{ lab.lede }}</p>
+  </div>
+</section>
+
+{% if not lab_live %}
+<section class="section">
+  <div class="wrap">
+    <p class="cat-note"><b>Not live yet.</b> This page is shared by link only
+      while the kitchen reviews the ingredient list. It isn&rsquo;t in the menu, it
+      isn&rsquo;t in the sitemap, and search engines are told not to index it.
+      Nothing submitted here goes anywhere until it launches.</p>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="wrap">
+    <div class="steps steps--row">{% for head, body in lab.how %}
+      <div class="step"><span class="step-n">{{ loop.index }}</span>
+        <div><b>{{ head }}</b><span>{{ body }}</span></div></div>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Build it</span>
+      <h2>Your pizza</h2>
+      <p>Everything on these lists is something our kitchens already stock, so
+        the winner is a pizza we can actually make on a Friday night.</p>
+    </div>
+
+    <form class="lab" id="lab" data-max="{{ lab.max_toppings }}" data-endpoint="{{ site.lab_endpoint }}" onsubmit="return false">
+      <fieldset class="lab-set">
+        <legend>Sauce</legend>
+        <div class="lab-chips">{% for x in lab.sauce %}
+          <label class="lab-chip"><input type="radio" name="sauce" value="{{ x }}"{% if loop.first %} checked{% endif %}><span>{{ x }}</span></label>{% endfor %}
+        </div>
+      </fieldset>
+
+      <fieldset class="lab-set">
+        <legend>Cheese</legend>
+        <div class="lab-chips">{% for x in lab.cheese %}
+          <label class="lab-chip"><input type="radio" name="cheese" value="{{ x }}"{% if loop.first %} checked{% endif %}><span>{{ x }}</span></label>{% endfor %}
+        </div>
+      </fieldset>
+
+      <fieldset class="lab-set">
+        <legend>Toppings <span class="lab-count" id="lab-count">0 of {{ lab.max_toppings }}</span></legend>
+        <div class="lab-chips">{% for x in lab.toppings %}
+          <label class="lab-chip"><input type="checkbox" name="topping" value="{{ x }}"><span>{{ x }}</span></label>{% endfor %}
+        </div>
+      </fieldset>
+
+      <fieldset class="lab-set">
+        <legend>Finish</legend>
+        <div class="lab-chips">{% for x in lab.finish %}
+          <label class="lab-chip"><input type="radio" name="finish" value="{{ x }}"{% if loop.first %} checked{% endif %}><span>{{ x }}</span></label>{% endfor %}
+        </div>
+      </fieldset>
+
+      <fieldset class="lab-set">
+        <legend>Name it</legend>
+        <input class="lab-name" id="lab-name" name="name" type="text" maxlength="40"
+               placeholder="The Meat Monster 3000" autocomplete="off">
+        <label class="lab-by"><span>Your first name and last initial, if you want it on the menu</span>
+          <input id="lab-by" name="by" type="text" maxlength="40" placeholder="Optional" autocomplete="off"></label>
+      </fieldset>
+
+      <div class="lab-preview" id="lab-preview" aria-live="polite"></div>
+
+      <div class="btn-row">
+        <button type="button" class="btn" id="lab-go"{% if not lab_live %} disabled{% endif %}>Submit my pizza</button>
+        <span class="note" id="lab-note">{% if lab_live %}One entry per round.{% else %}Submissions open at launch.{% endif %}</span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">The rules</span>
+      <h2>Short list.</h2>
+      <ul class="hw-list">{% for r in lab.rules %}<li><span>{{ r }}</span></li>{% endfor %}</ul>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Before it goes anywhere</span>
+      <h2>A person reads every one.</h2>
+      <p class="prose">Nothing submitted here appears on the website
+        automatically. Every build and every name goes into a queue and one of
+        us approves it before anyone else sees it. That&rsquo;s slower, and it&rsquo;s the
+        only version of this we were willing to put our name on.</p>
+    </div>
+  </div>
+</section>
+"""
+
 T["halloween"] = """
 <section class="page-head on-dark hw-head">
   {{ img('oven-fire', 'Pizza in the wood-fired oven at Square Peg', eager=True, cls='bg')|safe }}
@@ -3097,6 +3519,10 @@ def main():
     css = re.sub(r"\s*\n\s*", "", css)
     js = (ROOT / "src" / "site.js").read_text()
     jsv = hashlib.md5(js.encode()).hexdigest()[:8]
+    # The Playground bundle. Loaded only on /play/ pages, so the wheel and the
+    # poll code never reach a visitor who came for a phone number.
+    playjs = (ROOT / "src" / "play.js").read_text()
+    playjsv = hashlib.md5(playjs.encode()).hexdigest()[:8]
 
     for l in LOCATIONS:
         l["summary"] = hours_summary(l)
@@ -3148,6 +3574,9 @@ def main():
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, hwart=HW_ART, lunch_where=lunch_windows(),
         event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
+        pagejs="", pagejsv=playjsv, play=PLAY, wheels=WHEELS, debates=DEBATES, conf=CONFESSIONS,
+        lab=LAB, lab_live=LAB_LIVE, app_perks=APP_PERKS, tallies=TALLIES,
+        tally_line=tally_line,
     )
 
     pages = []  # (path, title, desc, body_template, extra ctx, schema, og, hero)
@@ -3315,6 +3744,46 @@ def main():
                   LTO["sections"][2][1][0][2], LTO["sections"][2][1][0][2]))
     pages.append(("/sms-terms/", "SMS Terms | Square Peg Pizzeria", "Terms for the Square Peg Pizzeria text message program: message frequency, carrier costs, how to opt out at any time, and where to get help.",
                   "sms", dict(sms=SMS_TERMS), None, None, None))
+    # ---- The Playground
+    pages.append(("/play/", "The Square Peg Playground | Pizza Games & Debates",
+                  "A pizza decision wheel, the arguments that divide every table, and an "
+                  "anonymous confession booth. No sign-up, no email. From Square Peg Pizzeria.",
+                  "play", dict(pagejs="play.js"),
+                  graph(breadcrumbs([("Home", "/"), ("Playground", "/play/")])),
+                  "oven-fire", "oven-fire"))
+    pages.append(("/play/wheel/", "Pizza Decision Wheel: What Should I Order? | Square Peg",
+                  "Can't decide what to eat? Spin the Square Peg pizza wheel and let fate "
+                  "pick dinner. Four wheels, real menu items, and a button that orders it.",
+                  "wheel", dict(pagejs="play.js", wheel_json=ld_raw([
+                      dict(slug=w["slug"], name=w["name"], prompt=w["prompt"], items=w["items"]) for w in WHEELS])),
+                  graph(breadcrumbs([("Home", "/"), ("Playground", "/play/"), ("The wheel", "/play/wheel/")])),
+                  "pizza-boxes", "pizza-boxes"))
+    pages.append(("/play/debate/", "The Great Pizza Debate: Vote on Pizza's Biggest Arguments | Square Peg",
+                  "Pineapple, ranch, folding, cold leftovers. Vote on the arguments that "
+                  "divide every table and see how Connecticut and Florida disagree.",
+                  "debate_index", dict(pagejs="play.js"),
+                  graph(breadcrumbs([("Home", "/"), ("Playground", "/play/"), ("The Debate", "/play/debate/")])),
+                  "friends-sharing", "friends-sharing"))
+    for d in DEBATES:
+        t = tally(d)
+        pages.append((f"/play/debate/{d['slug']}/", d["title"], d["desc"], "debate",
+                      dict(pagejs="play.js", d=d, tally=t, tally_sentence=tally_sentence(t),
+                           others=[o for o in DEBATES if o["slug"] != d["slug"]][:5],
+                           hero_img="friends-sharing"),
+                      graph(breadcrumbs([("Home", "/"), ("Playground", "/play/"),
+                                         ("The Debate", "/play/debate/"), (d["q"], f"/play/debate/{d['slug']}/")]),
+                            debate_schema(d, t)),
+                      "friends-sharing", "friends-sharing"))
+    pages.append(("/play/confessions/", "The Pizza Confession Booth | Square Peg Pizzeria",
+                  "Fifteen things people do to pizza and will not admit to. Tick the ones "
+                  "you've done, anonymously, and find out how alone you really are.",
+                  "confessions", dict(pagejs="play.js", pct_of=conf_pct),
+                  graph(breadcrumbs([("Home", "/"), ("Playground", "/play/"), ("Confession booth", "/play/confessions/")])),
+                  "pizza-boxes", "pizza-boxes"))
+    # Unlisted until the kitchen signs off — see LAB_LIVE in data/content.py.
+    pages.append(("/play/pizza-lab/", "The Square Peg Pizza Lab", LAB["lede"],
+                  "lab", dict(pagejs="play.js"), None, "margherita-board", "margherita-board"))
+
     pages.append(("/thanks/", "Thank You | Square Peg Pizzeria", "Thanks for reaching out to Square Peg Pizzeria.", "simple",
                   dict(eyebrow="Request received", h1="Thank you!", lede="We got your request and will get back to you within one business day. While you wait, there’s pizza.", prose=""), None, None, None))
     pages.append(("/privacy/", "Privacy Policy | Square Peg Pizzeria", "How Square Peg Pizzeria collects, uses and protects the information you share on this website, in our rewards program and by text.", "simple",
@@ -3373,12 +3842,12 @@ def main():
         if not PREVIEW:
             doc = env.get_template("page").render(**ctx)
             full_css = ctx["css"]
-            slim = purge_css(full_css, doc)
+            slim = purge_css(full_css, doc, path)
             doc = doc.replace("<style>" + full_css + "</style>", "<style>" + slim + "</style>", 1)
             doc = external_new_tab(doc)
             if path == "/404.html":
                 doc = doc.replace('<meta name="description"', '<meta name="robots" content="noindex"><meta name="description"', 1)
-            if path in ("/thanks/", "/what-you-did/", "/evidence/", "/links/"):
+            if path in UNLISTED:
                 doc = doc.replace('<meta name="description"', '<meta name="robots" content="noindex"><meta name="description"', 1)
             dest = OUT / (path.lstrip("/") if path.endswith(".html") else path.lstrip("/") + "index.html")
             dest.parent.mkdir(parents=True, exist_ok=True)
@@ -3390,11 +3859,13 @@ def main():
         import subprocess
         try:
             terser = os.environ.get("TERSER") or shutil.which("terser") or "/tmp/fs/node_modules/.bin/terser"
-            mini = subprocess.run([terser, "-c", "-m"], input=js, capture_output=True, text=True, timeout=60)
-            (OUT / "site.js").write_text(mini.stdout if mini.returncode == 0 and mini.stdout.strip() else js)
+            for src, name in ((js, "site.js"), (playjs, "play.js")):
+                mini = subprocess.run([terser, "-c", "-m"], input=src, capture_output=True, text=True, timeout=60)
+                (OUT / name).write_text(mini.stdout if mini.returncode == 0 and mini.stdout.strip() else src)
         except Exception:
             (OUT / "site.js").write_text(js)
-        write_extras([p for p in pages if p[0] not in ("/404.html", "/thanks/", "/what-you-did/", "/evidence/", "/links/")])
+            (OUT / "play.js").write_text(playjs)
+        write_extras([p for p in pages if p[0] not in UNLISTED and p[0] != "/404.html"])
     if PREV.exists():
         shutil.rmtree(PREV)
     print(f"  pages: {len(rendered)} -> {OUT}")
@@ -3403,6 +3874,117 @@ def main():
 # every page with the build date on every build is exactly how a sitemap teaches
 # it to stop looking. This keeps a small ledger of when each page's content last
 # genuinely changed, so a date in the sitemap means something.
+
+# ---------- Playground vote tallies
+#
+# Fetched into data/poll_tallies.json by scripts/sync_polls.py and refreshed
+# nightly by a GitHub Action. They are rendered into the HTML at build time on
+# purpose: a debate page whose results only appear after a fetch is, to a
+# crawler, a page with no results on it, and the whole reason these pages are
+# worth having is that they carry real numbers. The browser updates them live
+# after someone votes — that part is for the visitor.
+
+# Pages that exist but are not for search engines: thank-you and utility pages,
+# plus anything still behind a launch flag. One list so the noindex meta and the
+# sitemap can never disagree about what is hidden — a page left out of the
+# sitemap but still indexable is the failure mode this prevents.
+UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/"}
+if not LAB_LIVE:
+    UNLISTED.add("/play/pizza-lab/")
+
+TALLIES_FILE = ROOT / "data" / "poll_tallies.json"
+try:
+    TALLIES = json.loads(TALLIES_FILE.read_text()) if TALLIES_FILE.exists() else {}
+except json.JSONDecodeError:
+    TALLIES = {}
+
+# Below this, percentages are noise and we say the real thing instead.
+MIN_VOTES = 25
+
+
+def tally(d):
+    """Counts and percentages for one debate, plus the CT/FL split when it says
+    something. Returns zeroes when nobody has voted, and the template hides the
+    results block in that case."""
+    rows = TALLIES.get("debate:" + d["slug"], {})
+    keys = [k for k, _ in d["options"]]
+    counts = {k: int(rows.get(k, {}).get("all", 0)) for k in keys}
+    total = sum(counts.values())
+    pct = {k: (round(counts[k] * 100 / total) if total else 0) for k in keys}
+    # Make the two halves add to 100 even after rounding.
+    if total and sum(pct.values()) != 100:
+        pct[max(keys, key=lambda k: counts[k])] += 100 - sum(pct.values())
+
+    split = ""
+    if total >= MIN_VOTES:
+        a = keys[0]
+        ct = {k: int(rows.get(k, {}).get("CT", 0)) for k in keys}
+        fl = {k: int(rows.get(k, {}).get("FL", 0)) for k in keys}
+        ct_n, fl_n = sum(ct.values()), sum(fl.values())
+        if ct_n >= 10 and fl_n >= 10:
+            ct_p, fl_p = round(ct[a] * 100 / ct_n), round(fl[a] * 100 / fl_n)
+            if abs(ct_p - fl_p) >= 8:
+                label = d["options"][0][1].rstrip(".")
+                split = (f"Connecticut says \u201c{label}\u201d {ct_p}% of the time. "
+                         f"Delray Beach says it {fl_p}% of the time.")
+            else:
+                split = "Connecticut and Florida agree on this one, which is rarer than you\u2019d think."
+    return dict(counts=counts, total=total, pct=pct, split=split)
+
+
+def tally_sentence(t):
+    if not t["total"]:
+        return "Nobody has voted yet. Go on."
+    if t["total"] == 1:
+        return "One vote so far. Yours."
+    if t["total"] < MIN_VOTES:
+        return f"{t['total']} votes so far \u2014 early days, so take the split lightly."
+    return f"{t['total']:,} votes so far."
+
+
+def conf_pct(key):
+    """What share of the people who confessed ticked this one.
+
+    The denominator is the most-ticked confession rather than the number of
+    visitors, because we never count visitors — only ticks. So it reads as
+    "of the people who owned up, this many owned up to this"."""
+    rows = TALLIES.get("confession", {})
+    if not rows:
+        return 0
+    top = max(int(v.get("all", 0)) for v in rows.values()) or 1
+    return round(int(rows.get(key, {}).get("all", 0)) * 100 / top)
+
+
+def debate_schema(d, t):
+    """Marked up as a QAPage. The question is genuinely a question people ask,
+    and our answer is the written take rather than the vote."""
+    return {
+        "@type": "QAPage",
+        "mainEntity": {
+            "@type": "Question",
+            "name": d["q"],
+            "text": d["q"],
+            "answerCount": 1,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": " ".join(re.sub(r"<[^>]+>", "", x) for x in d["prose"]),
+                "url": abs_url(f"/play/debate/{d['slug']}/"),
+            },
+        },
+    }
+
+
+def tally_line(d):
+    """The one-line summary on the debate index card."""
+    t = tally(d)
+    if not t["total"]:
+        return "No votes yet"
+    if t["total"] < MIN_VOTES:
+        return f"{t['total']} votes so far"
+    top = max(t["pct"], key=lambda k: t["pct"][k])
+    label = dict(d["options"])[top].rstrip(".")
+    return f"{t['pct'][top]}% say \u201c{label}\u201d"
+
 LASTMOD_FILE = ROOT / "data" / "lastmod.json"
 
 
@@ -3484,6 +4066,8 @@ def write_extras(pages):
         "/fonts/*",
         "  Cache-Control: public, max-age=31536000, immutable",
         "/site.js",
+        "  Cache-Control: public, max-age=31536000, immutable",
+        "/play.js",
         "  Cache-Control: public, max-age=31536000, immutable",
         "/*.html",
         "  Cache-Control: public, max-age=0, must-revalidate",
@@ -3597,6 +4181,7 @@ def vercel_config():
         # site.js is requested as /site.js?v=<hash of its contents>, so a new build
         # is a new URL and the old one can be cached as long as the browser likes.
         {"source": "/site.js", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
+        {"source": "/play.js", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
     ]
     return {"$schema": "https://openapi.vercel.sh/vercel.json", "trailingSlash": True, "cleanUrls": False,
             "redirects": redirects, "headers": headers}
@@ -3625,6 +4210,12 @@ SAFE_CLASSES = {"open", "is-past", "menu-open", "is-open", "is-closed", "is-soon
                 "quiz-result", "quiz-eyebrow", "quiz-pic", "btn--line", "btn-row",
                 "calc-answer", "calc-eyebrow", "calc-big", "calc-sub", "calc-detail", "calc-empty"}
 
+# Injected by src/play.js, which loads only on /play/ pages. Kept separate from
+# SAFE_CLASSES because the stylesheet is inlined into every page: holding these
+# globally would put the wheel's CSS into all 52 pages to serve 11 of them.
+PLAY_CLASSES = {"is-on", "is-in", "is-mine", "is-done", "is-off",
+                "wheel-lab", "is-flip", "wheel-win-eyebrow", "lab-done"}
+
 def split_rules(css):
     """Top-level CSS blocks: plain rules, @media blocks (split further), and other @-rules kept as-is."""
     out, i, n = [], 0, len(css)
@@ -3643,9 +4234,11 @@ def split_rules(css):
         i = k
     return out
 
-def purge_css(css, page_html):
+def purge_css(css, page_html, path=""):
     classes = set(re.findall(r'class="([^"]*)"', page_html))
     tokens = set(" ".join(classes).split()) | SAFE_CLASSES
+    if path.startswith("/play/"):
+        tokens |= PLAY_CLASSES
     ids = set(re.findall(r'id="([^"]+)"', page_html))
     def keep_selector(sel):
         need_c = re.findall(r"\.([a-zA-Z0-9_-]+)", sel)

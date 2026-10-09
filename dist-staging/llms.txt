@@ -1,6 +1,6 @@
 # Square Peg Pizzeria
 
-> Wood-fired pizza made from scratch daily, with 10 locations in Connecticut and Delray Beach, Florida. Online ordering for pickup and delivery, catering, a wood-fired food truck, Tuesday night fundraisers, and a rewards app.
+> Wood-fired pizza made fresh from scratch, with 10 locations in Connecticut and Delray Beach, Florida. Online ordering for pickup and delivery, catering, a wood-fired food truck, Tuesday night fundraisers, and a rewards app.
 
 ## Locations
 - [Glastonbury](https://squarepegpizzeria.com/locations/glastonbury-ct/): 1001 Hebron Ave, Glastonbury, CT 06033 · (860) 286-0415 · order: https://order.squarepegpizzeria.com/order/square-peg-pizzeria
@@ -25,7 +25,7 @@
   - Nearby towns (within 15 miles): Gulf Stream, Highland Beach, Golf, Boynton Beach, Briny Breezes, Ocean Ridge, Boca Raton, Manalapan, Hypoluxo, Atlantis, Deerfield Beach, Lantana, South Palm Beach, Lake Worth Beach, Hillsboro Beach, Greenacres, Palm Springs, Parkland, Cloud Lake, Glen Ridge, Lighthouse Point, Lake Clarke Shores, Coconut Creek
 
 ## Menu (Italian-American restaurant + wood-fired pizza)
-- Pizza: Neo-Neapolitan rounds (Wood-fired, 12″ (6 slices) or 18″ (8 slices), red or white.); Detroit-style (Thick, crispy-edged 10×14″ pan pizza (6 slices). At every location except Bolton.); Gluten-free (12″ gluten-free crust on any round pie. Vegan cheese on any pizza.)
+- Pizza: Neo-Neapolitan rounds (12″ (6 slices) or 18″ (8 slices), red or white. Wood-fired at every location except Bolton.); Detroit-style (Thick, crispy-edged 10×14″ pan pizza (6 slices). At every location except Bolton.); Gluten-free (12″ gluten-free crust on any round pie. Vegan cheese on any pizza.)
 - Pasta: Chicken Parmesan, Pasta alla Vodka, Pasta Bolognese, Shrimp Scampi, Spaghetti & Meatballs, The Bella Parmigiana
 - Parm sandwiches & Italian subs: Chicken Parm, Meatball Parm, Eggplant & Ham Parm, Italian Combo, The Hot Honey Eggplant
 - Starters & wings: House-made pork meatballs, Calamari, Honey bruschetta, Fried mozzarella & garlic bread, Wood-fired wings

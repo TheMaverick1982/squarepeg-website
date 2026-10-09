@@ -1,0 +1,88 @@
+# Nightly: pull the Playground vote counts into the built pages.
+#
+# The debate pages are only worth indexing because they carry real numbers, and
+# a number that only appears after a JavaScript call is, to a crawler, not on
+# the page at all. So the counts are baked into the HTML at build time and this
+# refreshes them once a day. The browser still updates them live after someone
+# votes — that part is for the visitor, not for Google.
+#
+# If nothing has changed, nothing is committed, so this is silent on a quiet day.
+# Run it by hand any time: Actions > Refresh poll results > Run workflow.
+name: Refresh poll results
+
+on:
+  schedule:
+    - cron: "41 7 * * *"   # every day ~3:41am Eastern (2:41am in winter)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site-build        # shares the lock with the hours sync, so two builds never race
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Only the anon key, which is public by design and can read nothing but
+      # the aggregate totals. The service-role key is not needed here and must
+      # never be put in this workflow.
+      - name: Fetch vote totals
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: python3 scripts/sync_polls.py
+
+      - name: Stop here if the numbers are unchanged
+        id: check
+        run: |
+          if git diff --quiet -- data/poll_tallies.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No new votes since the last run."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install build tools
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          pip install -r requirements.txt
+          npm install -g terser@5 --silent
+
+      - name: Rebuild pages (images are reused, not re-encoded)
+        if: steps.check.outputs.changed == 'true'
+        env:
+          SP_REUSE_ASSETS: "1"
+        run: |
+          python3 build.py
+          python3 build.py --staging
+
+      - name: Commit and push
+        if: steps.check.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Commit as the repo owner so Vercel accepts the deploy.
+          owner="${{ github.repository_owner }}"
+          id=$(gh api "users/$owner" --jq .id)
+          git config user.name "$owner"
+          git config user.email "${id}+${owner}@users.noreply.github.com"
+          git add data/poll_tallies.json dist dist-staging
+          git commit -m "Playground: refresh poll results"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Ask Vercel to redeploy (optional backup)
+        if: steps.check.outputs.changed == 'true' && env.VERCEL_DEPLOY_HOOK != ''
+        run: curl -fsS -X POST "$VERCEL_DEPLOY_HOOK" > /dev/null

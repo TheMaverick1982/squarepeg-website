@@ -64,6 +64,11 @@ SITE = {
     "turnstile_site_key": "",      # Cloudflare Turnstile site key (public)
     "supabase_url": "https://ytkwogufrjffcgfpinrf.supabase.co",
     "supabase_anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0a3dvZ3VmcmpmZmNnZnBpbnJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MDM5MDIsImV4cCI6MjEwNTI3OTkwMn0.TBUjxGEnpo-sv7Yinb1GKIKOW14R2o1sYq5B_5viDPA",
+    # The Playground (/play/). Leave blank and the pages still render and still
+    # read correctly — they just don't record anything, which is the right
+    # failure mode. See supabase/POLLS_SETUP.sql.
+    "vote_endpoint": "",           # e.g. https://ytkwogufrjffcgfpinrf.functions.supabase.co/cast-vote
+    "lab_endpoint": "",            # e.g. https://ytkwogufrjffcgfpinrf.functions.supabase.co/lab-submit
     # Analytics — fill in to activate (left blank = nothing loads)
     "ga4_id": "G-REQKJC1SBJ",
     "meta_pixel_id": "",
@@ -640,6 +645,14 @@ EVENT_ROUTES = [
      "Come in on a Tuesday and 20% of food sales goes back to your school, "
      "team or cause.", "/fundraisers/"),
 ]
+
+# The Pizza Lab at /play/pizza-lab/ is built but deliberately NOT launched: it
+# isn't in the nav, isn't in the Playground hub, isn't in the sitemap, and the
+# page carries noindex. Brian is sharing the URL with the kitchen first, because
+# the ingredient list has to be something the line can actually make and someone
+# has to commit to running the winning pizza as a limited-time special.
+# Flip this to True once the kitchen and the GMs have signed off.
+LAB_LIVE = False
 
 TRUCK = {
     "party_min": "10 or more",
