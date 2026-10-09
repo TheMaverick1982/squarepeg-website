@@ -343,8 +343,7 @@ LAB = {
         "At the start of each month we go through them and pick the one we most "
         "want to make. It runs the following month as a limited-time special at "
         "all ten Square Pegs.",
-        "We won’t be in touch to tell you, so keep an eye on the monthly "
-        "specials. If yours is up there, it’ll have your first name and last "
-        "initial on it.",
+        "Keep an eye on the monthly specials. If we picked yours, you’ll see "
+        "it up there with your first name and last initial beside it.",
     ],
 }
