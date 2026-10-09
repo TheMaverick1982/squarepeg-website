@@ -91,12 +91,24 @@ def write_ingredients():
     print("  or deploy with the CLI if you have it.")
 
 
+# The Playground has its own Supabase project, which is NOT the one in
+# SITE["supabase_url"] (that one is the contact form's). Falling back to the
+# site's project would quietly read an empty database and look like "no votes
+# yet" forever, so the key has to be passed in explicitly.
+POLL_PROJECT = "https://tsrnpmkipdbtwyrlfbuy.supabase.co"
+
+
 def fetch_tallies():
-    from content import SITE
-    url = os.environ.get("SUPABASE_URL") or SITE.get("supabase_url") or ""
-    key = os.environ.get("SUPABASE_ANON_KEY") or SITE.get("supabase_anon_key") or ""
-    if not url or not key:
-        print("  no Supabase credentials — leaving the existing tallies alone")
+    """Read the vote totals from the Playground's Supabase project.
+
+    Anon key only. It is public by design and, under the policies in
+    POLLS_SETUP.sql, can read the aggregate counts and nothing else."""
+    url = os.environ.get("SUPABASE_URL") or POLL_PROJECT
+    key = os.environ.get("SUPABASE_ANON_KEY") or ""
+    if not key:
+        print("  SUPABASE_ANON_KEY is not set — leaving the existing tallies alone.")
+        print(f"  It needs the anon key for {POLL_PROJECT} (the Playground project),")
+        print("  not the website project's. Anon key only, never service_role.")
         return 1
 
     req = urllib.request.Request(

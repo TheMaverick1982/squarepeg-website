@@ -67,8 +67,15 @@ SITE = {
     # The Playground (/play/). Leave blank and the pages still render and still
     # read correctly — they just don't record anything, which is the right
     # failure mode. See supabase/POLLS_SETUP.sql.
-    "vote_endpoint": "",           # e.g. https://ytkwogufrjffcgfpinrf.functions.supabase.co/cast-vote
-    "lab_endpoint": "",            # e.g. https://ytkwogufrjffcgfpinrf.functions.supabase.co/lab-submit
+    #
+    # The Playground has its own Supabase project, separate from the one above
+    # (which holds the contact form and its customer submissions). That split
+    # is worth keeping: cast-vote is a public, unauthenticated endpoint, and
+    # Supabase hands every function the service-role key for its own project.
+    # Keeping it in a project that holds nothing else means a mistake there
+    # cannot reach anything that matters.
+    "vote_endpoint": "https://tsrnpmkipdbtwyrlfbuy.supabase.co/functions/v1/cast-vote",
+    "lab_endpoint": "",            # same project; deploy lab-submit when the Lab goes live
     # Analytics — fill in to activate (left blank = nothing loads)
     "ga4_id": "G-REQKJC1SBJ",
     "meta_pixel_id": "",

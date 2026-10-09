@@ -35,9 +35,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      # Only the anon key, which is public by design and can read nothing but
-      # the aggregate totals. The service-role key is not needed here and must
-      # never be put in this workflow.
+      # The PLAYGROUND project (tsrnpmkipdbtwyrlfbuy), which is a different
+      # Supabase project from the contact form's. Anon key only: it is public
+      # by design and can read nothing but the aggregate totals. The
+      # service-role key is not needed here and must never go in this workflow.
       - name: Fetch vote totals
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
