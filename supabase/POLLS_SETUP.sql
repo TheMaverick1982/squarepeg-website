@@ -28,7 +28,10 @@
 create table if not exists public.poll_votes (
   poll        text        not null,              -- e.g. 'debate:pineapple-on-pizza', 'confession'
   option      text        not null,              -- e.g. 'yes', 'no', 'car', 'ketchup'
-  region      text        not null default 'other'  -- 'CT' | 'FL' | 'other'
+  -- UNUSED. This was for a Connecticut-vs-Florida comparison, but the browser
+  -- calls the Edge Function directly and Supabase does not expose the visitor's
+  -- location, so it always took the default. Kept rather than migrated away.
+  region      text        not null default 'other'
                           check (region in ('CT', 'FL', 'other')),
   day         date        not null default (now() at time zone 'America/New_York'),
   votes       bigint      not null default 0,

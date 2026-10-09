@@ -2718,12 +2718,10 @@ T["debate_index"] = """
       <span class="eyebrow">How this works</span>
       <h2>One vote, then the numbers.</h2>
       <p class="prose">No sign-up and nothing saved to your name. We count the
-        vote and the state it came from, and that&rsquo;s the whole record &mdash; there
-        is no row in our database with you in it.</p>
-      <p class="prose">The state is the interesting part. Nine of our ten
-        pizzerias are in Connecticut and one is in Delray Beach, which makes
-        this an unusually clean test of whether Florida and Connecticut
-        actually disagree about food, or only think they do.</p>
+        vote and nothing else &mdash; there is no row in our database with you in
+        it, and no way back from a tally to a person.</p>
+      <p class="prose">One vote per browser, which is about as far as anyone
+        should go to police an argument about pineapple.</p>
     </div>
     <div class="stack">
       <span class="eyebrow">Where the numbers come from</span>
@@ -2767,7 +2765,6 @@ T["debate"] = """
             <b class="bar-pct">{{ (tally.pct[key]|string + "%") if tally.total else "\u2014" }}</b>
           </li>{% endfor %}
         </ul>
-        {% if tally.split %}<p class="note" id="poll-split">{{ tally.split }}</p>{% endif %}
       </div>
     </div>
   </div>
@@ -3904,9 +3901,7 @@ MIN_VOTES = 25
 
 
 def tally(d):
-    """Counts and percentages for one debate, plus the CT/FL split when it says
-    something. Returns zeroes when nobody has voted, and the template hides the
-    results block in that case."""
+    """Counts and percentages for one debate. Zeroes when nobody has voted."""
     rows = TALLIES.get("debate:" + d["slug"], {})
     keys = [k for k, _ in d["options"]]
     counts = {k: int(rows.get(k, {}).get("all", 0)) for k in keys}
@@ -3916,21 +3911,7 @@ def tally(d):
     if total and sum(pct.values()) != 100:
         pct[max(keys, key=lambda k: counts[k])] += 100 - sum(pct.values())
 
-    split = ""
-    if total >= MIN_VOTES:
-        a = keys[0]
-        ct = {k: int(rows.get(k, {}).get("CT", 0)) for k in keys}
-        fl = {k: int(rows.get(k, {}).get("FL", 0)) for k in keys}
-        ct_n, fl_n = sum(ct.values()), sum(fl.values())
-        if ct_n >= 10 and fl_n >= 10:
-            ct_p, fl_p = round(ct[a] * 100 / ct_n), round(fl[a] * 100 / fl_n)
-            if abs(ct_p - fl_p) >= 8:
-                label = d["options"][0][1].rstrip(".")
-                split = (f"Connecticut says \u201c{label}\u201d {ct_p}% of the time. "
-                         f"Delray Beach says it {fl_p}% of the time.")
-            else:
-                split = "Connecticut and Florida agree on this one, which is rarer than you\u2019d think."
-    return dict(counts=counts, total=total, pct=pct, split=split)
+    return dict(counts=counts, total=total, pct=pct)
 
 
 def tally_sentence(t):

@@ -106,13 +106,13 @@ function rateLimited(ip: string): boolean {
   return recent.length > MAX_PER_WINDOW;
 }
 
-// Coarse region for the Connecticut-vs-Florida split, from the edge's own
-// geo header. Never asked of the visitor, never stored against them.
-function region(req: Request): string {
-  const r = (req.headers.get("x-vercel-ip-country-region") ??
-             req.headers.get("cf-region-code") ?? "").toUpperCase();
-  return r === "CT" || r === "FL" ? r : "other";
-}
+// There is no region here, deliberately. This once read Vercel and Cloudflare
+// geo headers to split Connecticut from Florida, but the browser calls Supabase
+// directly — Vercel is not in that path — and Supabase Edge Functions do not
+// expose the visitor's location, so every vote filed as "other". Rather than
+// leave a feature that silently never works, the split is gone. The region
+// column still exists in poll_votes and now always takes its 'other' default;
+// it is harmless, and left in place rather than run a destructive migration.
 
 function db() {
   return createClient(
@@ -135,7 +135,7 @@ Deno.serve(async (req) => {
     const poll = new URL(req.url).searchParams.get("poll");
     // No poll named: every poll at once, which is what the debate index needs.
     // Six cards should cost one request, not six.
-    const q = db().from("poll_totals").select("poll,option,region,votes");
+    const q = db().from("poll_totals").select("poll,option,votes");
     if (poll !== null) {
       if (!Object.prototype.hasOwnProperty.call(POLLS, poll)) {
         return new Response(JSON.stringify({ error: "unknown poll" }), { status: 400, headers });
@@ -180,9 +180,8 @@ Deno.serve(async (req) => {
   }
 
   const sb = db();
-  const reg = region(req);
   for (const option of good) {
-    const { error } = await sb.rpc("cast_vote", { p_poll: poll, p_option: option, p_region: reg });
+    const { error } = await sb.rpc("cast_vote", { p_poll: poll, p_option: option, p_region: "other" });
     if (error) {
       return new Response(JSON.stringify({ error: "could not record vote" }), { status: 500, headers });
     }
@@ -190,6 +189,6 @@ Deno.serve(async (req) => {
 
   // Hand back the fresh totals so the page can show results without a second
   // round trip, and without waiting for the nightly rebuild.
-  const { data } = await sb.from("poll_totals").select("option,region,votes").eq("poll", poll);
+  const { data } = await sb.from("poll_totals").select("option,votes").eq("poll", poll);
   return new Response(JSON.stringify({ ok: true, totals: data ?? [] }), { headers });
 });
