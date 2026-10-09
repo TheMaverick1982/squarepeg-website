@@ -39,6 +39,11 @@ PLAY = {
 # ---------------------------------------------------------------- the wheels
 #
 # Every item is on the menu right now. When the menu changes, these change.
+#
+# Write real characters here, never HTML entities: "&", not "&amp;". These
+# strings are escaped twice on the way to the wheel — once into the page's JSON
+# config, once by esc() in play.js — so an entity in the source arrives on
+# screen as literal "&amp;".
 
 WHEELS = [
     {
@@ -66,7 +71,7 @@ WHEELS = [
             ("Chicken Parm", "The sandwich or over pasta. Both are correct."),
             ("Wood-fired wings", "Start here. Decide the rest later."),
             ("The Hot Honey Eggplant", "The sub people come back for and then can’t remember the name of."),
-            ("Spaghetti &amp; Meatballs", "House-made pork meatballs. Nobody has ever regretted this."),
+            ("Spaghetti & Meatballs", "House-made pork meatballs. Nobody has ever regretted this."),
         ],
     },
     {

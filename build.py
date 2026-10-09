@@ -2667,7 +2667,7 @@ T["wheel"] = """
       <div class="prose-block">
         <h3>{{ w.name }}</h3>
         <ul class="hw-list">{% for label, blurb in w['items'] %}
-          <li><b>{{ label|safe }}</b><span>{{ blurb }}</span></li>{% endfor %}
+          <li><b>{{ label }}</b><span>{{ blurb }}</span></li>{% endfor %}
         </ul>
       </div>{% endfor %}
     </div>
