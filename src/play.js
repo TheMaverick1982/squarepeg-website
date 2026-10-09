@@ -170,7 +170,6 @@
     var endpoint = el.getAttribute("data-endpoint");
     var voteBox = $("#poll-vote");
     var results = $("#poll-results");
-    var thanks = $("#poll-thanks");
     var said = $("#poll-said");
     var key = "sp_poll_" + name;
 
@@ -185,28 +184,23 @@
       return n;
     }
 
+    // The results block is always on the page at its full height, so numbers
+    // arriving later only change text and bar widths — they never move anything,
+    // which is what keeps this off the layout-shift score.
     function paint(by) {
       var sum = total(by);
-      if (!sum) {
-        // Nothing worth drawing. Never claim nobody has voted to somebody who
-        // just did — say their vote landed and leave the bars out of it.
-        results.hidden = true;
-        if (thanks) thanks.hidden = !store.get(key);
-        return;
-      }
       $$("li[data-option]", results).forEach(function (li) {
         var o = li.getAttribute("data-option");
-        var pct = Math.round(((by[o] || 0) / sum) * 100);
+        var pct = sum ? Math.round(((by[o] || 0) / sum) * 100) : 0;
         $(".bar i", li).style.width = pct + "%";
-        $(".bar-pct", li).textContent = pct + "%";
+        $(".bar-pct", li).textContent = sum ? pct + "%" : "\u2014";
       });
       if (said) {
-        said.textContent = sum === 1 ? "One vote so far. Yours."
+        said.textContent = !sum ? "No votes yet. Be the first."
+                         : sum === 1 ? "One vote so far. Yours."
                          : sum < 25 ? sum + " votes so far \u2014 early days, so take the split lightly."
                          : sum.toLocaleString() + " votes so far.";
       }
-      if (thanks) thanks.hidden = true;
-      results.hidden = false;
     }
 
     // totals: [{option, region, votes}] from the Edge Function — authoritative,
@@ -214,6 +208,7 @@
     function fromServer(rows) {
       var by = {};
       rows.forEach(function (r) { by[r.option] = (by[r.option] || 0) + (+r.votes || 0); });
+      baked = by;
       paint(by);
     }
 
@@ -221,8 +216,25 @@
       voteBox.classList.add("is-done");
       var prev = $(".poll-btn[data-option='" + store.get(key) + "']", voteBox);
       if (prev) prev.classList.add("is-mine");
-      paint(baked);
     }
+
+    // Live totals. The page already shows the numbers baked in at build time —
+    // that is what a crawler reads — and this refreshes them to the minute.
+    // Deliberately after load and on an idle callback, so it never competes
+    // with rendering: the page is complete and readable without it.
+    function refresh() {
+      if (!endpoint) return;
+      fetch(endpoint + "?poll=" + encodeURIComponent(name), { method: "GET" })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { if (d && d.totals) fromServer(d.totals); })
+        .catch(function () { /* the baked numbers stay on screen */ });
+    }
+    function whenIdle(fn) {
+      if ("requestIdleCallback" in window) requestIdleCallback(fn, { timeout: 3000 });
+      else setTimeout(fn, 1200);
+    }
+    if (document.readyState === "complete") whenIdle(refresh);
+    else addEventListener("load", function () { whenIdle(refresh); });
 
     $$(".poll-btn", el).forEach(function (b) {
       b.addEventListener("click", function () {
@@ -238,7 +250,7 @@
         var optimistic = {};
         for (var k in baked) if (Object.prototype.hasOwnProperty.call(baked, k)) optimistic[k] = baked[k];
         optimistic[option] = (optimistic[option] || 0) + 1;
-        paint(total(baked) ? optimistic : {});
+        paint(optimistic);
 
         if (!endpoint) return;
         fetch(endpoint, {

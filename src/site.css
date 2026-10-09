@@ -1406,4 +1406,3 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .lab-done b{display:block;font-family:var(--display);font-weight:800;
   font-size:clamp(26px,4vw,38px);line-height:1;margin-bottom:8px}
 .lab-done span{color:var(--smoke)}
-.poll-thanks{font-weight:700;max-width:46ch;margin:22px 0 0}

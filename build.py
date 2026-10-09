@@ -2757,15 +2757,13 @@ T["debate"] = """
           <button type="button" class="btn poll-btn" data-option="{{ key }}">{{ label }}</button>{% endfor %}
         </div>
       </div>
-      <p class="poll-thanks" id="poll-thanks" hidden>Your vote is in. We&rsquo;ll show the
-        split here once a few more people have weighed in.</p>
-      <div class="poll-results" id="poll-results"{% if not tally.total %} hidden{% endif %}>
+      <div class="poll-results" id="poll-results">
         <p class="poll-ask" id="poll-said">{{ tally_sentence }}</p>
         <ul class="bars">{% for key, label in d.options %}
           <li data-option="{{ key }}">
             <span class="bar-label">{{ label }}</span>
-            <span class="bar"><i style="width:{{ tally.pct[key] }}%"></i></span>
-            <b class="bar-pct">{{ tally.pct[key] }}%</b>
+            <span class="bar"><i style="width:{{ tally.pct[key] if tally.total else 0 }}%"></i></span>
+            <b class="bar-pct">{{ (tally.pct[key]|string + "%") if tally.total else "\u2014" }}</b>
           </li>{% endfor %}
         </ul>
         {% if tally.split %}<p class="note" id="poll-split">{{ tally.split }}</p>{% endif %}
@@ -3936,7 +3934,7 @@ def tally(d):
 
 def tally_sentence(t):
     if not t["total"]:
-        return "Nobody has voted yet. Go on."
+        return "No votes yet. Be the first."
     if t["total"] == 1:
         return "One vote so far. Yours."
     if t["total"] < MIN_VOTES:
@@ -4216,7 +4214,7 @@ SAFE_CLASSES = {"open", "is-past", "menu-open", "is-open", "is-closed", "is-soon
 # SAFE_CLASSES because the stylesheet is inlined into every page: holding these
 # globally would put the wheel's CSS into all 52 pages to serve 11 of them.
 PLAY_CLASSES = {"is-on", "is-in", "is-mine", "is-done", "is-off",
-                "wheel-lab", "is-flip", "wheel-win-eyebrow", "lab-done", "poll-thanks"}
+                "wheel-lab", "is-flip", "wheel-win-eyebrow", "lab-done"}
 
 def split_rules(css):
     """Top-level CSS blocks: plain rules, @media blocks (split further), and other @-rules kept as-is."""

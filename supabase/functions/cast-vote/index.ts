@@ -29,7 +29,7 @@ function cors(origin: string | null) {
   return {
     "Access-Control-Allow-Origin": allow,
     "Access-Control-Allow-Headers": "content-type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Vary": "Origin",
   };
 }
@@ -114,12 +114,40 @@ function region(req: Request): string {
   return r === "CT" || r === "FL" ? r : "other";
 }
 
+function db() {
+  return createClient(
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    { auth: { persistSession: false } },
+  );
+}
+
 Deno.serve(async (req) => {
   const origin = req.headers.get("origin");
   const headers = { ...cors(origin), "Content-Type": "application/json" };
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors(origin) });
+
+  // GET ?poll=<name> — current totals, so a page can show live numbers rather
+  // than whatever the nightly build baked in. Cached briefly: these are vote
+  // counts on a pizza poll, and a minute of staleness is worth not hitting the
+  // database once per page view.
+  if (req.method === "GET") {
+    const poll = new URL(req.url).searchParams.get("poll") ?? "";
+    if (!Object.prototype.hasOwnProperty.call(POLLS, poll)) {
+      return new Response(JSON.stringify({ error: "unknown poll" }), { status: 400, headers });
+    }
+    const { data, error } = await db().from("poll_totals")
+      .select("option,region,votes").eq("poll", poll);
+    if (error) {
+      return new Response(JSON.stringify({ error: "could not read totals" }), { status: 500, headers });
+    }
+    return new Response(JSON.stringify({ ok: true, totals: data ?? [] }), {
+      headers: { ...headers, "Cache-Control": "public, max-age=30, s-maxage=60" },
+    });
+  }
+
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "POST only" }), { status: 405, headers });
+    return new Response(JSON.stringify({ error: "GET or POST only" }), { status: 405, headers });
   }
   if (ORIGINS.length && origin && !ORIGINS.includes(origin)) {
     return new Response(JSON.stringify({ error: "forbidden" }), { status: 403, headers });
@@ -146,15 +174,10 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: "unknown poll or option" }), { status: 400, headers });
   }
 
-  const db = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-    { auth: { persistSession: false } },
-  );
-
+  const sb = db();
   const reg = region(req);
   for (const option of good) {
-    const { error } = await db.rpc("cast_vote", { p_poll: poll, p_option: option, p_region: reg });
+    const { error } = await sb.rpc("cast_vote", { p_poll: poll, p_option: option, p_region: reg });
     if (error) {
       return new Response(JSON.stringify({ error: "could not record vote" }), { status: 500, headers });
     }
@@ -162,6 +185,6 @@ Deno.serve(async (req) => {
 
   // Hand back the fresh totals so the page can show results without a second
   // round trip, and without waiting for the nightly rebuild.
-  const { data } = await db.from("poll_totals").select("option,region,votes").eq("poll", poll);
+  const { data } = await sb.from("poll_totals").select("option,region,votes").eq("poll", poll);
   return new Response(JSON.stringify({ ok: true, totals: data ?? [] }), { headers });
 });
