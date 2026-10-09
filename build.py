@@ -2701,8 +2701,9 @@ T["debate_index"] = """
 
 <section class="section">
   <div class="wrap">
-    <div class="route-grid">{% for d in debates %}
-      <a class="route" href="{{ u('/play/debate/' + d.slug + '/') }}">
+    <div class="route-grid" id="debate-cards" data-endpoint="{{ site.vote_endpoint }}">{% for d in debates %}
+      <a class="route" href="{{ u('/play/debate/' + d.slug + '/') }}"
+         data-poll="debate:{{ d.slug }}" data-labels='{{ dict(d.options)|tojson }}'>
         <span class="eyebrow">{{ tally_line(d) }}</span>
         <b>{{ d.q }}</b>
         <span>{{ d.options[0][1] }} &nbsp;vs&nbsp; {{ d.options[1][1] }}</span>
@@ -3980,7 +3981,9 @@ def tally_line(d):
     if not t["total"]:
         return "No votes yet"
     if t["total"] < MIN_VOTES:
-        return f"{t['total']} votes so far"
+        # Must match line() in src/play.js, which relabels these cards live —
+        # otherwise the wording changes a second after load for no visible reason.
+        return f"{t['total']} vote{'' if t['total'] == 1 else 's'} so far"
     top = max(t["pct"], key=lambda k: t["pct"][k])
     label = dict(d["options"])[top].rstrip(".")
     return f"{t['pct'][top]}% say \u201c{label}\u201d"

@@ -285,6 +285,65 @@
     });
   })();
 
+  /* ======================================================= DEBATE INDEX
+     The cards carry the counts baked in at build time, same as the debate
+     pages. One request refreshes all of them, so the index never sits there
+     claiming "no votes yet" on a question somebody has just answered.         */
+
+  (function debateIndex() {
+    var grid = $("#debate-cards");
+    if (!grid) return;
+    var endpoint = grid.getAttribute("data-endpoint");
+    if (!endpoint) return;
+
+    // Must match tally_line() in build.py, or a card would change its wording
+    // on every load for no reason the reader can see.
+    var MIN = 25;
+    function line(by, labels) {
+      var sum = 0, top = null;
+      for (var k in by) {
+        if (!Object.prototype.hasOwnProperty.call(by, k)) continue;
+        sum += by[k];
+        if (top === null || by[k] > by[top]) top = k;
+      }
+      if (!sum) return "No votes yet";
+      if (sum < MIN) return sum + (sum === 1 ? " vote so far" : " votes so far");
+      var pct = Math.round((by[top] / sum) * 100);
+      var label = (labels[top] || "").replace(/\.$/, "");
+      return pct + "% say \u201c" + label + "\u201d";
+    }
+
+    function apply(rows) {
+      var byPoll = {};
+      rows.forEach(function (r) {
+        if (!r.poll) return;
+        (byPoll[r.poll] = byPoll[r.poll] || {});
+        byPoll[r.poll][r.option] = (byPoll[r.poll][r.option] || 0) + (+r.votes || 0);
+      });
+      $$(".route[data-poll]", grid).forEach(function (card) {
+        var by = byPoll[card.getAttribute("data-poll")];
+        if (!by) return;
+        var labels = {};
+        try { labels = JSON.parse(card.getAttribute("data-labels") || "{}"); } catch (e) {}
+        var eb = $(".eyebrow", card);
+        if (eb) eb.textContent = line(by, labels);
+      });
+    }
+
+    function go() {
+      fetch(endpoint, { method: "GET" })      // no ?poll= — every poll at once
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { if (d && d.totals) apply(d.totals); })
+        .catch(function () { /* the baked lines stay */ });
+    }
+    function whenIdle(fn) {
+      if ("requestIdleCallback" in window) requestIdleCallback(fn, { timeout: 3000 });
+      else setTimeout(fn, 1200);
+    }
+    if (document.readyState === "complete") whenIdle(go);
+    else addEventListener("load", function () { whenIdle(go); });
+  })();
+
   /* ========================================================== CONFESSIONS
      Same engine, several options at once, and a verdict at the end.           */
 

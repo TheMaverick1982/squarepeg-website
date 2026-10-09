@@ -132,12 +132,17 @@ Deno.serve(async (req) => {
   // counts on a pizza poll, and a minute of staleness is worth not hitting the
   // database once per page view.
   if (req.method === "GET") {
-    const poll = new URL(req.url).searchParams.get("poll") ?? "";
-    if (!Object.prototype.hasOwnProperty.call(POLLS, poll)) {
-      return new Response(JSON.stringify({ error: "unknown poll" }), { status: 400, headers });
+    const poll = new URL(req.url).searchParams.get("poll");
+    // No poll named: every poll at once, which is what the debate index needs.
+    // Six cards should cost one request, not six.
+    const q = db().from("poll_totals").select("poll,option,region,votes");
+    if (poll !== null) {
+      if (!Object.prototype.hasOwnProperty.call(POLLS, poll)) {
+        return new Response(JSON.stringify({ error: "unknown poll" }), { status: 400, headers });
+      }
+      q.eq("poll", poll);
     }
-    const { data, error } = await db().from("poll_totals")
-      .select("option,region,votes").eq("poll", poll);
+    const { data, error } = await q;
     if (error) {
       return new Response(JSON.stringify({ error: "could not read totals" }), { status: 500, headers });
     }
