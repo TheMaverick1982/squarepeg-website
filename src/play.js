@@ -465,7 +465,9 @@
       var name = ($("#lab-name").value || "").trim();
       if (!name) { note.textContent = "Give it a name first."; $("#lab-name").focus(); return; }
       if (!chosen().length) { note.textContent = "Pick at least one topping."; return; }
-      if (!endpoint) { note.textContent = "Submissions aren't open yet."; return; }
+      // No endpoint yet: the page is finished, the backend is not. Say so
+      // plainly rather than failing, and never fake a confirmation.
+      if (!endpoint) { note.textContent = "Submissions open when we launch."; return; }
 
       go.disabled = true;
       note.textContent = "Sending…";

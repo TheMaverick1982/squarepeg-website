@@ -1378,7 +1378,33 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .conf-verdict span{color:var(--smoke)}
 
 /* ---- the pizza lab */
-.lab{max-width:900px;display:grid;gap:26px}
+.lab{display:grid;gap:26px}
+.lab-grid{align-items:start}
+.lab-fields{display:grid;gap:26px;min-width:0}
+
+/* The payoff: the pizza assembling itself beside the controls, so the choices
+   and the result are on screen together rather than a scroll apart. */
+/* Sticky only in the two-column layout. Stacked, the card is the last thing
+   on the page, so sticking it achieves nothing and can trap it mid-scroll. */
+.lab-card{position:static;background:var(--char);color:#fff;padding:26px 24px 24px;
+  border-top:4px solid var(--ember);box-shadow:0 20px 44px rgba(20,17,16,.22)}
+.lab-card-tag{display:inline-block;font:800 11px/1 var(--body);letter-spacing:.17em;
+  text-transform:uppercase;color:var(--flame);margin-bottom:14px}
+.lab-card .lab-preview{padding:0;border:0;background:none;margin-bottom:22px}
+.lab-card .lab-preview b{color:#fff}
+.lab-card .lab-preview .wheel-win-eyebrow{color:var(--flame)}
+.lab-card .lab-preview>span:last-child{color:#cfc5bd}
+.lab-submit{width:100%}
+.lab-card .note{display:block;margin-top:12px;color:#a99e96;text-align:center}
+
+/* After the base .lab-card rule, not before it. Same specificity, so source
+   order decides, and the media query losing to position:static is exactly how
+   this silently did nothing the first time. */
+@media (min-width:1040px){
+  .lab-grid{grid-template-columns:minmax(0,1fr) 370px;gap:48px}
+  .lab-card{position:sticky;top:96px}
+}
+
 .lab-set{border:0;padding:0;margin:0}
 .lab-set legend{font:800 12px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;
   color:var(--ember);padding:0;margin-bottom:12px}
@@ -1403,9 +1429,29 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .lab-by input{width:100%;max-width:420px;padding:11px 13px;border:1px solid var(--line);
   border-radius:10px;font:400 16px/1 var(--body);background:var(--white);color:var(--ink)}
 .lab-preview{padding:20px 22px;border-radius:14px;background:var(--paper);border:1px solid var(--line)}
-.lab-preview b{display:block;font-family:var(--display);font-weight:800;line-height:1.05;
-  font-size:clamp(24px,3.6vw,34px);margin:4px 0 6px}
-.lab-preview>span:last-child{color:var(--smoke)}
+.lab-preview b{display:block;font-family:var(--display);font-weight:800;line-height:1.02;
+  font-size:clamp(26px,3.6vw,36px);margin:4px 0 8px}
+.lab-preview>span:last-child{color:var(--smoke);font-size:15px;line-height:1.5;
+  display:block;text-transform:lowercase}
 .lab-done b{display:block;font-family:var(--display);font-weight:800;
   font-size:clamp(26px,4vw,38px);line-height:1;margin-bottom:8px}
 .lab-done span{color:var(--smoke)}
+
+/* ---- Pizza Lab: how it works.
+   Its own block rather than .steps, which is built for an <ol> with a CSS
+   counter and a number badge. These want an icon instead, and four across
+   rather than the three .steps--row allows — which was leaving step 4 stranded
+   on a row of its own. */
+.how-steps{list-style:none;margin:0;padding:0;display:grid;gap:26px 24px;
+  grid-template-columns:1fr}
+@media (min-width:620px){.how-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1000px){.how-steps{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.how-steps li{display:grid;gap:4px;align-content:start}
+.how-ico{display:grid;place-items:center;width:52px;height:52px;margin-bottom:10px;
+  border-radius:50%;background:var(--ink);color:#fff}
+.how-ico svg{width:26px;height:26px}
+.how-n{font:800 12px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ember)}
+.how-steps b{font-family:var(--display);font-weight:800;line-height:1.05;
+  font-size:clamp(21px,2.3vw,26px)}
+.how-body{color:var(--smoke);font-size:15px;line-height:1.55}

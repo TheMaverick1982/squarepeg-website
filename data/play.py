@@ -299,15 +299,20 @@ LAB = {
     "lede": "Build it from what’s actually in our kitchens, give it a name, and "
             "put it in front of everyone else. The winner goes on the menu as a "
             "limited-time special.",
+    # (icon key in ICONS, heading, body)
     "how": [
-        ("Build it", "Pick a sauce, a cheese, up to four toppings and a finish. "
-                     "Everything on the list is something our kitchens already "
-                     "stock, so the winner is a pizza we can actually make."),
-        ("Name it", "This is the part people remember. Keep it clean — every "
-                    "entry is read by a person before it goes anywhere."),
-        ("Everyone votes", "Approved builds go up for a public vote."),
-        ("The winner gets made", "It runs as a limited-time special across all "
-                                 "ten Square Pegs, with your name on it if you want it there."),
+        ("lab_build", "Build it",
+         "Pick a sauce, a cheese, up to four toppings and a finish. Everything "
+         "on the list is something our kitchens already stock, so the winner is "
+         "a pizza we can actually make."),
+        ("lab_name", "Name it",
+         "This is the part people remember. Keep it clean — every entry is "
+         "read by a person before it goes anywhere."),
+        ("lab_vote", "Everyone votes",
+         "Approved builds go up for a public vote."),
+        ("lab_win", "The winner gets made",
+         "It runs as a limited-time special across all ten Square Pegs, with "
+         "your name on it if you want it there."),
     ],
     # ⚠ CONFIRM WITH THE KITCHEN — this list is drawn from the current menu and
     # the catering tray menu, but nobody on the line has signed off on it yet.

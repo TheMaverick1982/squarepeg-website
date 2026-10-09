@@ -548,6 +548,12 @@ ICONS = {
     "tag": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 12V3h9l9 9-9 9-9-9Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>',
     "menu": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
     "arrow": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    # The four Pizza Lab steps: build it, name it, everyone votes, the winner
+    # gets made. Same 24x24 stroke style as the rest, so they sit with the set.
+    "lab_build": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="9.2" cy="10" r="1.3"/><circle cx="15" cy="9.4" r="1.3"/><circle cx="12.4" cy="15.2" r="1.3"/></svg>',
+    "lab_name": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m14 6 4 4"/></svg>',
+    "lab_vote": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 20v-6M12 20V5M19 20v-9"/></svg>',
+    "lab_win": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5.6"/><path d="M8.6 13.8 7.4 21l4.6-2.3 4.6 2.3-1.2-7.2"/></svg>',
 }
 
 NAV = [("Menu", "MENU"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Catering", "/catering/"),
@@ -2862,23 +2868,16 @@ T["lab"] = """
   </div>
 </section>
 
-{% if not lab_live %}
 <section class="section">
   <div class="wrap">
-    <p class="cat-note"><b>Not live yet.</b> This page is shared by link only
-      while the kitchen reviews the ingredient list. It isn&rsquo;t in the menu, it
-      isn&rsquo;t in the sitemap, and search engines are told not to index it.
-      Nothing submitted here goes anywhere until it launches.</p>
-  </div>
-</section>
-{% endif %}
-
-<section class="section">
-  <div class="wrap">
-    <div class="steps steps--row">{% for head, body in lab.how %}
-      <div class="step"><span class="step-n">{{ loop.index }}</span>
-        <div><b>{{ head }}</b><span>{{ body }}</span></div></div>{% endfor %}
-    </div>
+    <ol class="how-steps">{% for icon, head, body in lab.how %}
+      <li>
+        <span class="how-ico" aria-hidden="true">{{ icons[icon]|safe }}</span>
+        <span class="how-n">Step {{ loop.index }}</span>
+        <b>{{ head }}</b>
+        <span class="how-body">{{ body }}</span>
+      </li>{% endfor %}
+    </ol>
   </div>
 </section>
 
@@ -2891,7 +2890,8 @@ T["lab"] = """
         the winner is a pizza we can actually make on a Friday night.</p>
     </div>
 
-    <form class="lab" id="lab" data-max="{{ lab.max_toppings }}" data-endpoint="{{ site.lab_endpoint }}" onsubmit="return false">
+    <form class="lab lab-grid" id="lab" data-max="{{ lab.max_toppings }}" data-endpoint="{{ site.lab_endpoint }}" onsubmit="return false">
+      <div class="lab-fields">
       <fieldset class="lab-set">
         <legend>Sauce</legend>
         <div class="lab-chips">{% for x in lab.sauce %}
@@ -2927,13 +2927,16 @@ T["lab"] = """
         <label class="lab-by"><span>Your first name and last initial, if you want it on the menu</span>
           <input id="lab-by" name="by" type="text" maxlength="40" placeholder="Optional" autocomplete="off"></label>
       </fieldset>
-
-      <div class="lab-preview" id="lab-preview" aria-live="polite"></div>
-
-      <div class="btn-row">
-        <button type="button" class="btn" id="lab-go"{% if not lab_live %} disabled{% endif %}>Submit my pizza</button>
-        <span class="note" id="lab-note">{% if lab_live %}One entry per round.{% else %}Submissions open at launch.{% endif %}</span>
       </div>
+
+      <aside class="lab-side">
+        <div class="lab-card">
+          <span class="lab-card-tag">Limited time special</span>
+          <div class="lab-preview" id="lab-preview" aria-live="polite"></div>
+          <button type="button" class="btn lab-submit" id="lab-go">Submit my pizza</button>
+          <span class="note" id="lab-note">One entry per round.</span>
+        </div>
+      </aside>
     </form>
   </div>
 </section>
