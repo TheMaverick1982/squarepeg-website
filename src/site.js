@@ -412,65 +412,130 @@
   }
 
   /* ---------- Contact form → Supabase ---------- */
-  /* ---------- Where a contact enquiry came from ----------------------------
-     Recorded on the first page of the visit and kept for the rest of it, so a
-     visitor who lands on /catering/ from a Google search and then wanders to
-     /contact/ before writing still reports Google, not "came from our own
-     catering page". Only the native contact form uses this; the Connect
-     iframes submit to a different system and never see it.
+  /* ---------- Where the visitor came from -------------------------------
+     One record, two consumers: the native contact form sends a readable
+     summary with the message, and the Connect booking forms get the raw
+     parameters appended to their iframe URL, because they are a separate app
+     and cannot see anything this site knows.
 
-     Nothing here identifies anybody. It is the referring site, the campaign
-     tags we put on our own links, and which page they arrived on. */
-  var SRC_KEY = "sp_src";
+     Kept for 30 days in localStorage, not the session, so someone who clicks
+     a Meta ad on Tuesday and books catering on Friday is still credited to
+     the ad. A later visit carrying ad or campaign tags, or arriving from
+     another site, replaces it; a plain direct visit does not, or every repeat
+     customer typing the address in would wipe out the thing that found them.
 
-  function sourceFromReferrer(ref) {
-    if (!ref) return "";
-    var host;
-    try { host = new URL(ref).hostname.replace(/^www\./, ""); } catch (e) { return ""; }
-    if (/(^|\.)squarepegpizzeria\.com$/.test(host)) return "";     // our own pages are not a source
-    if (/(^|\.)google\./.test(host)) return "Google";
-    if (/(^|\.)bing\./.test(host)) return "Bing";
-    if (/duckduckgo\./.test(host)) return "DuckDuckGo";
-    if (/(^|\.)yahoo\./.test(host)) return "Yahoo";
-    if (/facebook\.|fb\.me|fb\.com/.test(host)) return "Facebook";
-    if (/instagram\./.test(host)) return "Instagram";
-    if (/t\.co$|twitter\.|x\.com$/.test(host)) return "X";
-    if (/tiktok\./.test(host)) return "TikTok";
-    if (/yelp\./.test(host)) return "Yelp";
-    if (/tripadvisor\./.test(host)) return "Tripadvisor";
-    if (/doordash\.|ubereats\.|grubhub\./.test(host)) return host;
-    return host;
-  }
+     Nothing identifying: the referring site, the tags we put on our own
+     links, and a page path. No fingerprint, no third party, no lookup. */
+  var ATTR_KEY = "sp_attribution";
+  var ATTR_DAYS = 30;
+  var ATTR_PARAMS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
+                     "gclid", "gbraid", "wbraid", "fbclid", "msclkid", "ttclid"];
 
-  function captureSource() {
+  function readAttribution() {
     try {
-      if (sessionStorage.getItem(SRC_KEY)) return;                 // first touch wins
-    } catch (e) { return; }
-    var q = new URLSearchParams(location.search);
-    var parts = [];
-
-    // Our own tags beat any guess from the referrer.
-    var utmSource = q.get("utm_source"), utmMedium = q.get("utm_medium");
-    var campaign = q.get("utm_campaign"), content = q.get("utm_content");
-    var paid = q.get("gclid") ? "Google Ads" : q.get("fbclid") ? "Meta ad" : "";
-
-    if (utmSource) {
-      parts.push(utmSource + (utmMedium ? " (" + utmMedium + ")" : ""));
-    } else if (paid) {
-      parts.push(paid);
-    } else {
-      var ref = sourceFromReferrer(document.referrer);
-      // No referrer is not the same as "typed the address in": it is also every
-      // in-app browser and email client that strips it. Say so rather than
-      // reporting direct traffic we cannot actually vouch for.
-      parts.push(ref ? ref + (/google|bing|duckduckgo|yahoo/i.test(ref) ? " (organic)" : "") : "Direct or unknown");
-    }
-    if (campaign) parts.push("campaign: " + campaign + (content ? " / " + content : ""));
-    parts.push("landed on " + location.pathname);
-
-    try { sessionStorage.setItem(SRC_KEY, parts.join(" \u00b7 ").slice(0, 300)); } catch (e) {}
+      var raw = localStorage.getItem(ATTR_KEY);
+      if (!raw) return null;
+      var rec = JSON.parse(raw);
+      if (!rec || !rec.ts) return null;
+      if (Date.now() - rec.ts > ATTR_DAYS * 864e5) return null;   // expired
+      return rec;
+    } catch (e) { return null; }
   }
-  captureSource();
+
+  function externalReferrer() {
+    var ref = document.referrer;
+    if (!ref) return "";
+    try {
+      var host = new URL(ref).hostname;
+      // Our own pages are not a source; otherwise every internal click would
+      // overwrite whatever actually brought them here.
+      if (/(^|\.)squarepegpizzeria\.com$/i.test(host)) return "";
+      return ref;
+    } catch (e) { return ""; }
+  }
+
+  function captureAttribution() {
+    var q;
+    try { q = new URLSearchParams(location.search); } catch (e) { return; }
+    var found = {}, any = false;
+    ATTR_PARAMS.forEach(function (k) {
+      var v = q.get(k);
+      if (v) { found[k] = v.slice(0, 300); any = true; }
+    });
+    var ref = externalReferrer();
+    if (ref) { found.sp_ref = ref.slice(0, 300); any = true; }
+
+    var existing = readAttribution();
+    if (!any && existing) return;            // a plain direct visit keeps what we had
+    found.sp_landing = location.pathname.slice(0, 300);
+    found.ts = Date.now();
+    try { localStorage.setItem(ATTR_KEY, JSON.stringify(found)); } catch (e) {}
+  }
+  captureAttribution();
+
+  /* A sentence for the contact notification, built from the same record. */
+  function sourceLine() {
+    var a = readAttribution();
+    if (!a) return null;
+    var bits = [];
+    if (a.utm_source) {
+      bits.push(a.utm_source + (a.utm_medium ? " (" + a.utm_medium + ")" : ""));
+    } else if (a.gclid || a.gbraid || a.wbraid) {
+      bits.push("Google Ads");
+    } else if (a.fbclid) {
+      bits.push("Meta ad");
+    } else if (a.msclkid) {
+      bits.push("Microsoft Ads");
+    } else if (a.ttclid) {
+      bits.push("TikTok ad");
+    } else if (a.sp_ref) {
+      var host = "";
+      try { host = new URL(a.sp_ref).hostname.replace(/^www\./, ""); } catch (e) {}
+      var named = /google\./.test(host) ? "Google" : /bing\./.test(host) ? "Bing"
+        : /duckduckgo\./.test(host) ? "DuckDuckGo" : /yahoo\./.test(host) ? "Yahoo"
+        : /facebook\.|fb\.me|fb\.com/.test(host) ? "Facebook"
+        : /instagram\./.test(host) ? "Instagram"
+        : /t\.co$|twitter\.|x\.com$/.test(host) ? "X"
+        : /tiktok\./.test(host) ? "TikTok"
+        : /yelp\./.test(host) ? "Yelp"
+        : /tripadvisor\./.test(host) ? "Tripadvisor" : host;
+      bits.push(named + (/^(Google|Bing|DuckDuckGo|Yahoo)$/.test(named) ? " (organic)" : ""));
+    } else {
+      // Not the same as "typed it in": in-app browsers, email clients and link
+      // shorteners all strip the referrer. Don't claim direct traffic we can't
+      // actually vouch for.
+      bits.push("Direct or unknown");
+    }
+    if (a.utm_campaign) bits.push("campaign: " + a.utm_campaign + (a.utm_content ? " / " + a.utm_content : ""));
+    if (a.sp_landing) bits.push("landed on " + a.sp_landing);
+    return bits.join(" · ").slice(0, 300);
+  }
+
+  /* Hand the raw values to the Connect forms, which are a different app on a
+     different domain and otherwise know nothing about how the visitor got here.
+     The iframes carry data-src rather than src so the form loads once, already
+     tagged, instead of loading bare and then reloading. */
+  function tagConnect() {
+    var a = readAttribution();
+    function decorate(url) {
+      if (!a) return url;
+      var u;
+      try { u = new URL(url, location.origin); } catch (e) { return url; }
+      ATTR_PARAMS.concat(["sp_ref", "sp_landing"]).forEach(function (k) {
+        if (a[k] && !u.searchParams.has(k)) u.searchParams.set(k, String(a[k]).slice(0, 300));
+      });
+      return u.toString();
+    }
+    $$("iframe[data-src]").forEach(function (f) {
+      if (f.getAttribute("src")) return;
+      f.setAttribute("src", decorate(f.getAttribute("data-src")));
+    });
+    $$('a[href*="connect.squarepegpizzeria.com/public/"]').forEach(function (link) {
+      link.href = decorate(link.href);
+    });
+  }
+  if (document.readyState === "loading") addEventListener("DOMContentLoaded", tagConnect);
+  else tagConnect();
 
   document.addEventListener("submit", function (e) {
     var f = e.target, table = f.getAttribute("data-supabase");
@@ -490,9 +555,7 @@
       email: fd.get("email") || null, phone: fd.get("phone") || null,
       topic: fd.get("event_type") || null, location: fd.get("location") || null,
       message: fd.get("notes") || null, page: location.pathname,
-      source: (function () {
-        try { return sessionStorage.getItem(SRC_KEY) || null; } catch (e) { return null; }
-      })()
+      source: sourceLine()
     };
     var url = viaFunction ? CFG.contactEndpoint : CFG.supabaseUrl.replace(/\/$/, "") + "/rest/v1/" + table;
     var headers = viaFunction

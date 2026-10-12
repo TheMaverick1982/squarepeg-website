@@ -1265,7 +1265,8 @@ T["form_catering"] = """{% set fname = form_name|default('catering') %}<form cla
 
 T["booking_form"] = """{% set e = embeds.get(embed_key) %}{% if e %}<div class="form-embed" id="{{ fid }}-booking" style="--h-m:{{ e.mobile }}px;--h-d:{{ e.desktop }}px;--crop:{{ e.crop }}px">
   {% if pick %}<p class="embed-pick">Under <b>&ldquo;Where would you prefer your order?&rdquo;</b> choose <b>{{ pick }}</b>.</p>{% endif %}
-  <div class="embed-frame"><iframe src="{{ e.src }}?embed=1" title="{{ e.title }}" loading="lazy" allow="clipboard-write"></iframe></div>
+  <div class="embed-frame"><iframe data-src="{{ e.src }}?embed=1" title="{{ e.title }}" loading="lazy" allow="clipboard-write"></iframe>
+    <noscript><iframe src="{{ e.src }}?embed=1" title="{{ e.title }}" allow="clipboard-write"></iframe></noscript></div>
   <p class="embed-help">Trouble with the form? <a href="{{ e.src }}" rel="noopener" target="_blank">Open it in a new tab</a>, or call <a href="{{ u('/locations/') }}">any location</a>.</p>
 </div>{% else %}{% include "form_catering" %}{% endif %}"""
 
@@ -1729,7 +1730,8 @@ T["fundraisers"] = """
       <div class="faq" style="margin-top:12px">{% for q, a in faqs %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
     </div>
     {% if embeds.fundraiser %}{% with e = embeds.fundraiser, fid = 'fundraiser' %}<div class="form-embed" id="fundraiser-booking" style="--h-m:{{ e.mobile }}px;--h-d:{{ e.desktop }}px;--crop:{{ e.crop }}px">
-      <div class="embed-frame"><iframe src="{{ e.src }}?embed=1" title="{{ e.title }}" loading="lazy" allow="clipboard-write"></iframe></div>
+      <div class="embed-frame"><iframe data-src="{{ e.src }}?embed=1" title="{{ e.title }}" loading="lazy" allow="clipboard-write"></iframe>
+    <noscript><iframe src="{{ e.src }}?embed=1" title="{{ e.title }}" allow="clipboard-write"></iframe></noscript></div>
       <p class="embed-help">Trouble with the form? <a href="{{ e.src }}" rel="noopener" target="_blank">Open it in a new tab</a>.</p>
     </div>{% endwith %}{% else %}
     <form class="form" name="fundraiser" method="POST" action="{{ u('/thanks/') }}" data-netlify="true" netlify-honeypot="company_website">
