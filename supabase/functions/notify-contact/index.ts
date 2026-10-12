@@ -69,11 +69,11 @@ Deno.serve(async (req) => {
   const { record } = await req.json();
   if (!record) return new Response("no record", { status: 400 });
 
-  const db0 = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+  const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
   const { score, why } = spamScore(record);
   if (score >= 3) {
     // Looks like spam: keep it in the table for review, but don't email anyone.
-    await db0.from("contact_messages").update({ status: "spam", routed_to: `spam (${why.join(", ")})` }).eq("id", record.id);
+    await db.from("contact_messages").update({ status: "spam", routed_to: `spam (${why.join(", ")})` }).eq("id", record.id);
     return new Response(JSON.stringify({ ok: true, skipped: "spam", why }), { headers: { "Content-Type": "application/json" } });
   }
 
@@ -91,6 +91,6 @@ Deno.serve(async (req) => {
 
   await sendEmail(to, record.email, subject, html);
 
-  await db0.from("contact_messages").update({ routed_to: to.join(", ") }).eq("id", record.id);
+  await db.from("contact_messages").update({ routed_to: to.join(", ") }).eq("id", record.id);
   return new Response(JSON.stringify({ ok: true, to }), { headers: { "Content-Type": "application/json" } });
 });

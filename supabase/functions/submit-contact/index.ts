@@ -1,7 +1,11 @@
 // Supabase Edge Function: receive the website contact form, check it's a human, save it.
 //
-// Optional. Without it the form posts straight into the table (the table's own rules still apply).
-// Use it when you want a Cloudflare Turnstile check, which can only be verified server-side.
+// NOT DEPLOYED as of Oct 2026, and nothing on the live site calls it:
+// SITE["contact_endpoint"] is empty, so the form posts straight into the table
+// and the table's own rules do the checking. Leaving the file here because it
+// is the only way to add a Cloudflare Turnstile check, which can only be
+// verified server-side. If it is ever deployed, set contact_endpoint and
+// rebuild, or the site will keep ignoring it.
 //
 // Deploy:  supabase functions deploy submit-contact --no-verify-jwt
 // Secrets: TURNSTILE_SECRET_KEY   Cloudflare Turnstile secret (optional: without it the check is skipped)
