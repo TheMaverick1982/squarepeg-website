@@ -52,6 +52,9 @@ create policy "website can insert contact messages"
     and char_length(coalesce(topic, '')) <= 80
     and char_length(coalesce(location, '')) <= 80
     and char_length(coalesce(page, '')) <= 200
+    -- the page builds the source line itself and caps it at 300 characters, so
+    -- anything longer did not come from our own form
+    and char_length(coalesce(source, '')) <= 300
     -- at most 2 links in a message (spam blasts carry more)
     and (array_length(regexp_split_to_array(lower(message), 'https?://'), 1) - 1) <= 2
     -- no HTML in the message
