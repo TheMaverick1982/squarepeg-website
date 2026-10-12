@@ -13,6 +13,11 @@ create table if not exists public.contact_messages (
   location    text,          -- e.g. 'Glastonbury' (blank = not location-specific)
   message     text not null,
   page        text,
+  -- Where the enquiry came from: referring site or our own campaign tags, plus
+  -- the page they landed on. Captured on arrival and carried through the visit,
+  -- so a search that lands on /catering/ and submits from /contact/ still
+  -- reports the search. No visitor identity in it.
+  source      text,
   status      text not null default 'new',   -- new / in progress / done / spam
   routed_to   text           -- filled in by the notify-contact function
 );

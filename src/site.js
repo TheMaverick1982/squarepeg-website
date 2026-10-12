@@ -412,6 +412,66 @@
   }
 
   /* ---------- Contact form → Supabase ---------- */
+  /* ---------- Where a contact enquiry came from ----------------------------
+     Recorded on the first page of the visit and kept for the rest of it, so a
+     visitor who lands on /catering/ from a Google search and then wanders to
+     /contact/ before writing still reports Google, not "came from our own
+     catering page". Only the native contact form uses this; the Connect
+     iframes submit to a different system and never see it.
+
+     Nothing here identifies anybody. It is the referring site, the campaign
+     tags we put on our own links, and which page they arrived on. */
+  var SRC_KEY = "sp_src";
+
+  function sourceFromReferrer(ref) {
+    if (!ref) return "";
+    var host;
+    try { host = new URL(ref).hostname.replace(/^www\./, ""); } catch (e) { return ""; }
+    if (/(^|\.)squarepegpizzeria\.com$/.test(host)) return "";     // our own pages are not a source
+    if (/(^|\.)google\./.test(host)) return "Google";
+    if (/(^|\.)bing\./.test(host)) return "Bing";
+    if (/duckduckgo\./.test(host)) return "DuckDuckGo";
+    if (/(^|\.)yahoo\./.test(host)) return "Yahoo";
+    if (/facebook\.|fb\.me|fb\.com/.test(host)) return "Facebook";
+    if (/instagram\./.test(host)) return "Instagram";
+    if (/t\.co$|twitter\.|x\.com$/.test(host)) return "X";
+    if (/tiktok\./.test(host)) return "TikTok";
+    if (/yelp\./.test(host)) return "Yelp";
+    if (/tripadvisor\./.test(host)) return "Tripadvisor";
+    if (/doordash\.|ubereats\.|grubhub\./.test(host)) return host;
+    return host;
+  }
+
+  function captureSource() {
+    try {
+      if (sessionStorage.getItem(SRC_KEY)) return;                 // first touch wins
+    } catch (e) { return; }
+    var q = new URLSearchParams(location.search);
+    var parts = [];
+
+    // Our own tags beat any guess from the referrer.
+    var utmSource = q.get("utm_source"), utmMedium = q.get("utm_medium");
+    var campaign = q.get("utm_campaign"), content = q.get("utm_content");
+    var paid = q.get("gclid") ? "Google Ads" : q.get("fbclid") ? "Meta ad" : "";
+
+    if (utmSource) {
+      parts.push(utmSource + (utmMedium ? " (" + utmMedium + ")" : ""));
+    } else if (paid) {
+      parts.push(paid);
+    } else {
+      var ref = sourceFromReferrer(document.referrer);
+      // No referrer is not the same as "typed the address in": it is also every
+      // in-app browser and email client that strips it. Say so rather than
+      // reporting direct traffic we cannot actually vouch for.
+      parts.push(ref ? ref + (/google|bing|duckduckgo|yahoo/i.test(ref) ? " (organic)" : "") : "Direct or unknown");
+    }
+    if (campaign) parts.push("campaign: " + campaign + (content ? " / " + content : ""));
+    parts.push("landed on " + location.pathname);
+
+    try { sessionStorage.setItem(SRC_KEY, parts.join(" \u00b7 ").slice(0, 300)); } catch (e) {}
+  }
+  captureSource();
+
   document.addEventListener("submit", function (e) {
     var f = e.target, table = f.getAttribute("data-supabase");
     if (!table) return;
@@ -429,7 +489,10 @@
       first_name: fd.get("first_name") || null, last_name: fd.get("last_name") || null,
       email: fd.get("email") || null, phone: fd.get("phone") || null,
       topic: fd.get("event_type") || null, location: fd.get("location") || null,
-      message: fd.get("notes") || null, page: location.pathname
+      message: fd.get("notes") || null, page: location.pathname,
+      source: (function () {
+        try { return sessionStorage.getItem(SRC_KEY) || null; } catch (e) { return null; }
+      })()
     };
     var url = viaFunction ? CFG.contactEndpoint : CFG.supabaseUrl.replace(/\/$/, "") + "/rest/v1/" + table;
     var headers = viaFunction

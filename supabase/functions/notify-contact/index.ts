@@ -84,6 +84,7 @@ Deno.serve(async (req) => {
     <h2>New message from squarepegpizzeria.com</h2>
     <p><b>From:</b> ${esc(name)} &lt;${esc(record.email)}&gt;${record.phone ? ` · ${esc(record.phone)}` : ""}</p>
     <p><b>Topic:</b> ${esc(record.topic)}<br><b>Location:</b> ${esc(record.location || "Not location-specific")}</p>
+    ${record.source ? `<p style="color:#655d57"><b>Came from:</b> ${esc(record.source)}${record.page && record.page !== "/contact/" ? ` &rarr; sent from ${esc(record.page)}` : ""}</p>` : ""}
     <p style="white-space:pre-wrap;border-left:4px solid #d61b24;padding-left:12px">${esc(record.message)}</p>
     <p style="color:#777">Reply to this email to answer ${esc(name)} directly.</p>
     ${score > 0 ? `<p style="color:#b5121b">Heads up, this message scored ${score} on the spam check (${esc(why.join(", "))}). It still looked real enough to send.</p>` : ""}`;

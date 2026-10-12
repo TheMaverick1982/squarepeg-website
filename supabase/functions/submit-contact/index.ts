@@ -101,6 +101,7 @@ Deno.serve(async (req) => {
     location: str(b.location, 80) || null,
     message,
     page: str(b.page, 200) || null,
+    source: str(b.source, 300) || null,
   });
   if (error) return new Response(JSON.stringify({ error: "could not save the message" }), { status: 500, headers });
   return new Response(JSON.stringify({ ok: true }), { headers });
