@@ -197,7 +197,7 @@
         $(".bar-pct", li).textContent = sum ? pct + "%" : "\u2014";
       });
       if (said) {
-        said.textContent = !sum ? "No votes yet. Be the first."
+        said.textContent = !sum ? "Cast your vote to see where everyone else landed."
                          : sum === 1 ? "One vote so far. Yours."
                          : sum < 25 ? sum + " votes so far \u2014 early days, so take the split lightly."
                          : sum.toLocaleString() + " votes so far.";
@@ -306,7 +306,7 @@
         sum += by[k];
         if (top === null || by[k] > by[top]) top = k;
       }
-      if (!sum) return "No votes yet";
+      if (!sum) return "Have your say";
       if (sum < MIN) return sum + (sum === 1 ? " vote so far" : " votes so far");
       var pct = Math.round((by[top] / sum) * 100);
       var label = (labels[top] || "").replace(/\.$/, "");

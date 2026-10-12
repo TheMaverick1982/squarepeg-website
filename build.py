@@ -3915,7 +3915,10 @@ def tally(d):
 
 def tally_sentence(t):
     if not t["total"]:
-        return "No votes yet. Be the first."
+        # Evergreen on purpose. The baked tallies are never refreshed now, so
+        # this is the line a crawler sees forever — "no votes yet" would be
+        # wrong the moment somebody votes, and nobody would ever notice.
+        return "Cast your vote to see where everyone else landed."
     if t["total"] == 1:
         return "One vote so far. Yours."
     if t["total"] < MIN_VOTES:
@@ -3959,7 +3962,7 @@ def tally_line(d):
     """The one-line summary on the debate index card."""
     t = tally(d)
     if not t["total"]:
-        return "No votes yet"
+        return "Have your say"
     if t["total"] < MIN_VOTES:
         # Must match line() in src/play.js, which relabels these cards live —
         # otherwise the wording changes a second after load for no visible reason.

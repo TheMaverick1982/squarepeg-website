@@ -2,20 +2,23 @@
 
 Two jobs, both safe to run any time:
 
-  --allowlist   Regenerate supabase/functions/cast-vote/polls.json from
-                data/play.py, so the Edge Function will only accept polls and
-                options that actually exist on the site. Run this after adding
-                a debate question or a confession, then redeploy the function.
+  --allowlist   Regenerate the POLLS block inside the cast-vote Edge Function
+                from data/play.py, so it only accepts polls and options that
+                actually exist on the site. Run this after adding a debate
+                question or a confession, then redeploy the function.
 
   (default)     Fetch the current vote totals into data/poll_tallies.json so the
                 next build bakes them into the HTML.
 
-Why the tallies are fetched at build time rather than by the browser: a page
-whose results only appear after a JavaScript call is, to Google, a page with no
-results on it. The whole SEO case for the debate pages is that they carry real,
-quotable numbers, so the numbers have to be in the server-rendered HTML. The
-page still updates live in the browser after someone votes — that part is for
-the visitor, not the crawler.
+The tally fetch is MANUAL. It used to run nightly, which was a mistake: the
+pages already read live totals in the browser, so the nightly build was only
+ever for crawlers, and any hiccup — a missing key, a slow response — emailed a
+red failure every morning about numbers nobody was waiting on. Not worth a
+daily alarm on a pineapple poll.
+
+Run it by hand if the numbers are ever worth freezing into the HTML (before a
+press mention, say). Otherwise the pages keep building their results live as
+people vote, which is what actually matters.
 
 Reads SUPABASE_URL and SUPABASE_ANON_KEY from the environment, falling back to
 the values in data/content.py. The anon key is public by design and only has
