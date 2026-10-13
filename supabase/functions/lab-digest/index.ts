@@ -1,7 +1,7 @@
 // Supabase Edge Function: the weekly Pizza Lab digest.
 //
-// Emails every submission waiting for review to plainville@squarepegpizzeria.com,
-// once a week, so nobody has to remember to go and look in the dashboard.
+// Emails every submission waiting for review, once a week, so nobody has to
+// remember to go and look in the dashboard.
 //
 // Why this runs inside Supabase rather than as a GitHub Action, which is where
 // the site's other scheduled jobs live: pending submissions are deliberately
@@ -14,14 +14,23 @@
 //           (or paste it into the dashboard — it is a single file)
 // Secrets:  RESEND_API_KEY   already set for the contact form
 //           NOTIFY_FROM      already set, e.g. "Square Peg Website <website@squarepegpizzeria.com>"
-//           LAB_DIGEST_TO    optional; defaults to plainville@squarepegpizzeria.com
+//           LAB_DIGEST_TO    optional; comma-separated. Defaults to the three
+//                            addresses below, so it works without setting it.
 //           LAB_DIGEST_KEY   a long random string, sent as ?key= by the schedule,
 //                            so nobody can trigger the mail by hitting the URL
 //
 // Schedule: see the cron block at the bottom of supabase/LAB_SETUP.sql.
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-const TO = (Deno.env.get("LAB_DIGEST_TO") ?? "plainville@squarepegpizzeria.com")
+// Set LAB_DIGEST_TO to change this without redeploying — it takes a
+// comma-separated list and wins over the default.
+const DEFAULT_TO = [
+  "brian@brianhardy.com",
+  "plainville@squarepegpizzeria.com",
+  "ehartford@squarepegpizzeria.com",
+].join(",");
+
+const TO = (Deno.env.get("LAB_DIGEST_TO") || DEFAULT_TO)
   .split(",").map((s) => s.trim()).filter(Boolean);
 
 function esc(s: unknown): string {
@@ -34,21 +43,41 @@ type Entry = {
   sauce: string; cheese: string; toppings: string[]; finish: string | null;
 };
 
+// One entry, laid out as a build sheet. Sauce, cheese, toppings and finish get
+// their own labelled rows rather than one run-on sentence, because the person
+// reading this is deciding whether the kitchen can make it and then, if it
+// wins, handing it to the line.
+function row(label: string, value: string): string {
+  if (!value) return "";
+  return `
+    <tr>
+      <td style="font:700 11px/1.5 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#a09890;padding:2px 14px 2px 0;vertical-align:top;white-space:nowrap">${esc(label)}</td>
+      <td style="font:400 15px/1.5 Arial,sans-serif;color:#1a1614;padding:2px 0">${esc(value)}</td>
+    </tr>`;
+}
+
 function card(e: Entry): string {
   const when = new Date(e.created_at).toLocaleDateString("en-US",
     { weekday: "short", month: "short", day: "numeric", timeZone: "America/New_York" });
-  const build = [e.sauce, e.cheese, ...(e.toppings ?? [])]
-    .filter((x) => x && !/^no sauce$/i.test(x)).join(", ");
-  const finish = e.finish && !/^nothing/i.test(e.finish) ? `, finished with ${e.finish}` : "";
+  const toppings = (e.toppings ?? []).filter(Boolean).join(", ");
+  // "Nothing — leave it alone" is a real choice on the form, but printing it as
+  // a finish reads like a mistake. An empty row just doesn't render.
+  const finish = e.finish && !/^nothing/i.test(e.finish) ? e.finish : "";
   return `
-    <tr><td style="padding:18px 0;border-bottom:1px solid #e2ddd8">
+    <tr><td style="padding:20px 0;border-bottom:1px solid #e2ddd8">
       <div style="font:700 12px/1 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#b5121b">
-        ${esc(when)}${e.by_name ? ` &middot; ${esc(e.by_name)}` : ""}
+        ${esc(when)}
       </div>
-      <div style="font:800 21px/1.2 Georgia,serif;color:#1a1614;margin:6px 0 4px">${esc(e.name)}</div>
-      <div style="font:400 15px/1.5 Arial,sans-serif;color:#655d57">
-        ${esc(build.toLowerCase())}${esc(finish.toLowerCase())}
+      <div style="font:800 22px/1.2 Georgia,serif;color:#1a1614;margin:7px 0 2px">${esc(e.name)}</div>
+      <div style="font:400 14px/1.4 Arial,sans-serif;color:#655d57;margin:0 0 12px">
+        built by ${e.by_name ? esc(e.by_name) : "someone who didn't leave a name"}
       </div>
+      <table style="border-collapse:collapse">
+        ${row("Sauce", e.sauce)}
+        ${row("Cheese", e.cheese)}
+        ${row("Toppings", toppings)}
+        ${row("Finish", finish)}
+      </table>
     </td></tr>`;
 }
 
@@ -113,14 +142,17 @@ Deno.serve(async (req) => {
         ${n} ${n === 1 ? "pizza is" : "pizzas are"} waiting for you
       </h1>
       <p style="font:400 15px/1.55 Arial,sans-serif;color:#655d57;margin:0 0 6px">
-        Customers built these on the website. Nothing appears publicly until
-        someone approves it, so these are sitting in the queue until you do.
+        Customers built these on the website. Nobody but us ever sees them.
+        Everything here is made from ingredients already on the menu, so any
+        one of them is a pizza the line can put up.
       </p>
       <table style="width:100%;border-collapse:collapse">${entries.map(card).join("")}</table>
       <p style="font:400 14px/1.55 Arial,sans-serif;color:#655d57;margin:22px 0 0">
-        To approve or reject: open the Supabase Table Editor, find the entry in
-        <b>lab_entries</b>, and set <b>status</b> to <b>approved</b> or
-        <b>rejected</b>. Only approved entries are ever visible on the website.
+        These stay on this list until somebody clears them, so next week's email
+        will show them again. When you pick one, open <b>lab_entries</b> in the
+        Supabase Table Editor and set its <b>status</b> to <b>approved</b>, and
+        set the ones you're passing on to <b>rejected</b>. That's only so the
+        list stays short — neither word is shown to anyone.
       </p>
     </div>
   </div>`;

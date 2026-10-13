@@ -22,47 +22,46 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 // INGREDIENTS-START
 const INGREDIENTS = {
   "sauce": [
-    "Tomato",
-    "White (garlic and oil)",
-    "Vodka sauce",
-    "Pesto",
-    "No sauce"
+    "House-made red sauce",
+    "Parm Cream sauce"
   ],
   "cheese": [
-    "Fresh mozzarella",
     "Shredded mozzarella",
+    "Fresh mozzarella",
+    "Parmesan",
     "Ricotta",
     "Goat cheese",
-    "Parmesan",
+    "Fontina",
+    "Bleu cheese crumbles",
     "Vegan cheese"
   ],
   "toppings": [
+    "Meatballs",
+    "Sausage",
+    "Bacon",
     "Pepperoni",
-    "House pork meatballs",
-    "Spicy capicola",
     "Prosciutto",
-    "Italian sausage",
-    "Grilled chicken",
-    "Mushrooms",
-    "Cherry peppers",
+    "Chicken cacciatore",
+    "Spicy capicola",
+    "Olives",
     "Roasted red peppers",
-    "Caramelised onions",
-    "Black olives",
-    "Fresh basil",
-    "Baby arugula",
-    "Roasted tomatoes",
+    "Mushrooms",
+    "Red onion",
+    "Hot cherry peppers",
     "Garlic",
-    "Jalape\u00f1os",
-    "Eggplant",
-    "Artichoke hearts"
+    "Hot pepper relish",
+    "Pineapple",
+    "Broccolini"
   ],
   "finish": [
     "Hot honey",
-    "Calabrian chili oil",
-    "Balsamic glaze",
+    "Chili oil",
     "Maple",
-    "Olive oil and sea salt",
+    "Parm Cream drizzle",
+    "Ranch drizzle",
     "Fresh basil",
+    "Baby arugula",
+    "Olive oil",
     "Nothing \u2014 leave it alone"
   ],
   "max": 4

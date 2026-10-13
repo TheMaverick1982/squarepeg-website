@@ -315,18 +315,43 @@ LAB = {
          "The one we choose runs the following month as a limited-time special "
          "across all ten Square Pegs, credited to whoever built it."),
     ],
-    # ⚠ CONFIRM WITH THE KITCHEN — this list is drawn from the current menu and
-    # the catering tray menu, but nobody on the line has signed off on it yet.
-    "sauce": ["Tomato", "White (garlic and oil)", "Vodka sauce", "Pesto", "No sauce"],
-    "cheese": ["Fresh mozzarella", "Shredded mozzarella", "Ricotta", "Goat cheese",
-               "Parmesan", "Vegan cheese"],
-    "toppings": ["Pepperoni", "House pork meatballs", "Spicy capicola", "Prosciutto",
-                 "Italian sausage", "Grilled chicken", "Mushrooms", "Cherry peppers",
-                 "Roasted red peppers", "Caramelised onions", "Black olives",
-                 "Fresh basil", "Baby arugula", "Roasted tomatoes", "Garlic",
-                 "Jalapeños", "Eggplant", "Artichoke hearts"],
-    "finish": ["Hot honey", "Calabrian chili oil", "Balsamic glaze", "Maple",
-               "Olive oil and sea salt", "Fresh basil", "Nothing — leave it alone"],
+    # ======================================================================
+    # EVERY ITEM BELOW COMES OFF THE 10.12.26 MENU. Do not add to these lists
+    # from memory or from an older menu — the entire point of the builder is
+    # that whatever someone sends us is a pizza the line can actually make.
+    #
+    # The two sauces are the two the menu names: RED PIES are house-made red
+    # sauce, WHITE PIES are Parm Cream. There is no third base. (The earlier
+    # list offered vodka sauce and pesto, which are a pasta sauce and a thing
+    # we don't stock.)
+    #
+    # The toppings are exactly the PILE IT ON list — "add toppings to any pie,
+    # round or Detroit-style" — which is the only list on the menu that says
+    # what can be added to a pie someone else designed. Ingredients that are
+    # built into one named pie (mashed potato, figs, shaved celery, scallions,
+    # caramelized onions) are deliberately NOT here: the kitchen has them, but
+    # they aren't offered as add-ons, so offering them would be us inventing a
+    # menu. If Brian wants any of them, add them here and redeploy lab-submit.
+    #
+    # Finishes have no list of their own on the menu, so these are the ones
+    # that appear ON a pizza: chili oil and maple (Bianco), Parm Cream drizzle
+    # (Funghi & Cipolle, Chicken Bacon Cacciatore), ranch (White Out), basil
+    # (Margherita), arugula (Figgy Piggy), olive oil (Margherita). Hot honey is
+    # on the Sausage & Broccolini starter and the eggplant sub. Balsamic glaze
+    # was dropped: it's on the quesadilla, never on a pie.
+    # ======================================================================
+    "sauce": ["House-made red sauce", "Parm Cream sauce"],
+    "cheese": ["Shredded mozzarella", "Fresh mozzarella", "Parmesan", "Ricotta",
+               "Goat cheese", "Fontina", "Bleu cheese crumbles", "Vegan cheese"],
+    # Meats first, then veggies, in the menu's own order.
+    "toppings": ["Meatballs", "Sausage", "Bacon", "Pepperoni", "Prosciutto",
+                 "Chicken cacciatore", "Spicy capicola",
+                 "Olives", "Roasted red peppers", "Mushrooms", "Red onion",
+                 "Hot cherry peppers", "Garlic", "Hot pepper relish", "Pineapple",
+                 "Broccolini"],
+    "finish": ["Hot honey", "Chili oil", "Maple", "Parm Cream drizzle",
+               "Ranch drizzle", "Fresh basil", "Baby arugula", "Olive oil",
+               "Nothing — leave it alone"],
     "max_toppings": 4,
     "rules": [
         "Up to four toppings. Everything after that is a mess, not a pizza.",

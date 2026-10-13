@@ -2935,7 +2935,7 @@ T["lab"] = """
           <span class="lab-card-tag">Limited time special</span>
           <div class="lab-preview" id="lab-preview" aria-live="polite"></div>
           <button type="button" class="btn lab-submit" id="lab-go">Submit my pizza</button>
-          <span class="note" id="lab-note">One entry per round.</span>
+          <span class="note" id="lab-note">One entry per person a month.</span>
         </div>
       </aside>
     </form>

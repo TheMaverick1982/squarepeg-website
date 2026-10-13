@@ -56,11 +56,20 @@ alter table public.lab_entries enable row level security;
 -- service-role key. Reading is you in the Table Editor and the weekly digest.
 
 -- What's waiting to be read. Open this in the Table Editor to moderate.
-create or replace view public.lab_pending as
+--
+-- security_invoker is load-bearing. A Postgres view runs as its OWNER by
+-- default, so without it this view hands the public anon key every pending
+-- submission -- straight past the row-level security that is the whole reason
+-- the table has none of its own policies. Verified both ways against a real
+-- Postgres 16: without the clause anon reads everything, with it anon is
+-- denied. The revoke below means anon never had a grant to use either.
+create or replace view public.lab_pending with (security_invoker = true) as
   select id, created_at, name, by_name, sauce, cheese, toppings, finish
     from public.lab_entries
    where status = 'pending'
    order by created_at;
+
+revoke all on public.lab_pending from anon, authenticated;
 
 
 -- ===========================================================================
