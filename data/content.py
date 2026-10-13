@@ -664,7 +664,10 @@ EVENT_ROUTES = [
 # Setting this False again pulls it from the nav, the Playground hub and the
 # sitemap and puts noindex back on the page, without touching anything that has
 # already been submitted.
-LAB_LIVE = True
+# Back to False Oct 2026 at Brian's request: the page works and submits, but it
+# stays off the Playground hub, out of the sitemap and noindex until they're
+# ready to launch it properly. lab_endpoint stays set, so testing still works.
+LAB_LIVE = False
 
 TRUCK = {
     "party_min": "10 or more",

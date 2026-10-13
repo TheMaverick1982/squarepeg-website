@@ -484,12 +484,23 @@
         })
       }).then(function (r) {
         if (!r.ok) throw new Error(r.status);
-        form.innerHTML = '<div class="lab-done"><b>Got it.</b><span>One of us will read it ' +
-          "before it goes anywhere. If it goes up for a vote, that happens within a few days.</span></div>";
+        form.innerHTML = '<div class="lab-done"><b>Got it.</b><span>Your pizza is with our ' +
+          "kitchen. We go through them at the start of each month and the one we pick runs " +
+          "the month after, with your name on it. Keep an eye on the monthly specials.</span></div>";
         track("lab_submit", {});
-      }).catch(function () {
+      }).catch(function (e) {
         go.disabled = false;
-        note.textContent = "That didn't go through. Try again in a moment.";
+        // The status matters: a 400 is a pizza the kitchen's list doesn't
+        // recognise, which is our bug, not the visitor's. Anything else is the
+        // request not landing at all. Saying "try again" to someone whose
+        // pizza will never be accepted just wastes their time.
+        var code = parseInt(e && e.message, 10);
+        if (code === 400) {
+          note.textContent = "Something in that build isn't on our list. Try a different topping?";
+        } else {
+          note.textContent = "That didn't go through. Try again in a moment.";
+        }
+        if (window.console) console.log("[lab] submit failed:", e && e.message);
       });
     });
 
