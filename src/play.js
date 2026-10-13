@@ -484,9 +484,9 @@
         })
       }).then(function (r) {
         if (!r.ok) throw new Error(r.status);
-        form.innerHTML = '<div class="lab-done"><b>Got it.</b><span>Your pizza is with our ' +
-          "kitchen. We go through them at the start of each month and the one we pick runs " +
-          "the month after, with your name on it. Keep an eye on the monthly specials.</span></div>";
+        form.innerHTML = '<div class="lab-done"><span class="wheel-win-eyebrow">Built it</span>' +
+          "<b>We got it.</b><span>We will check out your submission and each month our " +
+          "kitchen will pick a new pizza to feature on our monthly LTO menu. Thanks!</span></div>";
         track("lab_submit", {});
       }).catch(function (e) {
         go.disabled = false;
