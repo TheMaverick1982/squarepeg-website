@@ -71,11 +71,15 @@ SITE = {
     # The Playground has its own Supabase project, separate from the one above
     # (which holds the contact form and its customer submissions). That split
     # is worth keeping: cast-vote is a public, unauthenticated endpoint, and
-    # Supabase hands every function the service-role key for its own project.
-    # Keeping it in a project that holds nothing else means a mistake there
-    # cannot reach anything that matters.
-    "vote_endpoint": "https://tsrnpmkipdbtwyrlfbuy.supabase.co/functions/v1/cast-vote",
-    "lab_endpoint": "",            # same project; deploy lab-submit when the Lab goes live
+    # Everything the website stores lives in the website's own project, the
+    # same one as supabase_url above. The polls spent their first weeks in
+    # tsrnpmkipdbtwyrlfbuy, which is the Connect app's project — the system
+    # behind connect.squarepegpizzeria.com. That was a mistake: the public
+    # website should not read or write anything in there, and a function in
+    # that project is handed that project's service-role key. Moved Oct 2026,
+    # votes carried across.
+    "vote_endpoint": "https://ytkwogufrjffcgfpinrf.supabase.co/functions/v1/cast-vote",
+    "lab_endpoint": "",            # set when lab-submit is deployed; see LAB_LIVE
     # Analytics — fill in to activate (left blank = nothing loads)
     "ga4_id": "G-REQKJC1SBJ",
     "meta_pixel_id": "",
