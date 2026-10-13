@@ -2904,8 +2904,10 @@ T["lab"] = """
     <div class="section-head">
       <span class="eyebrow">Build it</span>
       <h2>Your pizza</h2>
+      <!-- Not "the winner": there is no contest and no public vote. We read the
+           entries and we pick one. Any word that implies otherwise has to go. -->
       <p>Everything on these lists is something our kitchens already stock, so
-        the winner is a pizza we can actually make on a Friday night.</p>
+        the one we pick is a pizza we can actually make on a Friday night.</p>
     </div>
 
     <form class="lab lab-grid" id="lab" data-max="{{ lab.max_toppings }}" data-endpoint="{{ site.lab_endpoint }}" onsubmit="return false">
