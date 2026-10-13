@@ -19,7 +19,8 @@
 //           LAB_DIGEST_KEY   a long random string, sent as ?key= by the schedule,
 //                            so nobody can trigger the mail by hitting the URL
 //
-// Schedule: see the cron block at the bottom of supabase/LAB_SETUP.sql.
+// Schedule: the pg_cron block in supabase/LAB_DIGEST_SCHEDULE.sql.
+// Project:  the website's own, ytkwogufrjffcgfpinrf, beside contact_messages.
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 // Set LAB_DIGEST_TO to change this without redeploying — it takes a
@@ -96,8 +97,13 @@ async function sendEmail(subject: string, html: string) {
 Deno.serve(async (req) => {
   // The schedule calls this with ?key=<LAB_DIGEST_KEY>. Without it, anyone who
   // learned the URL could send the kitchen an email whenever they liked.
-  const want = Deno.env.get("LAB_DIGEST_KEY");
-  if (want && new URL(req.url).searchParams.get("key") !== want) {
+  //
+  // Both sides are trimmed. A secret pasted into a dashboard field very often
+  // carries a trailing newline, and an exact comparison then fails in a way
+  // that looks like the wrong key rather than invisible whitespace.
+  const want = (Deno.env.get("LAB_DIGEST_KEY") ?? "").trim();
+  const got = (new URL(req.url).searchParams.get("key") ?? "").trim();
+  if (want && got !== want) {
     return new Response("forbidden", { status: 403 });
   }
 
@@ -149,10 +155,11 @@ Deno.serve(async (req) => {
       <table style="width:100%;border-collapse:collapse">${entries.map(card).join("")}</table>
       <p style="font:400 14px/1.55 Arial,sans-serif;color:#655d57;margin:22px 0 0">
         These stay on this list until somebody clears them, so next week's email
-        will show them again. When you pick one, open <b>lab_entries</b> in the
-        Supabase Table Editor and set its <b>status</b> to <b>approved</b>, and
-        set the ones you're passing on to <b>rejected</b>. That's only so the
-        list stays short — neither word is shown to anyone.
+        will show them again. To read them any time, open <b>lab_inbox</b> in the
+        Supabase Table Editor. When you pick one, set its <b>status</b> to
+        <b>approved</b> in <b>lab_entries</b> and set the ones you're passing on
+        to <b>rejected</b>. That's only so the list stays short — neither word is
+        shown to anyone.
       </p>
     </div>
   </div>`;

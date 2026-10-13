@@ -7,16 +7,17 @@
 //
 // Then set lab_endpoint in data/content.py, flip LAB_LIVE to True, and rebuild.
 //
-// This endpoint writes a row with status 'pending' and nothing else. There is no
-// path through this function that publishes anything. Approval happens by hand
-// in the Supabase Table Editor, which is the point of the whole design: a name
-// typed by a stranger does not appear on the restaurant's domain until one of us
-// has read it.
+// This endpoint writes a row and nothing else. Nothing a member of the public
+// submits is ever shown on squarepegpizzeria.com: entries go to the kitchen, we
+// pick one, it runs as an LTO. So there is no path through this function that
+// publishes anything, and no API that reads these rows back out.
 //
-// The ingredient values are checked against the same fixed list the page offers,
-// written here by the build (scripts/sync_polls.py writes polls.json; the build
-// writes ingredients.json), so a crafted request cannot smuggle free text into
-// what looks like a structured field.
+// Only two fields are free text — the pizza's name and the submitter's name —
+// and both are read by a person before they go anywhere. Everything else is
+// checked against the same fixed list the page offers, generated from
+// data/play.py by `python3 scripts/sync_polls.py --allowlist` into the marked
+// block below, so a crafted request cannot smuggle free text into what looks
+// like a structured field, and the lists cannot drift from the menu.
 import { createClient } from "npm:@supabase/supabase-js@2";
 // Generated from data/play.py by `python3 scripts/sync_polls.py --allowlist`.
 // INGREDIENTS-START
@@ -152,7 +153,8 @@ Deno.serve(async (req) => {
   );
 
   // status defaults to 'pending' in the schema and is deliberately not settable
-  // from here — there is no request body that results in a published entry.
+  // from here. status is only ever changed by hand, and only to keep the inbox
+  // short — it does not control whether anything is shown, because nothing is.
   const { error } = await db.from("lab_entries").insert({
     name, by_name: by || null, sauce, cheese, toppings, finish: finish || null,
   });
