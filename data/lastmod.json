@@ -140,8 +140,8 @@
   "hash": "02f016b0278d4090ee0654588cace981"
  },
  "/play/": {
-  "date": "2026-10-12",
-  "hash": "fdd74c279008c0b03afd7dd96c245e85"
+  "date": "2026-10-13",
+  "hash": "9821cdeede352581541d3fed24938dfd"
  },
  "/play/confessions/": {
   "date": "2026-10-13",
@@ -174,6 +174,10 @@
  "/play/debate/ranch-with-pizza/": {
   "date": "2026-10-13",
   "hash": "79bbc3608124d7a77ab9c1f5f01a6475"
+ },
+ "/play/pizza-lab/": {
+  "date": "2026-10-13",
+  "hash": "cc289212befc091c693c5053052b5532"
  },
  "/play/wheel/": {
   "date": "2026-10-12",

@@ -79,7 +79,7 @@ SITE = {
     # that project is handed that project's service-role key. Moved Oct 2026,
     # votes carried across.
     "vote_endpoint": "https://ytkwogufrjffcgfpinrf.supabase.co/functions/v1/cast-vote",
-    "lab_endpoint": "",            # set when lab-submit is deployed; see LAB_LIVE
+    "lab_endpoint": "https://ytkwogufrjffcgfpinrf.supabase.co/functions/v1/lab-submit",
     # Analytics — fill in to activate (left blank = nothing loads)
     "ga4_id": "G-REQKJC1SBJ",
     "meta_pixel_id": "",
@@ -657,13 +657,14 @@ EVENT_ROUTES = [
      "team or cause.", "/fundraisers/"),
 ]
 
-# The Pizza Lab at /play/pizza-lab/ is built but deliberately NOT launched: it
-# isn't in the nav, isn't in the Playground hub, isn't in the sitemap, and the
-# page carries noindex. Brian is sharing the URL with the kitchen first, because
-# the ingredient list has to be something the line can actually make and someone
-# has to commit to running the winning pizza as a limited-time special.
-# Flip this to True once the kitchen and the GMs have signed off.
-LAB_LIVE = False
+# The Pizza Lab at /play/pizza-lab/. Launched Oct 2026: the ingredient lists
+# were rebuilt from the 10.12.26 menu, submissions go to lab-submit in the
+# website's own Supabase project, and the three of us get a digest every Monday.
+#
+# Setting this False again pulls it from the nav, the Playground hub and the
+# sitemap and puts noindex back on the page, without touching anything that has
+# already been submitted.
+LAB_LIVE = True
 
 TRUCK = {
     "party_min": "10 or more",

@@ -352,6 +352,12 @@ LAB = {
     "finish": ["Hot honey", "Chili oil", "Maple", "Parm Cream drizzle",
                "Ranch drizzle", "Fresh basil", "Baby arugula", "Olive oil",
                "Nothing — leave it alone"],
+    # Which finish is pre-selected. NOT the first one: whatever is checked when
+    # the page loads is what every half-interested visitor submits, so putting
+    # hot honey there would have told us hot honey is wildly popular. "Nothing"
+    # is the only neutral default — it makes choosing a finish a deliberate act.
+    # Keep this exactly equal to one of the strings above.
+    "finish_default": "Nothing — leave it alone",
     "max_toppings": 4,
     "rules": [
         "Up to four toppings. Everything after that is a mess, not a pizza.",

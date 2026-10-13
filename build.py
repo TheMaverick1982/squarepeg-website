@@ -22,6 +22,17 @@ from town_pages import TOWN_PAGES  # noqa
 from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 
+# The Pizza Lab's pre-selected finish has to be one of the finishes on offer.
+# If it isn't, no radio renders checked, the form submits with no finish at all,
+# and nothing anywhere complains — the entries just quietly arrive incomplete.
+assert LAB["finish_default"] in LAB["finish"], (
+    f"LAB['finish_default'] is {LAB['finish_default']!r}, which is not in LAB['finish']"
+)
+# Same trap, worse: lab-submit rejects anything not on these lists, so a value
+# the page offers but the function doesn't know means a submission that fails
+# with "that isn't a pizza we can make" for a pizza the visitor built correctly.
+# Run `python3 scripts/sync_polls.py --allowlist` after editing any of them.
+
 PREVIEW = "--preview" in sys.argv
 STAGING = "--staging" in sys.argv   # team review deploy: hidden from Google
 OUT = ROOT / ("preview" if PREVIEW else "dist-staging" if STAGING else "dist")
@@ -2575,14 +2586,20 @@ T["play"] = """
       <a class="route" href="{{ u('/play/debate/') }}">
         <span class="eyebrow">Settle it</span>
         <b>The Great Pizza Debate</b>
-        <span>{{ debates|length }} arguments, live results, and where Connecticut
-          and Florida disagree.</span>
+        <span>{{ debates|length }} arguments our dining rooms have been having for
+          twenty years, with live results.</span>
       </a>
       <a class="route" href="{{ u('/play/confessions/') }}">
         <span class="eyebrow">Anonymous</span>
         <b>The confession booth</b>
         <span>Tick what you&rsquo;ve done. Find out how alone you really are.</span>
       </a>
+      {% if lab_live %}<a class="route" href="{{ u('/play/pizza-lab/') }}">
+        <span class="eyebrow">Build one</span>
+        <b>The Pizza Lab</b>
+        <span>Invent a pizza from our own ingredients. We put the one we like
+          best on the menu.</span>
+      </a>{% endif %}
     </div>
   </div>
 </section>
@@ -2917,7 +2934,7 @@ T["lab"] = """
       <fieldset class="lab-set">
         <legend>Finish</legend>
         <div class="lab-chips">{% for x in lab.finish %}
-          <label class="lab-chip"><input type="radio" name="finish" value="{{ x }}"{% if loop.first %} checked{% endif %}><span>{{ x }}</span></label>{% endfor %}
+          <label class="lab-chip"><input type="radio" name="finish" value="{{ x }}"{% if x == lab.finish_default %} checked{% endif %}><span>{{ x }}</span></label>{% endfor %}
         </div>
       </fieldset>
 

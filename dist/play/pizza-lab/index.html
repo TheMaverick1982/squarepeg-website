@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Square Peg Pizza Lab</title>
-<meta name="robots" content="noindex"><meta name="description" content="Build it from what’s actually in our kitchens and give it a name. We read every one, and the one we pick goes on the menu next month as a limited-time special.">
+<meta name="description" content="Build it from what’s actually in our kitchens and give it a name. We read every one, and the one we pick goes on the menu next month as a limited-time special.">
 <link rel="canonical" href="https://squarepegpizzeria.com/play/pizza-lab/">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Square Peg Pizzeria"><meta property="og:locale" content="en_US">
 <meta property="og:title" content="The Square Peg Pizza Lab"><meta property="og:description" content="Build it from what’s actually in our kitchens and give it a name. We read every one, and the one we pick goes on the menu next month as a limited-time special.">
@@ -121,7 +121,7 @@
         the winner is a pizza we can actually make on a Friday night.</p>
     </div>
 
-    <form class="lab lab-grid" id="lab" data-max="4" data-endpoint="" onsubmit="return false">
+    <form class="lab lab-grid" id="lab" data-max="4" data-endpoint="https://ytkwogufrjffcgfpinrf.supabase.co/functions/v1/lab-submit" onsubmit="return false">
       <div class="lab-fields">
       <fieldset class="lab-set">
         <legend>Sauce</legend>
@@ -170,7 +170,7 @@
       <fieldset class="lab-set">
         <legend>Finish</legend>
         <div class="lab-chips">
-          <label class="lab-chip"><input type="radio" name="finish" value="Hot honey" checked><span>Hot honey</span></label>
+          <label class="lab-chip"><input type="radio" name="finish" value="Hot honey"><span>Hot honey</span></label>
           <label class="lab-chip"><input type="radio" name="finish" value="Chili oil"><span>Chili oil</span></label>
           <label class="lab-chip"><input type="radio" name="finish" value="Maple"><span>Maple</span></label>
           <label class="lab-chip"><input type="radio" name="finish" value="Parm Cream drizzle"><span>Parm Cream drizzle</span></label>
@@ -178,7 +178,7 @@
           <label class="lab-chip"><input type="radio" name="finish" value="Fresh basil"><span>Fresh basil</span></label>
           <label class="lab-chip"><input type="radio" name="finish" value="Baby arugula"><span>Baby arugula</span></label>
           <label class="lab-chip"><input type="radio" name="finish" value="Olive oil"><span>Olive oil</span></label>
-          <label class="lab-chip"><input type="radio" name="finish" value="Nothing — leave it alone"><span>Nothing — leave it alone</span></label>
+          <label class="lab-chip"><input type="radio" name="finish" value="Nothing — leave it alone" checked><span>Nothing — leave it alone</span></label>
         </div>
       </fieldset>
 
