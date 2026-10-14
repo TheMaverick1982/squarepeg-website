@@ -638,8 +638,8 @@ REVIEWS = [
 ]
 
 FUNDRAISER_FAQ = [
-    ("Does takeout count?", "Yes. Dine-in and pickup both count. The only thing excluded is ordering through a third-party delivery app — DoorDash, Uber Eats, Grubhub and the like."),
-    ("How do supporters make their purchase count?", "They dine in or pick up from the location you booked, any Tuesday from 4pm to close, and tell whoever takes their order that they’re supporting your organization."),
+    ("Does takeout count?", "Yes, as long as supporters phone the order through to the restaurant. Dine-in and called-in pickup both count. An order placed on our website doesn’t — it never gets attached to your group — and nor does anything through a third-party delivery app like DoorDash, Uber Eats or Grubhub. Worth putting in your own invite in those words."),
+    ("How do supporters make their purchase count?", "They order from the location you booked, on your Tuesday, any time from 4pm to close — dining in, or calling the restaurant to arrange a pickup — and tell whoever takes the order that they’re supporting your organization. Pickup has to be phoned in; an order placed on our website can’t be credited to you."),
     ("How much does our organization earn?", "20% of qualifying food sales, excluding tax and alcohol. We total everything at the end of the night and send the donation after the event."),
     ("How many organizations can book a night?", "One organization per location per Tuesday. If your date is taken, we’ll add you to our priority waiting list."),
     ("What do we get to promote it?", "A custom digital flyer and social-ready graphics made by our team. Server tracking and sales reporting are handled by us."),
@@ -804,17 +804,23 @@ FUNDRAISER_NIGHT = {
          "Tuesday, and not whichever location is closest. Any time from 4pm to "
          "close. No ticket, flyer or reservation needed."),
         ("Dine in or take it home",
-         "Both count. Eat with us or pick it up — the only orders that don’t count "
-         "are the ones placed through DoorDash, Uber Eats, Grubhub and the like."),
+         # No HTML in here: the step body is rendered with {{ }}, which escapes it,
+         # so a <b> comes out as literal &lt;b&gt; on the page. Say it in words.
+         "Both count, with one catch. A pickup order has to be phoned through to "
+         "the restaurant — an order placed on our website never gets attached to "
+         "the group, so it won’t count. Nor will anything through DoorDash, Uber "
+         "Eats, Grubhub and the like."),
         ("Say who you’re with",
-         "Tell your server, or whoever takes your order at the counter or on the "
-         "phone. That’s how it gets counted."),
+         "Tell your server, the person at the counter, or whoever picks up the "
+         "phone. That’s the whole mechanism — nobody can credit an order to your "
+         "group unless somebody is told."),
     ],
-    "counts": ["Food — eaten in or picked up",
+    "counts": ["Food eaten in, or picked up when the order was phoned through",
                "The one Tuesday your group booked, 4pm to close",
                "The Square Peg they named — each location runs its own night",
                "Any size order — a table of twenty or one pizza"],
-    "excluded": ["DoorDash, Uber Eats, Grubhub and other delivery apps",
+    "excluded": ["Pickup ordered on the website instead of over the phone",
+                 "DoorDash, Uber Eats, Grubhub and other delivery apps",
                  "A different Tuesday, or a different Square Peg",
                  "Alcohol",
                  "Tax and tip"],
@@ -822,8 +828,10 @@ FUNDRAISER_NIGHT = {
         ("Do I need a flyer or a code?",
          "No. Just say which group you’re supporting when you order."),
         ("Does takeout count?",
-         "Yes. Dine in or pick it up, either one counts. The only orders that don’t "
-         "are the ones that come through a delivery app."),
+         "Yes — but call the restaurant to place it. Dine-in and phoned-in pickup "
+         "both count. A pickup order put through the website doesn’t, because that "
+         "order never gets attached to the group, and nor does anything booked "
+         "through a delivery app."),
         ("What time should we come?",
          "Any time from 4pm to close, on the specific Tuesday the group booked. "
          "Earlier is usually quieter if you’re bringing small children."),
