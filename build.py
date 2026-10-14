@@ -4031,7 +4031,12 @@ def main():
 # plus anything still behind a launch flag. One list so the noindex meta and the
 # sitemap can never disagree about what is hidden — a page left out of the
 # sitemap but still indexable is the failure mode this prevents.
-UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/"}
+#   /fundraiser-night/ — the page an approved group sends to its own supporters.
+#     It goes out in the confirmation email after a Tuesday is booked, and it is
+#     not something a stranger should land on from a search: out of context it
+#     reads like an offer anyone can turn up and claim, when it only applies to
+#     one group, at one location, on one night.
+UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-night/"}
 if not LAB_LIVE:
     UNLISTED.add("/play/pizza-lab/")
 
