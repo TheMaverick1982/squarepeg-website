@@ -1459,3 +1459,30 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .how-steps b{font-family:var(--display);font-weight:800;line-height:1.05;
   font-size:clamp(21px,2.3vw,26px)}
 .how-body{color:var(--smoke);font-size:15px;line-height:1.55}
+
+/* ---- Toys for Tots ------------------------------------------------------
+   .tft-todo is an editor's placeholder, not public copy. It only ever renders
+   while TFT["live"] is False — build.py refuses to build a live page with an
+   unfilled placeholder — so it cannot reach a visitor. It is styled to look
+   obviously unfinished on purpose: the failure this guards against is somebody
+   glancing at the page, seeing something tidy, and shipping it. */
+.tft-todo{border:2px dashed var(--line);border-radius:14px;padding:26px 24px;background:
+  repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(0,0,0,.015) 10px,rgba(0,0,0,.015) 20px)}
+.tft-todo>span{display:block;font:800 12px/1 var(--body);letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ember);margin-bottom:8px}
+.tft-todo b{display:block;font-family:var(--display);font-weight:800;line-height:1.05;
+  font-size:clamp(24px,3.2vw,34px);margin-bottom:8px}
+.tft-todo p{color:var(--smoke);font-size:15px;line-height:1.55;margin:0;max-width:62ch}
+.tft-todo code{font:600 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:2px 5px}
+
+.tft-locs{list-style:none;margin:0;padding:0;display:grid;gap:18px;
+  grid-template-columns:1fr}
+@media (min-width:620px){.tft-locs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1000px){.tft-locs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.tft-locs li{padding:18px 20px;border:1px solid var(--line);border-radius:12px;
+  background:var(--white)}
+.tft-locs li>a:first-child{text-decoration:none}
+.tft-locs b{font-family:var(--display);font-weight:800;font-size:20px;line-height:1.1}
+.tft-locs address{font-style:normal;color:var(--smoke);font-size:15px;
+  line-height:1.5;margin:6px 0 8px}

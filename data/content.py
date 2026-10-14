@@ -1272,3 +1272,90 @@ LTO = {
          "Gooseneck Pinot Grigio, pear liqueur and apple cider in a salted caramel and cinnamon sugar rimmed glass."),
     ],
 }
+
+
+# ===========================================================================
+# TOYS FOR TOTS — Square Peg as a drop-off location
+# ===========================================================================
+#
+# NOT LIVE. The page is built, unlisted and noindex until Brian has the dates
+# and the promotion settled. Flip TFT["live"] to True and rebuild to launch it;
+# build.py refuses to launch while a placeholder is still unfilled, so the page
+# cannot go public saying "dates to come".
+#
+# ON THE LOGO: the Toys for Tots bear-and-train logo is a registered trademark
+# of the Marine Toys for Tots Foundation and is NOT on this page. Registered
+# drop-off locations are sent approved artwork by their local coordinator —
+# that is where the file comes from, not from saving an image off their
+# website. Once Brian has it, it goes in src/img and gets added here.
+#
+# ON THE RULES BELOW: "new and unwrapped" is the Foundation's own universal
+# requirement and is safe to state. The "please don't" list is the usual
+# guidance but coordinators vary, so Brian should confirm it with his before
+# this goes public. Marked with a comment where it matters.
+
+TFT = {
+    # Flip to True to launch. See the build-time guard in build.py.
+    "live": False,
+
+    "eyebrow": "Toys for Tots",
+    "h1": "Drop a toy at Square Peg.",
+    "lede": "Every Square Peg is a Toys for Tots drop-off point this holiday "
+            "season. Bring a new, unwrapped toy, leave it in the box by the "
+            "door, and the Marine Corps Reserve gets it to a child in the same "
+            "community it was dropped off in.",
+
+    # ---------------------------------------------------------------------
+    # PLACEHOLDER 1 — THE DATES
+    # Fill in "window" with the collection period, e.g. "November 14 – December 15".
+    # Leave it empty and the page shows a visible placeholder card instead.
+    # ---------------------------------------------------------------------
+    "window": "",
+    "window_note": "Drop off any time we're open — you don't need to be eating.",
+
+    # ---------------------------------------------------------------------
+    # PLACEHOLDER 2 — THE PROMOTION
+    # What a guest gets for bringing a toy. Fill all three in or leave all
+    # three empty; a half-filled offer renders as the placeholder.
+    # ---------------------------------------------------------------------
+    "offer_head": "",
+    "offer_body": "",
+    "offer_fine": "",
+
+    "steps": [
+        ("Pick up a toy",
+         "New and unwrapped, in its original packaging. Anything from a board "
+         "game to a basketball. Gifts for teenagers are what every campaign "
+         "runs short of, so if you're stuck, that's where to aim."),
+        ("Bring it in",
+         "The collection box is by the door at all ten Square Pegs. Any day "
+         "we're open, during normal hours. You don't have to stay, and you "
+         "don't have to buy anything."),
+        ("The Marines take it from there",
+         "Local Marine Toys for Tots coordinators collect, sort and distribute "
+         "every toy to families in the same area it was collected."),
+    ],
+
+    # The Foundation's own universal requirement. Safe to state as written.
+    "yes": [
+        "New toys, in the original packaging",
+        "Books, board games, puzzles and art supplies",
+        "Sports equipment and anything active",
+        "Gifts for ages 12–18 — always the shortest category",
+    ],
+    # ⚠ CONFIRM WITH YOUR COORDINATOR before this page goes public. This is the
+    # usual guidance but individual campaigns set their own rules.
+    "no": [
+        "Used, opened or hand-made toys",
+        "Anything resembling a real weapon",
+        "Food, sweets or anything perishable",
+    ],
+
+    "org_url": "https://www.toysfortots.org/",
+    "chapter_url": "https://www.toysfortots.org/find-your-local-chapter/",
+    # Attribution. Registered drop-off locations credit the program properly;
+    # this is the line that does it.
+    "credit": "Toys for Tots is a program of the U.S. Marine Corps Reserve, run "
+              "by the Marine Toys for Tots Foundation. Square Peg Pizzeria is a "
+              "drop-off location, not an affiliate of the Foundation.",
+}

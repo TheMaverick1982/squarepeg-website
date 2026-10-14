@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 
 # The Pizza Lab's pre-selected finish has to be one of the finishes on offer.
@@ -2242,6 +2242,129 @@ T["townpage"] = """
 </section>
 """
 
+T["tft"] = """
+<section class="page-head on-dark">
+  {{ img('friends-holiday', 'Friends together at Square Peg over the holidays', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Toys for Tots</span></nav>
+    <span class="eyebrow">{{ tft.eyebrow }}{% if tft.window %} &middot; {{ tft.window }}{% endif %}</span>
+    <h1>{{ tft.h1 }}</h1>
+    <p class="lede">{{ tft.lede }}</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a>
+      <a class="btn btn--ghost" href="{{ tft.org_url }}" rel="noopener nofollow" target="_blank">About Toys for Tots</a>
+    </div>
+  </div>
+</section>
+
+{# ---- PLACEHOLDER: the collection dates -------------------------------- #}
+{% if tft.window %}
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">When</span>
+      <h2>{{ tft.window }}</h2>
+      <p>{{ tft.window_note }}</p>
+    </div>
+  </div>
+</section>
+{% else %}
+<section class="section section--paper">
+  <div class="wrap"><div class="tft-todo">
+    <span>Placeholder &mdash; collection dates</span>
+    <b>Dates to come</b>
+    <p>Set <code>TFT["window"]</code> in data/content.py, e.g. &ldquo;November 14 &ndash; December 15&rdquo;.
+      This block becomes the real dates and this placeholder disappears.</p>
+  </div></div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Three things, and that&rsquo;s it</span>
+      <h2>How it works</h2>
+    </div>
+    <ol class="steps steps--row">
+      {% for head, body in tft.steps %}<li><div><b>{{ head }}</b><span>{{ body }}</span></div></li>{% endfor %}
+    </ol>
+  </div>
+</section>
+
+{# ---- PLACEHOLDER: what a guest gets for bringing a toy ----------------- #}
+{% if tft.offer_head and tft.offer_body %}
+<section class="section section--dark">
+  <div class="wrap cta-foot">
+    <span class="eyebrow">Bring a toy, get this</span>
+    <h2>{{ tft.offer_head }}</h2>
+    <p class="lede">{{ tft.offer_body }}</p>
+    {% if tft.offer_fine %}<p class="note">{{ tft.offer_fine }}</p>{% endif %}
+  </div>
+</section>
+{% else %}
+<section class="section">
+  <div class="wrap"><div class="tft-todo">
+    <span>Placeholder &mdash; the promotion</span>
+    <b>Offer to come</b>
+    <p>Set <code>TFT["offer_head"]</code>, <code>offer_body</code> and optionally
+      <code>offer_fine</code>. Until all of it is filled in this placeholder shows
+      instead, so a half-written offer can never go live.</p>
+  </div></div>
+</section>
+{% endif %}
+
+<section class="section section--paper">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">Yes please</span>
+      <h2>What to bring</h2>
+      <ul class="checks">{% for i in tft.yes %}<li>{{ i }}</li>{% endfor %}</ul>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Can&rsquo;t accept</span>
+      <h2>What we can&rsquo;t take</h2>
+      <ul class="checks checks--no">{% for i in tft.no %}<li>{{ i }}</li>{% endfor %}</ul>
+      <p class="note">Not us being difficult &mdash; these are the program&rsquo;s own
+        rules, and anything outside them can&rsquo;t be handed on.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">All ten</span>
+      <h2>Where to drop off</h2>
+      <p>Every Square Peg takes toys, in Connecticut and in Florida. Opening
+        hours are on each location&rsquo;s page.</p>
+    </div>
+    <ul class="tft-locs">
+      {% for l in locs %}<li>
+        <a href="{{ u('/locations/' ~ l.slug ~ '/') }}"><b>{{ l.name }}</b></a>
+        <address>{{ l.street }}<br>{{ l.city }}, {{ l.state }} {{ l.zip }}</address>
+        <a class="phone" href="tel:{{ tel(l.phone) }}" data-track="call_click" data-loc="{{ l.slug }}">{{ l.phone }}</a>
+      </li>{% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap cta-foot">
+    <span class="eyebrow">The program</span>
+    <h2>Where the toys actually go.</h2>
+    <p class="lede">Toys collected here go to local Marine Toys for Tots
+      coordinators and are distributed to families in the same community. To read
+      about the program or find the campaign nearest you:</p>
+    <div class="btn-row">
+      <a class="btn" href="{{ tft.chapter_url }}" rel="noopener nofollow" target="_blank">Find your local campaign</a>
+      <a class="btn btn--line" href="{{ tft.org_url }}" rel="noopener nofollow" target="_blank">toysfortots.org</a>
+    </div>
+    <p class="note">{{ tft.credit }}</p>
+  </div>
+</section>
+"""
+
+
 T["fundraiser_night"] = """
 <section class="page-head on-dark">
   {{ img('team-kids', 'A group celebrating a Tuesday fundraiser at Square Peg', eager=True, cls='bg')|safe }}
@@ -3593,7 +3716,7 @@ def main():
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, hwart=HW_ART, lunch_where=lunch_windows(),
         event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
         pagejs="", pagejsv=playjsv, play=PLAY, wheels=WHEELS, debates=DEBATES, conf=CONFESSIONS,
-        lab=LAB, lab_live=LAB_LIVE, app_perks=APP_PERKS, tallies=TALLIES,
+        lab=LAB, lab_live=LAB_LIVE, tft=TFT, app_perks=APP_PERKS, tallies=TALLIES,
         tally_line=tally_line,
     )
 
@@ -3671,6 +3794,13 @@ def main():
                             breadcrumbs([("Home", "/"), ("Locations", "/locations/"),
                                          (tp["h1"], f"/{tp['slug']}/")])),
                       tp["hero"], tp["hero"]))
+    pages.append(("/toys-for-tots/", "Toys for Tots Drop-Off | Square Peg Pizzeria",
+                  "Every Square Peg Pizzeria is a Toys for Tots drop-off location. "
+                  "Bring a new, unwrapped toy to any of our ten restaurants in "
+                  "Connecticut and Delray Beach, Florida.",
+                  "tft", dict(tft=TFT),
+                  graph(breadcrumbs([("Home", "/"), ("Toys for Tots", "/toys-for-tots/")])),
+                  "friends-holiday", "friends-holiday"))
     pages.append(("/fundraiser-night/", "Fundraiser Night at Square Peg | How It Works for Guests",
                   "Supporting a school, team or nonprofit at Square Peg Pizzeria? Order on "
                   "their Tuesday — dine in or pickup — mention the group, and 20% goes "
@@ -3909,6 +4039,21 @@ def main():
 UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/"}
 if not LAB_LIVE:
     UNLISTED.add("/play/pizza-lab/")
+
+# The Toys for Tots page carries two deliberate placeholders. Launching with
+# either still empty would publish a page telling the public "dates to come",
+# so the flag alone is not enough — the content has to be there too.
+_tft_missing = [n for n, v in (("window", TFT["window"]),
+                               ("offer_head", TFT["offer_head"]),
+                               ("offer_body", TFT["offer_body"])) if not v.strip()]
+if TFT["live"] and _tft_missing:
+    raise SystemExit(
+        "Refusing to build: TFT['live'] is True but these are still empty: "
+        + ", ".join(_tft_missing)
+        + ".\nFill them in data/content.py, or set TFT['live'] = False to keep "
+          "the page unlisted while you work on it.")
+if not TFT["live"]:
+    UNLISTED.add("/toys-for-tots/")
 
 TALLIES_FILE = ROOT / "data" / "poll_tallies.json"
 try:
