@@ -2279,7 +2279,7 @@ T["tft"] = """
 </section>
 {% endif %}
 
-<section class="section">
+<section class="section tft-steps">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Three things, and that&rsquo;s it</span>
@@ -2293,7 +2293,7 @@ T["tft"] = """
 
 {# ---- PLACEHOLDER: what a guest gets for bringing a toy ----------------- #}
 {% if tft.offer_head and tft.offer_body %}
-<section class="section section--dark">
+<section class="section section--dark tft-offer">
   <div class="wrap cta-foot">
     <span class="eyebrow">Bring a toy, get this</span>
     <h2>{{ tft.offer_head }}</h2>
@@ -2360,6 +2360,19 @@ T["tft"] = """
       <a class="btn btn--line" href="{{ tft.org_url }}" rel="noopener nofollow" target="_blank">toysfortots.org</a>
     </div>
     <p class="note">{{ tft.credit }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="join-bar">
+      <div>
+        <span class="eyebrow">Square Peg Rewards</span>
+        <b>{{ tft.rewards_head }}</b>
+        <p>{{ tft.rewards_body }}</p>
+      </div>
+      <a class="btn" href="{{ site.app_link }}" rel="noopener"{{ ext|safe }}>{{ tft.rewards_cta }}</a>
+    </div>
   </div>
 </section>
 """

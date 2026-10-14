@@ -1314,13 +1314,19 @@ TFT = {
     "window_note": "Drop off any time we're open — you don't need to be eating.",
 
     # ---------------------------------------------------------------------
-    # PLACEHOLDER 2 — THE PROMOTION
-    # What a guest gets for bringing a toy. Fill all three in or leave all
-    # three empty; a half-filled offer renders as the placeholder.
+    # THE PROMOTION — set Oct 2026
+    #
+    # ⚠ ONE THING TO SETTLE BEFORE LAUNCH: new Square Peg Rewards members also
+    # get a $5 welcome reward. "Not combinable with any other offer" means a
+    # guest who brings a toy AND joins on the same visit gets one $5, not two —
+    # which is an argument at the till unless the staff know the answer. Tell
+    # the GMs which way it goes.
     # ---------------------------------------------------------------------
-    "offer_head": "",
-    "offer_body": "",
-    "offer_fine": "",
+    "offer_head": "$5 toward your meal, the day you drop off",
+    "offer_body": "Bring in a toy and we'll take $5 off whatever you're eating "
+                  "or taking home that day. Dine in or pick up, at any of the ten.",
+    "offer_fine": "One $5 per guest, on the day you drop off the toy. Can't be "
+                  "combined with any other offer, discount or reward.",
 
     "steps": [
         ("Pick up a toy",
@@ -1350,6 +1356,13 @@ TFT = {
         "Anything resembling a real weapon",
         "Food, sweets or anything perishable",
     ],
+
+    # The Square Peg Rewards bar near the foot of the page. Wording follows the
+    # menus: free, $5 welcome reward, points every visit, members-only deals.
+    "rewards_head": "While you're here, join Square Peg Rewards.",
+    "rewards_body": "It's free. A $5 welcome reward, points on every visit and "
+                    "deals only members get.",
+    "rewards_cta": "Get the app",
 
     "org_url": "https://www.toysfortots.org/",
     "chapter_url": "https://www.toysfortots.org/find-your-local-chapter/",

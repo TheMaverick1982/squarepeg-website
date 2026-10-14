@@ -1486,3 +1486,27 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .tft-locs b{font-family:var(--display);font-weight:800;font-size:20px;line-height:1.1}
 .tft-locs address{font-style:normal;color:var(--smoke);font-size:15px;
   line-height:1.5;margin:6px 0 8px}
+
+/* The Square Peg Rewards bar. Horizontal on a desktop, stacked on a phone,
+   with the button never shrinking below its text. */
+.join-bar{display:flex;flex-wrap:wrap;align-items:center;gap:20px 28px;
+  justify-content:space-between;padding:26px 28px;border-radius:14px;
+  background:var(--ink);color:#fff}
+.join-bar>div{flex:1 1 320px;min-width:0}
+.join-bar .eyebrow{color:var(--flame)}
+.join-bar b{display:block;font-family:var(--display);font-weight:800;
+  line-height:1.05;font-size:clamp(22px,2.6vw,30px);margin:6px 0 6px}
+.join-bar p{margin:0;color:rgba(255,255,255,.72);font-size:15px;line-height:1.55;
+  max-width:54ch}
+.join-bar .btn{flex:0 0 auto}
+
+/* Toys for Tots: tighten the run-up to the offer. Two stacked .section blocks
+   put 112px of padding on each side of the join at desktop width — 224px of
+   empty page between the last step and the offer, which read as a mistake. */
+.tft-steps{padding-block-end:clamp(28px,4vw,52px)}
+.tft-offer{padding-block:clamp(44px,6vw,76px)}
+
+/* The fine print is the line that stops an argument at the till ("can't be
+   combined"), so it has to be readable. var(--smoke) on the dark band measures
+   2.91:1 — below the 4.5:1 AA needs for text this size. This takes it clear. */
+.tft-offer .note{color:#cfc7c1}
