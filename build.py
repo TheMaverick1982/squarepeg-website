@@ -2251,7 +2251,7 @@ T["tft"] = """
     <h1>{{ tft.h1 }}</h1>
     <p class="lede">{{ tft.lede }}</p>
     <div class="btn-row">
-      <a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a>
+      <a class="btn" href="#drop-off">{{ icons.pin|safe }}See the drop-off list</a>
       <a class="btn btn--ghost" href="{{ tft.org_url }}" rel="noopener nofollow" target="_blank">About Toys for Tots</a>
     </div>
   </div>
@@ -2330,7 +2330,7 @@ T["tft"] = """
   </div>
 </section>
 
-<section class="section">
+<section class="section" id="drop-off">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">All ten</span>
