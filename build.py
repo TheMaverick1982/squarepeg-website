@@ -2163,8 +2163,14 @@ T["links"] = """
     </a>
     <p class="link-lede">Wood-fired pizza, ten locations, dough made fresh from scratch.<br>Everything you might be looking for is right here.</p>
 
-    <ul class="link-list">{% for label, dest, sub, hot in links_rows %}
-      <li><a class="link-row{{ ' is-hot' if hot }}"
+    {# A dated row ships VISIBLE and is hidden by JS once the date passes, rather
+       than shipping hidden and being revealed. This page is the Instagram bio
+       destination: a link that needs JavaScript to appear is a link that doesn't
+       work when JavaScript fails, which is the one thing this page cannot do.
+       The cost is a brief flash of a finished campaign the morning after it
+       ends, which is the cheaper mistake. #}
+    <ul class="link-list">{% for label, dest, sub, hot, show_from, show_until in links_rows %}
+      <li{% if show_from %} data-season-from="{{ show_from }}"{% endif %}{% if show_until %} data-season-to="{{ show_until }}"{% endif %}><a class="link-row{{ ' is-hot' if hot }}"
              href="{% if dest == 'ORDER' %}{{ site.order_picker_toast }}{% elif dest == 'GIFT' %}{{ site.gift_cards_url }}{% elif dest.startswith('http') %}{{ dest }}{% else %}{{ u(dest) }}{% endif %}"
              {% if dest in ('ORDER', 'GIFT') or dest.startswith('http') %}rel="noopener"{{ ext|safe }}{% endif %}
              data-track="link_click" data-src="{{ label|lower|replace(' ', '-') }}">
@@ -3723,7 +3729,7 @@ def main():
 
     base_ctx = dict(
         u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
-        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=MORE_GROUPS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=LINKS, calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
+        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=MORE_GROUPS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, hwart=HW_ART, lunch_where=lunch_windows(),

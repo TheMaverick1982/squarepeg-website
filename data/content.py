@@ -279,8 +279,20 @@ PAIRING = {
 # ordering first, then the thing being promoted right now, then the booking paths.
 # Keep this under about a dozen rows — a long list gets scrolled past, not read.
 # ("Label", "destination", "sub-label or empty", "accent" True for the primary rows)
+# Rows are (label, destination, subtitle, highlight) — or six, adding
+# (show_from, show_until) as ISO dates to make a row seasonal. The browser hides
+# it outside that window against Eastern time, so a dated row drops off by
+# itself without anyone rebuilding or remembering to take it down. Either date
+# may be None.
 LINKS = [
     ("Order Online", "ORDER", "Pickup or delivery from any location", True),
+    # Peg or Treat. Live now so the Instagram bio link works through the run-up,
+    # and gone by itself the morning after Halloween. HALLOWEEN is defined
+    # further down this file so it can't be referenced here — instead there is
+    # an assert below its definition that fails the build if these two dates
+    # ever drift apart.
+    ("Peg or Treat", "/halloween/", "Costume photo contest — win a $25 gift card",
+     True, None, "2026-10-31"),
     ("Find a Location", "/locations/", "Ten spots across CT and Delray Beach", False),
     ("This Month\u2019s Specials", "/monthly-specials/", "The limited-time menu, gone at the end of the month", True),
     ("Ask Sal: What Should I Drink?", "/pairing/", "Our pairing guide, free to use", False),
@@ -1235,6 +1247,17 @@ HALLOWEEN = {
         "Not sponsored, endorsed or administered by Instagram or Facebook.",
     ],
 }
+
+# The Peg or Treat row on /links/ carries its own end date, because LINKS is
+# defined before HALLOWEEN and cannot reference it. This makes the duplication
+# safe: if the campaign moves and the links row doesn't, the build stops here
+# rather than leaving a dead Halloween link in the Instagram bio for a month.
+_pot = [r for r in LINKS if r[0] == "Peg or Treat"]
+assert _pot, "The Peg or Treat row is missing from LINKS"
+assert len(_pot[0]) == 6 and _pot[0][5] == HALLOWEEN["ends"], (
+    f"The /links/ Peg or Treat row expires {_pot[0][5] if len(_pot[0]) == 6 else 'never'}, "
+    f"but HALLOWEEN['ends'] is {HALLOWEEN['ends']}. Make them match.")
+
 
 LTO = {
     "month": "October",
