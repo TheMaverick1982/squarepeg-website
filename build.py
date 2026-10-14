@@ -1708,30 +1708,6 @@ T["fundraisers"] = """
     </div>
   </div>
 </section>
-<section class="section">
-  <div class="wrap two-col" style="align-items:center">
-    <div class="stack">
-      <span class="eyebrow">Once your date is booked</span>
-      <h2>Send your people here.</h2>
-      <p class="prose">This page is for you &mdash; the people you&rsquo;re inviting need
-        something different. We&rsquo;ve written them their own: what to do on the night,
-        what counts and what doesn&rsquo;t, and how to find the right Square Peg.</p>
-      <p class="prose">Put the link in your newsletter, on your website or in the
-        class group. Half the money a night leaves on the table is somebody ordering
-        through a delivery app by mistake.</p>
-      <div class="btn-row"><a class="btn" href="{{ u('/fundraiser-night/') }}">See the page for supporters</a></div>
-    </div>
-    <div class="stack">
-      <div class="cat-note" style="padding:20px;background:var(--paper);border-left:3px solid var(--ember)">
-        <b>Ready to paste:</b><br>
-        Join us at Square Peg in [town] on [date]. Eat dinner, bring friends, and 20%
-        of what everyone spends on food comes back to us. Dine in or pick up &mdash; just
-        tell them you&rsquo;re with [group]. Delivery apps don&rsquo;t count.<br>
-        What to know: {{ site.domain|replace('https://','') }}/fundraiser-night/
-      </div>
-    </div>
-  </div>
-</section>
 <section class="section" id="apply">
   <div class="wrap two-col">
     <div class="stack">
