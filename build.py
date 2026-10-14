@@ -2027,7 +2027,7 @@ T["entertainment"] = """
       <a class="btn btn--sm btn--line" href="{{ u('/locations/' ~ slug ~ '/') }}" aria-label="Hours & directions: Square Peg {{ l.short or l.name }}">Hours & directions</a>
     </article>{% endfor %}</div>
     <p class="note" style="margin-top:20px">Schedules can change for holidays and special events. Call your location to confirm.</p>
-    <div class="class-band"><div><span class="eyebrow">Monthly</span><h3>Pizza-making classes</h3><p>Adult classes every month, plus free kids’ classes. Stretch, top and fire your own pie.</p></div><div class="btn-row"><a class="btn" href="{{ site.events_calendar_url }}" target="_blank" rel="noopener" data-track="classes_click" data-src="entertainment">See dates & get tickets</a><a class="btn btn--line" href="{{ u('/private-events/') }}#classes">About the classes</a></div></div>
+    <div class="class-band"><div><span class="eyebrow">Monthly</span><h3>Pizza-making classes</h3><p>Adult classes every month, plus kids’ classes for $10. Stretch, top and fire your own pie.</p></div><div class="btn-row"><a class="btn" href="{{ site.events_calendar_url }}" target="_blank" rel="noopener" data-track="classes_click" data-src="entertainment">See dates & get tickets</a><a class="btn btn--line" href="{{ u('/private-events/') }}#classes">About the classes</a></div></div>
   </div>
 </section>
 """
@@ -3432,8 +3432,8 @@ T["private_events"] = """{% macro bento(items) %}<div class="bento">{% for p, a,
     <div class="stack">
       <span class="eyebrow">Monthly · adults & kids</span>
       <h2>Pizza-making classes</h2>
-      <p class="prose">Square Peg believes everyone is a chef, and we want to bring your inner chef to life. Every month we host adult pizza-making classes, plus <strong>free</strong> kids’ pizza-making classes.</p>
-      <ul class="checks"><li>Stretch, top and fire your own pie</li><li>Adult classes every month</li><li>Free classes for kids</li></ul>
+      <p class="prose">Square Peg believes everyone is a chef, and we want to bring your inner chef to life. Every month we host adult pizza-making classes, plus kids’ pizza-making classes for <strong>$10</strong>.</p>
+      <ul class="checks"><li>Stretch, top and fire your own pie</li><li>Adult classes every month</li><li>Kids’ classes are $10</li></ul>
       <div class="btn-row"><a class="btn" href="{{ site.events_calendar_url or u('/entertainment/') }}"{% if site.events_calendar_url %} target="_blank" rel="noopener" data-track="classes_click" data-src="private-events"{% endif %}>See dates & get tickets</a>{% if site.instagram %}<a class="btn btn--line" href="{{ site.instagram }}" rel="noopener"{{ ext|safe }}>Follow on Instagram</a>{% endif %}</div>
     </div>
   </div>
@@ -3796,7 +3796,7 @@ def main():
                   "Weekly trivia, bingo and DJ nights at Square Peg Pizzeria in Plainville, Shelton, East Hartford, Glastonbury, Preston, Storrs and Delray Beach.",
                   "entertainment", {}, graph(breadcrumbs([("Home", "/"), ("Entertainment", "/entertainment/")])), "friends-holiday", "friends-holiday"))
     pages.append(("/private-events/", "Private Events & Pizza-Making Classes | Square Peg Pizzeria",
-                  "Plan a private event at Square Peg Pizzeria, and join our monthly pizza-making classes for adults plus free kids' classes. Parties, catering and the food truck.",
+                  "Plan a private event at Square Peg Pizzeria, and join our monthly pizza-making classes for adults plus $10 kids' classes. Parties, catering and the food truck.",
                   "private_events", dict(routes=EVENT_ROUTES), graph(breadcrumbs([("Home", "/"), ("Private Events & Classes", "/private-events/")])), "table-spread", "table-spread"))
     pages.append(("/careers/", "Careers: Now Hiring | Square Peg Pizzeria",
                   "Join the Square Peg Pizzeria crew. Now hiring managers, servers, bartenders, kitchen staff and pizza cooks at locations across Connecticut and Delray Beach, FL.",
