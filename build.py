@@ -2243,8 +2243,8 @@ T["townpage"] = """
 """
 
 T["tft"] = """
-<section class="page-head on-dark">
-  {{ img('friends-holiday', 'Friends together at Square Peg over the holidays', eager=True, cls='bg')|safe }}
+<section class="page-head on-dark tft-head">
+  {{ img('kid-slice', 'A boy grinning over a slice of Square Peg pizza', eager=True, cls='bg')|safe }}
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Toys for Tots</span></nav>
     <span class="eyebrow">{{ tft.eyebrow }}{% if tft.window %} &middot; {{ tft.window }}{% endif %}</span>
@@ -3813,7 +3813,7 @@ def main():
                   "Connecticut and Delray Beach, Florida.",
                   "tft", dict(tft=TFT),
                   graph(breadcrumbs([("Home", "/"), ("Toys for Tots", "/toys-for-tots/")])),
-                  "friends-holiday", "friends-holiday"))
+                  "kid-slice", "kid-slice"))
     pages.append(("/fundraiser-night/", "Fundraiser Night at Square Peg | How It Works for Guests",
                   "Supporting a school, team or nonprofit at Square Peg Pizzeria? Order on "
                   "their Tuesday — dine in or pickup — mention the group, and 20% goes "

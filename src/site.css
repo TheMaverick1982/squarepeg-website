@@ -1510,3 +1510,11 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
    combined"), so it has to be readable. var(--smoke) on the dark band measures
    2.91:1 — below the 4.5:1 AA needs for text this size. This takes it clear. */
 .tft-offer .note{color:#cfc7c1}
+
+/* The hero photo is dimmed twice over: img.bg sits at opacity .5 AND a gradient
+   lays 95%->35% of near-black on top. On a bright stock shot that is fine; on
+   this one the kids disappear into the background, which defeats the point of
+   choosing a photo of kids. Lifting the image only — the gradient is untouched,
+   and the gradient is what the headline and lede sit on at the left edge, so
+   text contrast is unaffected. Measured after the change, not assumed. */
+.tft-head img.bg{opacity:.78}
