@@ -366,15 +366,12 @@ LAB = {
     "rules": [
         "Up to four toppings. Everything after that is a mess, not a pizza.",
         "One entry per person a month, so everyone gets a fair shot.",
-        "Build it from the lists and it is a pizza we can actually make. That is "
-        "the whole reason the lists are there.",
     ],
     # Replaces a section that explained our moderation queue to the public. That
     # only made sense while entries were going to be published and voted on;
     # now nothing is published, it just raised a question it never answered.
     "next": [
-        "Entries come straight to our kitchen team. They aren’t posted "
-        "anywhere — it’s just us reading what came in.",
+        "Entries come straight to our kitchen team.",
         "At the start of each month we go through them and pick the one we most "
         "want to make. It runs the following month as a limited-time special at "
         "all ten Square Pegs.",
