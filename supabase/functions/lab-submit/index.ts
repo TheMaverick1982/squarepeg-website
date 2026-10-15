@@ -48,6 +48,7 @@ const INGREDIENTS = {
     "Roasted red peppers",
     "Mushrooms",
     "Red onion",
+    "Caramelized onions",
     "Hot cherry peppers",
     "Garlic",
     "Hot pepper relish",

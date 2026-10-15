@@ -347,6 +347,10 @@ LAB = {
     "toppings": ["Meatballs", "Sausage", "Bacon", "Pepperoni", "Prosciutto",
                  "Chicken cacciatore", "Spicy capicola",
                  "Olives", "Roasted red peppers", "Mushrooms", "Red onion",
+                 # Added Oct 2026 at Brian's request. Not on the PILE IT ON list,
+                 # but it's on two named pies (Smashed Potato, Funghi & Cipolle),
+                 # so the kitchen stocks it and can put it on anything.
+                 "Caramelized onions",
                  "Hot cherry peppers", "Garlic", "Hot pepper relish", "Pineapple",
                  "Broccolini"],
     "finish": ["Hot honey", "Chili oil", "Maple", "Parm Cream drizzle",

@@ -576,11 +576,14 @@ MORE_GROUPS = [
              ("Pairing Guide", "/pairing/"), ("Rewards & Monthly Deals", "/deals/")]),
     ("Plan", [("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"),
               ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
-    # One entry for the Playground, not three. The hub links to the wheel and the
-    # debate itself, and nine items under "Fun" unbalances the mega menu.
-    ("Fun", [("Halloween", "/halloween/"), ("The Playground", "/play/"),
-             ("Roll the Dice", "/roll-the-dice/"), ("Date Night", "/date-night/"),
-             ("What Pizza Are You?", "/what-pizza-are-you/"), ("Pizza Trivia", "/pizza-trivia/")]),
+    # One entry for the Playground, not three: the hub links to the wheel and the
+    # debate itself. The Pizza Lab is the exception — it has its own entry because
+    # it is the one page we are actively promoting, and a submission is worth more
+    # than a page view.
+    ("Fun", [("Halloween", "/halloween/"), ("The Pizza Lab", "/play/pizza-lab/"),
+             ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"),
+             ("Date Night", "/date-night/"), ("What Pizza Are You?", "/what-pizza-are-you/"),
+             ("Pizza Trivia", "/pizza-trivia/")]),
     ("Helpful", [("Pizza Calculator", "/pizza-calculator/"), ("Pizza FAQ", "/pizza-faq/"),
                  ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
@@ -591,7 +594,7 @@ DRAWER_EXTRA = []
 DRAWER_GROUPS = [
     ("Eat", [("Menu", "MENU"), ("LTO Menu", "/monthly-specials/"), ("Pairing Guide", "/pairing/"), ("What’s on the Menu", "/our-menu/"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
     ("Plan", [("Catering", "/catering/"), ("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
-    ("Fun", [("Entertainment", "/entertainment/"), ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Cards", "GIFT")]),
+    ("Fun", [("Entertainment", "/entertainment/"), ("The Pizza Lab", "/play/pizza-lab/"), ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
 ]
 DAY_NAMES = {"Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"}
