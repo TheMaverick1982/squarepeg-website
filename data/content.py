@@ -1402,3 +1402,169 @@ TFT = {
               "by the Marine Toys for Tots Foundation. Square Peg Pizzeria is a "
               "drop-off location, not an affiliate of the Foundation.",
 }
+
+# ---- Corporate: events & bulk gift cards --------------------------------
+# Two B2B pages that run holiday wording now and evergreen wording from
+# Jan 1. Both copies ship in the HTML; the build hides whichever is out of
+# season today and site.js re-checks against Eastern time on every load, so
+# the swap happens on the day without anyone rebuilding or remembering.
+#
+# SWITCH is the last day the holiday wording runs. Move it a year each
+# autumn — the build asserts it is in the future, so a stale date fails the
+# build instead of quietly serving "book your holiday party" in March.
+CORPORATE_SWITCH = "2026-12-31"
+
+CORPORATE_EVENTS = {
+    "holiday": {
+        "eyebrow": "Corporate holiday parties · All 10 locations",
+        "h1": "Host the holiday party at ours.",
+        "lede": "Your team, your clients, or both. We give you the room, plan the "
+                "food ahead, and run a tab you set the ceiling on. You turn up and "
+                "talk to people.",
+        "kicker": "December books up first. The good Thursdays go before Halloween.",
+    },
+    "evergreen": {
+        "eyebrow": "Corporate events · All 10 locations",
+        "h1": "Host it at ours.",
+        "lede": "Client appreciation, a closed deal, a team that has had a long "
+                "quarter. We give you the room, plan the food ahead, and run a tab "
+                "you set the ceiling on. You turn up and talk to people.",
+        "kicker": "Give us a couple of weeks and a rough headcount and the rest is ours.",
+    },
+    # Two genuinely different formats. The second one is the interesting one and
+    # almost nobody offers it, so it gets equal billing rather than a footnote.
+    "formats": [
+        ("Everyone at once", "The sit-down",
+         "One night, one long table or a room of your own. The food is planned "
+         "before anyone arrives so it lands together instead of in waves, and "
+         "nobody from your company has to get up and deal with the kitchen."),
+        ("Come when you can", "The drop-in night",
+         "Your clients can’t all make Thursday at seven, so don’t make them. Pick "
+         "a night — or a whole week — tell us who’s invited, and they come by when "
+         "it suits them. A drink and a pizza, eaten in or carried out, on your tab. "
+         "You can be there the whole time or not at all."),
+    ],
+    "handled": [
+        "A room of its own at some locations, a reserved section at others",
+        "Food planned before the night, so it comes out together",
+        "A tab with a ceiling you set — we stop there and tell you where it landed",
+        "One invoice at the end. Nobody collects from anybody",
+        "Gluten-free crust and vegan cheese on request, same as always",
+    ],
+    "steps": [
+        ("Send the form", "A date, a rough headcount, and which Square Peg."),
+        ("We call you", "We confirm the space, plan the food with you, and agree the tab."),
+        ("Turn up", "Tables ready, tab open, nothing for you to run."),
+    ],
+    # Deliberately vague on which locations have a real room: it differs store to
+    # store and a list on a web page goes stale the first time a dining room is
+    # rearranged. The honest version is "tell us the number and we'll tell you where".
+    "space": "Some of our locations have a room of their own. At the others we "
+             "reserve a section and build it around your group. Tell us the "
+             "headcount and the date and we’ll tell you which Square Peg fits — "
+             "that one call saves a lot of guessing.",
+    # Bolton is the only location without a bar. Saying so up front beats a
+    # company booking a drinks night at the one place that can't pour.
+    "bar_note": "Nine of the ten have a full bar. Bolton doesn’t — worth knowing "
+                "if drinks are part of the night.",
+}
+
+CORPORATE_EVENTS_FAQ = [
+    ("How many people can you take?",
+     "It depends on the location. Some Square Pegs have a room of their own, others "
+     "reserve a section of the dining room. Send the headcount and the date and we’ll "
+     "tell you which one works rather than guessing on a web page."),
+    ("Can we set a spending limit?",
+     "Yes, and most companies do. You tell us the ceiling before the night, we run the "
+     "tab against it, and we tell you where it landed. Nobody gets an awkward surprise."),
+    ("Can guests take a pizza home instead of eating in?",
+     "Yes — that’s the whole idea behind the drop-in night. They come by, have a drink, "
+     "and take a pie home on the company."),
+    ("Can we have the place to ourselves?",
+     "Ask. It depends on the location and the night, and it’s a conversation rather than "
+     "a yes or no on a web page."),
+    ("Do you do this outside the holidays?",
+     "Yes. December is busiest, but client appreciation, closing celebrations and team "
+     "dinners run all year, and January through March is when we have the most room."),
+    ("What about dietary needs?",
+     "We have a 12″ gluten-free crust and vegan cheese. Mention it in the request and "
+     "we’ll plan around it."),
+    ("Can we get one invoice?",
+     "Yes. One bill at the end, to the company. No splitting, no collecting."),
+]
+
+# Bonus cards rather than a discount. Costs roughly the same but never marks the
+# card down, and the bonus cards themselves bring extra people through the door —
+# which a percentage off the invoice never does.
+#
+# "bonus" is cards given on top of the cards bought, so the headline percentage
+# is bonus ÷ bought: 1/10, 3/25, 8/50.
+CORPORATE_GIFTS = {
+    "holiday": {
+        "eyebrow": "Corporate gift cards · Bulk orders",
+        "h1": "Give them something they’ll actually use.",
+        "lede": "Your clients get a lot of branded water bottles in December. A Square "
+                "Peg card gets spent — usually on a Friday, usually with their family, "
+                "and they’ll remember who sent it.",
+        "kicker": "Order with a week’s notice and they’ll be ready to collect.",
+    },
+    "evergreen": {
+        "eyebrow": "Corporate gift cards · Bulk orders",
+        "h1": "Give them something they’ll actually use.",
+        "lede": "Closing gifts, referral thank-yous, a crew that pulled a long week. A "
+                "Square Peg card gets spent. A branded water bottle goes in a drawer.",
+        "kicker": "Order with a week’s notice and they’ll be ready to collect.",
+    },
+    "denominations": ["$25", "$50"],
+    # (cards bought, bonus cards, headline)
+    "tiers": [
+        (10, 1, "10% extra"),
+        (25, 3, "12% extra"),
+        (50, 8, "16% extra"),
+    ],
+    "examples": [
+        ("25 × $25", "$625", "28 cards", "$700 of Square Peg"),
+        ("50 × $50", "$2,500", "58 cards", "$2,900 of Square Peg"),
+    ],
+    "uses": [
+        ("Client thank-yous", "The one gift nobody re-gifts."),
+        ("Closing gifts", "Realtors, agents, dealerships, anyone who shakes a hand at the end."),
+        ("Referral thank-yous", "Cheaper than an ad and it earns the next one."),
+        ("Staff rewards", "A spot bonus that doesn’t go through payroll."),
+        ("Crew appreciation", "Contractors, trades, anyone who had a brutal week."),
+        ("Patient and customer appreciation", "Medical, dental, veterinary — people remember dinner."),
+    ],
+    "how": [
+        ("Tell us the numbers", "How many cards, and whether you want $25s, $50s or a mix."),
+        ("We confirm and take payment", "One invoice to the company. We’ll tell you the bonus cards you’ve earned."),
+        ("Collect them", "Ready at the Square Peg you choose, boxed and counted."),
+    ],
+    # ⚠ CONFIRM BEFORE PUSHING — do Toast gift cards redeem at all ten locations,
+    # including Shelton and Delray Beach? The page says they do. If any store is on
+    # a separate Toast account the claim is wrong and this line has to change.
+    "scope": "Good at any Square Peg, on anything on the menu.",
+    "min": 10,
+}
+
+CORPORATE_GIFTS_FAQ = [
+    ("How does the bonus work?",
+     "You pay for the cards you order and we add more on top. Ten cards earns one extra, "
+     "twenty-five earns three, fifty earns eight. The cards themselves are never marked "
+     "down — you just leave with more of them than you paid for."),
+    ("What’s the minimum?",
+     "Ten cards. Below that, buy them one at a time online like anyone else — the bonus "
+     "is for the volume, not the paperwork."),
+    ("Can we mix $25 and $50 cards?",
+     "Yes. The bonus is counted on the total number of cards, and the bonus cards come in "
+     "whichever denomination you’re mostly buying."),
+    ("Can you put our company name on them?",
+     "Ask when you send the request. Tell us what you had in mind and we’ll tell you "
+     "honestly what we can and can’t do."),
+    ("How long does it take?",
+     "Give us about a week. In December, give us two — that’s the month everybody "
+     "remembers gift cards at the same time."),
+    ("Where do they work?",
+     "Any Square Peg, on anything on the menu."),
+    ("Can we get one invoice for accounting?",
+     "Yes. One invoice to the company for the whole order."),
+]

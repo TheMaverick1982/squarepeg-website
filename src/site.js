@@ -403,12 +403,25 @@
   function chatOnce() { chatEvents.forEach(function (ev) { removeEventListener(ev, chatOnce); }); whenIdle(loadChat, 300); }
   chatEvents.forEach(function (ev) { addEventListener(ev, chatOnce, { passive: true }); });
 
-  /* ---------- Prefill forms from ?location= ---------- */
+  /* ---------- Prefill forms from ?location= and ?topic= ---------- */
   function prefill() {
-    var m = (location.search + location.hash).match(/[?&]location=([a-z0-9-]+)/);
+    var q = location.search + location.hash;
+    var m = q.match(/[?&]location=([a-z0-9-]+)/);
     var l = m && bySlug(m[1]);
-    if (!l) return;
-    $$('select[name="location"]').forEach(function (s) { s.value = l.name; });
+    if (l) $$('select[name="location"]').forEach(function (s) { s.value = l.name; });
+
+    // ?topic= picks an option on the contact form's topic select, so a page can
+    // send someone to /contact/ already on the right subject. Matched against the
+    // option text rather than set blind: an unknown value leaves the select alone
+    // instead of blanking it.
+    var t = q.match(/[?&]topic=([^&#]+)/);
+    if (!t) return;
+    var want = decodeURIComponent(t[1].replace(/\+/g, " ")).trim().toLowerCase();
+    $$('select[name="event_type"]').forEach(function (s) {
+      for (var i = 0; i < s.options.length; i++) {
+        if (s.options[i].text.trim().toLowerCase() === want) { s.selectedIndex = i; return; }
+      }
+    });
   }
 
   /* ---------- Contact form → Supabase ---------- */

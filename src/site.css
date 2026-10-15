@@ -1463,12 +1463,12 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
    sizes above — set for three side by side — read small. Scale them up for the
    stacked layout only; the multi-column cases are unchanged. */
 @media (max-width:619px){
-  .how-steps{gap:32px}
-  .how-ico{width:60px;height:60px;margin-bottom:12px}
-  .how-ico svg{width:30px;height:30px}
-  .how-n{font-size:13px;letter-spacing:.14em}
-  .how-steps b{font-size:27px}
-  .how-body{font-size:17px;line-height:1.6}
+  .how-steps{gap:34px}
+  .how-ico{width:64px;height:64px;margin-bottom:14px}
+  .how-ico svg{width:32px;height:32px}
+  .how-n{font-size:14px;letter-spacing:.14em}
+  .how-steps b{font-size:32px;line-height:1.08}
+  .how-body{font-size:18px;line-height:1.6}
 }
 
 /* ---- Toys for Tots ------------------------------------------------------
@@ -1529,3 +1529,39 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
    and the gradient is what the headline and lede sit on at the left edge, so
    text contrast is unaffected. Measured after the change, not assumed. */
 .tft-head img.bg{opacity:.78}
+
+/* ---- Corporate bulk gift card tiers -------------------------------------
+   Three cards, biggest offer last. The last one is marked rather than made
+   bigger: a size jump reflows the row at every breakpoint and the ranking is
+   already obvious from the numbers. */
+.corp-tiers{display:grid;gap:18px;grid-template-columns:1fr;margin-top:8px}
+@media (min-width:720px){.corp-tiers{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.corp-tier{display:grid;justify-items:start;gap:2px;padding:26px 24px;border-radius:14px;
+  background:var(--white);border:1px solid var(--line)}
+.corp-tier.is-best{border-color:var(--ember);box-shadow:inset 0 0 0 1px var(--ember)}
+.corp-tier-n{font-family:var(--display);font-weight:800;font-size:clamp(40px,6vw,54px);
+  line-height:1;color:var(--ink)}
+.corp-tier-lab{font:800 12px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--smoke);margin-bottom:10px}
+.corp-tier b{font-family:var(--display);font-weight:800;font-size:26px;line-height:1.1;
+  color:var(--ember)}
+.corp-tier-out{color:var(--smoke);font-size:15px;line-height:1.5;margin-top:4px}
+.corp-tier-out b{font-family:inherit;font-size:inherit;color:var(--ink)}
+.corp-tier-pct{margin-top:12px;font:800 12px/1 var(--body);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ember)}
+.corp-note{margin:18px 0 0;color:var(--smoke);font-size:15px;line-height:1.6;max-width:62ch}
+.corp-eg{display:grid;gap:14px;grid-template-columns:1fr;margin-top:24px}
+@media (min-width:620px){.corp-eg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.corp-eg>div{display:grid;gap:3px;padding:18px 20px;border-radius:12px;background:var(--ink);color:#fff}
+.corp-eg b{font-family:var(--display);font-weight:800;font-size:24px;line-height:1.1}
+.corp-eg span:last-child{color:#cfc7c1;font-size:15px;line-height:1.5}
+.corp-eg .eyebrow{color:var(--flame)}
+@media (max-width:619px){
+  .corp-tier{padding:22px 20px}
+  .corp-tier b{font-size:24px}
+  .corp-tier-out{font-size:16px}
+}
+/* Subheading inside a page that carries two FAQ sets. */
+.faq-h{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.2;
+  margin:28px 0 10px;color:var(--ink)}
+.section-head + .faq-h{margin-top:4px}

@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 
 # The Pizza Lab's pre-selected finish has to be one of the finishes on offer.
@@ -27,6 +27,14 @@ from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 # and nothing anywhere complains — the entries just quietly arrive incomplete.
 assert LAB["finish_default"] in LAB["finish"], (
     f"LAB['finish_default'] is {LAB['finish_default']!r}, which is not in LAB['finish']"
+)
+# The corporate pages carry holiday wording until CORPORATE_SWITCH and evergreen
+# wording after it. Once the date is past, the holiday copy is dead weight nobody
+# will ever see again and the next December's needs a new date — so fail here
+# rather than quietly shipping two versions of a page that only has one live.
+assert date.today().isoformat() <= CORPORATE_SWITCH, (
+    f"CORPORATE_SWITCH is {CORPORATE_SWITCH}, which has passed. Roll it forward to "
+    f"next year's and refresh the 'holiday' copy in CORPORATE_EVENTS and CORPORATE_GIFTS."
 )
 # Same trap, worse: lab-submit rejects anything not on these lists, so a value
 # the page offers but the function doesn't know means a submission that fails
@@ -1439,6 +1447,167 @@ T["catering"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap i
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Planning questions</span><h2>Catering FAQ</h2></div>
     <div class="faq">{% for q, a in faqs %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
+  </div>
+</section>
+"""
+
+ced = 'data-season-to="' + CORPORATE_SWITCH + '"'          # holiday copy: runs until the switch
+cev = ced + ' data-season-invert'                          # evergreen copy: runs after it
+# The build also hides whichever one is out of season today, so the page is right
+# before site.js runs and right for anyone with JS off. site.js then re-checks on
+# every load, which is what carries the page over Jan 1 between builds.
+CORP_SEASON = {"hol": ced + ("" if TODAY <= CORPORATE_SWITCH else " hidden"),
+               "eve": cev + (" hidden" if TODAY <= CORPORATE_SWITCH else "")}
+
+T["corporate"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
+
+<section class="page-head on-dark">
+  {{ img('catering-table', 'A long table of wood-fired pizzas laid out for a group', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>For Business</span></nav>
+    <span class="eyebrow" {{ season.hol|safe }}>{{ ce.holiday.eyebrow }}</span>
+    <span class="eyebrow" {{ season.eve|safe }}>{{ ce.evergreen.eyebrow }}</span>
+    <h1 {{ season.hol|safe }}>{{ ce.holiday.h1 }}</h1>
+    <h1 {{ season.eve|safe }}>{{ ce.evergreen.h1 }}</h1>
+    <p class="lede" {{ season.hol|safe }}>{{ ce.holiday.lede }}</p>
+    <p class="lede" {{ season.eve|safe }}>{{ ce.evergreen.lede }}</p>
+    <div class="btn-row"><a class="btn" href="#party">Host an event</a><a class="btn btn--ghost" href="#cards">Gift cards in bulk</a></div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Two ways we work with companies</span>
+      <h2>Bring them here, or send them something.</h2>
+      <p>Most businesses end up doing both &mdash; a night for the people who can come,
+        and a card for the ones who can&rsquo;t.</p>
+    </div>
+    <div class="route-grid">
+      <a class="route-card" href="#party"><span class="eyebrow">Come to us</span><h3>Host an event</h3>
+        <p>A holiday party, a client night, a team dinner. A room or a reserved section,
+          food planned ahead, and a tab you cap.</p><span class="btn btn--sm">See how it works {{ icons.arrow|safe }}</span></a>
+      <a class="route-card" href="#cards"><span class="eyebrow">Send it to them</span><h3>Gift cards in bulk</h3>
+        <p>Order ten or more and earn bonus cards on top &mdash; up to eight free at fifty.
+          One invoice, ready to collect.</p><span class="btn btn--sm">See the tiers {{ icons.arrow|safe }}</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PART ONE: THE EVENT ======================= -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Two ways to do it</span>
+      <h2>Not every night has to be a sit-down.</h2>
+      <p>Pick the one that matches how your people actually move.</p>
+    </div>
+    <div class="route-grid">
+      {% for when, name, blurb in ce.formats %}
+      <article class="route-card"><span class="eyebrow">{{ when }}</span><h3>{{ name }}</h3><p>{{ blurb }}</p></article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper" id="party">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">What you hand over</span>
+      <h2>You invite people. We do the rest.</h2>
+      <ul class="checks">{% for h in ce.handled %}<li>{{ h }}</li>{% endfor %}</ul>
+      <p class="prose">{{ ce.space }}</p>
+      <p class="prose"><b>{{ ce.bar_note }}</b></p>
+      {{ feature('table-spread', 'A table of shared plates and drinks at Square Peg', 'Planned ahead, so it lands together') }}
+      <ol class="steps">{% for b, s in ce.steps %}<li><div><b>{{ b }}</b><span>{{ s }}</span></div></li>{% endfor %}</ol>
+      <p class="prose" {{ season.hol|safe }}><b>{{ ce.holiday.kicker }}</b></p>
+      <p class="prose" {{ season.eve|safe }}><b>{{ ce.evergreen.kicker }}</b></p>
+    </div>
+    {% with form_title='Request a corporate event', fid='corp', embed_key='large_party', form_name='large_party', submit='Send my request', default_type='Corporate / office' %}{% include "booking_form" %}{% endwith %}
+  </div>
+</section>
+
+<!-- ===================== PART TWO: THE GIFT CARDS ===================== -->
+<section class="section section--dark on-dark" id="cards">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">{{ cg.holiday.eyebrow }}</span>
+      <h2>{{ cg.holiday.h1 }}</h2>
+      <p {{ season.hol|safe }}>{{ cg.holiday.lede }}</p>
+      <p {{ season.eve|safe }}>{{ cg.evergreen.lede }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Buy in bulk, hand out more</span>
+      <h2>We don&rsquo;t discount the card. We give you extra ones.</h2>
+      <p>A percentage off an invoice disappears into accounting. Extra cards go to
+        extra people &mdash; which is the point of buying them.</p>
+    </div>
+    <div class="corp-tiers">
+      {% for buy, bonus, head in cg.tiers %}
+      <article class="corp-tier{{ ' is-best' if loop.last }}">
+        <span class="corp-tier-n">{{ buy }}</span>
+        <span class="corp-tier-lab">cards</span>
+        <b>+{{ bonus }} free</b>
+        <span class="corp-tier-out">You hand out <b>{{ buy + bonus }}</b></span>
+        <span class="corp-tier-pct">{{ head }}</span>
+      </article>
+      {% endfor %}
+    </div>
+    <p class="corp-note">Cards come in {{ cg.denominations|join(' and ') }}, and you can mix them.
+      Minimum order is {{ cg.min }} cards. {{ cg.scope }}</p>
+    <div class="corp-eg">
+      {% for what, pay, get, worth in cg.examples %}
+      <div><span class="eyebrow">{{ what }}</span><b>Pay {{ pay }}</b><span>Get {{ get }} &mdash; {{ worth }}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Who these are for</span><h2>Where a Square Peg card lands well.</h2></div>
+    <div class="route-grid">
+      {% for name, blurb in cg.uses %}
+      <article class="route-card"><h3>{{ name }}</h3><p>{{ blurb }}</p></article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark on-dark">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">How a bulk order works</span>
+      <h2>Three steps, one invoice.</h2>
+      <ol class="steps">{% for b, s in cg.how %}<li><div><b>{{ b }}</b><span>{{ s }}</span></div></li>{% endfor %}</ol>
+      <p class="prose" {{ season.hol|safe }}><b>{{ cg.holiday.kicker }}</b></p>
+      <p class="prose" {{ season.eve|safe }}><b>{{ cg.evergreen.kicker }}</b></p>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Send the numbers</span>
+      <h2>Tell us how many.</h2>
+      <p class="prose">How many cards, which denominations, and when you need them. We&rsquo;ll
+        confirm the bonus cards you&rsquo;ve earned and take it from there.</p>
+      <div class="btn-row"><a class="btn" href="{{ u('/contact/') }}?topic=Gift+cards">Request a bulk order</a><a class="btn btn--ghost" href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Just need one?</a></div>
+      <p class="prose">Feeding people at your place instead? That&rsquo;s
+        <a href="{{ u('/catering/') }}">catering</a> &mdash; boxed and ready to collect,
+        48 hours&rsquo; notice, no minimum.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Before you ask</span><h2>Questions we get</h2></div>
+    <h3 class="faq-h">Hosting an event</h3>
+    <div class="faq">{% for q, a in event_faqs %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
+    <h3 class="faq-h">Gift cards in bulk</h3>
+    <div class="faq">{% for q, a in gift_faqs %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
   </div>
 </section>
 """
@@ -3741,7 +3910,7 @@ def main():
                       "})();</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=MORE_GROUPS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
@@ -3792,6 +3961,12 @@ def main():
     pages.append(("/large-party-reservations/", "Large Party & Group Reservations | Square Peg Pizzeria",
                   "Reserve for a big group at any Square Peg Pizzeria in CT or Delray Beach, FL. Birthdays, team dinners, showers and reunions with wood-fired pizza.",
                   "parties", dict(faqs=LARGE_PARTY_FAQ, routes=EVENT_ROUTES), graph(faq_schema(LARGE_PARTY_FAQ), breadcrumbs([("Home", "/"), ("Large Parties", "/large-party-reservations/")])), "friends-holiday", "friends-holiday"))
+    pages.append(("/corporate/", "Corporate Parties & Bulk Gift Cards | Square Peg Pizzeria",
+                  "Square Peg Pizzeria for business: host your company holiday party or client night at any of 10 locations, and buy gift cards in bulk — order 10 get 1 free, 50 get 8.",
+                  "corporate", dict(event_faqs=CORPORATE_EVENTS_FAQ, gift_faqs=CORPORATE_GIFTS_FAQ),
+                  graph(faq_schema(CORPORATE_EVENTS_FAQ + CORPORATE_GIFTS_FAQ),
+                        breadcrumbs([("Home", "/"), ("For Business", "/corporate/")])),
+                  "friends-holiday", "friends-holiday"))
     pages.append(("/contact/", "Contact Us | Square Peg Pizzeria",
                   "Contact Square Peg Pizzeria: phone numbers for all 10 locations, email, and a message form for catering, large parties, gift cards, jobs and more.",
                   "contact", {}, graph({"@type": "ContactPage", "url": abs_url("/contact/"), "name": "Contact Square Peg Pizzeria",
@@ -4073,7 +4248,8 @@ def main():
 #     not something a stranger should land on from a search: out of context it
 #     reads like an offer anyone can turn up and claim, when it only applies to
 #     one group, at one location, on one night.
-UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-night/"}
+UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-night/",
+            "/corporate/"}
 if not LAB_LIVE:
     UNLISTED.add("/play/pizza-lab/")
 
