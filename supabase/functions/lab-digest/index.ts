@@ -29,6 +29,8 @@ const DEFAULT_TO = [
   "brian@brianhardy.com",
   "plainville@squarepegpizzeria.com",
   "ehartford@squarepegpizzeria.com",
+  "catering@squarepegpizzeria.com",
+  "maffefinancial@hotmail.com",
 ].join(",");
 
 const TO = (Deno.env.get("LAB_DIGEST_TO") || DEFAULT_TO)
