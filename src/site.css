@@ -1459,6 +1459,17 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .how-steps b{font-family:var(--display);font-weight:800;line-height:1.05;
   font-size:clamp(21px,2.3vw,26px)}
 .how-body{color:var(--smoke);font-size:15px;line-height:1.55}
+/* One column below 620px, so each step has the full width to itself and the
+   sizes above — set for three side by side — read small. Scale them up for the
+   stacked layout only; the multi-column cases are unchanged. */
+@media (max-width:619px){
+  .how-steps{gap:32px}
+  .how-ico{width:60px;height:60px;margin-bottom:12px}
+  .how-ico svg{width:30px;height:30px}
+  .how-n{font-size:13px;letter-spacing:.14em}
+  .how-steps b{font-size:27px}
+  .how-body{font-size:17px;line-height:1.6}
+}
 
 /* ---- Toys for Tots ------------------------------------------------------
    .tft-todo is an editor's placeholder, not public copy. It only ever renders
