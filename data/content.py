@@ -1568,3 +1568,52 @@ CORPORATE_GIFTS_FAQ = [
     ("Can we get one invoice for accounting?",
      "Yes. One invoice to the company for the whole order."),
 ]
+
+# ---- Gift card bounce-back: buy $100 in Nov/Dec, get $20 for January -----
+# A bounce-back, not a discount. December gift card buyers are shopping for
+# somebody else; the $20 is the only part of the transaction that is theirs,
+# and it lands in the quietest six weeks of the year on purpose.
+#
+# Four windows, and the page tells the truth in all of them without anyone
+# editing it: before it starts, while you can buy, while you can spend, and
+# after. Dates are checked against each other at build time below.
+GIFT_BOUNCE = {
+    "buy_from": "2026-11-01",
+    "buy_to": "2026-12-31",
+    "use_from": "2027-01-01",
+    "use_to": "2027-02-13",
+    "buy_label": "November 1 – December 31",
+    "use_label": "January 1 – February 13",
+    "spend": "$100",
+    "reward": "$20",
+    "eyebrow": "November & December · In store · Loyalty members",
+    "h1": "The gift card is for them. The $20 is for you.",
+    "lede": "Buy $100 in Square Peg gift cards at any of our ten locations in "
+            "November or December, and we’ll put $20 of credit straight into your "
+            "loyalty account — to spend between January 1 and February 13, which "
+            "is about when you’ll want it.",
+    "steps": [
+        ("Buy $100 in gift cards", "At the register, at any Square Peg, any time in November or December. "
+                                   "One card or several — it’s the $100 that counts."),
+        ("We load $20 to your app", "It lands in your loyalty account before you leave. Nothing to keep "
+                                    "hold of, nothing to lose in a coat pocket until March."),
+        ("Spend it in the new year", "January 1 to February 13. Dine in, pick up, whatever you fancy."),
+    ],
+    "why": "Everyone buys gift cards in December and nobody buys anything in "
+           "January. This is us closing that gap — and giving you a reason to "
+           "come back when the decorations are down.",
+    "join_head": "Not a member yet?",
+    "join_body": "The $20 lands in a loyalty account, so you’ll need one — it takes "
+                 "a minute and it’s free. Join now and you start with $5 off your "
+                 "next order, before any of this.",
+    "terms": [
+        "$100 or more in gift cards, bought in person at a Square Peg location.",
+        "One $20 credit per loyalty member for the whole promotion, not per visit.",
+        "Gift cards bought online or through a bulk corporate order don’t qualify — "
+        "corporate orders earn bonus cards instead.",
+        "The $20 is loaded as loyalty credit, not a gift card, and isn’t redeemable for cash.",
+        "Usable January 1 through February 13 only. It doesn’t carry over.",
+        "Not valid with other offers. Tax and gratuity not included.",
+        "Participating locations. Management may end the promotion at any time.",
+    ],
+}

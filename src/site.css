@@ -1608,3 +1608,28 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
   .steps b{font-size:19px}
   .steps span{font-size:17px}
 }
+
+/* ---- Gift card bounce-back ---------------------------------------------
+   The status strip tells the visitor where in the promotion today falls. The
+   build picks the right one and site.js re-checks on every load, so the page
+   is right on Nov 1 and again on Jan 1 without a rebuild. */
+.gb-status{padding-top:26px;padding-bottom:26px}
+.gb-flag{margin:0;padding:16px 20px;border-left:4px solid var(--line);
+  background:var(--white);color:var(--smoke);font-size:16.5px;line-height:1.55}
+.gb-flag b{color:var(--ink)}
+.gb-flag.is-on{border-left-color:var(--ember)}
+/* The offer, as a thing you can look at rather than a sentence you must parse. */
+.gb-card{display:grid;justify-items:center;text-align:center;gap:2px;padding:34px 26px 32px;
+  background:var(--ink);color:#fff;border-radius:14px}
+.gb-card-eyebrow{font:800 12px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--flame)}
+.gb-card-n{font-family:var(--display);font-weight:800;font-size:clamp(56px,9vw,78px);
+  line-height:1;margin-top:6px}
+.gb-card-when{color:#cfc7c1;font-size:15px;line-height:1.5}
+.gb-card-arrow{display:block;margin:16px 0 14px;font-size:26px;line-height:1;color:var(--ember-bright)}
+.gb-card-win{font-family:var(--display);font-weight:800;font-size:clamp(40px,6.5vw,56px);
+  line-height:1;margin-top:6px;color:var(--flame)}
+.terms-list{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:10px;max-width:72ch}
+.terms-list li{position:relative;padding-left:22px;color:var(--smoke);font-size:15.5px;line-height:1.6}
+.terms-list li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;
+  background:var(--ember)}

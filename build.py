@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 
 # The Pizza Lab's pre-selected finish has to be one of the finishes on offer.
@@ -32,6 +32,14 @@ assert LAB["finish_default"] in LAB["finish"], (
 # wording after it. Once the date is past, the holiday copy is dead weight nobody
 # will ever see again and the next December's needs a new date — so fail here
 # rather than quietly shipping two versions of a page that only has one live.
+# The bounce-back's four windows have to run in order, or the page can offer a
+# credit that is already dead, or one you cannot earn yet.
+assert (GIFT_BOUNCE["buy_from"] < GIFT_BOUNCE["buy_to"]
+        < GIFT_BOUNCE["use_from"] < GIFT_BOUNCE["use_to"]), (
+    "GIFT_BOUNCE windows overlap or run backwards: buy "
+    f"{GIFT_BOUNCE['buy_from']}..{GIFT_BOUNCE['buy_to']}, use "
+    f"{GIFT_BOUNCE['use_from']}..{GIFT_BOUNCE['use_to']}"
+)
 assert date.today().isoformat() <= CORPORATE_SWITCH, (
     f"CORPORATE_SWITCH is {CORPORATE_SWITCH}, which has passed. Roll it forward to "
     f"next year's and refresh the 'holiday' copy in CORPORATE_EVENTS and CORPORATE_GIFTS."
@@ -1458,6 +1466,84 @@ cev = ced + ' data-season-invert'                          # evergreen copy: run
 # every load, which is what carries the page over Jan 1 between builds.
 CORP_SEASON = {"hol": ced + ("" if TODAY <= CORPORATE_SWITCH else " hidden"),
                "eve": cev + (" hidden" if TODAY <= CORPORATE_SWITCH else "")}
+
+T["giftcard_bonus"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
+
+<section class="page-head on-dark">
+  {{ img('gift-card-25', 'A Square Peg Pizzeria gift card', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Gift Card Bonus</span></nav>
+    <span class="eyebrow">{{ gb.eyebrow }}</span>
+    <h1>{{ gb.h1 }}</h1>
+    <p class="lede">{{ gb.lede }}</p>
+    <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">Find a Square Peg</a><a class="btn btn--ghost" href="{{ site.app_link }}" rel="noopener"{{ ext|safe }}>Get the app</a></div>
+  </div>
+</section>
+
+<!-- The page says where in the promotion we are, on its own, on any given day. -->
+<section class="section section--paper gb-status">
+  <div class="wrap">
+    <p class="gb-flag" data-season-to="{{ gb.buy_from_eve }}"{{ ' hidden' if today >= gb.buy_from }}>
+      <b>Starts {{ gb.buy_from_long }}.</b> Buy between {{ gb.buy_label }} to earn it.</p>
+    <p class="gb-flag is-on" data-season-from="{{ gb.buy_from }}" data-season-to="{{ gb.buy_to }}"{{ ' hidden' if not (gb.buy_from <= today <= gb.buy_to) }}>
+      <b>Running now.</b> Buy {{ gb.spend }} in gift cards in store by {{ gb.buy_to_long }} and the {{ gb.reward }} is yours.</p>
+    <p class="gb-flag is-on" data-season-from="{{ gb.use_from }}" data-season-to="{{ gb.use_to }}"{{ ' hidden' if not (gb.use_from <= today <= gb.use_to) }}>
+      <b>Time to spend it.</b> Credit earned in November and December is good through {{ gb.use_to_long }}.</p>
+    <p class="gb-flag" data-season-from="{{ gb.use_to_next }}"{{ ' hidden' if today <= gb.use_to }}>
+      <b>This one has finished.</b> Keep an eye on the app &mdash; there is usually something on.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">How it works</span>
+      <h2>Three things, none of them complicated.</h2>
+      <ol class="steps">{% for b, d in gb.steps %}<li><div><b>{{ b }}</b><span>{{ d }}</span></div></li>{% endfor %}</ol>
+      <p class="prose">{{ gb.why }}</p>
+    </div>
+    <div class="stack">
+      <div class="gb-card">
+        <span class="gb-card-eyebrow">Buy in store</span>
+        <span class="gb-card-n">{{ gb.spend }}</span>
+        <span class="gb-card-when">{{ gb.buy_label }}</span>
+        <span class="gb-card-arrow" aria-hidden="true">↓</span>
+        <span class="gb-card-eyebrow">Lands in your app</span>
+        <b class="gb-card-win">{{ gb.reward }} free</b>
+        <span class="gb-card-when">Spend it {{ gb.use_label }}</span>
+      </div>
+      {{ feature('pizza-boxes', 'Stacked Square Peg pizza boxes ready to go', 'Worth coming back for in January') }}
+    </div>
+  </div>
+</section>
+
+<section class="section section--dark on-dark">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">{{ gb.join_head }}</span>
+      <h2>Join free, start with $5 off.</h2>
+      <p class="prose">{{ gb.join_body }}</p>
+      <ul class="checks">{% for p in perks %}<li>{{ p }}</li>{% endfor %}</ul>
+      <div class="btn-row"><a class="btn" href="{{ site.app_link }}" rel="noopener"{{ ext|safe }}>Get the app</a><a class="btn btn--ghost" href="{{ u('/deals/') }}">Deals &amp; rewards</a></div>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Buying for a business?</span>
+      <h2>Ten cards or more works differently.</h2>
+      <p class="prose">Bulk orders for clients and staff earn bonus cards instead &mdash;
+        ten gets one free, fifty gets seven. One invoice, ready to collect.</p>
+      <div class="btn-row"><a class="btn btn--ghost" href="{{ u('/corporate/') }}">Corporate gift cards</a></div>
+      <p class="prose">Just need a card today? <a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Buy one online</a> &mdash; though online cards don&rsquo;t earn the {{ gb.reward }}.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">The details</span><h2>What counts, and until when.</h2></div>
+    <ul class="terms-list">{% for t in gb.terms %}<li>{{ t }}</li>{% endfor %}</ul>
+  </div>
+</section>
+"""
 
 T["corporate"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
 
@@ -3652,6 +3738,23 @@ env = Environment(loader=DictLoader(T), autoescape=select_autoescape(default_for
 # ---------------------------------------------------------------- build
 PASTA_NAMES = [n for n, _ in dict((k, v) for _, k, v in MENU["sections"])["pasta"]]
 
+def gift_bounce():
+    """The bounce-back, with the edge dates the page gates itself on: the day
+    before buying opens and the day after spending closes, plus the long-form
+    dates for the status strip. Derived rather than typed twice, because a hand
+    written "Oct 31" that disagrees with buy_from is exactly the bug nobody sees
+    until the promotion is live."""
+    g = dict(GIFT_BOUNCE)
+    bf, bt = date.fromisoformat(g["buy_from"]), date.fromisoformat(g["buy_to"])
+    uf, ut = date.fromisoformat(g["use_from"]), date.fromisoformat(g["use_to"])
+    g["buy_from_eve"] = (bf - timedelta(days=1)).isoformat()
+    g["use_to_next"] = (ut + timedelta(days=1)).isoformat()
+    for k, d in (("buy_from_long", bf), ("buy_to_long", bt),
+                 ("use_from_long", uf), ("use_to_long", ut)):
+        g[k] = f"{d.strftime('%B')} {d.day}"
+    return g
+
+
 def halloween():
     """Halloween week with the dates the page gates itself on: the day before it
     starts, and the day after it ends."""
@@ -3910,7 +4013,7 @@ def main():
                       "})();</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=MORE_GROUPS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
@@ -3961,6 +4064,10 @@ def main():
     pages.append(("/large-party-reservations/", "Large Party & Group Reservations | Square Peg Pizzeria",
                   "Reserve for a big group at any Square Peg Pizzeria in CT or Delray Beach, FL. Birthdays, team dinners, showers and reunions with wood-fired pizza.",
                   "parties", dict(faqs=LARGE_PARTY_FAQ, routes=EVENT_ROUTES), graph(faq_schema(LARGE_PARTY_FAQ), breadcrumbs([("Home", "/"), ("Large Parties", "/large-party-reservations/")])), "friends-holiday", "friends-holiday"))
+    pages.append(("/gift-card-bonus/", "Buy $100 in Gift Cards, Get $20 Free | Square Peg Pizzeria",
+                  "Buy $100 in Square Peg Pizzeria gift cards in store during November or December and get $20 of loyalty credit to spend January 1 through February 13. Members only, free to join.",
+                  "giftcard_bonus", dict(gb=gift_bounce()), graph(breadcrumbs([("Home", "/"), ("Gift Card Bonus", "/gift-card-bonus/")])),
+                  "gift-card-25", "gift-card-25"))
     pages.append(("/corporate/", "Corporate Parties & Bulk Gift Cards | Square Peg Pizzeria",
                   "Square Peg Pizzeria for business: host your company holiday party or client night at any of 10 locations, and buy gift cards in bulk — order 10 get 1 free, 50 get 7.",
                   "corporate", dict(event_faqs=CORPORATE_EVENTS_FAQ, gift_faqs=CORPORATE_GIFTS_FAQ),
@@ -4249,7 +4356,7 @@ def main():
 #     reads like an offer anyone can turn up and claim, when it only applies to
 #     one group, at one location, on one night.
 UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-night/",
-            "/corporate/"}
+            "/corporate/", "/gift-card-bonus/"}
 if not LAB_LIVE:
     UNLISTED.add("/play/pizza-lab/")
 
