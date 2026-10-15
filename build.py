@@ -1469,6 +1469,12 @@ CORP_SEASON = {"hol": ced + ("" if TODAY <= CORPORATE_SWITCH else " hidden"),
 
 T["giftcard_bonus"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
 
+<!-- The offer itself is gone on Jan 1. Everything below is wrapped so it goes
+     as one piece rather than leaving a live-looking page with a dead date on
+     it; the build hides whichever half is out of season today and site.js
+     re-checks on every load, so this happens on the night without a rebuild. -->
+<div data-season-to="{{ gb.buy_to }}"{{ ' hidden' if today > gb.buy_to }}>
+
 <section class="page-head on-dark">
   {{ img('gift-card-25', 'A Square Peg Pizzeria gift card', eager=True, cls='bg')|safe }}
   <div class="wrap">
@@ -1480,17 +1486,12 @@ T["giftcard_bonus"] = """{% macro feature(p, a, cap) %}<figure class="feature-ph
   </div>
 </section>
 
-<!-- The page says where in the promotion we are, on its own, on any given day. -->
 <section class="section section--paper gb-status">
   <div class="wrap">
     <p class="gb-flag" data-season-to="{{ gb.buy_from_eve }}"{{ ' hidden' if today >= gb.buy_from }}>
       <b>Starts {{ gb.buy_from_long }}.</b> Buy between {{ gb.buy_label }} to earn it.</p>
     <p class="gb-flag is-on" data-season-from="{{ gb.buy_from }}" data-season-to="{{ gb.buy_to }}"{{ ' hidden' if not (gb.buy_from <= today <= gb.buy_to) }}>
       <b>Running now.</b> Buy {{ gb.spend }} in gift cards in store by {{ gb.buy_to_long }} and the {{ gb.reward }} is yours.</p>
-    <p class="gb-flag is-on" data-season-from="{{ gb.use_from }}" data-season-to="{{ gb.use_to }}"{{ ' hidden' if not (gb.use_from <= today <= gb.use_to) }}>
-      <b>Time to spend it.</b> Credit earned in November and December is good through {{ gb.use_to_long }}.</p>
-    <p class="gb-flag" data-season-from="{{ gb.use_to_next }}"{{ ' hidden' if today <= gb.use_to }}>
-      <b>This one has finished.</b> Keep an eye on the app &mdash; there is usually something on.</p>
   </div>
 </section>
 
@@ -1507,7 +1508,7 @@ T["giftcard_bonus"] = """{% macro feature(p, a, cap) %}<figure class="feature-ph
         <span class="gb-card-eyebrow">Buy in store</span>
         <span class="gb-card-n">{{ gb.spend }}</span>
         <span class="gb-card-when">{{ gb.buy_label }}</span>
-        <span class="gb-card-arrow" aria-hidden="true">↓</span>
+        <span class="gb-card-arrow" aria-hidden="true">&darr;</span>
         <span class="gb-card-eyebrow">Lands in your app</span>
         <b class="gb-card-win">{{ gb.reward }} free</b>
         <span class="gb-card-when">Spend it {{ gb.use_label }}</span>
@@ -1543,6 +1544,25 @@ T["giftcard_bonus"] = """{% macro feature(p, a, cap) %}<figure class="feature-ph
     <ul class="terms-list">{% for t in gb.terms %}<li>{{ t }}</li>{% endfor %}</ul>
   </div>
 </section>
+
+</div>
+
+<!-- From Jan 1: the offer is gone, but anyone holding credit still needs the
+     date it dies on, so this answers that one question and nothing else. -->
+<div data-season-from="{{ gb.use_from }}"{{ ' hidden' if today < gb.use_from }}>
+<section class="page-head on-dark">
+  {{ img('gift-card-25', 'A Square Peg Pizzeria gift card', cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Gift Card Bonus</span></nav>
+    <span class="eyebrow">This promotion has closed</span>
+    <h1>That one has finished.</h1>
+    <p class="lede" data-season-to="{{ gb.use_to }}"{{ ' hidden' if today > gb.use_to }}>The {{ gb.reward }} credit earned in November and December is still
+      good until {{ gb.use_to_long }} &mdash; it&rsquo;s in your loyalty account, and it doesn&rsquo;t carry over.</p>
+    <p class="lede" data-season-from="{{ gb.use_to_next }}"{{ ' hidden' if today <= gb.use_to }}>There&rsquo;s usually something on. The app is where it shows up first.</p>
+    <div class="btn-row"><a class="btn" href="{{ u('/deals/') }}">Deals &amp; rewards</a><a class="btn btn--ghost" href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Gift cards</a></div>
+  </div>
+</section>
+</div>
 """
 
 T["corporate"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
