@@ -1633,3 +1633,12 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
 .terms-list li{position:relative;padding-left:22px;color:var(--smoke);font-size:15.5px;line-height:1.6}
 .terms-list li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;
   background:var(--ember)}
+/* The gift card art is graphic rather than photographic — flat colour and two
+   big numerals — so it competes with the headline in a way a photo doesn't.
+   It sits further back here, and further back again on a phone, where the
+   cover-crop pulls the cards in behind the copy instead of out to the right. */
+.gb-head img.bg{opacity:.38}
+@media (max-width:760px){
+  .gb-head img.bg{opacity:.20}
+  .gb-head::after{background:linear-gradient(180deg,rgba(20,17,16,.88) 0%,rgba(20,17,16,.93) 100%)}
+}

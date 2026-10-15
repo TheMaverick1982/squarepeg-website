@@ -1475,8 +1475,8 @@ T["giftcard_bonus"] = """{% macro feature(p, a, cap) %}<figure class="feature-ph
      re-checks on every load, so this happens on the night without a rebuild. -->
 <div data-season-to="{{ gb.buy_to }}"{{ ' hidden' if today > gb.buy_to }}>
 
-<section class="page-head on-dark">
-  {{ img('gift-card-25', 'A Square Peg Pizzeria gift card', eager=True, cls='bg')|safe }}
+<section class="page-head gb-head on-dark">
+  {{ img('giftcard-hero', 'A $100 Square Peg gift card with a free $20 card behind it', eager=True, cls='bg')|safe }}
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Gift Card Bonus</span></nav>
     <span class="eyebrow">{{ gb.eyebrow }}</span>
@@ -1550,8 +1550,8 @@ T["giftcard_bonus"] = """{% macro feature(p, a, cap) %}<figure class="feature-ph
 <!-- From Jan 1: the offer is gone, but anyone holding credit still needs the
      date it dies on, so this answers that one question and nothing else. -->
 <div data-season-from="{{ gb.use_from }}"{{ ' hidden' if today < gb.use_from }}>
-<section class="page-head on-dark">
-  {{ img('gift-card-25', 'A Square Peg Pizzeria gift card', cls='bg')|safe }}
+<section class="page-head gb-head on-dark">
+  {{ img('giftcard-hero', 'A $100 Square Peg gift card with a free $20 card behind it', cls='bg')|safe }}
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Gift Card Bonus</span></nav>
     <span class="eyebrow">This promotion has closed</span>
@@ -4087,7 +4087,7 @@ def main():
     pages.append(("/gift-card-bonus/", "Buy $100 in Gift Cards, Get $20 Free | Square Peg Pizzeria",
                   "Buy $100 in Square Peg Pizzeria gift cards in store during November or December and get $20 of loyalty credit to spend January 1 through February 13. Members only, free to join.",
                   "giftcard_bonus", dict(gb=gift_bounce()), graph(breadcrumbs([("Home", "/"), ("Gift Card Bonus", "/gift-card-bonus/")])),
-                  "gift-card-25", "gift-card-25"))
+                  "giftcard-og", "giftcard-hero"))
     pages.append(("/corporate/", "Corporate Parties & Bulk Gift Cards | Square Peg Pizzeria",
                   "Square Peg Pizzeria for business: host your company holiday party or client night at any of 10 locations, and buy gift cards in bulk — order 10 get 1 free, 50 get 7.",
                   "corporate", dict(event_faqs=CORPORATE_EVENTS_FAQ, gift_faqs=CORPORATE_GIFTS_FAQ),
