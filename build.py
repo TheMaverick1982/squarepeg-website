@@ -1483,12 +1483,12 @@ T["corporate"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">
       <p>Most businesses end up doing both &mdash; a night for the people who can come,
         and a card for the ones who can&rsquo;t.</p>
     </div>
-    <div class="route-grid">
+    <div class="route-grid route-grid--2">
       <a class="route-card" href="#party"><span class="eyebrow">Come to us</span><h3>Host an event</h3>
         <p>A holiday party, a client night, a team dinner. A room or a reserved section,
           food planned ahead, and a tab you cap.</p><span class="btn btn--sm">See how it works {{ icons.arrow|safe }}</span></a>
       <a class="route-card" href="#cards"><span class="eyebrow">Send it to them</span><h3>Gift cards in bulk</h3>
-        <p>Order ten or more and earn bonus cards on top &mdash; up to eight free at fifty.
+        <p>Order ten or more and earn bonus cards on top &mdash; up to seven free at fifty.
           One invoice, ready to collect.</p><span class="btn btn--sm">See the tiers {{ icons.arrow|safe }}</span></a>
     </div>
   </div>
@@ -1502,7 +1502,7 @@ T["corporate"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">
       <h2>Not every night has to be a sit-down.</h2>
       <p>Pick the one that matches how your people actually move.</p>
     </div>
-    <div class="route-grid">
+    <div class="route-grid route-grid--2">
       {% for when, name, blurb in ce.formats %}
       <article class="route-card"><span class="eyebrow">{{ when }}</span><h3>{{ name }}</h3><p>{{ blurb }}</p></article>
       {% endfor %}
@@ -3962,7 +3962,7 @@ def main():
                   "Reserve for a big group at any Square Peg Pizzeria in CT or Delray Beach, FL. Birthdays, team dinners, showers and reunions with wood-fired pizza.",
                   "parties", dict(faqs=LARGE_PARTY_FAQ, routes=EVENT_ROUTES), graph(faq_schema(LARGE_PARTY_FAQ), breadcrumbs([("Home", "/"), ("Large Parties", "/large-party-reservations/")])), "friends-holiday", "friends-holiday"))
     pages.append(("/corporate/", "Corporate Parties & Bulk Gift Cards | Square Peg Pizzeria",
-                  "Square Peg Pizzeria for business: host your company holiday party or client night at any of 10 locations, and buy gift cards in bulk — order 10 get 1 free, 50 get 8.",
+                  "Square Peg Pizzeria for business: host your company holiday party or client night at any of 10 locations, and buy gift cards in bulk — order 10 get 1 free, 50 get 7.",
                   "corporate", dict(event_faqs=CORPORATE_EVENTS_FAQ, gift_faqs=CORPORATE_GIFTS_FAQ),
                   graph(faq_schema(CORPORATE_EVENTS_FAQ + CORPORATE_GIFTS_FAQ),
                         breadcrumbs([("Home", "/"), ("For Business", "/corporate/")])),

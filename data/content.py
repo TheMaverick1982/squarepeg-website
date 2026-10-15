@@ -1520,11 +1520,11 @@ CORPORATE_GIFTS = {
     "tiers": [
         (10, 1, "10% extra"),
         (25, 3, "12% extra"),
-        (50, 8, "16% extra"),
+        (50, 7, "14% extra"),
     ],
     "examples": [
         ("25 × $25", "$625", "28 cards", "$700 of Square Peg"),
-        ("50 × $50", "$2,500", "58 cards", "$2,900 of Square Peg"),
+        ("50 × $50", "$2,500", "57 cards", "$2,850 of Square Peg"),
     ],
     "uses": [
         ("Client thank-yous", "The one gift nobody re-gifts."),
@@ -1549,7 +1549,7 @@ CORPORATE_GIFTS = {
 CORPORATE_GIFTS_FAQ = [
     ("How does the bonus work?",
      "You pay for the cards you order and we add more on top. Ten cards earns one extra, "
-     "twenty-five earns three, fifty earns eight. The cards themselves are never marked "
+     "twenty-five earns three, fifty earns seven. The cards themselves are never marked "
      "down — you just leave with more of them than you paid for."),
     ("What’s the minimum?",
      "Ten cards. Below that, buy them one at a time online like anyone else — the bonus "
