@@ -249,6 +249,39 @@ def build_images():
         IMG_META[name] = {"w": w, "h": h, "widths": widths, "alpha": has_alpha}
     print(f"  images: {len(IMG_META)} processed")
 
+# Photos for the email blasts. Mail clients can't be relied on for WebP or AVIF —
+# Outlook on Windows renders neither, and that is a real slice of a catering list —
+# so these are plain JPEG, one fixed file per image, at 1000px for a 500px email
+# canvas. Not responsive: an email gets one URL and one file.
+#
+# (name, source photo, width, height, vertical focus 0=top 1=bottom)
+# /img/* is served immutable, so if a photo here is ever swapped, give it a new
+# name rather than new bytes — Gmail's image proxy will hold the old one otherwise.
+EMAIL_IMAGES = [
+    ("catering-spread", "catering-table", 1000, 560, 0.50),
+    ("fundraiser-team", "team-kids", 1000, 600, 0.58),
+]
+
+def build_email_images():
+    dest = OUT / "img" / "email"
+    dest.mkdir(parents=True, exist_ok=True)
+    for name, photo, w, h, focus in EMAIL_IMAGES:
+        out = dest / f"{name}.jpg"
+        if reuse(out):
+            continue
+        src = next((p for p in IMG_SRC.glob(photo + ".*")), None)
+        if src is None:
+            raise SystemExit(f"email image source missing: {photo}")
+        im = Image.open(src).convert("RGB")
+        sw, sh = im.size
+        s = max(w / sw, h / sh)
+        im = im.resize((round(sw * s), round(sh * s)), Image.LANCZOS)
+        x = (im.width - w) // 2
+        y = max(0, min(im.height - h, round((im.height - h) * focus)))
+        im.crop((x, y, x + w, y + h)).save(
+            out, "JPEG", quality=78, optimize=True, progressive=True)
+    print(f"  email images: {len(EMAIL_IMAGES)}")
+
 def build_brand():
     dest = OUT / "img"
     dest.mkdir(parents=True, exist_ok=True)
@@ -3647,6 +3680,7 @@ def main():
     TOWN_COUNT = sum(len(rows) for _, rows in town_directory())
     print(f"  hours: {g} of {len(LOCATIONS)} locations from Google" if g else "  hours: from data/content.py")
     build_images()
+    build_email_images()
     logo_ratio = build_brand()
     LOGO_RATIO[0] = logo_ratio
     css = (ROOT / "src" / "site.css").read_text()
