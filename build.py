@@ -633,7 +633,13 @@ MORE_GROUPS = [
              ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"),
              ("Date Night", "/date-night/"), ("What Pizza Are You?", "/what-pizza-are-you/"),
              ("Pizza Trivia", "/pizza-trivia/")]),
+    # Nav items are (label, path) or (label, path, show_from, show_until). A dated
+    # item ships visible and the browser hides it once the date passes, against
+    # Eastern time — so the gift card bonus drops out of the menu on New Year's
+    # Day without anyone rebuilding. The end date reads GIFT_BOUNCE, so unlike the
+    # /links/ row there is no second copy of it to drift.
     ("Helpful", [("Pizza Calculator", "/pizza-calculator/"), ("Pizza FAQ", "/pizza-faq/"),
+                 ("Gift Card Bonus", "/gift-card-bonus/", None, GIFT_BOUNCE["buy_to"]),
                  ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
 ]
@@ -643,7 +649,7 @@ DRAWER_EXTRA = []
 DRAWER_GROUPS = [
     ("Eat", [("Menu", "MENU"), ("LTO Menu", "/monthly-specials/"), ("Pairing Guide", "/pairing/"), ("What’s on the Menu", "/our-menu/"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
     ("Plan", [("Catering", "/catering/"), ("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
-    ("Fun", [("Entertainment", "/entertainment/"), ("The Pizza Lab", "/play/pizza-lab/"), ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Cards", "GIFT")]),
+    ("Fun", [("Entertainment", "/entertainment/"), ("The Pizza Lab", "/play/pizza-lab/"), ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Card Bonus", "/gift-card-bonus/", None, GIFT_BOUNCE["buy_to"]), ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
 ]
 DAY_NAMES = {"Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"}
@@ -741,7 +747,7 @@ T["header"] = """<a class="skip" href="#main">Skip to content</a>
       <details class="more"><summary>More</summary><div class="more-menu more-mega">{% for group, items in more_groups %}<div class="more-col">
         <span class="more-h">{{ group }}</span>
         {% if group == 'Fun' %}<a class="nav-gd" href="{{ u('/game-day/') }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}"{% if path == '/game-day/' %} aria-current="page"{% endif %}>Game Day</a>{% endif %}
-        {% for n, p in items %}{% if p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
+        {% for n, p, sf, st in items %}{% set sa %}{% if sf %} data-season-from="{{ sf }}"{% endif %}{% if st %} data-season-to="{{ st }}"{% endif %}{% endset %}{% if p == 'GIFT' %}<a href="{{ site.gift_cards_url }}"{{ sa }} rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{{ sa }}{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}
       </div>{% endfor %}</div></details></nav>
     <details class="more signin"><summary>Sign in</summary><div class="more-menu more-menu--right">
       <a href="{{ site.toast_account }}" rel="noopener"{{ ext|safe }}>Ordering account <span>Toast: saved cards &amp; past orders</span></a>
@@ -759,7 +765,7 @@ T["header"] = """<a class="skip" href="#main">Skip to content</a>
       </div>
       <nav aria-label="Mobile">
         {% for title, links in drawer_groups %}<div class="drawer-group"><p class="drawer-title">{{ title }}</p>
-          {% for n, p in links %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% elif p == 'GIFT' %}<a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}{% if title == 'Fun' %}<a href="{{ u('/game-day/') }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}"{% if path == '/game-day/' %} aria-current="page"{% endif %}>Game Day</a>{% endif %}
+          {% for n, p, sf, st in links %}{% set sa %}{% if sf %} data-season-from="{{ sf }}"{% endif %}{% if st %} data-season-to="{{ st }}"{% endif %}{% endset %}{% if p == 'MENU' %}<a href="{{ site.menu_url }}" data-open-picker="menu">{{ n }}</a>{% elif p == 'GIFT' %}<a href="{{ site.gift_cards_url }}"{{ sa }} rel="noopener"{{ ext|safe }}>{{ n }}</a>{% else %}<a href="{{ u(p) }}"{{ sa }}{% if p == path %} aria-current="page"{% endif %}>{{ n }}</a>{% endif %}{% endfor %}{% if title == 'Fun' %}<a href="{{ u('/game-day/') }}" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}"{% if path == '/game-day/' %} aria-current="page"{% endif %}>Game Day</a>{% endif %}
         </div>{% endfor %}
       </nav>
       <div class="drawer-group"><p class="drawer-title">Sign in</p>
@@ -875,6 +881,24 @@ T["home"] = """
   <strong>{{ d.headline }}</strong><span>{{ d.eyebrow }} · Mon–Fri dine-in · {{ d.expires_label }}</span>
   <a href="{{ u('/deals/') }}">See all deals →</a>
 </div></div>{% endfor %}
+
+<!-- Holiday gift card bonus. The build stamps today's state so the band is
+     right with JavaScript off and before site.js runs; site.js re-checks on
+     every load against Eastern time, and the nightly hours-sync rebuild keeps
+     the stamped state fresh. It appears on November 1 and retires January 1
+     with nobody touching it. -->
+<aside class="gcb" aria-label="Holiday gift card bonus" data-season-from="{{ gcb.buy_from }}" data-season-to="{{ gcb.buy_to }}"{{ ' hidden' if today < gcb.buy_from or today > gcb.buy_to }}>
+  {{ img('giftcard-blade', '', cls='bg')|safe }}
+  <div class="wrap gcb-inner">
+    <div class="gcb-copy">
+      <span class="gcb-tag">November &amp; December · In store</span>
+      <h2>The gift card is for them.<em>The $20 is for you.</em></h2>
+      <p>Every $100 in Square Peg gift cards comes with a $20 voucher &mdash; yours to spend {{ gcb.use_label }}.</p>
+      <a class="btn btn--flame btn--sm" href="{{ u('/gift-card-bonus/') }}" data-track="promo_click" data-src="home-giftcard">See how it works</a>
+    </div>
+    {{ img('giftcard-cards', 'A $100 Square Peg gift card with a free $20 voucher behind it', sizes='(min-width:760px) 360px, 300px', cls='gcb-cards')|safe }}
+  </div>
+</aside>
 
 <aside class="gd-strip" aria-label="Game day specials" data-season-from="{{ gd.season_from }}" data-season-to="{{ gd.season_to }}"><div class="wrap">
   <div class="gd-strip-copy">
@@ -3957,8 +3981,8 @@ def main():
                       "})();</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=DRAWER_GROUPS, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
-        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=MORE_GROUPS, deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in DRAWER_GROUPS], gcb=GIFT_BOUNCE, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
+        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in MORE_GROUPS], deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, hwart=HW_ART, lunch_where=lunch_windows(),

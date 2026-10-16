@@ -1642,3 +1642,29 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
   .gb-head img.bg{opacity:.20}
   .gb-head::after{background:linear-gradient(180deg,rgba(20,17,16,.88) 0%,rgba(20,17,16,.93) 100%)}
 }
+
+/* ---- Home page: holiday gift card blade (Nov 1 - Dec 31) ----
+   The cards are a foreground image rather than part of the background, which is
+   what lets the band reflow on a phone: they drop under the copy instead of
+   being sliced off the right edge. Their shadow is baked into the PNG alpha, so
+   there is no filter here to double it. */
+.gcb{position:relative;overflow:hidden;isolation:isolate;background:#071D16;color:#fff;border-bottom:4px solid var(--flame)}
+.gcb img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.gcb::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(6,26,20,.93) 0%,rgba(6,26,20,.74) 48%,rgba(6,26,20,.12) 100%)}
+.gcb-inner{display:flex;align-items:center;gap:clamp(16px,4vw,52px);padding-block:clamp(20px,3vw,32px)}
+.gcb-inner>picture{flex:0 0 auto;line-height:0;min-width:0}
+.gcb-copy{flex:1 1 400px;min-width:0;display:grid;gap:9px;justify-items:start;align-content:start}
+.gcb-tag{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--flame)}
+.gcb-copy h2{font-size:clamp(25px,3.3vw,39px);line-height:.97;margin:0}
+.gcb-copy h2 em{font-style:normal;color:#F7E3B6;display:block}
+.gcb-copy p{margin:0;color:#CFE0D6;font-size:clamp(14px,1.5vw,17px);max-width:48ch}
+.gcb-cards{display:block;width:clamp(190px,25vw,360px);height:auto}
+@media (max-width:760px){
+  .gcb-inner{flex-direction:column;align-items:flex-start;gap:14px}
+  /* Once the band stacks, flex-basis is a HEIGHT, and 400px of it stretched
+     every grid row in the copy block. Hand the height back to the content. */
+  .gcb-copy{flex:0 0 auto;width:100%}
+  .gcb::after{background:linear-gradient(180deg,rgba(6,26,20,.9) 0%,rgba(6,26,20,.8) 68%,rgba(6,26,20,.62) 100%)}
+  .gcb-inner>picture{align-self:center}
+  .gcb-cards{width:min(264px,74vw)}
+}
