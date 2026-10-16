@@ -1606,31 +1606,34 @@ GIFT_BOUNCE = {
     "use_label": "January 1 – February 13",
     "spend": "$100",
     "reward": "$20",
-    "eyebrow": "November & December · In store · Loyalty members",
+    "eyebrow": "November & December · In store · Everyone",
     "h1": "The gift card is for them. The $20 is for you.",
-    "lede": "Buy $100 in Square Peg gift cards at any of our ten locations in "
-            "November or December, and we’ll put $20 of credit straight into your "
-            "loyalty account — to spend between January 1 and February 13, which "
-            "is about when you’ll want it.",
+    "lede": "Every $100 in Square Peg gift cards you buy at any of our ten locations "
+            "in November or December comes with a $20 voucher for you — to spend between "
+            "January 1 and February 13, which is about when you’ll want it. No card to "
+            "sign up for, no account needed.",
     "steps": [
         ("Buy $100 in gift cards", "At the register, at any Square Peg, any time in November or December. "
                                    "One card or several — it’s the $100 that counts."),
-        ("We load $20 to your app", "It lands in your loyalty account before you leave. Nothing to keep "
-                                    "hold of, nothing to lose in a coat pocket until March."),
+        ("Take your $20 voucher", "Handed to you at the register, there and then. Buy $300 in cards and "
+                                  "you leave with three of them."),
         ("Spend it in the new year", "January 1 to February 13. Dine in, pick up, whatever you fancy."),
     ],
     "why": "Everyone buys gift cards in December and nobody buys anything in "
            "January. This is us closing that gap — and giving you a reason to "
            "come back when the decorations are down.",
-    "join_head": "Not a member yet?",
-    "join_body": "The $20 lands in a loyalty account, so you’ll need one — it takes "
-                 "a minute and it’s free. Join now and you start with $5 off your "
-                 "next order, before any of this.",
+    "join_head": "While you’re at it",
+    "join_body": "You don’t need to be a member for any of this — the voucher is for "
+                 "anyone buying. But if you aren’t in the app yet, joining is free, takes "
+                 "a minute, and starts you with $5 off your next order on top.",
     "terms": [
         "$100 or more in gift cards, bought in person at a Square Peg location.",
-        "One $20 credit per loyalty member for the whole promotion, not per visit.",
+        "One $20 voucher for every full $100 of gift cards on the same purchase. "
+        "Buy $250, get two.",
+        "Open to everyone. No loyalty membership needed.",
         "Gift cards bought online don’t qualify — it has to be in person at a location.",
-        "The $20 is loaded as loyalty credit, not a gift card, and isn’t redeemable for cash.",
+        "The $20 is a voucher, not a gift card. It isn’t redeemable for cash and can’t be "
+        "put toward buying more gift cards.",
         "Usable January 1 through February 13 only. It doesn’t carry over.",
         "Not valid with other offers. Tax and gratuity not included.",
         "Participating locations. Management may end the promotion at any time.",

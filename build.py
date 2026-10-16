@@ -1507,10 +1507,10 @@ T["giftcard_bonus"] = """{% macro feature(p, a, cap) %}<figure class="feature-ph
       <div class="gb-card">
         <span class="gb-card-eyebrow">Buy in store</span>
         <span class="gb-card-n">{{ gb.spend }}</span>
-        <span class="gb-card-when">{{ gb.buy_label }}</span>
+        <span class="gb-card-when">in gift cards, {{ gb.buy_label }}</span>
         <span class="gb-card-arrow" aria-hidden="true">&darr;</span>
-        <span class="gb-card-eyebrow">Lands in your app</span>
-        <b class="gb-card-win">{{ gb.reward }} free</b>
+        <span class="gb-card-eyebrow">Every $100 you buy</span>
+        <b class="gb-card-win">{{ gb.reward }} back</b>
         <span class="gb-card-when">Spend it {{ gb.use_label }}</span>
       </div>
       {{ feature('pizza-boxes', 'Stacked Square Peg pizza boxes ready to go', 'Worth coming back for in January') }}
@@ -1556,8 +1556,8 @@ T["giftcard_bonus"] = """{% macro feature(p, a, cap) %}<figure class="feature-ph
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Gift Card Bonus</span></nav>
     <span class="eyebrow">This promotion has closed</span>
     <h1>That one has finished.</h1>
-    <p class="lede" data-season-to="{{ gb.use_to }}"{{ ' hidden' if today > gb.use_to }}>The {{ gb.reward }} credit earned in November and December is still
-      good until {{ gb.use_to_long }} &mdash; it&rsquo;s in your loyalty account, and it doesn&rsquo;t carry over.</p>
+    <p class="lede" data-season-to="{{ gb.use_to }}"{{ ' hidden' if today > gb.use_to }}>Vouchers earned in November and December are still good
+      until {{ gb.use_to_long }}. Bring the voucher in &mdash; it doesn&rsquo;t carry over past that.</p>
     <p class="lede" data-season-from="{{ gb.use_to_next }}"{{ ' hidden' if today <= gb.use_to }}>There&rsquo;s usually something on. The app is where it shows up first.</p>
     <div class="btn-row"><a class="btn" href="{{ u('/deals/') }}">Deals &amp; rewards</a><a class="btn btn--ghost" href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Gift cards</a></div>
   </div>
@@ -4009,7 +4009,7 @@ def main():
                   "Reserve for a big group at any Square Peg Pizzeria in CT or Delray Beach, FL. Birthdays, team dinners, showers and reunions with wood-fired pizza.",
                   "parties", dict(faqs=LARGE_PARTY_FAQ, routes=EVENT_ROUTES), graph(faq_schema(LARGE_PARTY_FAQ), breadcrumbs([("Home", "/"), ("Large Parties", "/large-party-reservations/")])), "friends-holiday", "friends-holiday"))
     pages.append(("/gift-card-bonus/", "Buy $100 in Gift Cards, Get $20 Free | Square Peg Pizzeria",
-                  "Buy $100 in Square Peg Pizzeria gift cards in store during November or December and get $20 of loyalty credit to spend January 1 through February 13. Members only, free to join.",
+                  "Every $100 in Square Peg Pizzeria gift cards bought in store during November or December comes with a $20 voucher, good January 1 through February 13. Open to everyone.",
                   "giftcard_bonus", dict(gb=gift_bounce()), graph(breadcrumbs([("Home", "/"), ("Gift Card Bonus", "/gift-card-bonus/")])),
                   "giftcard-og", "giftcard-hero"))
     pages.append(("/corporate/", "Corporate Holiday Parties & Client Events | Square Peg Pizzeria",
