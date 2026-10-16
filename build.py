@@ -276,6 +276,9 @@ def build_images():
 EMAIL_IMAGES = [
     ("catering-spread", "catering-table", 1000, 560, 0.50),
     ("fundraiser-team", "team-kids", 1000, 600, 0.58),
+    # Holiday gift card bonus hero. Drawn, not photographed — the source is
+    # already 1000x480, so this is a straight pass-through to JPEG.
+    ("giftcard-bonus", "giftcard-email-hero", 1000, 480, 0.50),
 ]
 
 def build_email_images():
