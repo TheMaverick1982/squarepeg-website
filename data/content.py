@@ -293,6 +293,12 @@ LINKS = [
     # ever drift apart.
     ("Square Peg Costume Contest", "/halloween/", "Win a $25 gift card at your location",
      True, None, "2026-10-31"),
+    # The holiday gift card bonus. Live from today so the bio link works through
+    # the run-up — the page carries its own "Starts November 1" notice until the
+    # buy window opens — and gone by itself on New Year's Day, when the offer
+    # retires. The end date is checked against GIFT_BOUNCE further down.
+    ("Holiday Gift Card Bonus", "/gift-card-bonus/", "Buy $100 in store, get a $20 voucher",
+     True, None, "2026-12-31"),
     ("Find a Location", "/locations/", "Ten spots across CT and Delray Beach", False),
     ("This Month\u2019s Specials", "/monthly-specials/", "The limited-time menu, gone at the end of the month", True),
     ("Ask Sal: What Should I Drink?", "/pairing/", "Our pairing guide, free to use", False),
@@ -1639,3 +1645,14 @@ GIFT_BOUNCE = {
         "Participating locations. Management may end the promotion at any time.",
     ],
 }
+
+
+# Same guard as the costume contest row above: LINKS is defined long before
+# GIFT_BOUNCE and cannot reference it, so the end date is written twice. If the
+# promotion's buy window ever moves and the /links/ row doesn't, the build stops
+# here rather than leaving a dead offer in the Instagram bio through January.
+_gcb = [r for r in LINKS if r[0] == "Holiday Gift Card Bonus"]
+assert _gcb, "The Holiday Gift Card Bonus row is missing from LINKS"
+assert len(_gcb[0]) == 6 and _gcb[0][5] == GIFT_BOUNCE["buy_to"], (
+    f"The /links/ gift card bonus row expires {_gcb[0][5] if len(_gcb[0]) == 6 else 'never'}, "
+    f"but GIFT_BOUNCE['buy_to'] is {GIFT_BOUNCE['buy_to']}. Make them match.")
