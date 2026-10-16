@@ -286,12 +286,12 @@ PAIRING = {
 # may be None.
 LINKS = [
     ("Order Online", "ORDER", "Pickup or delivery from any location", True),
-    # Peg or Treat. Live now so the Instagram bio link works through the run-up,
+    # The costume contest. Live now so the Instagram bio link works through the run-up,
     # and gone by itself the morning after Halloween. HALLOWEEN is defined
     # further down this file so it can't be referenced here — instead there is
     # an assert below its definition that fails the build if these two dates
     # ever drift apart.
-    ("Peg or Treat", "/halloween/", "Costume photo contest — win a $25 gift card",
+    ("Square Peg Costume Contest", "/halloween/", "Win a $25 gift card at your location",
      True, None, "2026-10-31"),
     ("Find a Location", "/locations/", "Ten spots across CT and Delray Beach", False),
     ("This Month\u2019s Specials", "/monthly-specials/", "The limited-time menu, gone at the end of the month", True),
@@ -540,6 +540,8 @@ REGIONS = ["Greater Hartford", "Central CT", "Eastern CT", "Fairfield & New Have
 # both ends inclusive), so next month's promo can be staged ahead of its start
 # date and swaps itself in overnight. Keep them in chronological order and make
 # sure the windows don't overlap — two live at once would both render.
+import datetime as _dt
+
 DEALS = [
     {
         "eyebrow": "Loyalty members only",
@@ -557,8 +559,21 @@ DEALS = [
         "expires": "2026-10-31",
         "expires_label": "Ends Oct 31",
     },
+    # November: back to the September offer, which outperformed October's.
+    {
+        "eyebrow": "Loyalty members only",
+        "headline": "$6 off when you spend $36+",
+        "detail": "Monday–Friday, dine-in. One use per member. Not valid with other offers. Tax & gratuity not included.",
+        "starts": "2026-11-01",
+        "expires": "2026-11-30",
+        "expires_label": "Ends Nov 30",
+    },
 ]
-DEAL = DEALS[0]  # legacy single-deal reference
+# Legacy single-deal reference. Resolves to whichever deal is live today rather
+# than DEALS[0], which is the September one and has been expired since 1 Oct:
+# no template uses this now, but one that did would have shown a dead offer.
+_today = _dt.date.today().isoformat()
+DEAL = next((d for d in DEALS if d["starts"] <= _today <= d["expires"]), DEALS[-1])
 
 POINTS = [
     (100, "Free cookie"), (200, "$5 off"), (300, "Free appetizer", "excludes wings"),
@@ -1170,7 +1185,7 @@ HAPPY_HOUR = {
 }
 
 # ---------------------------------------------------------------- Halloween
-# Peg or Treat: the Monday of Halloween week through Halloween itself. In 2026
+# The costume contest: the Monday of Halloween week through Halloween itself. In 2026
 # Halloween is a Saturday, so the $5 kids menu is what earns the weeknights and
 # Saturday mostly fills itself.
 #
@@ -1180,12 +1195,12 @@ HAPPY_HOUR = {
 #   after "ends"         -> wrapped, winners coming
 # Nothing to switch on or off by hand.
 HALLOWEEN = {
-    "name": "Peg or Treat",
+    "name": "Square Peg Costume Contest",
     "year": 2026,
     "starts": "2026-10-26",
     "ends": "2026-10-31",
     "when": "Monday, October 26 – Saturday, October 31",
-    "hashtag": "#PegOrTreat",
+    "hashtag": "#SquarePegCostume",
     "lede": "Six days of it. Come in costume, eat something, and get your picture "
             "taken in front of a wall of cheese pizza.",
 
@@ -1198,7 +1213,7 @@ HALLOWEEN = {
     "enter": [
         ("Take the photo", "Get in front of the pizza wall, in costume. Any Square Peg, "
                            "any day of the week. Ask us and we’ll take it for you."),
-        ("Post it and tag us", "Put it on Instagram or Facebook with #PegOrTreat and tag "
+        ("Post it and tag us", "Put it on Instagram or Facebook with #SquarePegCostume and tag "
                                "your Square Peg. Tagged posts are what we judge from."),
         ("That’s it", "We pick a best costume at each location once Halloween’s done, "
                       "and get in touch to hand over the card."),
@@ -1240,7 +1255,7 @@ HALLOWEEN = {
     },
 
     "rules": [
-        "Open to anyone who comes in during Peg or Treat week, October 26–31, 2026.",
+        "Open to anyone who comes in during contest week, October 26–31, 2026.",
         "To be considered you have to post your photo and tag us — we judge from "
         "tagged posts on Instagram and Facebook. A photo we take for you still has "
         "to be posted and tagged by you.",
@@ -1255,14 +1270,14 @@ HALLOWEEN = {
     ],
 }
 
-# The Peg or Treat row on /links/ carries its own end date, because LINKS is
+# The costume contest row on /links/ carries its own end date, because LINKS is
 # defined before HALLOWEEN and cannot reference it. This makes the duplication
 # safe: if the campaign moves and the links row doesn't, the build stops here
 # rather than leaving a dead Halloween link in the Instagram bio for a month.
-_pot = [r for r in LINKS if r[0] == "Peg or Treat"]
-assert _pot, "The Peg or Treat row is missing from LINKS"
+_pot = [r for r in LINKS if r[0] == "Square Peg Costume Contest"]
+assert _pot, "The Square Peg Costume Contest row is missing from LINKS"
 assert len(_pot[0]) == 6 and _pot[0][5] == HALLOWEEN["ends"], (
-    f"The /links/ Peg or Treat row expires {_pot[0][5] if len(_pot[0]) == 6 else 'never'}, "
+    f"The /links/ costume contest row expires {_pot[0][5] if len(_pot[0]) == 6 else 'never'}, "
     f"but HALLOWEEN['ends'] is {HALLOWEEN['ends']}. Make them match.")
 
 

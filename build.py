@@ -3420,7 +3420,7 @@ T["halloween"] = """
     <p class="hw-state hw-now" data-season-from="{{ hw.starts }}" data-season-to="{{ hw.ends }}" hidden>On now &mdash; through Halloween</p>
     <p class="hw-state hw-done" data-season-from="{{ hw.after }}" hidden>That&rsquo;s a wrap. Winners being picked now.</p>
 
-    <h1><span class="eyebrow h1-eyebrow"><span>{{ hw.when }}</span></span>{{ hw.name }}</h1>
+    <h1><span class="eyebrow h1-eyebrow"><span>{{ hw.when }}</span></span>{{ hw.name }}!</h1>
     <p class="lede">{{ hw.lede }}</p>
     <div class="btn-row">
       <a class="btn" href="#enter">{{ icons.arrow|safe }}How to enter</a>
