@@ -1508,6 +1508,11 @@ CORPORATE_EVENTS_FAQ = [
      "Yes. One bill at the end, to the company. No splitting, no collecting."),
 ]
 
+# PARKED, Oct 16 2026 — Brian took bulk gift cards off /corporate/, which is now
+# only about hosting an event. Nothing on the site renders CORPORATE_GIFTS or
+# CORPORATE_GIFTS_FAQ any more; both are left here intact so the programme can
+# be switched back on without rewriting it.
+#
 # Bonus cards rather than a discount. Costs roughly the same but never marks the
 # card down, and the bonus cards themselves bring extra people through the door —
 # which a percentage off the invoice never does.
@@ -1624,8 +1629,7 @@ GIFT_BOUNCE = {
     "terms": [
         "$100 or more in gift cards, bought in person at a Square Peg location.",
         "One $20 credit per loyalty member for the whole promotion, not per visit.",
-        "Gift cards bought online or through a bulk corporate order don’t qualify — "
-        "corporate orders earn bonus cards instead.",
+        "Gift cards bought online don’t qualify — it has to be in person at a location.",
         "The $20 is loaded as loyalty credit, not a gift card, and isn’t redeemable for cash.",
         "Usable January 1 through February 13 only. It doesn’t carry over.",
         "Not valid with other offers. Tax and gratuity not included.",

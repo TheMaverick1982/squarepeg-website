@@ -1528,11 +1528,11 @@ T["giftcard_bonus"] = """{% macro feature(p, a, cap) %}<figure class="feature-ph
       <div class="btn-row"><a class="btn" href="{{ site.app_link }}" rel="noopener"{{ ext|safe }}>Get the app</a><a class="btn btn--ghost" href="{{ u('/deals/') }}">Deals &amp; rewards</a></div>
     </div>
     <div class="stack">
-      <span class="eyebrow">Buying for a business?</span>
-      <h2>Ten cards or more works differently.</h2>
-      <p class="prose">Bulk orders for clients and staff earn bonus cards instead &mdash;
-        ten gets one free, fifty gets seven. One invoice, ready to collect.</p>
-      <div class="btn-row"><a class="btn btn--ghost" href="{{ u('/corporate/') }}">Corporate gift cards</a></div>
+      <span class="eyebrow">Buying a lot of them?</span>
+      <h2>Talk to us first.</h2>
+      <p class="prose">Companies buying cards for clients or staff should call the location
+        they&rsquo;ll collect from rather than working through the register one at a time.</p>
+      <div class="btn-row"><a class="btn btn--ghost" href="{{ u('/locations/') }}" data-open-picker="call">{{ icons.phone|safe }}Call a location</a></div>
       <p class="prose">Just need a card today? <a href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Buy one online</a> &mdash; though online cards don&rsquo;t earn the {{ gb.reward }}.</p>
     </div>
   </div>
@@ -1570,38 +1570,18 @@ T["corporate"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">
 <section class="page-head on-dark">
   {{ img('catering-table', 'A long table of wood-fired pizzas laid out for a group', eager=True, cls='bg')|safe }}
   <div class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>For Business</span></nav>
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Corporate Events</span></nav>
     <span class="eyebrow" {{ season.hol|safe }}>{{ ce.holiday.eyebrow }}</span>
     <span class="eyebrow" {{ season.eve|safe }}>{{ ce.evergreen.eyebrow }}</span>
     <h1 {{ season.hol|safe }}>{{ ce.holiday.h1 }}</h1>
     <h1 {{ season.eve|safe }}>{{ ce.evergreen.h1 }}</h1>
     <p class="lede" {{ season.hol|safe }}>{{ ce.holiday.lede }}</p>
     <p class="lede" {{ season.eve|safe }}>{{ ce.evergreen.lede }}</p>
-    <div class="btn-row"><a class="btn" href="#party">Host an event</a><a class="btn btn--ghost" href="#cards">Gift cards in bulk</a></div>
+    <div class="btn-row"><a class="btn" href="#party">Request a date</a><a class="btn btn--ghost" href="{{ u('/locations/') }}" data-open-picker="call">{{ icons.phone|safe }}Call a location</a></div>
   </div>
 </section>
 
 <section class="section section--paper">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Two ways we work with companies</span>
-      <h2>Bring them here, or send them something.</h2>
-      <p>Most businesses end up doing both &mdash; a night for the people who can come,
-        and a card for the ones who can&rsquo;t.</p>
-    </div>
-    <div class="route-grid route-grid--2">
-      <a class="route-card" href="#party"><span class="eyebrow">Come to us</span><h3>Host an event</h3>
-        <p>A holiday party, a client night, a team dinner. A room or a reserved section,
-          food planned ahead, and a tab you cap.</p><span class="btn btn--sm">See how it works {{ icons.arrow|safe }}</span></a>
-      <a class="route-card" href="#cards"><span class="eyebrow">Send it to them</span><h3>Gift cards in bulk</h3>
-        <p>Order ten or more and earn bonus cards on top &mdash; up to seven free at fifty.
-          One invoice, ready to collect.</p><span class="btn btn--sm">See the tiers {{ icons.arrow|safe }}</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- ======================= PART ONE: THE EVENT ======================= -->
-<section class="section">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Two ways to do it</span>
@@ -1616,7 +1596,7 @@ T["corporate"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">
   </div>
 </section>
 
-<section class="section section--paper" id="party">
+<section class="section" id="party">
   <div class="wrap two-col">
     <div class="stack">
       <span class="eyebrow">What you hand over</span>
@@ -1633,76 +1613,23 @@ T["corporate"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">
   </div>
 </section>
 
-<!-- ===================== PART TWO: THE GIFT CARDS ===================== -->
-<section class="section section--dark on-dark" id="cards">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">{{ cg.holiday.eyebrow }}</span>
-      <h2>{{ cg.holiday.h1 }}</h2>
-      <p {{ season.hol|safe }}>{{ cg.holiday.lede }}</p>
-      <p {{ season.eve|safe }}>{{ cg.evergreen.lede }}</p>
-    </div>
-  </div>
-</section>
-
-<section class="section section--paper">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Buy in bulk, hand out more</span>
-      <h2>We don&rsquo;t discount the card. We give you extra ones.</h2>
-      <p>A percentage off an invoice disappears into accounting. Extra cards go to
-        extra people &mdash; which is the point of buying them.</p>
-    </div>
-    <div class="corp-tiers">
-      {% for buy, bonus, head in cg.tiers %}
-      <article class="corp-tier{{ ' is-best' if loop.last }}">
-        <span class="corp-tier-n">{{ buy }}</span>
-        <span class="corp-tier-lab">cards</span>
-        <b>+{{ bonus }} free</b>
-        <span class="corp-tier-out">You hand out <b>{{ buy + bonus }}</b></span>
-        <span class="corp-tier-pct">{{ head }}</span>
-      </article>
-      {% endfor %}
-    </div>
-    <p class="corp-note">Cards come in {{ cg.denominations|join(' and ') }}, and you can mix them.
-      Minimum order is {{ cg.min }} cards. {{ cg.scope }}</p>
-    <div class="corp-eg">
-      {% for what, pay, get, worth in cg.examples %}
-      <div><span class="eyebrow">{{ what }}</span><b>Pay {{ pay }}</b><span>Get {{ get }} &mdash; {{ worth }}</span></div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="wrap">
-    <div class="section-head"><span class="eyebrow">Who these are for</span><h2>Where a Square Peg card lands well.</h2></div>
-    <div class="route-grid">
-      {% for name, blurb in cg.uses %}
-      <article class="route-card"><h3>{{ name }}</h3><p>{{ blurb }}</p></article>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
 <section class="section section--dark on-dark">
   <div class="wrap two-col">
     <div class="stack">
-      <span class="eyebrow">How a bulk order works</span>
-      <h2>Three steps, one invoice.</h2>
-      <ol class="steps">{% for b, s in cg.how %}<li><div><b>{{ b }}</b><span>{{ s }}</span></div></li>{% endfor %}</ol>
-      <p class="prose" {{ season.hol|safe }}><b>{{ cg.holiday.kicker }}</b></p>
-      <p class="prose" {{ season.eve|safe }}><b>{{ cg.evergreen.kicker }}</b></p>
+      <span class="eyebrow">Or bring it to them</span>
+      <h2>Feeding the office instead?</h2>
+      <p class="prose">If it&rsquo;s at your place rather than ours, that&rsquo;s catering &mdash; trays of
+        pasta, wings, salads and pizza, boxed and ready to collect at the time you agreed.
+        Forty-eight hours&rsquo; notice and no minimum.</p>
+      <div class="btn-row"><a class="btn" href="{{ u('/catering/') }}">Catering</a></div>
     </div>
     <div class="stack">
-      <span class="eyebrow">Send the numbers</span>
-      <h2>Tell us how many.</h2>
-      <p class="prose">How many cards, which denominations, and when you need them. We&rsquo;ll
-        confirm the bonus cards you&rsquo;ve earned and take it from there.</p>
-      <div class="btn-row"><a class="btn" href="{{ u('/contact/') }}?topic=Gift+cards">Request a bulk order</a><a class="btn btn--ghost" href="{{ site.gift_cards_url }}" rel="noopener"{{ ext|safe }}>Just need one?</a></div>
-      <p class="prose">Feeding people at your place instead? That&rsquo;s
-        <a href="{{ u('/catering/') }}">catering</a> &mdash; boxed and ready to collect,
-        48 hours&rsquo; notice, no minimum.</p>
+      <span class="eyebrow">Not a work thing</span>
+      <h2>Just a big table?</h2>
+      <p class="prose">Birthdays, team dinners, showers and reunions run through the same form
+        without the corporate wrapper. Ten or more and we&rsquo;ll save the tables and plan the
+        food with you.</p>
+      <div class="btn-row"><a class="btn btn--ghost" href="{{ u('/large-party-reservations/') }}">Large parties</a></div>
     </div>
   </div>
 </section>
@@ -1710,10 +1637,7 @@ T["corporate"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">
 <section class="section section--paper">
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Before you ask</span><h2>Questions we get</h2></div>
-    <h3 class="faq-h">Hosting an event</h3>
     <div class="faq">{% for q, a in event_faqs %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
-    <h3 class="faq-h">Gift cards in bulk</h3>
-    <div class="faq">{% for q, a in gift_faqs %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
   </div>
 </section>
 """
@@ -4088,12 +4012,12 @@ def main():
                   "Buy $100 in Square Peg Pizzeria gift cards in store during November or December and get $20 of loyalty credit to spend January 1 through February 13. Members only, free to join.",
                   "giftcard_bonus", dict(gb=gift_bounce()), graph(breadcrumbs([("Home", "/"), ("Gift Card Bonus", "/gift-card-bonus/")])),
                   "giftcard-og", "giftcard-hero"))
-    pages.append(("/corporate/", "Corporate Parties & Bulk Gift Cards | Square Peg Pizzeria",
-                  "Square Peg Pizzeria for business: host your company holiday party or client night at any of 10 locations, and buy gift cards in bulk — order 10 get 1 free, 50 get 7.",
-                  "corporate", dict(event_faqs=CORPORATE_EVENTS_FAQ, gift_faqs=CORPORATE_GIFTS_FAQ),
-                  graph(faq_schema(CORPORATE_EVENTS_FAQ + CORPORATE_GIFTS_FAQ),
-                        breadcrumbs([("Home", "/"), ("For Business", "/corporate/")])),
-                  "friends-holiday", "friends-holiday"))
+    pages.append(("/corporate/", "Corporate Holiday Parties & Client Events | Square Peg Pizzeria",
+                  "Host your company holiday party, client appreciation night or team dinner at any of 10 Square Peg Pizzeria locations. A room or a reserved section, food planned ahead, and a tab you cap.",
+                  "corporate", dict(event_faqs=CORPORATE_EVENTS_FAQ),
+                  graph(faq_schema(CORPORATE_EVENTS_FAQ),
+                        breadcrumbs([("Home", "/"), ("Corporate Events", "/corporate/")])),
+                  "catering-table", "catering-table"))
     pages.append(("/contact/", "Contact Us | Square Peg Pizzeria",
                   "Contact Square Peg Pizzeria: phone numbers for all 10 locations, email, and a message form for catering, large parties, gift cards, jobs and more.",
                   "contact", {}, graph({"@type": "ContactPage", "url": abs_url("/contact/"), "name": "Contact Square Peg Pizzeria",
