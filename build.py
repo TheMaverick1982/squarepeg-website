@@ -270,7 +270,10 @@ def build_images():
 # so these are plain JPEG, one fixed file per image, at 1000px for a 500px email
 # canvas. Not responsive: an email gets one URL and one file.
 #
-# (name, source photo, width, height, vertical focus 0=top 1=bottom)
+# (name, source photo, width, height, vertical focus 0=top 1=bottom[, format])
+# Format defaults to jpg, which is right for photographs. Flat graphic art with
+# hard edges wants "png": JPEG rings around white-on-black, and the ringing
+# shows as grey haze where the art is supposed to blend into a black cell.
 # /img/* is served immutable, so if a photo here is ever swapped, give it a new
 # name rather than new bytes — Gmail's image proxy will hold the old one otherwise.
 EMAIL_IMAGES = [
@@ -284,13 +287,19 @@ EMAIL_IMAGES = [
     # The photo wall, for the costume contest blast. Source is 722x681, so this
     # is its native size — asking for 1000 here would upscale it.
     ("pizza-wall", "pizza-wall", 722, 681, 0.50),
+    # Decorative band for the top of the costume contest blast. PNG: white
+    # ghosts and a web on pure black, which has to sit seamlessly on a #000000
+    # table cell.
+    ("halloween-band", "halloween-band", 1000, 200, 0.50, "png"),
 ]
 
 def build_email_images():
     dest = OUT / "img" / "email"
     dest.mkdir(parents=True, exist_ok=True)
-    for name, photo, w, h, focus in EMAIL_IMAGES:
-        out = dest / f"{name}.jpg"
+    for entry in EMAIL_IMAGES:
+        name, photo, w, h, focus = entry[:5]
+        fmt = entry[5] if len(entry) > 5 else "jpg"
+        out = dest / f"{name}.{fmt}"
         if reuse(out):
             continue
         src = next((p for p in IMG_SRC.glob(photo + ".*")), None)
@@ -302,8 +311,11 @@ def build_email_images():
         im = im.resize((round(sw * s), round(sh * s)), Image.LANCZOS)
         x = (im.width - w) // 2
         y = max(0, min(im.height - h, round((im.height - h) * focus)))
-        im.crop((x, y, x + w, y + h)).save(
-            out, "JPEG", quality=78, optimize=True, progressive=True)
+        crop = im.crop((x, y, x + w, y + h))
+        if fmt == "png":
+            crop.save(out, "PNG", optimize=True)
+        else:
+            crop.save(out, "JPEG", quality=78, optimize=True, progressive=True)
     print(f"  email images: {len(EMAIL_IMAGES)}")
 
 def build_brand():
