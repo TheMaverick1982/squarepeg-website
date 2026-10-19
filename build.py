@@ -284,13 +284,14 @@ EMAIL_IMAGES = [
     ("giftcard-bonus", "giftcard-email-hero", 1000, 480, 0.50),
     # Wide band of three pies for the monthly newsletter.
     ("three-pies", "sp-three-pies", 1000, 460, 0.50),
-    # The photo wall, for the costume contest blast. Source is 722x681, so this
-    # is its native size — asking for 1000 here would upscale it.
-    ("pizza-wall", "pizza-wall", 722, 681, 0.50),
     # Decorative band for the top of the costume contest blast. PNG: white
     # ghosts and a web on pure black, which has to sit seamlessly on a #000000
     # table cell.
     ("halloween-band", "halloween-band", 1000, 200, 0.50, "png"),
+    # Costume contest blast. Replaces the pizza wall shot there, because not
+    # every location has the wall — and two kids in sheets beats any photo of
+    # the wall anyway.
+    ("halloween-ghosts", "halloween-ghosts", 1000, 690, 0.75),
 ]
 
 def build_email_images():
