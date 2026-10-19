@@ -281,6 +281,9 @@ EMAIL_IMAGES = [
     ("giftcard-bonus", "giftcard-email-hero", 1000, 480, 0.50),
     # Wide band of three pies for the monthly newsletter.
     ("three-pies", "sp-three-pies", 1000, 460, 0.50),
+    # The photo wall, for the costume contest blast. Source is 722x681, so this
+    # is its native size — asking for 1000 here would upscale it.
+    ("pizza-wall", "pizza-wall", 722, 681, 0.50),
 ]
 
 def build_email_images():
