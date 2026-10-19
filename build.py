@@ -279,6 +279,8 @@ EMAIL_IMAGES = [
     # Holiday gift card bonus hero. Drawn, not photographed — the source is
     # already 1000x480, so this is a straight pass-through to JPEG.
     ("giftcard-bonus", "giftcard-email-hero", 1000, 480, 0.50),
+    # Wide band of three pies for the monthly newsletter.
+    ("three-pies", "sp-three-pies", 1000, 460, 0.50),
 ]
 
 def build_email_images():
