@@ -975,6 +975,9 @@ EMBEDS = {
                     "title": "Square Peg large reservation request form", "crop": 196, "mobile": 680, "desktop": 660},
     "fundraiser": {"src": "https://connect.squarepegpizzeria.com/public/fundraisers",
                    "title": "Square Peg Tuesday fundraiser request form", "crop": 196, "mobile": 680, "desktop": 660},
+    "kids_class": {"src": "https://connect.squarepegpizzeria.com/public/kids-classes",
+                   "title": "Square Peg kids pizza-making class request form",
+                   "crop": 196, "mobile": 800, "desktop": 800},
 }
 EMBEDS["food_truck"] = EMBEDS["catering"]
 
@@ -989,6 +992,7 @@ LARGE_PARTY_FAQ = [
 
 CONTACT_TOPICS = [
     "General question", "Feedback about a visit", "Catering", "Large party reservation", "Food truck",
+    "Kids pizza-making class",
     "Fundraiser", "Gift cards", "Rewards / app help", "Jobs", "Media or partnership",
 ]
 
@@ -1656,3 +1660,62 @@ assert _gcb, "The Holiday Gift Card Bonus row is missing from LINKS"
 assert len(_gcb[0]) == 6 and _gcb[0][5] == GIFT_BOUNCE["buy_to"], (
     f"The /links/ gift card bonus row expires {_gcb[0][5] if len(_gcb[0]) == 6 else 'never'}, "
     f"but GIFT_BOUNCE['buy_to'] is {GIFT_BOUNCE['buy_to']}. Make them match.")
+
+# The bookable kids pizza-making class — a private party booking with a ten-child
+# minimum, NOT the monthly open class that sells tickets through Eventbrite. Two
+# products, two prices; keep them apart or the $10 open class and the $20 party
+# class end up in the same sentence.
+#
+# Shelton's flyers sold this as two classes, "Little Peg" at $20 and "Big Peg" at
+# $25. It is one class and an upgrade: the extra $5 buys $10 of arcade credit,
+# which only works where there is an arcade.
+PIZZA_CLASS = {
+    "price": "$20",
+    "upgrade_total": "$25",
+    "upgrade_delta": "$5",
+    "arcade_credit": "$10",
+    "min_kids": 10,
+    "price_note": "per child, plus tax and gratuity",
+    "lede": "Your child stretches their own dough, tops it how they like it, and watches "
+            "it cook in a real wood-fired oven. They leave with a full stomach and a "
+            "certificate that says they did it.",
+    "includes": [
+        ("They make the pizza",
+         "Cheese or pepperoni, stretched and topped by them, with one of our chefs "
+         "showing them how."),
+        ("They watch it fire",
+         "Their pizza goes into the wood-fired oven and one of our chefs cooks it in "
+         "front of them."),
+        ("A drink and a cookie",
+         "A fountain drink each, and a warm chocolate chip cookie to finish."),
+        ("A certificate",
+         "Every child leaves with a certificate of completion, with their name on it."),
+    ],
+    "upgrade_head": "Add the arcade",
+    "upgrade_body": "Five dollars more per child buys ten dollars of arcade games each "
+                    "\u2014 so the party keeps going after the pizza comes out.",
+    # Only where there is actually an arcade. Add locations here as they get one.
+    "arcade_locations": ["Shelton"],
+    "steps": [
+        ("Send the form", "A date, how many children, and which Square Peg."),
+        ("We call you back", "We confirm the date, go through allergies, and take it from there."),
+        ("Turn up hungry", "Aprons and hats are on us. You bring the children."),
+    ],
+    "faq": [
+        ("How many children do we need?",
+         "Ten is the minimum for a class. There\u2019s no maximum we can\u2019t talk about "
+         "\u2014 tell us the number and we\u2019ll tell you which location fits it."),
+        ("What ages is it for?",
+         "It works best for roughly 4 to 12. Younger children are welcome with a "
+         "grown-up alongside them."),
+        ("Can parents stay?",
+         "Yes, and most do. Tell us how many adults are coming so we can set the room "
+         "up properly \u2014 they can order off the regular menu while the class runs."),
+        ("What about allergies?",
+         "Tell us on the form or when we call. Gluten-free crust is available, and we "
+         "will talk you through what we can and can\u2019t do for a specific allergy."),
+        ("How far ahead should we book?",
+         "A couple of weeks is comfortable. Weekends in December and around school "
+         "holidays go first."),
+    ],
+}

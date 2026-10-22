@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 
 # The Pizza Lab's pre-selected finish has to be one of the finishes on offer.
@@ -1377,6 +1377,90 @@ T["booking_form"] = """{% set e = embeds.get(embed_key) %}{% if e %}<div class="
     <noscript><iframe src="{{ e.src }}?embed=1" title="{{ e.title }}" allow="clipboard-write"></iframe></noscript></div>
   <p class="embed-help">Trouble with the form? <a href="{{ e.src }}" rel="noopener" target="_blank">Open it in a new tab</a>, or call <a href="{{ u('/locations/') }}">any location</a>.</p>
 </div>{% else %}{% include "form_catering" %}{% endif %}"""
+
+T["kids_class"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
+
+<section class="page-head on-dark">
+  {{ img('kid-slice', 'A young guest with a slice of Square Peg pizza', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><a href="{{ u('/private-events/') }}">Private Events &amp; Classes</a><span aria-hidden="true">/</span><span>Kids Pizza-Making Class</span></nav>
+    <span class="eyebrow">Private class &middot; {{ pc.min_kids }} children or more</span>
+    <h1>Kids pizza-making class</h1>
+    <p class="lede">{{ pc.lede }}</p>
+    <div class="btn-row"><a class="btn" href="#book">Book a class</a><a class="btn btn--ghost" href="#included">What&rsquo;s included</a></div>
+  </div>
+</section>
+
+<section class="section section--paper" id="included">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">{{ pc.price }} a child</span>
+      <h2>What happens in the class</h2>
+      <p>About an hour, start to finish. Aprons and chef hats are ours &mdash; you bring the children.</p>
+    </div>
+    <div class="cls-grid">
+      {% for head, body in pc.includes %}<article class="cls-card"><span class="cls-n">{{ loop.index }}</span><h3>{{ head }}</h3><p>{{ body }}</p></article>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Two ways to run it</span>
+      <h2>The class, or the class plus the arcade.</h2>
+    </div>
+    <div class="cls-tiers">
+      <article class="cls-tier">
+        <span class="cls-tier-tag">The class</span>
+        <p class="cls-price">{{ pc.price }}<span>{{ pc.price_note }}</span></p>
+        <ul class="checks">{% for head, body in pc.includes %}<li>{{ head }}</li>{% endfor %}</ul>
+      </article>
+      <article class="cls-tier cls-tier--up">
+        <span class="cls-tier-tag">{{ pc.upgrade_head }} &nbsp;&middot;&nbsp; +{{ pc.upgrade_delta }} a child</span>
+        <p class="cls-price">{{ pc.upgrade_total }}<span>{{ pc.price_note }}</span></p>
+        <p class="cls-up-body">Everything in the class, plus <strong>{{ pc.arcade_credit }} of arcade games</strong> for every child. {{ pc.upgrade_body }}</p>
+        <p class="note">Available at {{ pc.arcade_locations|join(', ') }} &mdash; the locations with an arcade.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper" id="book">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">How booking works</span>
+      <h2>Tell us the date and the headcount.</h2>
+      <ol class="steps">
+        {% for head, body in pc.steps %}<li><div><b>{{ head }}</b><span>{{ body }}</span></div></li>{% endfor %}
+      </ol>
+      <p class="cat-note"><b>{{ pc.min_kids }} children is the minimum.</b> Tell us roughly how many
+        and which Square Peg you want, and we&rsquo;ll confirm the room and the time when we call.</p>
+      {{ feature('dough', 'A ball of fresh pizza dough ready to stretch', 'Everyone’s a chef here') }}
+    </div>
+
+    {% with form_title='Book a class', fid='cls', embed_key='kids_class', submit='Send my request' %}{% include "booking_form" %}{% endwith %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Before you ask</span><h2>The usual questions</h2></div>
+    <div class="faq">
+      {% for q, a in pc.faq %}<details><summary class="faq-h">{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="page-head on-dark">
+  {{ img('oven-pizza', 'A pizza going into the Square Peg wood-fired oven', cls='bg')|safe }}
+  <div class="wrap">
+    <span class="eyebrow">Hungry yet?</span>
+    <h2>Let&rsquo;s get a date on the books.</h2>
+    <div class="btn-row"><a class="btn" href="#book">Book a class</a><a class="btn btn--ghost" href="{{ u('/locations/') }}" data-open-picker="call">{{ icons.phone|safe }}Call a location</a></div>
+  </div>
+</section>
+"""
 
 T["catering"] = """{% macro bento(items) %}<div class="bento">{% for p, a, cap in items %}<figure class="{{ 'b-main' if loop.first else 'b-side' }}">{{ img(p, a, sizes=('(min-width:800px) 60vw, 100vw' if loop.first else '(min-width:800px) 36vw, 50vw'))|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endfor %}</div>{% endmacro %}
 {% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
@@ -3690,6 +3774,9 @@ T["private_events"] = """{% macro bento(items) %}<div class="bento">{% for p, a,
       <h2>Pizza-making classes</h2>
       <p class="prose">Square Peg believes everyone is a chef, and we want to bring your inner chef to life. Every month we host adult pizza-making classes, plus kids’ pizza-making classes for <strong>$10</strong>.</p>
       <ul class="checks"><li>Stretch, top and fire your own pie</li><li>Adult classes every month</li><li>Kids’ classes are $10</li></ul>
+      <p class="cat-note"><b>Booking a party instead?</b> A private kids class runs on your own
+        date for a group of {{ pc.min_kids }} or more &mdash; {{ pc.price }} a child, with the
+        arcade as an optional extra. <a href="{{ u('/kids-pizza-class/') }}">See the private kids class</a>.</p>
       <div class="btn-row"><a class="btn" href="{{ site.events_calendar_url or u('/entertainment/') }}"{% if site.events_calendar_url %} target="_blank" rel="noopener" data-track="classes_click" data-src="private-events"{% endif %}>See dates & get tickets</a>{% if site.instagram %}<a class="btn btn--line" href="{{ site.instagram }}" rel="noopener"{{ ext|safe }}>Follow on Instagram</a>{% endif %}</div>
     </div>
   </div>
@@ -4081,7 +4168,15 @@ def main():
                   "entertainment", {}, graph(breadcrumbs([("Home", "/"), ("Entertainment", "/entertainment/")])), "friends-holiday", "friends-holiday"))
     pages.append(("/private-events/", "Private Events & Pizza-Making Classes | Square Peg Pizzeria",
                   "Plan a private event at Square Peg Pizzeria, and join our monthly pizza-making classes for adults plus $10 kids' classes. Parties, catering and the food truck.",
-                  "private_events", dict(routes=EVENT_ROUTES), graph(breadcrumbs([("Home", "/"), ("Private Events & Classes", "/private-events/")])), "table-spread", "table-spread"))
+                  "private_events", dict(routes=EVENT_ROUTES, pc=PIZZA_CLASS), graph(breadcrumbs([("Home", "/"), ("Private Events & Classes", "/private-events/")])), "table-spread", "table-spread"))
+    pages.append(("/kids-pizza-class/", "Kids Pizza-Making Class | Square Peg Pizzeria",
+                  "Book a private kids pizza-making class at Square Peg Pizzeria. Children make their own "
+                  "wood-fired pizza with one of our chefs. " + PIZZA_CLASS["price"] + " a child, minimum "
+                  + str(PIZZA_CLASS["min_kids"]) + " children, with the arcade as an optional extra.",
+                  "kids_class", dict(pc=PIZZA_CLASS),
+                  graph(breadcrumbs([("Home", "/"), ("Private Events & Classes", "/private-events/"),
+                                     ("Kids Pizza-Making Class", "/kids-pizza-class/")])),
+                  "kid-slice", "kid-slice"))
     pages.append(("/careers/", "Careers: Now Hiring | Square Peg Pizzeria",
                   "Join the Square Peg Pizzeria crew. Now hiring managers, servers, bartenders, kitchen staff and pizza cooks at locations across Connecticut and Delray Beach, FL.",
                   "careers", {}, graph(breadcrumbs([("Home", "/"), ("Careers", "/careers/")])), "oven-fire", "oven-fire"))
@@ -4345,7 +4440,7 @@ def main():
 #     reads like an offer anyone can turn up and claim, when it only applies to
 #     one group, at one location, on one night.
 UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-night/",
-            "/corporate/", "/gift-card-bonus/"}
+            "/corporate/", "/gift-card-bonus/", "/kids-pizza-class/"}
 if not LAB_LIVE:
     UNLISTED.add("/play/pizza-lab/")
 

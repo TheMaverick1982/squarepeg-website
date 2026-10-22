@@ -1668,3 +1668,33 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
   .gcb-inner>picture{align-self:center}
   .gcb-cards{width:min(264px,74vw)}
 }
+
+/* ---- Kids pizza-making class ----
+   Numbered cards because the class really is a sequence: make it, watch it
+   fire, eat it, take the certificate home. The upgrade tier is marked by one
+   ember rule rather than a second colour — the page is already a photo, a
+   price and a form, and it does not need three competing accents. */
+.cls-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.cls-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 20px 22px;min-width:0}
+.cls-n{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;
+  background:var(--ember);color:#fff;font:800 14px/1 var(--body);margin-bottom:12px}
+.cls-card h3{font-size:18px;margin:0 0 6px;line-height:1.2}
+.cls-card p{margin:0;color:var(--smoke);font-size:15px;line-height:1.5}
+
+.cls-tiers{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start}
+.cls-tier{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:24px 24px 26px;min-width:0}
+.cls-tier--up{background:var(--char);border-color:transparent;color:#fff}
+.cls-tier-tag{display:inline-block;font:800 11px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ember);margin-bottom:14px}
+.cls-tier--up .cls-tier-tag{color:var(--flame)}
+.cls-price{font-family:var(--display);font-weight:900;font-size:clamp(38px,5vw,52px);line-height:.95;margin:0 0 16px}
+.cls-price span{display:block;font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:0;
+  color:var(--smoke);margin-top:8px}
+.cls-tier--up .cls-price span{color:#cfc7c1}
+.cls-tier .checks{margin:0}
+.cls-up-body{margin:0 0 12px;font-size:15px;line-height:1.55;color:#e6ddd6}
+.cls-tier--up .note{color:#b9b1ab;margin:0}
+@media (max-width:560px){
+  .cls-card{padding:18px}
+  .cls-tier{padding:20px}
+}
