@@ -123,7 +123,7 @@ LOCATIONS = [
     {
         "slug": "vernon-ct", "review_url": "https://g.page/r/Ca9plvDsyye4EAE/review",
         # Kitchen closes before the bar on these days (from the store hours).
-        "kitchen": {"Wed": "21:00", "Thu": "21:00", "Fri": "23:00"}, "name": "Vernon", "region": "Greater Hartford",
+        "kitchen": {"Wed": "21:00", "Thu": "21:00", "Fri": "22:00", "Sat": "22:00"}, "name": "Vernon", "region": "Greater Hartford",
         "street": "226 Talcottville Rd", "city": "Vernon", "state": "CT", "zip": "06066",
         "phone": "(860) 926-0088", "toast": "square-peg-pizzeria-vernon-226-talcottville-rd",
         "lat": 41.836661, "lng": -72.491494, "geo_exact": True,  # US Census geocoder
@@ -152,7 +152,7 @@ LOCATIONS = [
         # Peg ever advertises something it cannot take.
         "husky_bucks": True,
         # Kitchen closes before the bar on these days (from the store hours).
-        "kitchen": {"Sun": "21:00", "Wed": "21:00", "Thu": "22:00", "Fri": "23:00", "Sat": "23:00"}, "name": "Storrs", "region": "Eastern CT",
+        "kitchen": {"Sun": "21:00", "Wed": "21:00", "Thu": "21:00", "Fri": "22:00", "Sat": "22:00"}, "name": "Storrs", "region": "Eastern CT",
         "street": "9 Dog Ln", "city": "Storrs", "state": "CT", "zip": "06268",
         "phone": "(860) 454-6038", "toast": "squarepegwindsor",
         "lat": 41.804999, "lng": -72.243305, "geo_exact": True,  # US Census geocoder
