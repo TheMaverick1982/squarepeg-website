@@ -1694,8 +1694,10 @@ PIZZA_CLASS = {
     "upgrade_head": "Add the arcade",
     "upgrade_body": "Five dollars more per child buys ten dollars of arcade games each "
                     "\u2014 so the party keeps going after the pizza comes out.",
-    # Only where there is actually an arcade. Add locations here as they get one.
-    "arcade_locations": ["Shelton"],
+    # Not every location has an arcade. Named locations stay off the page on
+    # purpose — the class is for all ten, and a list here would read as the
+    # upgrade being unavailable everywhere else rather than something to check.
+    "arcade_note": "Not every location has an arcade. We\u2019ll confirm when we call.",
     "steps": [
         ("Send the form", "A date, how many children, and which Square Peg."),
         ("We call you back", "We confirm the date, go through allergies, and take it from there."),

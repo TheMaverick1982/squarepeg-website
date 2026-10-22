@@ -1420,7 +1420,7 @@ T["kids_class"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
         <span class="cls-tier-tag">{{ pc.upgrade_head }} &nbsp;&middot;&nbsp; +{{ pc.upgrade_delta }} a child</span>
         <p class="cls-price">{{ pc.upgrade_total }}<span>{{ pc.price_note }}</span></p>
         <p class="cls-up-body">Everything in the class, plus <strong>{{ pc.arcade_credit }} of arcade games</strong> for every child. {{ pc.upgrade_body }}</p>
-        <p class="note">Available at {{ pc.arcade_locations|join(', ') }} &mdash; the locations with an arcade.</p>
+        <p class="note">{{ pc.arcade_note }}</p>
       </article>
     </div>
   </div>
