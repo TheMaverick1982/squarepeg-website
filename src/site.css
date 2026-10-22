@@ -1674,6 +1674,19 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
    fire, eat it, take the certificate home. The upgrade tier is marked by one
    ember rule rather than a second colour — the page is already a photo, a
    price and a form, and it does not need three competing accents. */
+/* Team Night: the sport chips, and the balls parked in the margins. The
+   balls use the same .cls-pie plumbing as the pizza; only the placement
+   differs, so there is one set of rules for decorative art on a page. */
+.tn-sports{list-style:none;margin:0 0 28px;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.tn-sports li{background:#fff;border:1px solid var(--line);border-radius:999px;
+  padding:9px 16px;font:700 14.5px/1 var(--body);color:var(--ink)}
+.tn-sports .tn-sports-more{background:transparent;border-style:dashed;color:var(--smoke);font-weight:600}
+.section--pie .tn-sports{position:relative;z-index:1}
+.tn-ball--a{top:-26px;right:-22px;width:170px;transform:rotate(-12deg);opacity:.9}
+.tn-ball--b{bottom:-30px;right:-26px;width:176px;transform:rotate(16deg);opacity:.85}
+.tn-ball--c{top:-30px;left:-28px;width:164px;transform:rotate(9deg);opacity:.85}
+.tn-ball--d{bottom:-24px;right:-20px;width:146px;transform:rotate(-14deg);opacity:.8}
+
 /* Drawn pizza, the same shapes as the class flyer, parked in the margins.
    Decoration only: aria-hidden, pointer-events off, and gone on phones where
    there is no margin to park anything in. */

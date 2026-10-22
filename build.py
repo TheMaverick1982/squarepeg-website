@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 
 # The Pizza Lab's pre-selected finish has to be one of the finishes on offer.
@@ -625,6 +625,13 @@ HW_ART["web"] = HW_ART["web"].replace("@@WEB@@", "M0 0L100.0 0.0M0 0L95.1 30.9M0
 # The same pizza drawn on the class flyer, as inline SVG so the page and the
 # print piece are recognisably one thing. Flat vector on purpose: it reads as
 # drawn rather than generated, and it costs nothing to ship.
+SPORTS_ART = {
+    'baseball': '<svg viewBox="-106 -106 212 212" aria-hidden="true" focusable="false"><circle cx="0" cy="0" r="100" fill="#FFFFFF" stroke="#8A8275" stroke-width="5"/><path d="M-70 71C-36 34 -36 -34 -70 -71" fill="none" stroke="#D50117" stroke-width="5.5" stroke-linecap="round"/><path d="M-44.9 53.9L-64.9 42.9M-36 24.3L-56 13.3M-36 -13.3L-56 -24.3M-44.9 -42.9L-64.9 -53.9" stroke="#D50117" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M70 71C36 34 36 -34 70 -71" fill="none" stroke="#D50117" stroke-width="5.5" stroke-linecap="round"/><path d="M44.9 53.9L64.9 42.9M36 24.3L56 13.3M36 -13.3L56 -24.3M44.9 -42.9L64.9 -53.9" stroke="#D50117" stroke-width="4.5" stroke-linecap="round" fill="none"/></svg>',
+    'soccer': '<svg viewBox="-106 -106 212 212" aria-hidden="true" focusable="false"><defs><clipPath id="sp-soccer-clip"><circle cx="0" cy="0" r="97.5"/></clipPath></defs><circle cx="0" cy="0" r="100" fill="#FFFFFF" stroke="#8A8275" stroke-width="5"/><g clip-path="url(#sp-soccer-clip)" fill="#1F1A17"><polygon points="0,-33 -31.4,-10.2 -19.4,26.7 19.4,26.7 31.4,-10.2"/><polygon points="-22.3,-132.7 -36.1,-90.3 -0,-64 36.1,-90.3 22.3,-132.7"/><polygon points="-133.1,-19.8 -97,6.5 -60.9,-19.8 -74.7,-62.3 -119.3,-62.3"/><polygon points="-60,120.5 -23.8,94.3 -37.6,51.8 -82.3,51.8 -96.1,94.3"/><polygon points="96.1,94.3 82.3,51.8 37.6,51.8 23.8,94.3 60,120.5"/><polygon points="119.3,-62.3 74.7,-62.3 60.9,-19.8 97,6.5 133.1,-19.8"/><path d="M0 -31L0 -66M-29.5 -9.6L-62.8 -20.4M-18.2 25.1L-38.8 53.4M18.2 25.1L38.8 53.4M29.5 -9.6L62.8 -20.4" stroke="#1F1A17" stroke-width="8.5" fill="none"/></g></svg>',
+    'basketball': '<svg viewBox="-106 -106 212 212" aria-hidden="true" focusable="false"><circle cx="0" cy="0" r="100" fill="#E2792A" stroke="#B4571A" stroke-width="5"/><path d="M0 -98L0 98M-98 0L98 0M-70 71C-24 34 -24 -34 -70 -71M70 71C24 34 24 -34 70 -71" fill="none" stroke="#1F1A17" stroke-width="5.8" stroke-linecap="round"/></svg>',
+    'football': '<svg viewBox="-106 -81.6 212 163.2" aria-hidden="true" focusable="false"><path d="M-100 0C-45 -76.8 45 -76.8 100 0C45 76.8 -45 76.8 -100 0Z" fill="#8B4A2B" stroke="#5E2F19" stroke-width="5" stroke-linejoin="round"/><path d="M-56 -24L-56 24M56 -24L56 24" stroke="#FFFFFF" stroke-width="4.8" stroke-linecap="round" fill="none"/><path d="M-30 0L30 0M-21 -13.2L-21 13.2M-7 -13.2L-7 13.2M7 -13.2L7 13.2M21 -13.2L21 13.2" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" fill="none"/></svg>',
+}
+
 PIZZA_ART = {
     "wheel": '<svg viewBox="-4.1 -4.1 192.3 192.3" aria-hidden="true" focusable="false"><circle cx="92" cy="92" r="92" fill="#E8A33F"/><circle cx="92" cy="92" r="78.7" fill="#FBE6B8"/><g fill="none" stroke="#C9801F" stroke-linecap="round"><circle cx="92" cy="92" r="92" stroke-width="4.1"/><circle cx="92" cy="92" r="78.7" stroke-width="2.8"/><path d="M106.7 92L168.4 92M102.4 102.4L146 146M92 106.7L92 168.4M81.6 102.4L38 146M77.3 92L15.6 92M81.6 81.6L38 38M92 77.3L92 15.6M102.4 81.6L146 38" stroke-width="2"/></g><g fill="#D50117" stroke="#A80314" stroke-width="1.7"><circle cx="144.2" cy="103.1" r="10.6"/><circle cx="115.9" cy="139.7" r="10.6"/><circle cx="69.6" cy="140.4" r="10.6"/><circle cx="40.2" cy="104.7" r="10.6"/><circle cx="49.8" cy="59.4" r="10.6"/><circle cx="91.2" cy="38.6" r="10.6"/><circle cx="133.2" cy="58.1" r="10.6"/><circle cx="103" cy="111.1" r="9.5"/><circle cx="69.9" cy="92" r="9.5"/><circle cx="103" cy="72.9" r="9.5"/></g></svg>',
     "slice": '<svg viewBox="73 -11.2 154 172.5" aria-hidden="true" focusable="false"><path d="M150 150L206.5 34.1A129 129 0 0 0 93.5 34.1Z" fill="#FBE6B8" stroke="#C9801F" stroke-width="5.3" stroke-linejoin="round"/><path d="M210.8 25.3A138.8 138.8 0 0 0 89.2 25.3" fill="none" stroke="#E8A33F" stroke-width="22.5"/><path d="M215.8 15.2A150 150 0 0 0 84.2 15.2" fill="none" stroke="#C9801F" stroke-width="5.3"/><path d="M206.2 34.7A128.2 128.2 0 0 0 93.8 34.7" fill="none" stroke="#C9801F" stroke-width="5.3"/><g fill="#D50117" stroke="#A80314" stroke-width="2"><circle cx="148.2" cy="45" r="12.3"/><circle cx="168.6" cy="80.5" r="12.3"/><circle cx="131.8" cy="86.6" r="12.3"/></g></svg>',
@@ -637,6 +644,10 @@ ICONS = {
     "tag": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 12V3h9l9 9-9 9-9-9Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>',
     "menu": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
     "arrow": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    # Team Night: a stopwatch for the game, the kit, and the discount.
+    "tn_clock": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.6" r="7.8"/><path d="M12 13.6V9.4"/><path d="M9.4 2.4h5.2"/><path d="M12 2.4v3.4"/><path d="m18.9 6.4 1.7-1.7"/></svg>',
+    "tn_kit": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.6 3 4 5.6l2.1 4.2 2-1.1V21h7.8V8.7l2 1.1L20 5.6 15.4 3l-1.6 1.5h-3.6L8.6 3Z"/></svg>',
+    "tn_off": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.6 15.4 15.4 8.6"/><circle cx="9.3" cy="9.3" r="1.5"/><circle cx="14.7" cy="14.7" r="1.5"/></svg>',
     # The four class steps: they make it, it fires, there's a drink and a
     # cookie, they leave with a certificate. Same 24x24 stroke set as the rest.
     "cls_make": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="7.6" cy="8.2" r="3.2"/><circle cx="16.4" cy="8.2" r="3.2"/><circle cx="12" cy="6.6" r="3.6"/><path d="M7.4 10.6V19h9.2v-8.4"/><path d="M7.4 15.6h9.2"/></svg>',
@@ -1476,6 +1487,89 @@ T["kids_class"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
     <span class="eyebrow">Hungry yet?</span>
     <h2>Let&rsquo;s get a date on the books.</h2>
     <div class="btn-row"><a class="btn" href="#book">Book a class</a><a class="btn btn--ghost" href="{{ u('/locations/') }}" data-open-picker="call">{{ icons.phone|safe }}Call a location</a></div>
+  </div>
+</section>
+"""
+
+T["team_night"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
+
+<section class="page-head on-dark">
+  {{ img('team-kids', 'A youth team outside Square Peg Pizzeria', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Team Night</span></nav>
+    <span class="eyebrow">Any team &middot; Any sport &middot; Any day</span>
+    <h1>Team Night</h1>
+    <p class="lede">{{ tn.lede }}</p>
+    <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a><a class="btn btn--ghost" href="#how">How it works</a></div>
+  </div>
+</section>
+
+<section class="section section--paper section--pie" id="how">
+  <span class="cls-pie tn-ball--a">{{ sports_art.baseball|safe }}</span>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">{{ tn.discount }} off the table</span>
+      <h2>Three steps, and we only do the last one</h2>
+      <p>No card, no code, no sign-up. Turn up in the kit and tell your server.</p>
+    </div>
+    <div class="cls-grid">
+      {% set tn_ico = ['tn_clock', 'tn_kit', 'tn_off'] %}
+      {% for head, body in tn.steps %}<article class="cls-card"><span class="cls-ico">{{ icons[tn_ico[loop.index0]]|safe }}<span class="cls-n">{{ loop.index }}</span></span><h3>{{ head }}</h3><p>{{ body }}</p></article>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--pie">
+  <span class="cls-pie tn-ball--b">{{ sports_art.football|safe }}</span>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">The deal</span>
+      <h2>{{ tn.discount }} off, for everyone at the table.</h2>
+    </div>
+    <div class="cls-tiers">
+      <article class="cls-tier">
+        <span class="cls-tier-tag">In uniform, dine in</span>
+        <p class="cls-price">{{ tn.discount }}<span>off the whole bill, not just the players</span></p>
+        <ul class="checks">{% for r in tn.rules %}<li>{{ r }}</li>{% endfor %}</ul>
+      </article>
+      <article class="cls-tier cls-tier--up">
+        <span class="cls-tier-tag">Coaches &amp; team parents</span>
+        <p class="cls-up-body">Bringing the whole roster and the parents behind them? Give the location a ring before you come so we can push tables together and have the ovens ready. Twenty or more and we can hold a room.</p>
+        <p class="note">No deposit, no minimum &mdash; just a heads up so nobody waits.</p>
+        <div class="btn-row"><a class="btn" href="{{ u('/large-party-reservations/') }}">Large parties</a><a class="btn btn--ghost" href="{{ u('/contact/') }}?topic=Team+night">Send us a note</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper section--pie">
+  <span class="cls-pie tn-ball--c">{{ sports_art.soccer|safe }}</span>
+  <span class="cls-pie tn-ball--d">{{ sports_art.basketball|safe }}</span>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">If you play it, it counts</span>
+      <h2>Every sport, every league</h2>
+      <p>Little league, travel, rec, school, club &mdash; and the adult leagues too.</p>
+    </div>
+    <ul class="tn-sports">{% for s in tn.sports %}<li>{{ s }}</li>{% endfor %}<li class="tn-sports-more">&hellip;and whatever we have missed</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">Things to know</span><h2>The usual questions</h2></div>
+    <div class="faq">
+      {% for q, a in tn.faq %}<details><summary class="faq-h">{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="page-head on-dark">
+  {{ img('oven-pizza', 'A pizza going into the Square Peg brick oven', cls='bg')|safe }}
+  <div class="wrap">
+    <span class="eyebrow">Good game</span>
+    <h2>Come in hungry. Stay in the kit.</h2>
+    <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a><a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the menu</a></div>
   </div>
 </section>
 """
@@ -4107,7 +4201,7 @@ def main():
                       "})();</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in DRAWER_GROUPS], gcb=GIFT_BOUNCE, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, pizza_art=PIZZA_ART, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in DRAWER_GROUPS], gcb=GIFT_BOUNCE, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, pizza_art=PIZZA_ART, sports_art=SPORTS_ART, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in MORE_GROUPS], deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
@@ -4196,6 +4290,13 @@ def main():
                   graph(breadcrumbs([("Home", "/"), ("Private Events & Classes", "/private-events/"),
                                      ("Kids Pizza-Making Class", "/kids-pizza-class/")])),
                   "kid-slice", "kid-slice"))
+    pages.append(("/team-night/", "Team Night | Square Peg Pizzeria",
+                  "Any team, any sport: play your game, come into Square Peg Pizzeria in "
+                  "uniform and we take " + TEAM_NIGHT["discount"] + " off the whole table. "
+                  "Dine in, any day, at every location.",
+                  "team_night", dict(tn=TEAM_NIGHT),
+                  graph(breadcrumbs([("Home", "/"), ("Team Night", "/team-night/")])),
+                  "team-kids", "team-kids"))
     pages.append(("/careers/", "Careers: Now Hiring | Square Peg Pizzeria",
                   "Join the Square Peg Pizzeria crew. Now hiring managers, servers, bartenders, kitchen staff and pizza cooks at locations across Connecticut and Delray Beach, FL.",
                   "careers", {}, graph(breadcrumbs([("Home", "/"), ("Careers", "/careers/")])), "oven-fire", "oven-fire"))
@@ -4459,7 +4560,8 @@ def main():
 #     reads like an offer anyone can turn up and claim, when it only applies to
 #     one group, at one location, on one night.
 UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-night/",
-            "/corporate/", "/gift-card-bonus/", "/kids-pizza-class/"}
+            "/corporate/", "/gift-card-bonus/", "/kids-pizza-class/",
+            "/team-night/"}
 if not LAB_LIVE:
     UNLISTED.add("/play/pizza-lab/")
 

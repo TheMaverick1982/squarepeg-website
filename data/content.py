@@ -992,7 +992,7 @@ LARGE_PARTY_FAQ = [
 
 CONTACT_TOPICS = [
     "General question", "Feedback about a visit", "Catering", "Large party reservation", "Food truck",
-    "Kids pizza-making class",
+    "Kids pizza-making class", "Team night",
     "Fundraiser", "Gift cards", "Rewards / app help", "Jobs", "Media or partnership",
 ]
 
@@ -1719,5 +1719,55 @@ PIZZA_CLASS = {
         ("How far ahead should we book?",
          "A couple of weeks is comfortable. Weekends in December and around school "
          "holidays go first."),
+    ],
+}
+
+
+# ---------------------------------------------------------------------------
+# Team Night. Any team, any sport: play your game, come in wearing the kit,
+# and the whole table comes off by DISCOUNT. Dine in, any day.
+#
+# The discount lives here and nowhere else - page, flyer and TV slide all read
+# it from this one line, because it is still being confirmed.
+TEAM_NIGHT = {
+    "discount": "10%",
+    "lede": "Any team, any sport. Play your game, come straight in wearing the kit, "
+            "and we take 10% off the whole table. No card, no sign-up, no special "
+            "night of the week \u2014 just turn up in uniform.",
+    "steps": [
+        ("Play your game",
+         "Baseball, soccer, basketball, hockey, lacrosse, swim, cheer \u2014 if there "
+         "was a game or a meet today, you qualify."),
+        ("Come in wearing it",
+         "Players in uniform, straight from the field. Muddy socks are part of it."),
+        ("We take it off the bill",
+         "Ten per cent off the whole table, not just the players. Tell your server "
+         "when you sit down."),
+    ],
+    "sports": ["Baseball", "Softball", "Soccer", "Basketball", "Football", "Hockey",
+               "Lacrosse", "Volleyball", "Field hockey", "Wrestling", "Swim",
+               "Track", "Cross country", "Cheer", "Dance", "Gymnastics"],
+    "rules": [
+        "Dine in only \u2014 the uniform has to be in the room.",
+        "Any day of the week, any Square Peg.",
+        "One discount per table. It doesn\u2019t stack with other offers.",
+        "Alcohol is excluded.",
+    ],
+    "faq": [
+        ("Does the whole table get it, or just the players?",
+         "The whole table. Parents, grandparents, the sibling who sat through the "
+         "whole game \u2014 ten per cent comes off the bill, not off one plate."),
+        ("What counts as a team?",
+         "Anything organised \u2014 little league, travel, rec league, school, club, "
+         "adult league. If you play together and you have a kit, you are a team."),
+        ("Do we all have to come at once?",
+         "No. Two players and a parent counts. If you are bringing the whole roster "
+         "and the parents, call the location first so we can put tables together."),
+        ("Which nights does it run?",
+         "Any day we are open. It is tied to your game, not to our calendar."),
+        ("Do adults count?",
+         "Yes. Beer-league softball in a jersey is still a team in uniform."),
+        ("Can we get it on takeout?",
+         "No \u2014 this one is dine in only."),
     ],
 }
