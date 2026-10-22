@@ -629,6 +629,12 @@ ICONS = {
     "tag": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 12V3h9l9 9-9 9-9-9Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>',
     "menu": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
     "arrow": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+    # The four class steps: they make it, it fires, there's a drink and a
+    # cookie, they leave with a certificate. Same 24x24 stroke set as the rest.
+    "cls_make": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="7.6" cy="8.2" r="3.2"/><circle cx="16.4" cy="8.2" r="3.2"/><circle cx="12" cy="6.6" r="3.6"/><path d="M7.4 10.6V19h9.2v-8.4"/><path d="M7.4 15.6h9.2"/></svg>',
+    "cls_fire": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8c2.6 3.3 5.7 5.2 5.7 9.3a5.7 5.7 0 0 1-11.4 0c0-1.9.9-3.4 2.1-4.6.3 1.5 1 2.3 2.1 2.5-.7-3.1.5-5.4 1.5-7.2Z"/></svg>',
+    "cls_treat": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5.6 8h12.8l-1.3 11.4a1.9 1.9 0 0 1-1.9 1.6H8.8a1.9 1.9 0 0 1-1.9-1.6L5.6 8Z"/><path d="M4.6 8h14.8"/><path d="M10.4 8 13 2.9"/></svg>',
+    "cls_cert": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5.6"/><path d="M8.4 13.7 6.9 21.2l5.1-2.5 5.1 2.5-1.5-7.5"/></svg>',
     # The four Pizza Lab steps: build it, name it, everyone votes, the winner
     # gets made. Same 24x24 stroke style as the rest, so they sit with the set.
     "lab_build": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="9.2" cy="10" r="1.3"/><circle cx="15" cy="9.4" r="1.3"/><circle cx="12.4" cy="15.2" r="1.3"/></svg>',
@@ -1399,7 +1405,8 @@ T["kids_class"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
       <p>About an hour, start to finish. Aprons and chef hats are ours &mdash; you bring the children.</p>
     </div>
     <div class="cls-grid">
-      {% for head, body in pc.includes %}<article class="cls-card"><span class="cls-n">{{ loop.index }}</span><h3>{{ head }}</h3><p>{{ body }}</p></article>{% endfor %}
+      {% set cls_ico = ['cls_make', 'cls_fire', 'cls_treat', 'cls_cert'] %}
+      {% for head, body in pc.includes %}<article class="cls-card"><span class="cls-ico">{{ icons[cls_ico[loop.index0]]|safe }}<span class="cls-n">{{ loop.index }}</span></span><h3>{{ head }}</h3><p>{{ body }}</p></article>{% endfor %}
     </div>
   </div>
 </section>
@@ -1436,7 +1443,7 @@ T["kids_class"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
       </ol>
       <p class="cat-note"><b>{{ pc.min_kids }} children is the minimum.</b> Tell us roughly how many
         and which Square Peg you want, and we&rsquo;ll confirm the room and the time when we call.</p>
-      {{ feature('dough', 'A ball of fresh pizza dough ready to stretch', 'Everyone’s a chef here') }}
+      {{ feature('kids-class', 'Two children in chef hats with the pizzas they topped at Square Peg', 'Aprons and chef hats are on us') }}
     </div>
 
     {% with form_title='Book a class', fid='cls', embed_key='kids_class', submit='Send my request' %}{% include "booking_form" %}{% endwith %}

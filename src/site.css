@@ -1674,12 +1674,16 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
    fire, eat it, take the certificate home. The upgrade tier is marked by one
    ember rule rather than a second colour — the page is already a photo, a
    price and a form, and it does not need three competing accents. */
-.cls-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-.cls-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 20px 22px;min-width:0}
-.cls-n{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;
-  background:var(--ember);color:#fff;font:800 14px/1 var(--body);margin-bottom:12px}
-.cls-card h3{font-size:18px;margin:0 0 6px;line-height:1.2}
-.cls-card p{margin:0;color:var(--smoke);font-size:15px;line-height:1.5}
+.cls-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(232px,1fr))}
+.cls-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 22px 28px;min-width:0}
+.cls-ico{position:relative;display:flex;align-items:center;justify-content:center;width:64px;height:64px;
+  border-radius:19px;background:#fbeaeb;color:var(--ember);margin-bottom:18px}
+.cls-ico svg{width:34px;height:34px}
+.cls-n{position:absolute;top:-7px;right:-7px;display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:50%;background:var(--ember);color:#fff;font:800 12px/1 var(--body);
+  border:2px solid #fff}
+.cls-card h3{font-size:21px;margin:0 0 8px;line-height:1.18}
+.cls-card p{margin:0;color:var(--smoke);font-size:15.5px;line-height:1.55}
 
 .cls-tiers{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start}
 .cls-tier{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:24px 24px 26px;min-width:0}
