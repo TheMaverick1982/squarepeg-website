@@ -644,7 +644,7 @@ ICONS = {
     "tag": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 12V3h9l9 9-9 9-9-9Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>',
     "menu": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
     "arrow": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
-    # Team Night: a stopwatch for the game, the kit, and the discount.
+    # Team Night: a stopwatch for the game, the jersey, and the discount.
     "tn_clock": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.6" r="7.8"/><path d="M12 13.6V9.4"/><path d="M9.4 2.4h5.2"/><path d="M12 2.4v3.4"/><path d="m18.9 6.4 1.7-1.7"/></svg>',
     "tn_kit": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.6 3 4 5.6l2.1 4.2 2-1.1V21h7.8V8.7l2 1.1L20 5.6 15.4 3l-1.6 1.5h-3.6L8.6 3Z"/></svg>',
     "tn_off": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.6 15.4 15.4 8.6"/><circle cx="9.3" cy="9.3" r="1.5"/><circle cx="14.7" cy="14.7" r="1.5"/></svg>',
@@ -1510,7 +1510,7 @@ T["team_night"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
     <div class="section-head">
       <span class="eyebrow">{{ tn.discount }} off the table</span>
       <h2>Three steps, and we only do the last one</h2>
-      <p>No card, no code, no sign-up. Turn up in the kit and tell your server.</p>
+      <p>No card, no code, no sign-up. Turn up in your uniform and tell your server.</p>
     </div>
     <div class="cls-grid">
       {% set tn_ico = ['tn_clock', 'tn_kit', 'tn_off'] %}
@@ -1568,7 +1568,7 @@ T["team_night"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
   {{ img('oven-pizza', 'A pizza going into the Square Peg brick oven', cls='bg')|safe }}
   <div class="wrap">
     <span class="eyebrow">Good game</span>
-    <h2>Come in hungry. Stay in the kit.</h2>
+    <h2>Come in hungry. Stay in your uniform.</h2>
     <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find your Square Peg</a><a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the menu</a></div>
   </div>
 </section>
