@@ -1674,6 +1674,18 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
    fire, eat it, take the certificate home. The upgrade tier is marked by one
    ember rule rather than a second colour — the page is already a photo, a
    price and a form, and it does not need three competing accents. */
+/* Drawn pizza, the same shapes as the class flyer, parked in the margins.
+   Decoration only: aria-hidden, pointer-events off, and gone on phones where
+   there is no margin to park anything in. */
+.section--pie{position:relative;overflow:hidden}
+.section--pie>.wrap{position:relative;z-index:1}
+.cls-pie{position:absolute;z-index:0;pointer-events:none;opacity:.6}
+.cls-pie svg{display:block;width:100%;height:auto}
+.cls-pie--a{top:-56px;right:-52px;width:214px;transform:rotate(-9deg)}
+.cls-pie--b{top:40px;right:72px;width:118px;transform:rotate(13deg)}
+.cls-pie--c{bottom:-78px;left:-70px;width:188px;transform:rotate(16deg);opacity:.42}
+@media (max-width:1080px){.cls-pie{display:none}}
+
 .cls-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(232px,1fr))}
 .cls-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 22px 28px;min-width:0}
 .cls-ico{position:relative;display:flex;align-items:center;justify-content:center;width:64px;height:64px;

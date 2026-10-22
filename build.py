@@ -622,6 +622,14 @@ HW_ART = {
 }
 HW_ART["web"] = HW_ART["web"].replace("@@WEB@@", "M0 0L100.0 0.0M0 0L95.1 30.9M0 0L80.9 58.8M0 0L58.8 80.9M0 0L30.9 95.1M0 0L0.0 100.0M26.0 0.0Q19.3 3.1 24.7 8.0M24.7 8.0Q17.4 8.9 21.0 15.3M21.0 15.3Q13.8 13.8 15.3 21.0M15.3 21.0Q8.9 17.4 8.0 24.7M8.0 24.7Q3.1 19.3 0.0 26.0M46.0 0.0Q34.2 5.4 43.7 14.2M43.7 14.2Q30.8 15.7 37.2 27.0M37.2 27.0Q24.5 24.5 27.0 37.2M27.0 37.2Q15.7 30.8 14.2 43.7M14.2 43.7Q5.4 34.2 0.0 46.0M66.0 0.0Q49.0 7.8 62.8 20.4M62.8 20.4Q44.2 22.5 53.4 38.8M53.4 38.8Q35.1 35.1 38.8 53.4M38.8 53.4Q22.5 44.2 20.4 62.8M20.4 62.8Q7.8 49.0 0.0 66.0M88.0 0.0Q65.4 10.4 83.7 27.2M83.7 27.2Q59.0 30.1 71.2 51.7M71.2 51.7Q46.8 46.8 51.7 71.2M51.7 71.2Q30.1 59.0 27.2 83.7M27.2 83.7Q10.4 65.4 0.0 88.0")
 
+# The same pizza drawn on the class flyer, as inline SVG so the page and the
+# print piece are recognisably one thing. Flat vector on purpose: it reads as
+# drawn rather than generated, and it costs nothing to ship.
+PIZZA_ART = {
+    "wheel": '<svg viewBox="-4.1 -4.1 192.3 192.3" aria-hidden="true" focusable="false"><circle cx="92" cy="92" r="92" fill="#E8A33F"/><circle cx="92" cy="92" r="78.7" fill="#FBE6B8"/><g fill="none" stroke="#C9801F" stroke-linecap="round"><circle cx="92" cy="92" r="92" stroke-width="4.1"/><circle cx="92" cy="92" r="78.7" stroke-width="2.8"/><path d="M106.7 92L168.4 92M102.4 102.4L146 146M92 106.7L92 168.4M81.6 102.4L38 146M77.3 92L15.6 92M81.6 81.6L38 38M92 77.3L92 15.6M102.4 81.6L146 38" stroke-width="2"/></g><g fill="#D50117" stroke="#A80314" stroke-width="1.7"><circle cx="144.2" cy="103.1" r="10.6"/><circle cx="115.9" cy="139.7" r="10.6"/><circle cx="69.6" cy="140.4" r="10.6"/><circle cx="40.2" cy="104.7" r="10.6"/><circle cx="49.8" cy="59.4" r="10.6"/><circle cx="91.2" cy="38.6" r="10.6"/><circle cx="133.2" cy="58.1" r="10.6"/><circle cx="103" cy="111.1" r="9.5"/><circle cx="69.9" cy="92" r="9.5"/><circle cx="103" cy="72.9" r="9.5"/></g></svg>',
+    "slice": '<svg viewBox="73 -11.2 154 172.5" aria-hidden="true" focusable="false"><path d="M150 150L206.5 34.1A129 129 0 0 0 93.5 34.1Z" fill="#FBE6B8" stroke="#C9801F" stroke-width="5.3" stroke-linejoin="round"/><path d="M210.8 25.3A138.8 138.8 0 0 0 89.2 25.3" fill="none" stroke="#E8A33F" stroke-width="22.5"/><path d="M215.8 15.2A150 150 0 0 0 84.2 15.2" fill="none" stroke="#C9801F" stroke-width="5.3"/><path d="M206.2 34.7A128.2 128.2 0 0 0 93.8 34.7" fill="none" stroke="#C9801F" stroke-width="5.3"/><g fill="#D50117" stroke="#A80314" stroke-width="2"><circle cx="148.2" cy="45" r="12.3"/><circle cx="168.6" cy="80.5" r="12.3"/><circle cx="131.8" cy="86.6" r="12.3"/></g></svg>',
+}
+
 ICONS = {
     "bag": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
     "phone": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>',
@@ -1397,12 +1405,13 @@ T["kids_class"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
   </div>
 </section>
 
-<section class="section section--paper" id="included">
+<section class="section section--paper section--pie" id="included">
+  <span class="cls-pie cls-pie--a">{{ pizza_art.wheel|safe }}</span>
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">{{ pc.price }} a child</span>
       <h2>What happens in the class</h2>
-      <p>About an hour, start to finish. Aprons and chef hats are ours &mdash; you bring the children.</p>
+      <p>About an hour, start to finish. We provide the aprons and chef hats &mdash; you bring the children.</p>
     </div>
     <div class="cls-grid">
       {% set cls_ico = ['cls_make', 'cls_fire', 'cls_treat', 'cls_cert'] %}
@@ -1411,7 +1420,9 @@ T["kids_class"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
   </div>
 </section>
 
-<section class="section">
+<section class="section section--pie">
+  <span class="cls-pie cls-pie--b">{{ pizza_art.slice|safe }}</span>
+  <span class="cls-pie cls-pie--c">{{ pizza_art.wheel|safe }}</span>
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Two ways to run it</span>
@@ -1443,7 +1454,7 @@ T["kids_class"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
       </ol>
       <p class="cat-note"><b>{{ pc.min_kids }} children is the minimum.</b> Tell us roughly how many
         and which Square Peg you want, and we&rsquo;ll confirm the room and the time when we call.</p>
-      {{ feature('kids-class', 'Two children in chef hats with the pizzas they topped at Square Peg', 'Aprons and chef hats are on us') }}
+      {{ feature('kids-class', 'Two children in chef hats with the pizzas they topped at Square Peg', 'Aprons and chef hats provided') }}
     </div>
 
     {% with form_title='Book a class', fid='cls', embed_key='kids_class', submit='Send my request' %}{% include "booking_form" %}{% endwith %}
@@ -1452,7 +1463,7 @@ T["kids_class"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
 
 <section class="section">
   <div class="wrap">
-    <div class="section-head"><span class="eyebrow">Before you ask</span><h2>The usual questions</h2></div>
+    <div class="section-head"><span class="eyebrow">Things to know</span><h2>The usual questions</h2></div>
     <div class="faq">
       {% for q, a in pc.faq %}<details><summary class="faq-h">{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}
     </div>
@@ -1460,7 +1471,7 @@ T["kids_class"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
 </section>
 
 <section class="page-head on-dark">
-  {{ img('oven-pizza', 'A pizza going into the Square Peg wood-fired oven', cls='bg')|safe }}
+  {{ img('oven-pizza', 'A pizza going into the Square Peg brick oven', cls='bg')|safe }}
   <div class="wrap">
     <span class="eyebrow">Hungry yet?</span>
     <h2>Let&rsquo;s get a date on the books.</h2>
@@ -4096,7 +4107,7 @@ def main():
                       "})();</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in DRAWER_GROUPS], gcb=GIFT_BOUNCE, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in DRAWER_GROUPS], gcb=GIFT_BOUNCE, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, pizza_art=PIZZA_ART, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in MORE_GROUPS], deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
@@ -4174,11 +4185,12 @@ def main():
                   "Weekly trivia, bingo and DJ nights at Square Peg Pizzeria in Plainville, Shelton, East Hartford, Glastonbury, Preston, Storrs and Delray Beach.",
                   "entertainment", {}, graph(breadcrumbs([("Home", "/"), ("Entertainment", "/entertainment/")])), "friends-holiday", "friends-holiday"))
     pages.append(("/private-events/", "Private Events & Pizza-Making Classes | Square Peg Pizzeria",
-                  "Plan a private event at Square Peg Pizzeria, and join our monthly pizza-making classes for adults plus $10 kids' classes. Parties, catering and the food truck.",
+                  "Plan a private event at Square Peg Pizzeria, and join our monthly pizza-making classes for adults plus kids' classes from " + PIZZA_CLASS["price"] + " a child. Parties, catering and the food truck.",
                   "private_events", dict(routes=EVENT_ROUTES, pc=PIZZA_CLASS), graph(breadcrumbs([("Home", "/"), ("Private Events & Classes", "/private-events/")])), "table-spread", "table-spread"))
     pages.append(("/kids-pizza-class/", "Kids Pizza-Making Class | Square Peg Pizzeria",
                   "Book a private kids pizza-making class at Square Peg Pizzeria. Children make their own "
-                  "wood-fired pizza with one of our chefs. " + PIZZA_CLASS["price"] + " a child, minimum "
+                  "pizza with one of our chefs and it is cooked in our brick oven. "
+                  + PIZZA_CLASS["price"] + " a child, minimum "
                   + str(PIZZA_CLASS["min_kids"]) + " children, with the arcade as an optional extra.",
                   "kids_class", dict(pc=PIZZA_CLASS),
                   graph(breadcrumbs([("Home", "/"), ("Private Events & Classes", "/private-events/"),

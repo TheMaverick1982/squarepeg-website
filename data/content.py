@@ -1676,16 +1676,16 @@ PIZZA_CLASS = {
     "arcade_credit": "$10",
     "min_kids": 10,
     "price_note": "per child, plus tax and gratuity",
-    "lede": "Your child stretches their own dough, tops it how they like it, and watches "
-            "it cook in a real wood-fired oven. They leave with a full stomach and a "
-            "certificate that says they did it.",
+    "lede": "Your child stretches their own dough and tops it how they like it. The "
+            "pizzas are then cooked in our brick oven. They leave with a full stomach "
+            "and a certificate that says they did it.",
     "includes": [
         ("They make the pizza",
          "Cheese or pepperoni, stretched and topped by them, with one of our chefs "
          "showing them how."),
-        ("They watch it fire",
-         "Their pizza goes into the wood-fired oven and one of our chefs cooks it in "
-         "front of them."),
+        ("Into the brick oven",
+         "Their pizzas are then cooked in our brick oven by one of our chefs, while "
+         "they watch."),
         ("A drink and a cookie",
          "A fountain drink each, and a warm chocolate chip cookie to finish."),
         ("A certificate",
@@ -1701,7 +1701,7 @@ PIZZA_CLASS = {
     "steps": [
         ("Send the form", "A date, how many children, and which Square Peg."),
         ("We call you back", "We confirm the date, go through allergies, and take it from there."),
-        ("Turn up hungry", "Aprons and hats are on us. You bring the children."),
+        ("Turn up hungry", "We provide the aprons and chef hats. You bring the children."),
     ],
     "faq": [
         ("How many children do we need?",
