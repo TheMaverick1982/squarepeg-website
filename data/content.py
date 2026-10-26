@@ -299,6 +299,10 @@ LINKS = [
     # retires. The end date is checked against GIFT_BOUNCE further down.
     ("Holiday Gift Card Bonus", "/gift-card-bonus/", "Buy $100 in store, get a $20 voucher",
      True, None, "2026-12-31"),
+    # Toys for Tots. Live now, and gone by itself the day after the boxes are
+    # collected. The end date is checked against TFT["collect"] further down.
+    ("Toys for Tots Drop-Off", "/toys-for-tots/", "Bring a toy, take $5 off your meal",
+     True, None, "2026-12-03"),
     ("Find a Location", "/locations/", "Ten spots across CT and Delray Beach", False),
     ("This Month\u2019s Specials", "/monthly-specials/", "The limited-time menu, gone at the end of the month", True),
     ("Ask Sal: What Should I Drink?", "/pairing/", "Our pairing guide, free to use", False),
@@ -1372,10 +1376,13 @@ TFT = {
     # Fill in "window" with the collection period, e.g. "November 14 – December 15".
     # Leave it empty and the page shows a visible placeholder card instead.
     # ---------------------------------------------------------------------
-    "window": "Now through the first week of December",
+    # The day the Marines collect. Drives the window text, and the Linktree row
+    # above retires itself the day after this date.
+    "collect": "2026-12-03",
+    "window": "Now through December 3",
     "window_note": "Drop off any time we're open — you don't need to be eating. "
-                   "The Marines collect the boxes in the first week of December, "
-                   "so bring toys in before then.",
+                   "The Marines collect the boxes on December 3, so bring toys "
+                   "in before then.",
 
     # ---------------------------------------------------------------------
     # THE PROMOTION — set Oct 2026
@@ -1437,6 +1444,17 @@ TFT = {
               "by the Marine Toys for Tots Foundation. Square Peg Pizzeria is a "
               "drop-off location, not an affiliate of the Foundation.",
 }
+
+# The Linktree row for Toys for Tots must retire on collection day, not before
+# and not weeks after. Checked here rather than trusted to memory.
+_tft_row = [r for r in LINKS if r[1] == "/toys-for-tots/"]
+assert len(_tft_row) == 1, "expected exactly one Toys for Tots row in LINKS"
+assert _tft_row[0][5] == TFT["collect"], (
+    f"the Toys for Tots link retires {_tft_row[0][5]} but the boxes are "
+    f"collected {TFT['collect']} — make them match")
+assert TFT["collect"] in TFT["window_note"].replace("December 3", "2026-12-03") \
+    or "December 3" in TFT["window_note"], "the window note does not state the collection date"
+
 
 # ---- Corporate: events & bulk gift cards --------------------------------
 # Two B2B pages that run holiday wording now and evergreen wording from
