@@ -2788,14 +2788,28 @@ T["tft"] = """
   </div>
 </section>
 
+<section class="section section--paper" id="giving">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">{{ tft.giving.name }} &middot; {{ tft.giving.when }}</span>
+      <p class="tft-state" data-season-to="{{ tft.giving.eve }}"{{ ' hidden' if today > tft.giving.eve }}>Starts {{ tft.giving.starts_long }}</p>
+      <p class="tft-state" data-season-from="{{ tft.giving.starts }}" data-season-to="{{ tft.giving.ends }}"{{ ' hidden' if today < tft.giving.starts or today > tft.giving.ends }}>On now &mdash; through Thanksgiving</p>
+      <p class="tft-state" data-season-from="{{ tft.giving.after }}"{{ ' hidden' if today < tft.giving.after }}>That&rsquo;s a wrap. Thank you.</p>
+      <h2>{{ tft.giving.head }}</h2>
+      <p>{{ tft.giving.lede }}</p>
+    </div>
+    <ul class="checks">{% for i in tft.giving.yes %}<li>{{ i }}</li>{% endfor %}</ul>
+    <p class="note">{{ tft.giving.note }}</p>
+  </div>
+</section>
+
 <section class="section" id="drop-off">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">{{ tft.locations|length }} locations so far</span>
+      <span class="eyebrow">{% if tft.locations|length >= 10 %}All ten{% else %}{{ tft.locations|length }} locations{% endif %}</span>
       <h2>Where to drop off</h2>
-      <p>These Square Pegs have a collection box right now, and we&rsquo;re adding
-        more as their local coordinators come back to us. Opening hours are on
-        each location&rsquo;s page.</p>
+      <p>Toys, and food through November, at every Square Peg in Connecticut and
+        in Florida. Opening hours are on each location&rsquo;s page.</p>
     </div>
     <ul class="tft-locs">
       {% for l in locs if l.name in tft.locations %}<li>
@@ -4314,9 +4328,9 @@ def main():
                                          (tp["h1"], f"/{tp['slug']}/")])),
                       tp["hero"], tp["hero"]))
     pages.append(("/toys-for-tots/", "Toys for Tots Drop-Off | Square Peg Pizzeria",
-                  "Drop a new, unwrapped toy at Square Peg Pizzeria in Storrs, "
-                  "Bolton, Preston or Vernon, CT. Toys for Tots boxes are in now "
-                  "and collected the first week of December.",
+                  "Drop a new, unwrapped toy at any Square Peg Pizzeria for Toys "
+                  "for Tots, collected December 3 — and non-perishable food for "
+                  "a local food bank through November.",
                   "tft", dict(tft=TFT),
                   graph(breadcrumbs([("Home", "/"), ("Toys for Tots", "/toys-for-tots/")])),
                   "kid-slice", "kid-slice"))

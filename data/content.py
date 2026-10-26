@@ -1361,15 +1361,17 @@ TFT = {
     # The rest are still waiting to be registered, so they are not on the page:
     # sending someone to a restaurant with no box is worse than not listing it.
     # Add names here as the coordinators come back, and the page follows.
-    "locations": ["Storrs", "Bolton", "Preston", "Vernon"],
+    "locations": ["Glastonbury", "East Hartford", "Vernon", "Bolton", "Storrs",
+                  "Preston", "Plainville", "Berlin Truck Bar", "Shelton",
+                  "Delray Beach"],
 
     "eyebrow": "Toys for Tots",
     "h1": "Drop a toy at Square Peg.",
-    "lede": "Four Square Pegs are Toys for Tots drop-off points this holiday "
-            "season \u2014 Storrs, Bolton, Preston and Vernon, with more to come. "
-            "Bring a new, unwrapped toy, leave it in the box by the door, and "
-            "the Marine Corps Reserve gets it to a child in the same community "
-            "it was dropped off in.",
+    "lede": "Every Square Peg is a drop-off point this holiday season. Bring a "
+            "new, unwrapped toy, leave it in the box by the door, and the Marine "
+            "Corps Reserve gets it to a child in the same community it was "
+            "dropped off in. Through November we’re collecting food for a local "
+            "food bank too.",
 
     # ---------------------------------------------------------------------
     # PLACEHOLDER 1 — THE DATES
@@ -1380,7 +1382,7 @@ TFT = {
     # above retires itself the day after this date.
     "collect": "2026-12-03",
     "window": "Now through December 3",
-    "window_note": "Drop off any time we're open — you don't need to be eating. "
+    "window_note": "Drop off any time we’re open — you don’t need to be eating. "
                    "The Marines collect the boxes on December 3, so bring toys "
                    "in before then.",
 
@@ -1394,27 +1396,27 @@ TFT = {
     # the GMs which way it goes.
     # ---------------------------------------------------------------------
     "offer_head": "$5 toward your meal, the day you drop off",
-    "offer_body": "Bring in a toy and we'll take $5 off whatever you're eating "
+    "offer_body": "Bring in a toy and we’ll take $5 off whatever you’re eating "
                   "or taking home that day. Dine in or pick up, at any of the "
                   "locations with a box.",
-    "offer_fine": "One $5 per guest, on the day you drop off the toy. Can't be "
+    "offer_fine": "One $5 per guest, on the day you drop off the toy. Can’t be "
                   "combined with any other offer, discount or reward.",
 
     "steps": [
         ("Pick up a toy",
          "New and unwrapped, in its original packaging. Anything from a board "
          "game to a basketball. Gifts for teenagers are what every campaign "
-         "runs short of, so if you're stuck, that's where to aim."),
+         "runs short of, so if you’re stuck, that’s where to aim."),
         ("Bring it in",
-         "The collection box is by the door at Storrs, Bolton, Preston and "
-         "Vernon. Any day we're open, during normal hours. You don't have to "
-         "stay, and you don't have to buy anything."),
+         "The collection box is by the door at every Square Peg. Any day we’re "
+         "open, during normal hours. You don’t have to stay, and you don’t "
+         "have to buy anything."),
         ("The Marines take it from there",
          "Local Marine Toys for Tots coordinators collect, sort and distribute "
          "every toy to families in the same area it was collected."),
     ],
 
-    # The Foundation's own universal requirement. Safe to state as written.
+    # The Foundation’s own universal requirement. Safe to state as written.
     "yes": [
         "New toys, in the original packaging",
         "Books, board games, puzzles and art supplies",
@@ -1431,10 +1433,38 @@ TFT = {
 
     # The Square Peg Rewards bar near the foot of the page. Wording follows the
     # menus: free, $5 welcome reward, points every visit, members-only deals.
-    "rewards_head": "While you're here, join Square Peg Rewards.",
-    "rewards_body": "It's free. A $5 welcome reward, points on every visit and "
+    "rewards_head": "While you’re here, join Square Peg Rewards.",
+    "rewards_body": "It’s free. A $5 welcome reward, points on every visit and "
                     "deals only members get.",
     "rewards_cta": "Get the app",
+
+    # -------------------------------------------------------------------
+    # SEASON OF GIVING — the November food drive, alongside the toys.
+    # Runs to Thanksgiving, 26 November in 2026. The three-state badge on the
+    # section flips itself: "starts" before, "on now" during, "thank you"
+    # after, against Eastern time in the browser.
+    # -------------------------------------------------------------------
+    "giving": {
+        "name": "Season of Giving",
+        "starts": "2026-11-01",
+        "eve": "2026-10-31",
+        "ends": "2026-11-26",
+        "after": "2026-11-27",
+        "starts_long": "November 1",
+        "when": "November 1 – Thanksgiving",
+        "head": "Fill the box with food, too.",
+        "lede": "All through November we’re collecting non-perishable food for a "
+                "local food bank, right alongside the toys. Same box, same door. "
+                "Bring a can on your way in — you don’t have to be eating.",
+        "yes": [
+            "Canned vegetables, beans and soup",
+            "Pasta, rice, cereal and oats",
+            "Peanut butter and canned protein",
+            "Cooking oil and shelf-stable milk",
+        ],
+        "note": "Check the date before you drop it in — food banks can’t hand on "
+                "anything out of date, opened or home-made.",
+    },
 
     "org_url": "https://www.toysfortots.org/",
     "chapter_url": "https://www.toysfortots.org/find-your-local-chapter/",

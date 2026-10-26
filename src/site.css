@@ -1674,6 +1674,12 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
    fire, eat it, take the certificate home. The upgrade tier is marked by one
    ember rule rather than a second colour — the page is already a photo, a
    price and a form, and it does not need three competing accents. */
+/* The Season of Giving state line: one of three, the browser picks by date. */
+.section-head .tft-state{display:inline-block;align-self:start;width:fit-content;
+  max-width:100%;margin:0 0 12px;padding:6px 14px;border-radius:999px;
+  background:var(--ember);color:#fff;font:800 11.5px/1 var(--body);
+  letter-spacing:.12em;text-transform:uppercase}
+
 /* Team Night: the sport chips, and the balls parked in the margins. The
    balls use the same .cls-pie plumbing as the pizza; only the placement
    differs, so there is one set of rules for decorative art on a page. */
