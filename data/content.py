@@ -1351,22 +1351,31 @@ LTO = {
 
 TFT = {
     # Flip to True to launch. See the build-time guard in build.py.
-    "live": False,
+    "live": True,
+
+    # Only the stores that actually have a box from their local coordinator.
+    # The rest are still waiting to be registered, so they are not on the page:
+    # sending someone to a restaurant with no box is worse than not listing it.
+    # Add names here as the coordinators come back, and the page follows.
+    "locations": ["Storrs", "Bolton", "Preston", "Vernon"],
 
     "eyebrow": "Toys for Tots",
     "h1": "Drop a toy at Square Peg.",
-    "lede": "Every Square Peg is a Toys for Tots drop-off point this holiday "
-            "season. Bring a new, unwrapped toy, leave it in the box by the "
-            "door, and the Marine Corps Reserve gets it to a child in the same "
-            "community it was dropped off in.",
+    "lede": "Four Square Pegs are Toys for Tots drop-off points this holiday "
+            "season \u2014 Storrs, Bolton, Preston and Vernon, with more to come. "
+            "Bring a new, unwrapped toy, leave it in the box by the door, and "
+            "the Marine Corps Reserve gets it to a child in the same community "
+            "it was dropped off in.",
 
     # ---------------------------------------------------------------------
     # PLACEHOLDER 1 — THE DATES
     # Fill in "window" with the collection period, e.g. "November 14 – December 15".
     # Leave it empty and the page shows a visible placeholder card instead.
     # ---------------------------------------------------------------------
-    "window": "",
-    "window_note": "Drop off any time we're open — you don't need to be eating.",
+    "window": "Now through the first week of December",
+    "window_note": "Drop off any time we're open — you don't need to be eating. "
+                   "The Marines collect the boxes in the first week of December, "
+                   "so bring toys in before then.",
 
     # ---------------------------------------------------------------------
     # THE PROMOTION — set Oct 2026
@@ -1379,7 +1388,8 @@ TFT = {
     # ---------------------------------------------------------------------
     "offer_head": "$5 toward your meal, the day you drop off",
     "offer_body": "Bring in a toy and we'll take $5 off whatever you're eating "
-                  "or taking home that day. Dine in or pick up, at any of the ten.",
+                  "or taking home that day. Dine in or pick up, at any of the "
+                  "locations with a box.",
     "offer_fine": "One $5 per guest, on the day you drop off the toy. Can't be "
                   "combined with any other offer, discount or reward.",
 
@@ -1389,9 +1399,9 @@ TFT = {
          "game to a basketball. Gifts for teenagers are what every campaign "
          "runs short of, so if you're stuck, that's where to aim."),
         ("Bring it in",
-         "The collection box is by the door at all ten Square Pegs. Any day "
-         "we're open, during normal hours. You don't have to stay, and you "
-         "don't have to buy anything."),
+         "The collection box is by the door at Storrs, Bolton, Preston and "
+         "Vernon. Any day we're open, during normal hours. You don't have to "
+         "stay, and you don't have to buy anything."),
         ("The Marines take it from there",
          "Local Marine Toys for Tots coordinators collect, sort and distribute "
          "every toy to families in the same area it was collected."),

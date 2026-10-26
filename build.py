@@ -2791,13 +2791,14 @@ T["tft"] = """
 <section class="section" id="drop-off">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">All ten</span>
+      <span class="eyebrow">{{ tft.locations|length }} locations so far</span>
       <h2>Where to drop off</h2>
-      <p>Every Square Peg takes toys, in Connecticut and in Florida. Opening
-        hours are on each location&rsquo;s page.</p>
+      <p>These Square Pegs have a collection box right now, and we&rsquo;re adding
+        more as their local coordinators come back to us. Opening hours are on
+        each location&rsquo;s page.</p>
     </div>
     <ul class="tft-locs">
-      {% for l in locs %}<li>
+      {% for l in locs if l.name in tft.locations %}<li>
         <a href="{{ u('/locations/' ~ l.slug ~ '/') }}"><b>{{ l.name }}</b></a>
         <address>{{ l.street }}<br>{{ l.city }}, {{ l.state }} {{ l.zip }}</address>
         <a class="phone" href="tel:{{ tel(l.phone) }}" data-track="call_click" data-loc="{{ l.slug }}">{{ l.phone }}</a>
@@ -4313,9 +4314,9 @@ def main():
                                          (tp["h1"], f"/{tp['slug']}/")])),
                       tp["hero"], tp["hero"]))
     pages.append(("/toys-for-tots/", "Toys for Tots Drop-Off | Square Peg Pizzeria",
-                  "Every Square Peg Pizzeria is a Toys for Tots drop-off location. "
-                  "Bring a new, unwrapped toy to any of our ten restaurants in "
-                  "Connecticut and Delray Beach, Florida.",
+                  "Drop a new, unwrapped toy at Square Peg Pizzeria in Storrs, "
+                  "Bolton, Preston or Vernon, CT. Toys for Tots boxes are in now "
+                  "and collected the first week of December.",
                   "tft", dict(tft=TFT),
                   graph(breadcrumbs([("Home", "/"), ("Toys for Tots", "/toys-for-tots/")])),
                   "kid-slice", "kid-slice"))
@@ -4568,6 +4569,12 @@ if not LAB_LIVE:
 # The Toys for Tots page carries two deliberate placeholders. Launching with
 # either still empty would publish a page telling the public "dates to come",
 # so the flag alone is not enough — the content has to be there too.
+_tft_unknown = [n for n in TFT["locations"]
+                if n not in {l["name"] for l in LOCATIONS}]
+if _tft_unknown:
+    raise SystemExit(
+        "Refusing to build: TFT['locations'] names no such Square Peg: "
+        + ", ".join(_tft_unknown))
 _tft_missing = [n for n, v in (("window", TFT["window"]),
                                ("offer_head", TFT["offer_head"]),
                                ("offer_body", TFT["offer_body"])) if not v.strip()]
