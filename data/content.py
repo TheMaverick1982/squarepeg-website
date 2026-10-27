@@ -1793,8 +1793,8 @@ TEAM_NIGHT = {
     # of this page carried a 10% placeholder while Brian confirmed it; the page
     # is built off these strings, so swapping the deal is a content edit.
     "deal": "Pizza and a pitcher",
-    "deal_price": "1 cheese pizza",
-    "deal_sub": "and a pitcher of soda, for the team \u2014 not one each",
+    "deal_price": "1 large cheese pizza",
+    "deal_sub": "and a pitcher of soda, for the team to share.",
     "lede": "Any team, any sport. Play your game, come straight in wearing your uniform, "
             "and the team gets a large cheese pizza and a pitcher of soda. No card, no sign-up, "
             "no special night of the week \u2014 just turn up in uniform.",
