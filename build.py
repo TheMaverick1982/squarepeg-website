@@ -1526,7 +1526,7 @@ T["team_night"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">The deal</span>
-      <h2>A large pizza and a pitcher of soda, for the team.</h2>
+      <h2>A large cheese pizza and a pitcher of soda, for the team.</h2>
     </div>
     <div class="cls-tiers">
       <article class="cls-tier">
@@ -4309,7 +4309,8 @@ def main():
                   "kid-slice", "kid-slice"))
     pages.append(("/team-night/", "Team Night | Square Peg Pizzeria",
                   "Any team, any sport: play your game, come into Square Peg Pizzeria in "
-                  "uniform and the team gets a large pizza and a pitcher of soda. "
+                  "uniform and the team gets a large cheese pizza and a pitcher of "
+                  "soda. "
                   "Dine in, any day, at every location.",
                   "team_night", dict(tn=TEAM_NIGHT),
                   graph(breadcrumbs([("Home", "/"), ("Team Night", "/team-night/")])),
