@@ -1788,19 +1788,25 @@ PIZZA_CLASS = {
 # The discount lives here and nowhere else - page, flyer and TV slide all read
 # it from this one line, because it is still being confirmed.
 TEAM_NIGHT = {
-    "discount": "10%",
+    # The standing offer, the one Square Peg has always run: a large pizza and
+    # a pitcher of soda for the team that turns up in uniform. An earlier draft
+    # of this page carried a 10% placeholder while Brian confirmed it; the page
+    # is built off these strings, so swapping the deal is a content edit.
+    "deal": "Pizza and a pitcher",
+    "deal_price": "1 pizza, 1 pitcher",
+    "deal_sub": "of soda, for the team \u2014 not one each",
     "lede": "Any team, any sport. Play your game, come straight in wearing your uniform, "
-            "and we take 10% off the whole table. No card, no sign-up, no special "
-            "night of the week \u2014 just turn up in uniform.",
+            "and the team gets a large pizza and a pitcher of soda. No card, no sign-up, "
+            "no special night of the week \u2014 just turn up in uniform.",
     "steps": [
         ("Play your game",
          "Baseball, soccer, basketball, hockey, lacrosse, swim, cheer \u2014 if there "
          "was a game or a meet today, you qualify."),
         ("Come in your uniform",
          "Players in uniform, straight from the field. Muddy socks are part of it."),
-        ("We take it off the bill",
-         "Ten per cent off the whole table, not just the players. Tell your server "
-         "when you sit down."),
+        ("Pizza and a pitcher",
+         "One large pizza and a pitcher of soda for the team. Tell your server when "
+         "you sit down."),
     ],
     "sports": ["Baseball", "Softball", "Soccer", "Basketball", "Football", "Hockey",
                "Lacrosse", "Volleyball", "Field hockey", "Wrestling", "Swim",
@@ -1808,19 +1814,20 @@ TEAM_NIGHT = {
     "rules": [
         "Dine in only \u2014 the uniform has to be in the room.",
         "Any day of the week, any Square Peg.",
-        "One discount per table. Not combinable with any other deal or promotion.",
-        "Alcohol is excluded.",
+        "One per team. Not combinable with any other deal or promotion.",
     ],
     "faq": [
-        ("Does the whole table get it, or just the players?",
-         "The whole table. Parents, grandparents, the sibling who sat through the "
-         "whole game \u2014 ten per cent comes off the bill, not off one plate."),
+        ("Is it one pizza each, or one for the team?",
+         "One for the team \u2014 a large pizza and a pitcher of soda, however many "
+         "of you walk in. Most teams order around it; this is the part that comes "
+         "with the uniform."),
         ("What counts as a team?",
          "Anything organised \u2014 little league, travel, rec league, school, club, "
          "adult league. If you play together and you have a uniform, you are a team."),
         ("Do we all have to come at once?",
-         "No. Two players and a parent counts. If you are bringing the whole roster "
-         "and the parents, call the location first so we can put tables together."),
+         "Enough of you that it reads as the team rather than one player who kept "
+         "their shirt on. If you are bringing the whole roster and the parents, call "
+         "the location first so we can put tables together."),
         ("Which nights does it run?",
          "Any day we are open. It is tied to your game, not to our calendar."),
         ("Do adults count?",

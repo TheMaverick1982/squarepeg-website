@@ -648,6 +648,8 @@ ICONS = {
     "tn_clock": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.6" r="7.8"/><path d="M12 13.6V9.4"/><path d="M9.4 2.4h5.2"/><path d="M12 2.4v3.4"/><path d="m18.9 6.4 1.7-1.7"/></svg>',
     "tn_kit": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.6 3 4 5.6l2.1 4.2 2-1.1V21h7.8V8.7l2 1.1L20 5.6 15.4 3l-1.6 1.5h-3.6L8.6 3Z"/></svg>',
     "tn_off": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.6 15.4 15.4 8.6"/><circle cx="9.3" cy="9.3" r="1.5"/><circle cx="14.7" cy="14.7" r="1.5"/></svg>',
+    # A slice, for the step that used to be a percentage.
+    "tn_slice": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 20.6 19a1 1 0 0 1-.9 1.5 42 42 0 0 1-15.4 0A1 1 0 0 1 3.4 19Z"/><circle cx="10" cy="12.4" r="1.15"/><circle cx="14.3" cy="15.2" r="1.15"/><circle cx="11.1" cy="17.4" r="1.15"/></svg>',
     # The four class steps: they make it, it fires, there's a drink and a
     # cookie, they leave with a certificate. Same 24x24 stroke set as the rest.
     "cls_make": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="7.6" cy="8.2" r="3.2"/><circle cx="16.4" cy="8.2" r="3.2"/><circle cx="12" cy="6.6" r="3.6"/><path d="M7.4 10.6V19h9.2v-8.4"/><path d="M7.4 15.6h9.2"/></svg>',
@@ -1508,12 +1510,12 @@ T["team_night"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
   <span class="cls-pie tn-ball--a">{{ sports_art.baseball|safe }}</span>
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">{{ tn.discount }} off the table</span>
+      <span class="eyebrow">How it works</span>
       <h2>Three steps, and we only do the last one</h2>
       <p>No card, no code, no sign-up. Turn up in your uniform and tell your server.</p>
     </div>
     <div class="cls-grid">
-      {% set tn_ico = ['tn_clock', 'tn_kit', 'tn_off'] %}
+      {% set tn_ico = ['tn_clock', 'tn_kit', 'tn_slice'] %}
       {% for head, body in tn.steps %}<article class="cls-card"><span class="cls-ico">{{ icons[tn_ico[loop.index0]]|safe }}<span class="cls-n">{{ loop.index }}</span></span><h3>{{ head }}</h3><p>{{ body }}</p></article>{% endfor %}
     </div>
   </div>
@@ -1524,12 +1526,12 @@ T["team_night"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo"
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">The deal</span>
-      <h2>{{ tn.discount }} off, for everyone at the table.</h2>
+      <h2>A large pizza and a pitcher of soda, for the team.</h2>
     </div>
     <div class="cls-tiers">
       <article class="cls-tier">
         <span class="cls-tier-tag">In uniform, dine in</span>
-        <p class="cls-price">{{ tn.discount }}<span>off the whole bill, not just the players</span></p>
+        <p class="cls-price">{{ tn.deal_price }}<span>{{ tn.deal_sub }}</span></p>
         <ul class="checks">{% for r in tn.rules %}<li>{{ r }}</li>{% endfor %}</ul>
       </article>
       <article class="cls-tier cls-tier--up">
@@ -4307,7 +4309,7 @@ def main():
                   "kid-slice", "kid-slice"))
     pages.append(("/team-night/", "Team Night | Square Peg Pizzeria",
                   "Any team, any sport: play your game, come into Square Peg Pizzeria in "
-                  "uniform and we take " + TEAM_NIGHT["discount"] + " off the whole table. "
+                  "uniform and the team gets a large pizza and a pitcher of soda. "
                   "Dine in, any day, at every location.",
                   "team_night", dict(tn=TEAM_NIGHT),
                   graph(breadcrumbs([("Home", "/"), ("Team Night", "/team-night/")])),
