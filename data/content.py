@@ -1812,7 +1812,8 @@ TEAM_NIGHT = {
                "Lacrosse", "Volleyball", "Field hockey", "Wrestling", "Swim",
                "Track", "Cross country", "Cheer", "Dance", "Gymnastics"],
     "rules": [
-        "Dine in only \u2014 the uniform has to be in the room.",
+        "Dine in only \u2014 in uniform.",
+        "With your team.",
         "Any day of the week, any Square Peg.",
         "One per team. Not combinable with any other deal or promotion.",
     ],
