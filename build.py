@@ -292,6 +292,11 @@ EMAIL_IMAGES = [
     # every location has the wall — and two kids in sheets beats any photo of
     # the wall anyway.
     ("halloween-ghosts", "halloween-ghosts", 1000, 690, 0.75),
+    # Bolton welcome blast. The source is a square 600px, so this upscales --
+    # acceptable because the email body is 500px wide and the file ships at
+    # JPEG 78. Focus is high: the faces and the hands on the slices are in
+    # the top half and a centre crop cuts them off.
+    ("friends-sharing", "friends-sharing", 1000, 760, 0.52),
 ]
 
 def build_email_images():
