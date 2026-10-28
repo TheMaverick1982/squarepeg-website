@@ -297,6 +297,10 @@ EMAIL_IMAGES = [
     # JPEG 78. Focus is high: the faces and the hands on the slices are in
     # the top half and a centre crop cuts them off.
     ("friends-sharing", "friends-sharing", 1000, 760, 0.52),
+    # November newsletter's limited-time block. The chicken vodka pie is the
+    # month's hero on /monthly-specials/ too, so the email and the page open
+    # on the same picture.
+    ("lto-november", "lto-chicken-vodka", 1000, 560, 0.50),
 ]
 
 def build_email_images():
