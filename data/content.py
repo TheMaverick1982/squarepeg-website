@@ -1295,42 +1295,126 @@ assert len(_pot[0]) == 6 and _pot[0][5] == HALLOWEEN["ends"], (
     f"but HALLOWEEN['ends'] is {HALLOWEEN['ends']}. Make them match.")
 
 
-LTO = {
-    "month": "October",
-    "year": "2026",
-    "ends": "2026-10-31",
-    "blurb": "Five things our kitchen only makes in October, plus two cocktails that taste "
-             "like the season. Here until the 31st, then they're gone.",
-    "sections": [
-        ("Starter", [
-            ("Fried Eggplant", "$12", "lto-eggplant",
-             "Golden fried eggplant dusted in our Peg seasonings dry rub, with marinara for dipping."),
-        ]),
-        ("Sandwich", [
-            ("Burrata Bliss", "$16", "lto-burrata",
-             "Toasted garlic bread, fig jam, arugula and melted burrata. Our Italian take on a better grilled cheese."),
-        ]),
-        ("Signature brick oven pizza", [
-            ("I Yuv You", "$18 small · $28 large", "lto-i-yuv-you",
-             "The pizza our head chef makes for his own family. Red pie with mozzarella, pepperoni, "
-             "fried eggplant, sliced roma tomatoes, red onions and parm."),
-            ("The Bianca Bella", "$17 small · $27 large", "lto-bianca-bella",
-             "A white pizza with mozzarella, parm cream, sausage, caramelized onions and fresh basil. "
-             "Lives up to its name."),
-        ]),
-        ("Dessert", [
-            ("Deep Fried Sandwich Cookies", "$12", "lto-cookies",
-             "Five deep fried sandwich cookies, powdered sugar, chocolate sauce and a scoop of vanilla ice cream."),
-        ]),
-    ],
-    # No photos for these — they render as copy-only cards.
-    "cocktails": [
-        ("Pumpkin Spice Martini", "$9",
-         "Vanilla vodka, Kahlúa, Baileys, RumChata, pumpkin spice and cold brew, chilled, with whipped cream and caramel drizzle."),
-        ("Fall Sangria", "$9",
-         "Gooseneck Pinot Grigio, pear liqueur and apple cider in a salted caramel and cinnamon sugar rimmed glass."),
-    ],
-}
+# ---------------------------------------------------------------------------
+# MONTHLY SPECIALS (LTO) — /monthly-specials/
+#
+# The page carries every month we have loaded and shows whichever one the
+# visitor's date falls inside, checked against Eastern time in their browser.
+# That matters because the months butt up against each other: October runs to
+# the 31st and November opens on the 1st, so loading November early must not
+# take October down three days short. Each month carries its own start and end
+# and the page switches itself at midnight.
+#
+# After the last month ends, the page falls back to a short "next month is on
+# the way" card rather than showing a stale menu.
+#
+# Keep the months in date order. An item's photo may be None — it then renders
+# as a copy-only card, the same shape the cocktails use.
+# ---------------------------------------------------------------------------
+LTO_MONTHS = [
+    {
+        "month": "October",
+        "year": "2026",
+        "starts": "2026-10-01",
+        "ends": "2026-10-31",
+        "hero": "lto-i-yuv-you",
+        "blurb": "Five things our kitchen only makes in October, plus two cocktails "
+                 "that taste like the season. Here until the 31st, then they’re gone.",
+        "sections": [
+            ("Starter", [
+                ("Fried Eggplant", "$12", "lto-eggplant",
+                 "Golden fried eggplant dusted in our Peg seasonings dry rub, with "
+                 "marinara for dipping."),
+            ]),
+            ("Sandwich", [
+                ("Burrata Bliss", "$16", "lto-burrata",
+                 "Toasted garlic bread, fig jam, arugula and melted burrata. Our "
+                 "Italian take on a better grilled cheese."),
+            ]),
+            ("Signature brick oven pizza", [
+                ("I Yuv You", "$18 small · $28 large", "lto-i-yuv-you",
+                 "The pizza our head chef makes for his own family. Red pie with "
+                 "mozzarella, pepperoni, fried eggplant, sliced roma tomatoes, red "
+                 "onions and parm."),
+                ("The Bianca Bella", "$17 small · $27 large", "lto-bianca-bella",
+                 "A white pizza with mozzarella, parm cream, sausage, caramelized "
+                 "onions and fresh basil. Lives up to its name."),
+            ]),
+            ("Dessert", [
+                ("Deep Fried Sandwich Cookies", "$12", "lto-cookies",
+                 "Five deep fried sandwich cookies, powdered sugar, chocolate sauce "
+                 "and a scoop of vanilla ice cream."),
+            ]),
+        ],
+        "cocktails": [
+            ("Pumpkin Spice Martini", "$9",
+             "Vanilla vodka, Kahlúa, Baileys, RumChata, pumpkin spice and cold "
+             "brew, chilled, with whipped cream and caramel drizzle."),
+            ("Fall Sangria", "$9",
+             "Gooseneck Pinot Grigio, pear liqueur and apple cider in a salted "
+             "caramel and cinnamon sugar rimmed glass."),
+        ],
+    },
+    {
+        "month": "November",
+        "year": "2026",
+        "starts": "2026-11-01",
+        "ends": "2026-11-30",
+        "hero": "lto-chicken-vodka",
+        "blurb": "Four things our kitchen only makes in November, plus two cocktails "
+                 "that belong in a cold month. Here until the 30th, then they’re gone.",
+        "sections": [
+            # No photo for the bisque yet, so it renders as a copy-only card.
+            ("Starter", [
+                ("Tomato Bisque", "$12", None,
+                 "Hot, smooth and velvety, made in house and finished with croutons, "
+                 "herbs and parmesan. Add toasted garlic bread for $2."),
+            ]),
+            ("Signature brick oven pizza", [
+                ("Classic Rustic Oregano", "$16 small · $26 large", "lto-rustic-oregano",
+                 "Our red pizza sauce, dusted with parmesan and oregano, a drizzle of "
+                 "olive oil and finished with basil. Perfetto."),
+                ("Chicken Vodka", "$18 small · $28 large", "lto-chicken-vodka",
+                 "Our velvety vodka sauce under crispy chicken, fresh mozzarella, "
+                 "parmesan and basil."),
+            ]),
+            ("Dessert", [
+                ("Cannoli Dip and Chips", "$12", "lto-cannoli-dip",
+                 "Cinnamon sugar cannoli chips with cannoli cream and chocolate chips "
+                 "for dipping. Made for sharing, though nobody here is judging."),
+            ]),
+        ],
+        "cocktails": [
+            ("Salted Caramel Pumpkin Spice Martini", "$9",
+             "Pumpkin and caramel vodka with Baileys and agave, in a caramel-drizzled "
+             "glass with whipped cream and a sprinkle of cinnamon sugar."),
+            ("Salted Caramel Butterscotch White Russian", "$9",
+             "Vodka, Kahlúa, butterscotch liqueur and milk, in a caramel-drizzled "
+             "glass with whipped cream and a sprinkle of salt."),
+        ],
+    },
+]
+
+# The month that is live today. Drives the page title, the meta description,
+# the social image and the structured data, all of which are decided at build
+# time — so the site wants a rebuild on the 1st to catch up with the menu the
+# page is already showing by itself.
+_today = _dt.date.today().isoformat()
+LTO = next((m for m in LTO_MONTHS if m["starts"] <= _today <= m["ends"]), LTO_MONTHS[-1])
+
+# The day the fallback card takes over: the morning after the month ends.
+for _m in LTO_MONTHS:
+    _m["gone"] = (_dt.date.fromisoformat(_m["ends"]) + _dt.timedelta(days=1)).isoformat()
+
+# Months must not overlap, or two menus render at once.
+for _a, _b in zip(LTO_MONTHS, LTO_MONTHS[1:]):
+    assert _a["ends"] < _b["starts"], (
+        f"{_a['month']} ends {_a['ends']} but {_b['month']} starts {_b['starts']}")
+# Every photo an item names has to exist, or the page ships a broken image.
+for _m in LTO_MONTHS:
+    _pics = [p for _, _items in _m["sections"] for _, _, p, _ in _items if p]
+    assert _m["hero"] in _pics, (
+        f"{_m['month']}: hero {_m['hero']!r} is not one of that month's photos")
 
 
 # ===========================================================================

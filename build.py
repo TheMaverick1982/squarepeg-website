@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, PROMOS, MENU, GAME_DAY, EVENTS, ENT_DATES, LTO, LTO_MONTHS, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 
 # The Pizza Lab's pre-selected finish has to be one of the finishes on offer.
@@ -3802,14 +3802,21 @@ T["pairing"] = """
 <script src="{{ site.chat_src }}" data-widget-id="{{ pairing.widget_id }}" data-embed-mode="embedded" data-embed-target="embedded-widget-container" defer></script>
 """
 
-T["lto"] = """
+T["lto"] = """{#
+  One block per month, each gated to its own dates and stamped hidden at build
+  time for the months that are not today's. October runs to the 31st and
+  November opens on the 1st, so loading next month early cannot take this one
+  down early. After the last month ends, the fallback card takes over.
+#}
+{% for m in ltos %}
+<div data-season-from="{{ m.starts }}" data-season-to="{{ m.ends }}"{{ ' hidden' if today < m.starts or today > m.ends }}>
 <section class="page-head on-dark lto-head">
-  {{ img(lto.sections[2][1][0][2], lto.sections[2][1][0][0] ~ ' pizza at Square Peg Pizzeria', eager=True, cls='bg')|safe }}
+  {{ img(m.hero, m.month ~ ' specials at Square Peg Pizzeria', eager=(today >= m.starts and today <= m.ends), cls='bg')|safe }}
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Monthly specials</span></nav>
-    <span class="eyebrow">{{ lto.month }} {{ lto.year }} &middot; limited time</span>
-    <h1>{{ lto.month }}<br>specials</h1>
-    <p class="lede">{{ lto.blurb }}</p>
+    <span class="eyebrow">{{ m.month }} {{ m.year }} &middot; limited time</span>
+    <h1>{{ m.month }}<br>specials</h1>
+    <p class="lede">{{ m.blurb }}</p>
     <div class="btn-row">
       <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="lto">{{ icons.bag|safe }}Order online</a>
       <a class="btn btn--ghost" href="{{ u('/locations/') }}">{{ icons.pin|safe }}Find a table</a>
@@ -3817,24 +3824,12 @@ T["lto"] = """
   </div>
 </section>
 
-<div data-season-from="2000-01-01" data-season-to="{{ lto.ends }}" data-season-invert hidden>
-  <section class="section section--paper">
-    <div class="wrap lto-gone">
-      <span class="eyebrow">Between menus</span>
-      <h2>Next month&rsquo;s specials are on the way.</h2>
-      <p class="prose">{{ lto.month }}&rsquo;s run has ended. The new menu lands in a few days &mdash; in the meantime, the full menu is very much open.</p>
-      <div class="btn-row"><a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="lto-gone">{{ icons.bag|safe }}Order online</a><a class="btn btn--line" href="{{ u('/our-menu/') }}">See the full menu</a></div>
-    </div>
-  </section>
-</div>
-
-<div data-season-from="2000-01-01" data-season-to="{{ lto.ends }}" hidden>
-{% for title, items in lto.sections %}
+{% for title, items in m.sections %}
 <section class="section {{ 'section--dark on-dark' if loop.index is odd else 'section--paper' }}">
   <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ lto.month }} only</span><h2>{{ title }}</h2></div>
-    <div class="lto-grid{{ ' lto-grid--two' if items|length > 1 else '' }}">{% for name, price, pic, desc in items %}<article class="lto-item">
-      <div class="lto-pic">{{ img(pic, name ~ ' at Square Peg Pizzeria', sizes='(min-width:900px) 50vw, 100vw')|safe }}</div>
+    <div class="section-head"><span class="eyebrow">{{ m.month }} only</span><h2>{{ title }}</h2></div>
+    <div class="lto-grid{{ ' lto-grid--two' if items|length > 1 else '' }}">{% for name, price, pic, desc in items %}<article class="lto-item{{ ' lto-item--nopic' if not pic }}">
+      {% if pic %}<div class="lto-pic">{{ img(pic, name ~ ' at Square Peg Pizzeria', sizes='(min-width:900px) 50vw, 100vw')|safe }}</div>{% endif %}
       <div class="lto-body">
         <h3>{{ name }}</h3>
         <span class="lto-price">{{ price }}</span>
@@ -3847,8 +3842,8 @@ T["lto"] = """
 
 <section class="section section--dark on-dark">
   <div class="wrap">
-    <div class="section-head"><span class="eyebrow">{{ lto.month }} only &middot; at the bar</span><h2>Cocktails</h2></div>
-    <div class="lto-drinks">{% for name, price, desc in lto.cocktails %}<article class="lto-drink">
+    <div class="section-head"><span class="eyebrow">{{ m.month }} only &middot; at the bar</span><h2>Cocktails</h2></div>
+    <div class="lto-drinks">{% for name, price, desc in m.cocktails %}<article class="lto-drink">
       <h3>{{ name }}</h3><span class="lto-price">{{ price }}</span><p>{{ desc }}</p>
     </article>{% endfor %}</div>
     <p class="note lto-note">Cocktails at locations with a full bar.</p>
@@ -3857,7 +3852,7 @@ T["lto"] = """
 
 <section class="section lto-cta">
   <div class="wrap">
-    <h2>Gone on the <em>{{ lto.ends[-2:]|int }}{{ 'st' if lto.ends[-2:]|int in [1,21,31] else 'nd' if lto.ends[-2:]|int in [2,22] else 'rd' if lto.ends[-2:]|int in [3,23] else 'th' }}</em>.</h2>
+    <h2>Gone on the <em>{{ m.ends[-2:]|int }}{{ 'st' if m.ends[-2:]|int in [1,21,31] else 'nd' if m.ends[-2:]|int in [2,22] else 'rd' if m.ends[-2:]|int in [3,23] else 'th' }}</em>.</h2>
     <p>Ten Square Pegs across Connecticut and Delray Beach. Order it, or come sit down and have the whole thing.</p>
     <div class="btn-row">
       <a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="lto-footer">{{ icons.bag|safe }}Order online</a>
@@ -3865,6 +3860,29 @@ T["lto"] = """
     </div>
   </div>
 </section>
+</div>
+{% endfor %}
+
+{# After the last loaded month ends. Keeps a stale menu off a live page if an
+   update ever runs late, and still converts. #}
+<div data-season-from="{{ ltos[-1].gone }}"{{ ' hidden' if today < ltos[-1].gone }}>
+  <section class="page-head on-dark lto-head">
+    {{ img(ltos[-1].hero, 'A Square Peg pizza', cls='bg')|safe }}
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Monthly specials</span></nav>
+      <span class="eyebrow">Between menus</span>
+      <h1>Monthly<br>specials</h1>
+      <p class="lede">A new limited-time menu lands at the start of every month.</p>
+    </div>
+  </section>
+  <section class="section section--paper">
+    <div class="wrap lto-gone">
+      <span class="eyebrow">Between menus</span>
+      <h2>Next month&rsquo;s specials are on the way.</h2>
+      <p class="prose">{{ ltos[-1].month }}&rsquo;s run has ended. The new menu lands in a few days &mdash; in the meantime, the full menu is very much open.</p>
+      <div class="btn-row"><a class="btn" href="{{ site.order_picker_toast }}" rel="noopener"{{ ext|safe }} data-track="order_click" data-src="lto-gone">{{ icons.bag|safe }}Order online</a><a class="btn btn--line" href="{{ u('/our-menu/') }}">See the full menu</a></div>
+    </div>
+  </section>
 </div>
 """
 
@@ -4429,8 +4447,9 @@ def main():
                   "pie-spicy-margherita", "pie-spicy-margherita"))
     pages.append(("/monthly-specials/", f"{LTO['month']} Specials | Square Peg Pizzeria",
                   f"Square Peg Pizzeria's {LTO['month']} {LTO['year']} limited-time menu: new pizzas, starters, dessert and seasonal cocktails. Order online or dine in at ten locations.",
-                  "lto", dict(lto=LTO), graph(breadcrumbs([("Home", "/"), ("Monthly specials", "/monthly-specials/")])),
-                  LTO["sections"][2][1][0][2], LTO["sections"][2][1][0][2]))
+                  "lto", dict(lto=LTO, ltos=LTO_MONTHS),
+                  graph(breadcrumbs([("Home", "/"), ("Monthly specials", "/monthly-specials/")])),
+                  LTO["hero"], LTO["hero"]))
     pages.append(("/sms-terms/", "SMS Terms | Square Peg Pizzeria", "Terms for the Square Peg Pizzeria text message program: message frequency, carrier costs, how to opt out at any time, and where to get help.",
                   "sms", dict(sms=SMS_TERMS), None, None, None))
     # ---- The Playground

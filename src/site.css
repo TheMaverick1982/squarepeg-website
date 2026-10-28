@@ -1275,6 +1275,10 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .lto-item{background:rgba(255,255,255,.05);border:1px solid var(--line-dark);overflow:hidden;display:grid}
 .section--paper .lto-item{background:var(--white);border-color:var(--line)}
 @media (min-width:760px){.lto-grid:not(.lto-grid--two) .lto-item{grid-template-columns:1fr 1fr;align-items:stretch}}
+/* An item we have no photo of yet. One column, and the copy gets the room the
+   picture would have had rather than sitting in half an empty card. */
+@media (min-width:760px){.lto-grid:not(.lto-grid--two) .lto-item--nopic{grid-template-columns:1fr}}
+.lto-item--nopic .lto-body{padding-block:clamp(30px,4vw,44px)}
 .lto-pic{line-height:0;background:var(--oven)}
 .lto-pic img{width:100%;height:100%;min-height:260px;object-fit:cover;display:block;aspect-ratio:4/3}
 /* Stacked cards sit side by side, so their photos have to match. Without this the
