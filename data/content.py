@@ -1013,7 +1013,7 @@ ENTERTAINMENT = {
     "glastonbury-ct": [("Wed", "What Trivia", "6:30–9pm")],
     "preston-ct": [("Thu", "Trivia", "7–9pm"), ("Sun", "Bingo", "6pm")],
     "storrs-ct": [("Wed", "Trivia", "6:30–8:30pm"), ("Fri", "DJ", "10pm–close"), ("Sat", "DJ", "10pm–close")],
-    "delray-beach-fl": [("Sun", "Jackpot Bingo", "4–6pm"), ("Mon", "Bingo", "6:30–8:30pm"), ("Wed", "Trivia", "7–9pm")],
+    "delray-beach-fl": [("Sun", "Jackpot Bingo", "4–6pm"), ("Mon", "Music Bingo", "6:30–8:30pm"), ("Wed", "Trivia", "7–9pm")],
 }
 
 # Ongoing promotions (from squarepegpizzeria.com/promotions).
