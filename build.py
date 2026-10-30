@@ -301,6 +301,10 @@ EMAIL_IMAGES = [
     # month's hero on /monthly-specials/ too, so the email and the page open
     # on the same picture.
     ("lto-november", "lto-chicken-vodka", 1000, 560, 0.50),
+    # Paint & Sip at Shelton, Nov 12. The artwork is Paintbar's and arrives
+    # square; it goes into the email square and untouched rather than cropped
+    # to a band, which would cost them their headline.
+    ("paint-sip", "paint-sip-art", 1000, 1000, 0.50),
 ]
 
 def build_email_images():
