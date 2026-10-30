@@ -305,6 +305,9 @@ EMAIL_IMAGES = [
     # square; it goes into the email square and untouched rather than cropped
     # to a band, which would cost them their headline.
     ("paint-sip", "paint-sip-art", 1000, 1000, 0.50),
+    # Halloween-weekend $5 reward. Drawn, not photographed, and already at
+    # 1000x560, so this is a straight pass-through to JPEG.
+    ("halloween-reward", "halloween-reward", 1000, 560, 0.50),
 ]
 
 def build_email_images():
