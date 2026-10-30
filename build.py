@@ -308,6 +308,9 @@ EMAIL_IMAGES = [
     # Halloween-weekend $5 reward. Drawn, not photographed, and already at
     # 1000x560, so this is a straight pass-through to JPEG.
     ("halloween-reward", "halloween-reward", 1000, 560, 0.50),
+    # Husky Bucks contest at Storrs, Nov 1 - Dec 11. Drawn rather than
+    # photographed, already at 1000x560, so this is a straight pass to JPEG.
+    ("husky-contest", "husky-contest-art", 1000, 560, 0.50),
 ]
 
 def build_email_images():
