@@ -1099,6 +1099,25 @@ GAME_DAY = {
 #   url      Where tickets are sold. cta is the button label.
 #   host     Optional credit for an outside host/partner.
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Husky Bucks draw at Storrs. Not an EVENTS entry: it is not ticketed and has
+# no single date, so it rides along with the Husky Bucks row already on the
+# Storrs page and gates itself in the browser between `starts` and `ends`.
+#
+# Square Peg runs this, not UConn. Saying we take Husky Bucks is a fact;
+# implying the university is behind the draw is a claim that is not ours to
+# make, so the copy names us and nobody else.
+#
+# Nothing is collected at the till, so the only honest way to reach a winner
+# is to announce it. Never promise a call or an email here.
+# ---------------------------------------------------------------------------
+HUSKY_CONTEST = {
+    "slug": "storrs-ct",
+    "starts": "2026-11-01",
+    "ends": "2026-12-11",
+    "ends_long": "December 11",
+}
+
 EVENTS = {
     "shelton-ct": [
         {
@@ -1109,6 +1128,18 @@ EVENTS = {
                      "same night. Multiple designs to choose from and every material you need is "
                      "on the table — just bring yourself.",
             "meta": ["6:30 PM", "$35 per person", "Drink included", "Multiple designs"],
+            "url": "https://paintsquarepeg.eventbrite.com",
+            "cta": "Get tickets",
+            "host": "Hosted with Paint Bar CT (@paintbarct)",
+        },
+        {
+            "title": "Wooden Serving Tray Paint & Sip",
+            "date": "2026-11-12",
+            "announce": "2026-10-25",
+            "blurb": "Paint your own wooden serving tray and carry it home the same night. "
+                     "Pick your design, every material you need is on the table, and the first "
+                     "drink is on the ticket \u2014 just bring yourself.",
+            "meta": ["6:30 PM", "$35 per person", "First drink included", "Tray to take home"],
             "url": "https://paintsquarepeg.eventbrite.com",
             "cta": "Get tickets",
             "host": "Hosted with Paint Bar CT (@paintbarct)",
