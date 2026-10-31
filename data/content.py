@@ -1116,6 +1116,8 @@ HUSKY_CONTEST = {
     "starts": "2026-11-01",
     "ends": "2026-12-11",
     "ends_long": "December 11",
+    "window": "Nov 1 \u2013 Dec 11",
+    "window_long": "November 1 and December 11",
 }
 
 EVENTS = {

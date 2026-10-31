@@ -1022,12 +1022,22 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 .hb-row img{width:116px;height:auto;flex:none;border-radius:4px}
 .hb-row p{margin:0}
 @media (max-width:560px){.hb-row{flex-wrap:wrap;gap:12px}.hb-row img{width:96px}}
-/* The Husky Bucks draw, Nov 1 - Dec 11. Sits under the acceptance row it
-   belongs to and gates itself; tinted so it reads as a notice rather than
-   another paragraph of body copy. */
-.hb-draw{margin:10px 0 2px;padding:12px 15px;font-size:15.5px;line-height:1.5;
-  background:rgba(214,27,36,.06);border-left:4px solid var(--ember);border-radius:0 4px 4px 0}
-.hb-draw b{color:var(--ember-deep)}
+/* The Husky Bucks draw, Nov 1 - Dec 11. Its own section in the events area --
+   the acceptance row further up the page is evergreen and says something else.
+   Laid out like a ticketed event, with the two things a student recognises
+   doing the work: UConn's own badge and the real $25 card. Gates itself. */
+.hb-promo{display:grid;gap:clamp(20px,3vw,34px);align-items:center}
+@media (min-width:860px){.hb-promo{grid-template-columns:300px 1fr}}
+.hb-promo-art{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.hb-promo-badge{width:104px;height:auto;flex:none;border-radius:4px}
+.hb-promo-card{width:188px;height:auto;flex:none;border-radius:6px;
+  box-shadow:0 14px 30px rgba(20,17,16,.18)}
+@media (min-width:860px){.hb-promo-art{flex-direction:column;align-items:flex-start;gap:20px}
+  .hb-promo-badge{width:124px}.hb-promo-card{width:100%;max-width:260px}}
+.hb-promo-body h2{font-size:clamp(32px,4.4vw,52px);margin-top:10px}
+.hb-promo-body p{margin-top:14px;font-size:17.5px;line-height:1.55;max-width:60ch}
+.hb-promo-body .loc-event-meta{margin-top:18px}
+.hb-promo-body .note{margin-top:16px;font-size:14px;line-height:1.5;color:var(--smoke)}
 
 .loc-badges{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .hb-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;

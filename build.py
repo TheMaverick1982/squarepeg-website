@@ -1256,6 +1256,28 @@ T["location"] = """
     </article>
   </div>
 </section>{% endfor %}
+{% if l.slug == hc.slug %}<section class="section section--paper hb-promo-wrap" aria-label="Husky Bucks gift card draw at Square Peg {{ l.short or l.name }}" data-season-from="{{ hc.starts }}" data-season-to="{{ hc.ends }}"{{ ' hidden' if today < hc.starts or today > hc.ends }}>
+  <div class="wrap">
+    <article class="hb-promo">
+      <div class="hb-promo-art">
+        {{ img('husky-bucks', 'UConn One Card Husky Bucks accepted here', sizes='150px', cls='hb-promo-badge')|safe }}
+        {{ img('gift-card-25', 'A $25 Square Peg Pizzeria gift card', sizes='(min-width:760px) 260px, 200px', cls='hb-promo-card')|safe }}
+      </div>
+      <div class="hb-promo-body">
+        <span class="eyebrow">{{ hc.window }} &middot; {{ l.city }}</span>
+        <h2>Pay with Husky Bucks, win a gift card</h2>
+        <p>Come in between {{ hc.window_long }} and pay with your Husky Bucks, and you&rsquo;re entered to win one of <b>two $25 Square Peg gift cards</b>. Dine in, take out, any order &mdash; paying with the card is the entry.</p>
+        <ul class="loc-event-meta">
+          <li>Two winners</li>
+          <li>$25 each</li>
+          <li>No form to fill in</li>
+          <li>Every order is an entry</li>
+        </ul>
+        <p class="note">Two winners drawn after {{ hc.ends_long }} and announced on our Instagram and Facebook &mdash; nothing is collected at the register, so follow along there. Run by Square Peg Pizzeria; not sponsored, endorsed or administered by the University of Connecticut.</p>
+      </div>
+    </article>
+  </div>
+</section>{% endif %}
 {% if ent.get(l.slug) or ent_dates %}<section class="ent-strip on-dark" aria-label="Entertainment at Square Peg {{ l.short or l.name }}">
   <div class="wrap">
     <div class="ent-strip-head"><span class="eyebrow">{% if ent.get(l.slug) %}Weekly entertainment{% else %}What's on{% endif %}</span><a href="{{ u('/entertainment/') }}">All locations →</a></div>
@@ -1338,7 +1360,6 @@ T["location"] = """
         {{ img('husky-bucks', 'UConn One Card Husky Bucks accepted here', sizes='150px')|safe }}
         <p><b>We take Husky Bucks.</b> Dine in or order ahead for pickup and pay with your UConn One Card, same as cash.</p>
       </div>{% endif %}
-      {% if l.slug == hc.slug %}<p class="hb-draw" data-season-from="{{ hc.starts }}" data-season-to="{{ hc.ends }}"{{ ' hidden' if today < hc.starts or today > hc.ends }}><b>And you&rsquo;re in the draw.</b> Every order you pay for with Husky Bucks through {{ hc.ends_long }} is an entry to win one of two $25 Square Peg gift cards. No form, nothing to sign up for. Two winners drawn after the {{ hc.ends_long.split(' ')[1] }}th and announced on our Instagram and Facebook. Run by Square Peg Pizzeria; not sponsored, endorsed or administered by the University of Connecticut.</p>{% endif %}
       {% if local_page %}<p class="local-link"><a class="link-arrow" href="{{ u('/' ~ local_page.slug ~ '/') }}">{{ local_page.h1 }}</a> &mdash; what&rsquo;s here for you if that&rsquo;s where you&rsquo;re coming from.</p>{% endif %}
       <p>Every pie starts with dough made fresh from scratch and never frozen. Choose a red or white {% if lm.detroit %}Neo-Neapolitan round or a crispy-edged Detroit-style pie{% else %}signature pie{% endif %}, build your own, or go gluten-free with our 12″ crust. Vegan cheese is available on any pizza.</p>
       <p>Not in a pizza mood? The kitchen turns out Italian-American comfort food too: {{ join_and(lm.words + lm.rest) }}.{% if lm.bar %} Pair it with a cocktail, a glass of wine or a cold beer.{% endif %}{% if lm.extra %} Also here: {{ lm.extra|join('; ')|lower }}.{% endif %}</p>
