@@ -1529,7 +1529,7 @@ T["veterans"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Veterans Day</span></nav>
     <span class="eyebrow">{{ vd.long }}</span>
     <h1>Thank you for your service</h1>
-    <p class="lede">On Veterans Day, every Square Peg takes {{ vd.pct }} off the meal of anyone who has served or is serving. It is a small thing against what you gave, and we are glad to do it.</p>
+    <p class="lede">On Veterans Day, lunch is on us. Every Square Peg gives {{ vd.offer }} to anyone who has served or is serving. It is a small thing against what you gave, and we are glad to do it.</p>
     <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">Find your closest Peg</a><a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the menu</a></div>
   </div>
 </section>
@@ -1538,10 +1538,10 @@ T["veterans"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{
 <section class="section vd-offer">
   <div class="wrap">
     <div class="vd-offer-in">
-      <div class="vd-big"><b>{{ vd.pct }}</b><span>off your meal</span></div>
+      <div class="vd-big"><b>{{ vd.hook_a }}<br>{{ vd.hook_b }}</b><span>Small cheese pizza<br>with any drink</span></div>
       <div class="vd-say">
         <h2>Veterans and active-duty service members</h2>
-        <p>Dine in or take out at any Square Peg on {{ vd.long }}. <b>Just let us know when you order.</b></p>
+        <p>Buy any drink on {{ vd.long }} and the small cheese pizza is on us. All day, not just lunchtime. Dine in or take out at any Square Peg. <b>Just let us know when you order.</b></p>
         <p class="note">Our founders are from these towns and so are the people who serve from them. This is not a promotion we run to sell pizza; it is the one day we would feel wrong not marking.</p>
       </div>
     </div>
@@ -1555,7 +1555,7 @@ T["veterans"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{
       <h2>All ten locations, all day</h2>
       <p>Nine across Connecticut and one in Delray Beach, Florida. No reservation needed, though if you are bringing a group of ten or more we would rather know in advance so the table is ready.</p>
       <ul class="checks">
-        <li>{{ vd.pct }} off your own food and drink, before tax and gratuity</li>
+        <li>{{ vd.offer_cap }}, for you</li>
         <li>Dine in or take out, {{ vd.long }} only</li>
         <li>Just tell us when you order</li>
       </ul>
@@ -1567,7 +1567,7 @@ T["veterans"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{
 
 <section class="section">
   <div class="wrap">
-    <p class="note vd-fine">Valid {{ vd.long }}, 2026 only. {{ vd.pct }} off the food and drink of the veteran or active-duty service member, before tax and gratuity. Dine in or take out, ordered in person &mdash; not valid on online orders or third-party delivery apps. Not combinable with any other offer, discount, promotion or reward. One per guest. No cash value.</p>
+    <p class="note vd-fine">Valid {{ vd.long }}, 2026 only. One free small cheese pizza with the purchase of any drink, for the veteran or active-duty service member. Dine in or take out, ordered in person &mdash; not valid on online orders or third-party delivery apps. Not combinable with any other offer, discount, promotion or reward. One per guest. No cash value.</p>
   </div>
 </section>
 
@@ -4712,10 +4712,10 @@ def main():
                   "lto", dict(lto=LTO, ltos=LTO_MONTHS),
                   graph(breadcrumbs([("Home", "/"), ("Monthly specials", "/monthly-specials/")])),
                   LTO["hero"], LTO["hero"]))
-    pages.append(("/veterans-day/", "Veterans Day: 20% Off | Square Peg Pizzeria",
+    pages.append(("/veterans-day/", "Veterans Day: Free Lunch | Square Peg Pizzeria",
                   f"Thank you for your service. On {VETERANS['long']}, 2026, Square Peg "
-                  f"Pizzeria takes {VETERANS['pct']} off the meal of veterans and "
-                  f"active-duty service members at all ten locations. Dine in or take out.",
+                  f"Pizzeria gives veterans and active-duty service members "
+                  f"{VETERANS['offer']}, at all ten locations. Dine in or take out.",
                   "veterans", {},
                   graph(breadcrumbs([("Home", "/"), ("Veterans Day", "/veterans-day/")])),
                   "table-spread", "table-spread"))

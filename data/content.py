@@ -1014,7 +1014,12 @@ VETERANS = {
     "date": "2026-11-11",
     "long": "Wednesday, November 11",
     "short": "November 11",
-    "pct": "20%",
+    # The hook and the actual mechanic, kept apart. "Free lunch" is what gets
+    # read from across a room; the pizza-and-a-drink is what the register does.
+    "hook_a": "FREE",
+    "hook_b": "LUNCH",
+    "offer": "a free small cheese pizza with any drink",
+    "offer_cap": "A free small cheese pizza with any drink",
 }
 VETERANS["gone"] = (_dt2.date.fromisoformat(VETERANS["date"])
                     + _dt2.timedelta(days=1)).isoformat()
