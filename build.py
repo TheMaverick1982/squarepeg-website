@@ -1538,7 +1538,7 @@ T["veterans"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{
 <section class="section vd-offer">
   <div class="wrap">
     <div class="vd-offer-in">
-      <div class="vd-big"><b>{{ vd.hook_a }}<br>{{ vd.hook_b }}</b><span>Small cheese pizza<br>with any drink</span></div>
+      <div class="vd-big"><b>{{ vd.hook_a }}<br>{{ vd.hook_b }}</b><span>Small cheese pizza<br>with any drink purchase</span></div>
       <div class="vd-say">
         <h2>Veterans and active-duty service members</h2>
         <p>Buy any drink on {{ vd.long }} and the small cheese pizza is on us. All day, not just lunchtime. Dine in or take out at any Square Peg. <b>Just let us know when you order.</b></p>
