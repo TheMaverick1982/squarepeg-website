@@ -989,11 +989,11 @@ import datetime as _dt2
 FRIENDSGIVING = {
     "starts": "2026-11-02",      # live now
     "ends": "2026-11-23",        # last day the page runs
-    "early_ends": "2026-11-09",  # last day the fried dough is on the table
+    "early_ends": "2026-11-12",  # last day the fried dough is on the table
     "window": "Nov 14 \u2013 22",
     "from_long": "November 14",
     "to_long": "November 22",
-    "early_long": "November 10",
+    "early_long": "November 12",
     "treat": "fried dough",
 }
 FRIENDSGIVING["gone"] = (_dt2.date.fromisoformat(FRIENDSGIVING["ends"])

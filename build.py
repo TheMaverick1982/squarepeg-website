@@ -1479,10 +1479,10 @@ T["friendsgiving"] = """{% macro feature(p, a, cap) %}<figure class="feature-pho
   <div class="wrap fg-early-in">
     <div>
       <span class="eyebrow">Order early</span>
-      <h2>Free {{ fg.treat }} on orders placed before {{ fg.early_long }}</h2>
-      <p>Get your Friendsgiving order in before {{ fg.early_long }} and we&rsquo;ll add a {{ fg.treat }} to it, on us. Just put <b>Friendsgiving</b> in the notes on the form so we know to add it.</p>
+      <h2>Free {{ fg.treat }} on orders placed by {{ fg.early_long }}</h2>
+      <p>Get your Friendsgiving order in by {{ fg.early_long }} and we&rsquo;ll add a {{ fg.treat }} to it, on us. Just put <b>Friendsgiving</b> in the notes on the form so we know to add it.</p>
     </div>
-    {{ img('dough', 'Fresh dough at Square Peg Pizzeria', sizes='(min-width:860px) 300px, 100vw', cls='fg-early-pic')|safe }}
+    <figure class="fg-early-pic">{{ img('fried-dough', 'A plate of Square Peg fried dough dusted with sugar, with chocolate for dipping', sizes='(min-width:860px) 340px, 100vw')|safe }}</figure>
   </div>
 </section>
 
@@ -1490,7 +1490,7 @@ T["friendsgiving"] = """{% macro feature(p, a, cap) %}<figure class="feature-pho
      leaving a hole where the band was. -->
 <section class="section section--paper fg-still" data-season-from="{{ fg.early_from }}" data-season-to="{{ fg.ends }}"{{ ' hidden' if today < fg.early_from or today > fg.ends }}>
   <div class="wrap">
-    <p class="fg-still-note"><b>Pre-orders are still open</b> for {{ fg.from_long }} to {{ fg.to_long }}. The free {{ fg.treat }} closed on {{ fg.early_long }}, but the date is yours if it is free.</p>
+    <p class="fg-still-note"><b>Pre-orders are still open</b> for {{ fg.from_long }} to {{ fg.to_long }}. The free {{ fg.treat }} closed after {{ fg.early_long }}, but the date is yours if it is free.</p>
   </div>
 </section>
 
@@ -1500,7 +1500,7 @@ T["friendsgiving"] = """{% macro feature(p, a, cap) %}<figure class="feature-pho
       <span class="eyebrow">What you get</span>
       <h2>Enough food, ready when you said</h2>
       <p>Friendsgiving is our normal catering, pointed at one weekend. No set package to pick from and nothing you have to order in multiples &mdash; tell us what the room wants and we&rsquo;ll build it.</p>
-      <ul class="ticks">
+      <ul class="checks">
         <li>Trays of pasta, wings, salads, sandwiches and dessert, plus pizza</li>
         <li>Boxed and ready for pickup at the time you agreed</li>
         <li>No minimum order, and no headcount we can&rsquo;t take on</li>
@@ -1518,10 +1518,10 @@ T["friendsgiving"] = """{% macro feature(p, a, cap) %}<figure class="feature-pho
     <div class="section-head">
       <span class="eyebrow">Pre-order</span>
       <h2>Tell us the date and the headcount</h2>
-      <p>One form. Put <b>Friendsgiving</b> in the notes &mdash; it is how we spot the order, and before {{ fg.early_long }} it is how you get the free {{ fg.treat }}.</p>
+      <p>One form. Put <b>Friendsgiving</b> in the notes &mdash; it is how we spot the order, and up to {{ fg.early_long }} it is how you get the free {{ fg.treat }}.</p>
     </div>
     {% with form_title='Start your Friendsgiving order', fid='fg', embed_key='catering', submit='Send my request', default_type='Catering pickup', pick='Pick-up catering' %}{% include "booking_form" %}{% endwith %}
-    <p class="note fg-fine">Free {{ fg.treat }} on Friendsgiving catering requests submitted before {{ fg.early_long }}, 2026, for pickup between {{ fg.from_long }} and {{ fg.to_long }}. Mention Friendsgiving in the notes on the form. One per order. Not combinable with any other offer, discount or promotion. No cash value.</p>
+    <p class="note fg-fine">Free {{ fg.treat }} on Friendsgiving catering requests submitted by {{ fg.early_long }}, 2026, for pickup between {{ fg.from_long }} and {{ fg.to_long }}. Mention Friendsgiving in the notes on the form. One per order. Not combinable with any other offer, discount or promotion. No cash value.</p>
   </div>
 </section>
 
@@ -4585,7 +4585,7 @@ def main():
                   f"Pre-order Friendsgiving catering from Square Peg Pizzeria for "
                   f"{FRIENDSGIVING['from_long']}\u2013{FRIENDSGIVING['to_long']}, 2026. "
                   f"Trays, pizza and dessert, boxed for pickup at all ten locations. "
-                  f"Order before {FRIENDSGIVING['early_long']} for a free "
+                  f"Order by {FRIENDSGIVING['early_long']} for a free "
                   f"{FRIENDSGIVING['treat']}.",
                   "friendsgiving", {},
                   graph(breadcrumbs([("Home", "/"), ("Catering", "/catering/"),
