@@ -1146,6 +1146,23 @@ EVENTS = {
             "cta": "Get tickets",
             "host": "Hosted with Paint Bar CT (@paintbarct)",
         },
+        {
+            # Kids' event, so the copy is pitched at the parent reading it, not
+            # at the child. Sign-up is on the studio's side; the flyer gives the
+            # home page, so that is what this links to until there is a direct
+            # registration URL.
+            "title": "Kids Pizza & Paint",
+            "date": "2026-11-21",
+            "announce": "2026-11-01",
+            "blurb": "Texture painting for the kids with Artistry Creative Studio. Every "
+                     "child picks a design and takes their finished canvas home, and the "
+                     "ticket covers two slices of pizza, a drink and a cookie.",
+            "meta": ["11:30am \u2013 1:30pm", "$35 a child", "Pizza, drink & cookie",
+                     "Canvas to take home"],
+            "url": "https://artistry-creative-studio.com",
+            "cta": "Sign up",
+            "host": "Hosted with Artistry Creative Studio",
+        },
     ],
 }
 

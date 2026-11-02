@@ -1,7 +1,7 @@
 {
  "/": {
-  "date": "2026-10-28",
-  "hash": "2d1d2c382be0d85b8fc55d2017059a41"
+  "date": "2026-11-02",
+  "hash": "81b4afbac6f02a7ac16d339fddf1ecd6"
  },
  "/about/": {
   "date": "2026-10-28",
@@ -32,8 +32,8 @@
   "hash": "7e928dd2a079f1c515f01c04eebe5ac7"
  },
  "/entertainment/": {
-  "date": "2026-10-31",
-  "hash": "06bcdadf65be4617edc4c824923756af"
+  "date": "2026-11-02",
+  "hash": "cf71fad9482bb4aab05810770aa2ee10"
  },
  "/food-truck/": {
   "date": "2026-10-28",
@@ -92,20 +92,20 @@
   "hash": "5a16683de3f9eefae52b61034687ed89"
  },
  "/locations/shelton-ct/": {
-  "date": "2026-10-31",
-  "hash": "ae073becbc3055f8244af9a20ec9dec3"
+  "date": "2026-11-02",
+  "hash": "33a4816110d31c3989a6b904c4d6c2c9"
  },
  "/locations/storrs-ct/": {
-  "date": "2026-10-31",
-  "hash": "38e7812b1e59af79744a2da11a95546d"
+  "date": "2026-11-02",
+  "hash": "8c81389057b8fa38e7cc68212584c5fc"
  },
  "/locations/vernon-ct/": {
   "date": "2026-10-31",
   "hash": "225aa6ca229312418528a1fd54100c61"
  },
  "/monthly-specials/": {
-  "date": "2026-10-28",
-  "hash": "10bc3c7ae149666a891c32b22e279651"
+  "date": "2026-11-02",
+  "hash": "4d37dec541bbf444b04d647e40c1e4f7"
  },
  "/our-menu/": {
   "date": "2026-10-28",
@@ -208,8 +208,8 @@
   "hash": "cd2f5cf505b0bee1823eac06daf74d72"
  },
  "/toys-for-tots/": {
-  "date": "2026-10-28",
-  "hash": "3f268f52a8d476f0bd57d8267d164ca8"
+  "date": "2026-11-02",
+  "hash": "9c989b8107a43de945d1aa2ebe8afb2d"
  },
  "/what-pizza-are-you/": {
   "date": "2026-10-28",
