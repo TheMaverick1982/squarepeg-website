@@ -1541,7 +1541,7 @@ T["veterans"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{
       <div class="vd-big"><b>{{ vd.pct }}</b><span>off your meal</span></div>
       <div class="vd-say">
         <h2>Veterans and active-duty service members</h2>
-        <p>Dine in or take out at any Square Peg on {{ vd.long }}. <b>Just let us know when you order</b> &mdash; no card to show, no form to fill in. We will take it off.</p>
+        <p>Dine in or take out at any Square Peg on {{ vd.long }}. <b>Just let us know when you order.</b></p>
         <p class="note">Our founders are from these towns and so are the people who serve from them. This is not a promotion we run to sell pizza; it is the one day we would feel wrong not marking.</p>
       </div>
     </div>
@@ -1558,7 +1558,6 @@ T["veterans"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{
         <li>{{ vd.pct }} off your own food and drink, before tax and gratuity</li>
         <li>Dine in or take out, {{ vd.long }} only</li>
         <li>Just tell us when you order</li>
-        <li>No limit on how many of you come in</li>
       </ul>
       <div class="btn-row"><a class="btn btn--line" href="{{ u('/large-party-reservations/') }}">Group of ten or more</a></div>
     </div>
