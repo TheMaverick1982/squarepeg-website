@@ -1164,6 +1164,23 @@ EVENTS = {
             "host": "Hosted with Artistry Creative Studio",
         },
     ],
+    "delray-beach-fl": [
+        {
+            # Our own class, ticketed through Eventbrite -- not the $20
+            # ten-child private booking the /kids-pizza-class/ page covers.
+            # This one is an open session anybody can buy a single seat for.
+            "title": "Kids Pizza Making Class",
+            "date": "2026-11-14",
+            "announce": "2026-11-02",
+            "blurb": "An hour of hands-on pizza making for the kids. They make their own "
+                     "pizza from scratch with fresh ingredients, just like the pros \u2014 "
+                     "aprons and chef hats provided.",
+            "meta": ["1:00 \u2013 2:00 PM", "$10 per kid", "Make your own pizza"],
+            "url": "https://www.eventbrite.com/e/delray-beach-kids-pizza-making-class-"
+                   "tickets-2004131833263?aff=oddtdtcreator",
+            "cta": "Get tickets",
+        },
+    ],
 }
 
 # ---------------------------------------------------------------------------
