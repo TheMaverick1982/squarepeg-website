@@ -972,6 +972,36 @@ DICE = {
 # height and resizes itself on every step, with no logo and no extra white space.
 # Until then: "crop" hides Connect's logo header, and "mobile"/"desktop" are fixed frame
 # heights (px) that fit the tallest step.
+# ---------------------------------------------------------------------------
+# Friendsgiving, Nov 2026. A catering window rather than a set menu: the dates
+# are what the food is for, the normal catering menu is what you order.
+#
+# Three states, all checked in the browser so the page turns itself over
+# without a deploy:
+#   starts .. early_ends   pre-orders open AND the free fried dough is on
+#   early_from .. ends     pre-orders still open, the treat has closed
+#   gone onwards           the page says it is done and points at /catering/
+#
+# `gone` is the day after `ends`, not a separate date to keep in step.
+# ---------------------------------------------------------------------------
+import datetime as _dt2
+
+FRIENDSGIVING = {
+    "starts": "2026-11-02",      # live now
+    "ends": "2026-11-23",        # last day the page runs
+    "early_ends": "2026-11-09",  # last day the fried dough is on the table
+    "window": "Nov 14 \u2013 22",
+    "from_long": "November 14",
+    "to_long": "November 22",
+    "early_long": "November 10",
+    "treat": "fried dough",
+}
+FRIENDSGIVING["gone"] = (_dt2.date.fromisoformat(FRIENDSGIVING["ends"])
+                         + _dt2.timedelta(days=1)).isoformat()
+FRIENDSGIVING["early_from"] = (_dt2.date.fromisoformat(FRIENDSGIVING["early_ends"])
+                               + _dt2.timedelta(days=1)).isoformat()
+assert FRIENDSGIVING["starts"] <= FRIENDSGIVING["early_ends"] < FRIENDSGIVING["ends"]
+
 EMBEDS = {
     "catering": {"src": "https://connect.squarepegpizzeria.com/public/catering",
                  "title": "Square Peg catering request form", "crop": 196, "mobile": 1230, "desktop": 1210},

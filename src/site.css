@@ -1753,3 +1753,24 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
   .cls-card{padding:18px}
   .cls-tier{padding:20px}
 }
+
+/* ---- Friendsgiving. One band for the early-order treat, one quiet note for
+   after it closes. Both gate themselves, so the section has to look finished
+   whichever of them is showing. */
+.fg-early{background:var(--char);color:#fff}
+.fg-early-in{display:grid;gap:clamp(18px,3vw,34px);align-items:center}
+@media (min-width:860px){.fg-early-in{grid-template-columns:1fr 300px}}
+.fg-early .eyebrow{color:var(--flame)}
+.fg-early h2{font-size:clamp(30px,4.2vw,50px);margin-top:10px}
+.fg-early p{margin-top:14px;font-size:17.5px;line-height:1.55;color:#ded6cf;max-width:60ch}
+.fg-early p b{color:var(--flame)}
+/* img()'s cls= lands on the <img> itself, not on a wrapper -- styling
+   ".fg-early-pic img" matched nothing and the portrait source made the band
+   three times taller than its own copy. Crop it on the element. */
+.fg-early-pic{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;
+  object-position:center 44%;border-radius:6px}
+@media (max-width:859px){.fg-early-pic{aspect-ratio:16/7}}
+.fg-still-note{font-size:17.5px;line-height:1.55;padding:16px 20px;
+  background:rgba(214,27,36,.07);border-left:4px solid var(--ember);border-radius:0 4px 4px 0}
+.fg-still-note b{color:var(--ember-deep)}
+.fg-fine{margin-top:20px;font-size:14px;line-height:1.5;color:var(--smoke);max-width:88ch}
