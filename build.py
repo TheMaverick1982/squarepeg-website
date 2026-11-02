@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, FRIENDSGIVING, PROMOS, MENU, GAME_DAY, EVENTS, HUSKY_CONTEST, ENT_DATES, LTO, LTO_MONTHS, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
+from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, FRIENDSGIVING, VETERANS, PROMOS, MENU, GAME_DAY, EVENTS, HUSKY_CONTEST, ENT_DATES, LTO, LTO_MONTHS, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 
 # The Pizza Lab's pre-selected finish has to be one of the finishes on offer.
@@ -785,6 +785,63 @@ CAUGHT_SHOTS = [
      "Happy hour runs 2–6pm, every day. We are not saying the timing is related. We are showing it."),
 ]
 
+# ---------------------------------------------------------------------------
+# Veterans Day artwork. Stars and stripes as a motif, not a flag: a field of
+# stars behind the type and a stripe rule under it. Drawing the flag itself
+# and then printing an offer across it is the thing to avoid -- this reads as
+# the colours without using the thing.
+#
+# The star path is generated from the geometry (outer radius 1, inner 0.382,
+# first point at -90 degrees) rather than eyeballed, so the points are even.
+# ---------------------------------------------------------------------------
+VD_STAR = ("M0.000,-1.000L0.225,-0.309L0.951,-0.309L0.363,0.118L0.588,0.809"
+           "L0.000,0.382L-0.588,0.809L-0.363,0.118L-0.951,-0.309L-0.225,-0.309Z")
+
+
+def _vd_stars(uid):
+    """A tiled star field. Two sizes at two opacities, so it reads as texture
+    from across a room and as stars up close.
+
+    The pattern id is a parameter because the page renders this twice -- once
+    in the live half, once in the thank-you half. With one shared id the
+    second svg's fill resolves to the first pattern, which sits inside a
+    hidden element, and the stars simply do not paint.
+    """
+    g = "".join(
+        f'<path d="{VD_STAR}" transform="translate({x} {y}) scale({sc})" opacity="{op}"/>'
+        for x, y, sc, op in ((26, 26, 9, ".16"), (78, 78, 9, ".16"),
+                             (78, 26, 5, ".09"), (26, 78, 5, ".09")))
+    return (f'<svg class="vd-stars" aria-hidden="true" focusable="false" '
+            f'xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">'
+            f'<defs><pattern id="{uid}" width="104" height="104" '
+            f'patternUnits="userSpaceOnUse"><g fill="#FFFFFF">{g}</g></pattern></defs>'
+            f'<rect width="100%" height="100%" fill="url(#{uid})"/></svg>')
+
+
+VD_ART = {
+    "stars": _vd_stars("vdstarsA"),
+    "stars_b": _vd_stars("vdstarsB"),
+    # The stripe rule under the hero. Blocks rather than a gradient so it stays
+    # crisp at any width, and only five of them -- thirteen at 16px tall comes
+    # out as a pink smear.
+    "stripes": (
+        '<svg class="vd-stripes" aria-hidden="true" focusable="false" '
+        'xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" '
+        'viewBox="0 0 10 5">'
+        '<rect width="10" height="5" fill="#FFFFFF"/>'
+        '<g fill="#D50117">'
+        '<rect y="0" width="10" height="1"/>'
+        '<rect y="2" width="10" height="1"/>'
+        '<rect y="4" width="10" height="1"/>'
+        '</g></svg>'
+    ),
+    # A single star for the thank-you card's eyebrow.
+    "star": ('<svg class="vd-one" viewBox="-1.2 -1.2 2.4 2.4" aria-hidden="true" '
+             'focusable="false" xmlns="http://www.w3.org/2000/svg">'
+             f'<path d="{VD_STAR}" fill="currentColor"/></svg>'),
+}
+
+
 T = {}
 
 T["head"] = """<title>{{ title }}</title>
@@ -1455,6 +1512,81 @@ T["booking_form"] = """{% set e = embeds.get(embed_key) %}{% if e %}<div class="
 #
 # No "wood-fired" anywhere -- this goes to all ten and Bolton has no wood oven.
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Veterans Day. Live until the 11th, gone the morning after. The thank-you
+# outlives the offer: the page stays and says thank you rather than 404ing,
+# because the link will be in a text and on a TV by then.
+#
+# Thank-you first, offer second, in that order on the page. Reversing them
+# turns a day about service into a day about a coupon.
+# ---------------------------------------------------------------------------
+T["veterans"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
+<div data-season-to="{{ vd.date }}"{{ ' hidden' if today > vd.date }}>
+
+<section class="page-head vd-head on-dark">
+  {{ vd_art.stars|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Veterans Day</span></nav>
+    <span class="eyebrow">{{ vd.long }}</span>
+    <h1>Thank you for your service</h1>
+    <p class="lede">On Veterans Day, every Square Peg takes {{ vd.pct }} off the meal of anyone who has served or is serving. It is a small thing against what you gave, and we are glad to do it.</p>
+    <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">Find your closest Peg</a><a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the menu</a></div>
+  </div>
+</section>
+{{ vd_art.stripes|safe }}
+
+<section class="section vd-offer">
+  <div class="wrap">
+    <div class="vd-offer-in">
+      <div class="vd-big"><b>{{ vd.pct }}</b><span>off your meal</span></div>
+      <div class="vd-say">
+        <h2>Veterans and active-duty service members</h2>
+        <p>Dine in or take out at any Square Peg on {{ vd.long }}. <b>Just let us know when you order</b> &mdash; no card to show, no form to fill in. We will take it off.</p>
+        <p class="note">Our founders are from these towns and so are the people who serve from them. This is not a promotion we run to sell pizza; it is the one day we would feel wrong not marking.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">Bring the family</span>
+      <h2>All ten locations, all day</h2>
+      <p>Nine across Connecticut and one in Delray Beach, Florida. No reservation needed, though if you are bringing a group of ten or more we would rather know in advance so the table is ready.</p>
+      <ul class="checks">
+        <li>{{ vd.pct }} off your own food and drink, before tax and gratuity</li>
+        <li>Dine in or take out, {{ vd.long }} only</li>
+        <li>Just tell us when you order</li>
+        <li>No limit on how many of you come in</li>
+      </ul>
+      <div class="btn-row"><a class="btn btn--line" href="{{ u('/large-party-reservations/') }}">Group of ten or more</a></div>
+    </div>
+    {{ feature('table-spread', 'A table of Square Peg food laid out for a group', 'Every Square Peg, all day') }}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="note vd-fine">Valid {{ vd.long }}, 2026 only. {{ vd.pct }} off the food and drink of the veteran or active-duty service member, before tax and gratuity. Dine in or take out, ordered in person &mdash; not valid on online orders or third-party delivery apps. Not combinable with any other offer, discount, promotion or reward. One per guest. No cash value.</p>
+  </div>
+</section>
+
+</div>
+
+<div data-season-from="{{ vd.gone }}"{{ ' hidden' if today < vd.gone }}>
+<section class="page-head vd-head on-dark">
+  {{ vd_art.stars_b|safe }}
+  <div class="wrap">
+    <span class="eyebrow vd-thanks">{{ vd_art.star|safe }} Veterans Day {{ vd.date[:4] }}</span>
+    <h1>Thank you for your service</h1>
+    <p class="lede">Veterans Day has passed, and so has the offer &mdash; but the thanks has not. To everyone who has served or is serving: there is a table for you at every Square Peg, any day of the year.</p>
+    <div class="btn-row"><a class="btn" href="{{ u('/locations/') }}">Find your closest Peg</a><a class="btn btn--ghost" href="{{ u('/our-menu/') }}">See the menu</a></div>
+  </div>
+</section>
+</div>
+"""
+
 T["friendsgiving"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
 <div data-season-to="{{ fg.ends }}"{{ ' hidden' if today > fg.ends }}>
 
@@ -4372,7 +4504,7 @@ def main():
                       "})();</script>")
 
     base_ctx = dict(
-        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in DRAWER_GROUPS], gcb=GIFT_BOUNCE, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, hc=HUSKY_CONTEST, fg=FRIENDSGIVING, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, pizza_art=PIZZA_ART, sports_art=SPORTS_ART, nav=NAV,
+        u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in DRAWER_GROUPS], gcb=GIFT_BOUNCE, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, hc=HUSKY_CONTEST, fg=FRIENDSGIVING, vd=VETERANS, vd_art=VD_ART, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, pizza_art=PIZZA_ART, sports_art=SPORTS_ART, nav=NAV,
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in MORE_GROUPS], deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
@@ -4581,6 +4713,13 @@ def main():
                   "lto", dict(lto=LTO, ltos=LTO_MONTHS),
                   graph(breadcrumbs([("Home", "/"), ("Monthly specials", "/monthly-specials/")])),
                   LTO["hero"], LTO["hero"]))
+    pages.append(("/veterans-day/", "Veterans Day: 20% Off | Square Peg Pizzeria",
+                  f"Thank you for your service. On {VETERANS['long']}, 2026, Square Peg "
+                  f"Pizzeria takes {VETERANS['pct']} off the meal of veterans and "
+                  f"active-duty service members at all ten locations. Dine in or take out.",
+                  "veterans", {},
+                  graph(breadcrumbs([("Home", "/"), ("Veterans Day", "/veterans-day/")])),
+                  "table-spread", "table-spread"))
     pages.append(("/friendsgiving/", "Friendsgiving Catering | Square Peg Pizzeria",
                   f"Pre-order Friendsgiving catering from Square Peg Pizzeria for "
                   f"{FRIENDSGIVING['from_long']}\u2013{FRIENDSGIVING['to_long']}, 2026. "
@@ -4744,7 +4883,7 @@ def main():
 #     one group, at one location, on one night.
 UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-night/",
             "/corporate/", "/gift-card-bonus/", "/kids-pizza-class/",
-            "/team-night/", "/friendsgiving/"}
+            "/team-night/", "/friendsgiving/", "/veterans-day/"}
 if not LAB_LIVE:
     UNLISTED.add("/play/pizza-lab/")
 

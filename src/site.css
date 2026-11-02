@@ -1779,3 +1779,31 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
   background:rgba(214,27,36,.07);border-left:4px solid var(--ember);border-radius:0 4px 4px 0}
 .fg-still-note b{color:var(--ember-deep)}
 .fg-fine{margin-top:20px;font-size:14px;line-height:1.5;color:var(--smoke);max-width:88ch}
+
+/* ---- Veterans Day. Stars and stripes as a motif rather than a flag: a tiled
+   star field behind the type and a stripe rule under the hero. Navy is its
+   own colour here, not the house char, because the page is about the day. */
+.vd-head{background:#0A1B3D;position:relative;isolation:isolate;overflow:hidden}
+.vd-head::after{content:none}
+.vd-stars{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.vd-head .eyebrow{color:#9FC0FF}
+.vd-head .lede{color:#DCE5F5;max-width:56ch}
+.vd-stripes{display:block;width:100%;height:16px}
+.vd-offer{background:var(--white)}
+.vd-offer-in{display:grid;gap:clamp(20px,3vw,40px);align-items:center}
+@media (min-width:820px){.vd-offer-in{grid-template-columns:260px 1fr}}
+.vd-big{display:grid;justify-items:center;align-content:center;gap:4px;
+  padding:26px 20px;background:#0A1B3D;color:#fff;border-radius:6px;
+  border-bottom:7px solid var(--ember)}
+.vd-big b{font-family:var(--display);font-weight:900;font-size:clamp(62px,9vw,104px);
+  line-height:.86;letter-spacing:-.01em}
+.vd-big span{font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;
+  color:#AFC6EC;text-align:center}
+.vd-say h2{font-size:clamp(28px,3.6vw,44px)}
+.vd-say p{margin-top:14px;font-size:17.5px;line-height:1.58;max-width:60ch}
+.vd-say p b{color:var(--ember-deep)}
+.vd-say .note{margin-top:18px;font-size:15.5px;color:var(--smoke)}
+.vd-fine{font-size:14px;line-height:1.5;color:var(--smoke);max-width:92ch}
+.vd-thanks{display:inline-flex;align-items:center;gap:9px}
+.vd-thanks::before{content:none}
+.vd-one{width:15px;height:15px;flex:none}

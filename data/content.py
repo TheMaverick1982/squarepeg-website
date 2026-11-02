@@ -1002,6 +1002,23 @@ FRIENDSGIVING["early_from"] = (_dt2.date.fromisoformat(FRIENDSGIVING["early_ends
                                + _dt2.timedelta(days=1)).isoformat()
 assert FRIENDSGIVING["starts"] <= FRIENDSGIVING["early_ends"] < FRIENDSGIVING["ends"]
 
+# ---------------------------------------------------------------------------
+# Veterans Day. One day, one offer, and the page takes itself down the morning
+# after -- `gone` is derived from `date` so the two cannot drift apart.
+#
+# Veterans AND active-duty: turning away somebody currently serving on Veterans
+# Day is not a conversation we are asking staff to have. No ID language either;
+# they are asked, not audited.
+# ---------------------------------------------------------------------------
+VETERANS = {
+    "date": "2026-11-11",
+    "long": "Wednesday, November 11",
+    "short": "November 11",
+    "pct": "20%",
+}
+VETERANS["gone"] = (_dt2.date.fromisoformat(VETERANS["date"])
+                    + _dt2.timedelta(days=1)).isoformat()
+
 EMBEDS = {
     "catering": {"src": "https://connect.squarepegpizzeria.com/public/catering",
                  "title": "Square Peg catering request form", "crop": 196, "mobile": 1230, "desktop": 1210},
