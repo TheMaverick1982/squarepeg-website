@@ -315,6 +315,7 @@ EMAIL_IMAGES = [
     # photographed and already at 1000x560, so straight passes to JPEG.
     ("veterans-day", "veterans-hero-art", 1000, 560, 0.50),
     ("toys-for-tots", "tft-hero-art", 1000, 560, 0.50),
+    ("black-friday", "black-friday-hero-art", 1000, 560, 0.50),
 ]
 
 def build_email_images():
