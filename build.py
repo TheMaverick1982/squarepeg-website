@@ -311,6 +311,10 @@ EMAIL_IMAGES = [
     # Husky Bucks contest at Storrs, Nov 1 - Dec 11. Drawn rather than
     # photographed, already at 1000x560, so this is a straight pass to JPEG.
     ("husky-contest", "husky-contest-art", 1000, 560, 0.50),
+    # Veterans Day and the holiday toy drive. Both drawn rather than
+    # photographed and already at 1000x560, so straight passes to JPEG.
+    ("veterans-day", "veterans-hero-art", 1000, 560, 0.50),
+    ("toys-for-tots", "tft-hero-art", 1000, 560, 0.50),
 ]
 
 def build_email_images():
