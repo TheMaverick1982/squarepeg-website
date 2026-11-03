@@ -3075,10 +3075,11 @@ T["tft"] = """
 <section class="section" id="drop-off">
   <div class="wrap">
     <div class="section-head">
-      <span class="eyebrow">{% if tft.locations|length >= 10 %}All ten{% else %}{{ tft.locations|length }} locations{% endif %}</span>
+      <span class="eyebrow">{{ tft.locations|length }} Connecticut locations</span>
       <h2>Where to drop off</h2>
-      <p>Toys, and food through November, at every Square Peg in Connecticut and
-        in Florida. Opening hours are on each location&rsquo;s page.</p>
+      <p>Toys, and food through November, at every Square Peg in Connecticut.
+        Opening hours are on each location&rsquo;s page. <b>Delray Beach collects for
+        {{ tft.delray.org }} instead</b> &mdash; see below.</p>
     </div>
     <ul class="tft-locs">
       {% for l in locs if l.name in tft.locations %}<li>
@@ -3087,6 +3088,19 @@ T["tft"] = """
         <a class="phone" href="tel:{{ tel(l.phone) }}" data-track="call_click" data-loc="{{ l.slug }}">{{ l.phone }}</a>
       </li>{% endfor %}
     </ul>
+
+    <aside class="tft-delray" data-season-to="{{ tft.delray.deadline }}"{{ ' hidden' if today > tft.delray.deadline }}>
+      <span class="eyebrow">{{ tft.delray.loc }} &middot; a different drive</span>
+      <h3>{{ tft.delray.org }} {{ tft.delray.campaign }}</h3>
+      <p>Our Florida Peg collects for <b>{{ tft.delray.org }}</b> rather than Toys for Tots
+        &mdash; their {{ tft.delray.sub }} for {{ tft.delray.who }}.
+        {{ tft.delray.takes }}, by <b>{{ tft.delray.deadline_long }}</b>. {{ tft.delray.ages }}.</p>
+      <div class="btn-row">
+        <a class="btn btn--line" href="{{ tft.delray.list_url }}" rel="noopener"{{ ext|safe }}>See their gift list</a>
+        <a class="btn btn--line" href="{{ u('/locations/delray-beach-fl/') }}">Square Peg {{ tft.delray.loc }}</a>
+      </div>
+      <p class="note">{{ tft.delray.sponsor }}.</p>
+    </aside>
   </div>
 </section>
 
@@ -3094,9 +3108,9 @@ T["tft"] = """
   <div class="wrap cta-foot">
     <span class="eyebrow">The program</span>
     <h2>Where the toys actually go.</h2>
-    <p class="lede">Toys collected here go to local Marine Toys for Tots
-      coordinators and are distributed to families in the same community. To read
-      about the program or find the campaign nearest you:</p>
+    <p class="lede">Toys collected at our Connecticut locations go to local Marine
+      Toys for Tots coordinators and are distributed to families in the same
+      community. To read about the program or find the campaign nearest you:</p>
     <div class="btn-row">
       <a class="btn" href="{{ tft.chapter_url }}" rel="noopener nofollow" target="_blank">Find your local campaign</a>
       <a class="btn btn--line" href="{{ tft.org_url }}" rel="noopener nofollow" target="_blank">toysfortots.org</a>

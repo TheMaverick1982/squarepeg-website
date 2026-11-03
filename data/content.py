@@ -1564,17 +1564,18 @@ TFT = {
     # The rest are still waiting to be registered, so they are not on the page:
     # sending someone to a restaurant with no box is worse than not listing it.
     # Add names here as the coordinators come back, and the page follows.
+    # Connecticut only. Delray Beach runs 4KIDS' Gift of Hope instead -- see
+    # the "delray" block below -- so it must not appear in this list.
     "locations": ["Glastonbury", "East Hartford", "Vernon", "Bolton", "Storrs",
-                  "Preston", "Plainville", "Berlin Truck Bar", "Shelton",
-                  "Delray Beach"],
+                  "Preston", "Plainville", "Berlin Truck Bar", "Shelton"],
 
     "eyebrow": "Toys for Tots",
     "h1": "Drop a toy at Square Peg.",
-    "lede": "Every Square Peg is a drop-off point this holiday season. Bring a "
-            "new, unwrapped toy, leave it in the box by the door, and the Marine "
-            "Corps Reserve gets it to a child in the same community it was "
-            "dropped off in. Through November we’re collecting food for a local "
-            "food bank too.",
+    "lede": "Every Square Peg in Connecticut is a drop-off point this holiday "
+            "season. Bring a new, unwrapped toy, leave it in the box by the door, "
+            "and the Marine Corps Reserve gets it to a child in the same community "
+            "it was dropped off in. Through November we’re collecting food for a "
+            "local food bank too. Our Delray Beach Peg collects for 4KIDS instead.",
 
     # ---------------------------------------------------------------------
     # PLACEHOLDER 1 — THE DATES
@@ -1673,6 +1674,25 @@ TFT = {
     "chapter_url": "https://www.toysfortots.org/find-your-local-chapter/",
     # Attribution. Registered drop-off locations credit the program properly;
     # this is the line that does it.
+    # ---- Delray Beach is a different drive entirely.
+    # 4KIDS is a Florida children's charity; their Gift of Hope collection takes
+    # toys AND gift cards, for birth to 17, and closes earlier than the Toys for
+    # Tots season does. Listing Delray among the Toys for Tots drop-offs sent
+    # somebody to the wrong box, with the wrong thing, on the wrong date.
+    "delray": {
+        "loc": "Delray Beach",
+        "org": "4KIDS",
+        "campaign": "Gift of Hope",
+        "sub": "annual Christmas collection",
+        "sponsor": "Sponsored by Pediatrics by the Sea",
+        # The flyer reads "Saturday, December 6th", which was true in 2025; in
+        # 2026 the 6th is a Sunday. Brian confirmed Saturday. Asserted below.
+        "deadline": "2026-12-05",
+        "takes": "New, unwrapped toys and gift cards",
+        "ages": "Boys and girls, from birth to age 17",
+        "who": "foster and adoptive families",
+        "list_url": "https://a.co/0i5W5Us9",
+    },
     "credit": "Toys for Tots is a program of the U.S. Marine Corps Reserve, run "
               "by the Marine Toys for Tots Foundation. Square Peg Pizzeria is a "
               "drop-off location, not an affiliate of the Foundation.",
@@ -2040,3 +2060,9 @@ TEAM_NIGHT = {
          "No \u2014 this one is dine in only."),
     ],
 }
+
+_vd = _dt.date.fromisoformat(TFT["delray"]["deadline"])
+assert _vd.strftime("%A") == "Saturday", \
+    f"the 4KIDS deadline is a {_vd.strftime('%A')}, not a Saturday"
+TFT["delray"]["deadline_long"] = _vd.strftime("%A, %B ") + str(_vd.day)
+TFT["delray"]["gone"] = (_vd + _dt.timedelta(days=1)).isoformat()

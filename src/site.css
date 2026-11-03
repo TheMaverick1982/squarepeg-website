@@ -1809,3 +1809,13 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
 .vd-thanks{display:inline-flex;align-items:center;gap:9px}
 .vd-thanks::before{content:none}
 .vd-one{width:15px;height:15px;flex:none}
+
+/* ---- Toys for Tots: the Delray panel. A different charity, a different
+   deadline, so it is set apart from the Connecticut drop-off list rather
+   than being another item in it. */
+.tft-delray{margin-top:clamp(28px,4vw,44px);padding:clamp(22px,3vw,32px);
+  background:var(--paper);border-left:5px solid var(--flame);border-radius:0 6px 6px 0}
+.tft-delray h3{font-size:clamp(26px,3vw,38px);margin-top:8px}
+.tft-delray p{margin-top:12px;font-size:17px;line-height:1.55;max-width:66ch}
+.tft-delray .btn-row{margin-top:18px}
+.tft-delray .note{margin-top:14px;font-size:14px;color:var(--smoke)}
