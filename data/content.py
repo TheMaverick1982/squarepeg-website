@@ -1215,6 +1215,22 @@ EVENTS = {
             "cta": "Sign up",
             "host": "Hosted with Artistry Creative Studio",
         },
+        {
+            # Dec 2 2026 is a Wednesday -- checked, because the flyer names the
+            # weekday and last year's December 2 was a Tuesday.
+            "title": "Winter Glasses Paint & Sip",
+            "date": "2026-12-02",
+            "announce": "2026-11-05",
+            "blurb": "Paint your own winter wine or beer glass and take it home the "
+                     "same night \u2014 a snowman, a lit-up tree or a string of "
+                     "holiday lights. Every material you need is on the table, and a "
+                     "drink from the bar comes with the ticket.",
+            "meta": ["6:30 PM", "$40 per person", "Drink from the bar included",
+                     "Glass to take home"],
+            "url": "https://artistry-creative-studio.com",
+            "cta": "Sign up",
+            "host": "Hosted with Artistry Creative Studio",
+        },
     ],
     "delray-beach-fl": [
         {
