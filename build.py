@@ -701,7 +701,14 @@ MORE_GROUPS = [
     # debate itself. The Pizza Lab is the exception — it has its own entry because
     # it is the one page we are actively promoting, and a submission is worth more
     # than a page view.
-    ("Fun", [("Halloween", "/halloween/"), ("The Pizza Lab", "/play/pizza-lab/"),
+    # Halloween carries its own end date, like the gift card bonus below: the
+    # item ships visible and the browser drops it from the menu once the date
+    # passes. It was the one dated page in here without that, so the contest
+    # retired from /links/ on the 1st and sat in the menu for another ten days.
+    # Reading HALLOWEEN["ends"] means next year's dates bring it back by
+    # themselves.
+    ("Fun", [("Halloween", "/halloween/", None, HALLOWEEN["ends"]),
+             ("The Pizza Lab", "/play/pizza-lab/"),
              ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"),
              ("Date Night", "/date-night/"), ("What Pizza Are You?", "/what-pizza-are-you/"),
              ("Pizza Trivia", "/pizza-trivia/")]),
@@ -4904,6 +4911,12 @@ UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-
             "/team-night/", "/friendsgiving/", "/veterans-day/"}
 if not LAB_LIVE:
     UNLISTED.add("/play/pizza-lab/")
+
+# Out of the sitemap and the internal link lists once the contest is over. The
+# URL still works, so anything already shared keeps resolving and the page
+# explains that the contest has wrapped.
+if TODAY > HALLOWEEN["ends"]:
+    UNLISTED.add("/halloween/")
 
 # The Toys for Tots page carries two deliberate placeholders. Launching with
 # either still empty would publish a page telling the public "dates to come",
