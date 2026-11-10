@@ -3832,6 +3832,7 @@ T["labs"] = """
       <p>Everything on these lists is something we already stock, so the one we
         pick is a {{ lab.unit }} we can actually make on a Friday night.</p>
       {% if lab.note %}<p class="note">{{ lab.note }}</p>{% endif %}
+      {% if not lab.post %}<p class="note">Build one now &mdash; this bench opens for submissions shortly, and the lists are final.</p>{% endif %}
     </div>
 
     <form class="lab lab-grid" data-bench="{{ lab.slug }}" data-endpoint="{{ lab.post }}" onsubmit="return false">
