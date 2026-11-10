@@ -1819,3 +1819,16 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
 .tft-delray p{margin-top:12px;font-size:17px;line-height:1.55;max-width:66ch}
 .tft-delray .btn-row{margin-top:18px}
 .tft-delray .note{margin-top:14px;font-size:14px;color:var(--smoke)}
+
+/* ---- Square Peg Labs ------------------------------------------------- */
+/* A row of benches across the top of each lab, and the sub-headings that
+   break the bar's sixty-odd bottles into something readable. */
+.lab-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.lab-tab{display:inline-flex;align-items:center;padding:9px 16px;border-radius:999px;
+  border:1px solid var(--line);background:#fff;color:var(--smoke);
+  font:700 14px/1 var(--body);text-decoration:none}
+.lab-tab:hover{color:var(--ink);border-color:var(--smoke)}
+.lab-tab.is-on{background:var(--char);border-color:var(--char);color:#fff}
+.lab-sub{margin:14px 0 8px;font:800 11px/1 var(--body);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--smoke)}
+.lab-sub:first-child{margin-top:0}

@@ -82,10 +82,12 @@
 <section class="page-head on-dark">
   <picture><source type="image/avif" srcset="/img/margherita-board-360.avif 360w, /img/margherita-board-480.avif 480w, /img/margherita-board-640.avif 640w, /img/margherita-board-800.avif 800w, /img/margherita-board-1200.avif 1200w, /img/margherita-board-1600.avif 1600w, /img/margherita-board-1616.avif 1616w" sizes="100vw"><source type="image/webp" srcset="/img/margherita-board-360.webp 360w, /img/margherita-board-480.webp 480w, /img/margherita-board-640.webp 640w, /img/margherita-board-800.webp 800w, /img/margherita-board-1200.webp 1200w, /img/margherita-board-1600.webp 1600w, /img/margherita-board-1616.webp 1616w" sizes="100vw"><img class="bg" src="/img/margherita-board-480.webp" alt="A wood-fired pizza on the board at Square Peg" width="1616" height="1080" fetchpriority="high"></picture>
   <div class="wrap">
-    <h1><span class="eyebrow h1-eyebrow"><span>The Square Peg Pizza Lab</span></span>The next Square Peg pizza could be yours.</h1>
+    <h1><span class="eyebrow h1-eyebrow"><span>The Pizza Lab</span></span>The next Square Peg pizza could be yours.</h1>
     <p class="lede">Build it from what’s actually in our kitchens and give it a name. We read every one, and the one we pick goes on the menu next month as a limited-time special.</p>
   </div>
 </section>
+
+
 
 <section class="section">
   <div class="wrap">
@@ -119,11 +121,14 @@
       <h2>Your pizza</h2>
       <!-- Not "the winner": there is no contest and no public vote. We read the
            entries and we pick one. Any word that implies otherwise has to go. -->
-      <p>Everything on these lists is something our kitchens already stock, so
-        the one we pick is a pizza we can actually make on a Friday night.</p>
+      <p>Everything on these lists is something we already stock, so the one we
+        pick is a pizza we can actually make on a Friday night.</p>
+      
     </div>
 
-    <form class="lab lab-grid" id="lab" data-max="4" data-endpoint="https://ytkwogufrjffcgfpinrf.supabase.co/functions/v1/lab-submit" onsubmit="return false">
+    <script type="application/json" id="lab-spec">{"unit":"pizza","groups":[{"key":"sauce","field":"sauce","pick":"one","max":0,"silent":"","prefix":"","optional":false},{"key":"cheese","field":"cheese","pick":"one","max":0,"silent":"","prefix":"","optional":false},{"key":"topping","field":"toppings","pick":"many","max":4,"silent":"","prefix":"","optional":false},{"key":"finish","field":"finish","pick":"one","max":0,"silent":"Nothing \u2014 leave it alone","prefix":"finished with","optional":false}]}</script>
+
+    <form class="lab lab-grid" id="lab" data-endpoint="https://ytkwogufrjffcgfpinrf.supabase.co/functions/v1/lab-submit" onsubmit="return false">
       <div class="lab-fields">
       <fieldset class="lab-set">
         <legend>Sauce</legend>
@@ -132,7 +137,6 @@
           <label class="lab-chip"><input type="radio" name="sauce" value="Parm Cream sauce"><span>Parm Cream sauce</span></label>
         </div>
       </fieldset>
-
       <fieldset class="lab-set">
         <legend>Cheese</legend>
         <div class="lab-chips">
@@ -146,9 +150,8 @@
           <label class="lab-chip"><input type="radio" name="cheese" value="Vegan cheese"><span>Vegan cheese</span></label>
         </div>
       </fieldset>
-
       <fieldset class="lab-set">
-        <legend>Toppings <span class="lab-count" id="lab-count">0 of 4</span></legend>
+        <legend>Toppings <span class="lab-count" data-count="topping">0 of 4</span></legend>
         <div class="lab-chips">
           <label class="lab-chip"><input type="checkbox" name="topping" value="Meatballs"><span>Meatballs</span></label>
           <label class="lab-chip"><input type="checkbox" name="topping" value="Sausage"><span>Sausage</span></label>
@@ -169,7 +172,6 @@
           <label class="lab-chip"><input type="checkbox" name="topping" value="Broccolini"><span>Broccolini</span></label>
         </div>
       </fieldset>
-
       <fieldset class="lab-set">
         <legend>Finish</legend>
         <div class="lab-chips">
@@ -271,5 +273,5 @@
 <script type="application/json" id="sp-cfg">{"chatSrc": "https://cdn.apigateway.co/webchat-client..prod/sdk.js", "chatId": "c8ba1e1a-1e32-11f1-a953-6241c47b1fa1", "locationsUrl": "/locations/", "supabaseUrl": "https://ytkwogufrjffcgfpinrf.supabase.co", "supabaseKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0a3dvZ3VmcmpmZmNnZnBpbnJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MDM5MDIsImV4cCI6MjEwNTI3OTkwMn0.TBUjxGEnpo-sv7Yinb1GKIKOW14R2o1sYq5B_5viDPA", "thanksUrl": "/thanks/", "contactEndpoint": ""}</script>
 <script type="application/json" id="sp-ent">{"glastonbury-ct":{"name":"Glastonbury","url":"/locations/glastonbury-ct/","events":[["Wed","What Trivia","6:30\u20139pm",null]],"dates":[]},"east-hartford-ct":{"name":"East Hartford","url":"/locations/east-hartford-ct/","events":[["Thu","Bingo","6:30\u20138:30pm",null],["Sat","Bingo","6:30\u20138:30pm",null]],"dates":[]},"vernon-ct":{"name":"Vernon","url":"/locations/vernon-ct/","events":[["Wed","Trivia","6:30\u20138:30pm",null],["Sat","Bingo","6\u20138pm","2026-09-26"]],"dates":[]},"storrs-ct":{"name":"Storrs","url":"/locations/storrs-ct/","events":[["Wed","Trivia","6:30\u20138:30pm",null],["Fri","DJ","10pm\u2013close",null],["Sat","DJ","10pm\u2013close",null]],"dates":[]},"preston-ct":{"name":"Preston","url":"/locations/preston-ct/","events":[["Thu","Trivia","7\u20139pm",null],["Sun","Bingo","6pm",null]],"dates":[]},"plainville-ct":{"name":"Plainville","url":"/locations/plainville-ct/","events":[["Mon","Bingo","6\u20138pm",null],["Wed","Trivia","6:30\u20138:30pm",null],["Fri","DJ","7\u201310pm",null]],"dates":[]},"shelton-ct":{"name":"Shelton","url":"/locations/shelton-ct/","events":[["Tue","Bingo","6\u20138pm",null]],"dates":[]},"delray-beach-fl":{"name":"Delray Beach","url":"/locations/delray-beach-fl/","events":[["Sun","Jackpot Bingo","4\u20136pm",null],["Mon","Music Bingo","6:30\u20138:30pm",null],["Wed","Trivia","7\u20139pm",null]],"dates":[["2026-10-03","Karaoke with Trish","6\u201310pm"],["2026-10-16","Karaoke with Trish","6\u201310pm"],["2026-10-30","Karaoke with Trish","6\u201310pm"]]}}</script>
 <script src="/site.js?v=b3a44e32" defer></script>
-<script src="/play.js?v=144723fe" defer></script>
+<script src="/play.js?v=dec08904" defer></script>
 </body></html>

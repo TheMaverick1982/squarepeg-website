@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
 from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, FRIENDSGIVING, VETERANS, PROMOS, MENU, GAME_DAY, EVENTS, HUSKY_CONTEST, ENT_DATES, LTO, LTO_MONTHS, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
+from labs import BUILDERS, HUB as LAB_HUB, spec as lab_spec  # noqa: E402
 
 # The Pizza Lab's pre-selected finish has to be one of the finishes on offer.
 # If it isn't, no radio renders checked, the form submits with no finish at all,
@@ -3783,12 +3784,22 @@ T["confessions"] = """
 # data/content.py to put it in the nav, the hub and the sitemap.
 T["lab"] = """
 <section class="page-head on-dark">
-  {{ img('margherita-board', 'A wood-fired pizza on the board at Square Peg', eager=True, cls='bg')|safe }}
+  {{ img(lab.art, lab.alt, eager=True, cls='bg')|safe }}
   <div class="wrap">
     <h1><span class="eyebrow h1-eyebrow"><span>{{ lab.eyebrow }}</span></span>{{ lab.h1 }}</h1>
     <p class="lede">{{ lab.lede }}</p>
   </div>
 </section>
+
+{% if labs_live|length > 1 %}
+<section class="section">
+  <div class="wrap">
+    <nav class="lab-tabs" aria-label="Square Peg Labs">{% for o in labs_live %}
+      <a class="lab-tab{% if o.slug == lab.slug %} is-on{% endif %}" href="{{ u('/play/' ~ o.slug ~ '/') }}"{% if o.slug == lab.slug %} aria-current="page"{% endif %}>{{ o.short }}</a>{% endfor %}
+    </nav>
+  </div>
+</section>
+{% endif %}
 
 <section class="section">
   <div class="wrap">
@@ -3807,47 +3818,36 @@ T["lab"] = """
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Build it</span>
-      <h2>Your pizza</h2>
+      <h2>Your {{ lab.unit }}</h2>
       <!-- Not "the winner": there is no contest and no public vote. We read the
            entries and we pick one. Any word that implies otherwise has to go. -->
-      <p>Everything on these lists is something our kitchens already stock, so
-        the one we pick is a pizza we can actually make on a Friday night.</p>
+      <p>Everything on these lists is something we already stock, so the one we
+        pick is a {{ lab.unit }} we can actually make on a Friday night.</p>
+      {% if lab.note %}<p class="note">{{ lab.note }}</p>{% endif %}
     </div>
 
-    <form class="lab lab-grid" id="lab" data-max="{{ lab.max_toppings }}" data-endpoint="{{ site.lab_endpoint }}" onsubmit="return false">
-      <div class="lab-fields">
-      <fieldset class="lab-set">
-        <legend>Sauce</legend>
-        <div class="lab-chips">{% for x in lab.sauce %}
-          <label class="lab-chip"><input type="radio" name="sauce" value="{{ x }}"{% if loop.first %} checked{% endif %}><span>{{ x }}</span></label>{% endfor %}
-        </div>
-      </fieldset>
+    <script type="application/json" id="lab-spec">{{ lab_json|safe }}</script>
 
+    <form class="lab lab-grid" id="lab" data-endpoint="{{ lab_post }}" onsubmit="return false">
+      <div class="lab-fields">{% for g in lab.groups %}
       <fieldset class="lab-set">
-        <legend>Cheese</legend>
-        <div class="lab-chips">{% for x in lab.cheese %}
-          <label class="lab-chip"><input type="radio" name="cheese" value="{{ x }}"{% if loop.first %} checked{% endif %}><span>{{ x }}</span></label>{% endfor %}
+        <legend>{{ g.legend }}{% if g.pick == 'many' %} <span class="lab-count" data-count="{{ g.key }}">0 of {{ g.max }}</span>{% endif %}</legend>
+        {%- if g.sections %}{% for sub, opts in g.sections %}
+        <p class="lab-sub">{{ sub }}</p>
+        <div class="lab-chips">{% for x in opts %}
+          <label class="lab-chip"><input type="radio" name="{{ g.key }}" value="{{ x }}"><span>{{ x }}</span></label>{% endfor %}
+        </div>{% endfor %}
+        {%- else %}
+        <div class="lab-chips">{% for x in g.options %}
+          <label class="lab-chip"><input type="{{ 'checkbox' if g.pick == 'many' else 'radio' }}" name="{{ g.key }}" value="{{ x }}"{% if g.pick == 'one' and not g.required and ((g.default and x == g.default) or (not g.default and loop.first)) %} checked{% endif %}><span>{{ x }}</span></label>{% endfor %}
         </div>
-      </fieldset>
-
-      <fieldset class="lab-set">
-        <legend>Toppings <span class="lab-count" id="lab-count">0 of {{ lab.max_toppings }}</span></legend>
-        <div class="lab-chips">{% for x in lab.toppings %}
-          <label class="lab-chip"><input type="checkbox" name="topping" value="{{ x }}"><span>{{ x }}</span></label>{% endfor %}
-        </div>
-      </fieldset>
-
-      <fieldset class="lab-set">
-        <legend>Finish</legend>
-        <div class="lab-chips">{% for x in lab.finish %}
-          <label class="lab-chip"><input type="radio" name="finish" value="{{ x }}"{% if x == lab.finish_default %} checked{% endif %}><span>{{ x }}</span></label>{% endfor %}
-        </div>
-      </fieldset>
+        {%- endif %}
+      </fieldset>{% endfor %}
 
       <fieldset class="lab-set">
         <legend>Name it</legend>
         <input class="lab-name" id="lab-name" name="name" type="text" maxlength="40"
-               placeholder="The Meat Monster 3000" autocomplete="off">
+               placeholder="{{ lab.placeholder }}" autocomplete="off">
         <label class="lab-by"><span>First name and last initial &mdash; how we&rsquo;d credit you on the menu</span>
           <input id="lab-by" name="by" type="text" maxlength="40" placeholder="Optional" autocomplete="off"></label>
       </fieldset>
@@ -3857,7 +3857,7 @@ T["lab"] = """
         <div class="lab-card">
           <span class="lab-card-tag">Limited time special</span>
           <div class="lab-preview" id="lab-preview" aria-live="polite"></div>
-          <button type="button" class="btn lab-submit" id="lab-go">Submit my pizza</button>
+          <button type="button" class="btn lab-submit" id="lab-go">Submit my {{ lab.unit }}</button>
           <span class="note" id="lab-note">One entry per person a month.</span>
         </div>
       </aside>
@@ -3877,6 +3877,36 @@ T["lab"] = """
       <h2>Then we go and read them.</h2>
       {% for para in lab.next %}<p class="prose">{{ para }}</p>{% endfor %}
     </div>
+  </div>
+</section>
+"""
+
+T["labs"] = """
+<section class="page-head on-dark">
+  {{ img('sp-pies-board', 'Square Peg pizzas on the board', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <h1><span class="eyebrow h1-eyebrow"><span>{{ hub.eyebrow }}</span></span>{{ hub.h1 }}</h1>
+    <p class="lede">{{ hub.lede }}</p>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    <div class="cls-grid">{% for o in labs_live %}
+      <div class="cls-card">
+        <span class="eyebrow">{{ o.short }}</span>
+        <h3>{{ o.name }}</h3>
+        <p>{{ o.lede }}</p>
+        <p class="btn-row"><a class="btn btn--sm" href="{{ u('/play/' ~ o.slug ~ '/') }}">{{ icons.arrow|safe }}Open the {{ o.short|lower }} bench</a></p>
+      </div>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap stack">
+    <span class="eyebrow">How it works</span>
+    {% for para in hub.intro %}<p class="prose">{{ para }}</p>{% endfor %}
   </div>
 </section>
 """
@@ -4793,9 +4823,24 @@ def main():
                   "confessions", dict(pagejs="play.js", pct_of=conf_pct),
                   graph(breadcrumbs([("Home", "/"), ("Playground", "/play/"), ("Confession booth", "/play/confessions/")])),
                   "pizza-boxes", "pizza-boxes"))
-    # Unlisted until the kitchen signs off — see LAB_LIVE in data/content.py.
-    pages.append(("/play/pizza-lab/", "The Square Peg Pizza Lab", LAB["lede"],
-                  "lab", dict(pagejs="play.js"), None, "margherita-board", "margherita-board"))
+    # One page per lab, all from the same template. The Pizza Lab's entry is
+    # unchanged in everything that matters: same path, same title, same lede,
+    # same hero. LAB_LIVE still gates it (see data/content.py); the other
+    # three carry their own live flag and ship unlisted until Brian says go.
+    _labs_live = [b for b in BUILDERS if b["live"]]
+    for _b in BUILDERS:
+        pages.append((f"/play/{_b['slug']}/",
+                      "The Square Peg Pizza Lab" if _b["slug"] == "pizza-lab"
+                      else _b["name"] + " | Square Peg Pizzeria",
+                      _b["lede"], "lab",
+                      dict(pagejs="play.js", lab=_b, labs_live=_labs_live,
+                           lab_json=json.dumps(lab_spec(_b), separators=(",", ":")),
+                           lab_post=SITE["lab_endpoint"] if _b["endpoint"] else ""),
+                      None, _b["art"], _b["art"]))
+    pages.append(("/play/labs/", "Square Peg Labs | Square Peg Pizzeria",
+                  LAB_HUB["lede"], "labs",
+                  dict(hub=LAB_HUB, labs_live=_labs_live), None,
+                  "sp-pies-board", "sp-pies-board"))
 
     pages.append(("/thanks/", "Thank You | Square Peg Pizzeria", "Thanks for reaching out to Square Peg Pizzeria.", "simple",
                   dict(eyebrow="Request received", h1="Thank you!", lede="We got your request and will get back to you within one business day. While you wait, there’s pizza.", prose=""), None, None, None))
@@ -4911,6 +4956,15 @@ UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-
             "/team-night/", "/friendsgiving/", "/veterans-day/"}
 if not LAB_LIVE:
     UNLISTED.add("/play/pizza-lab/")
+
+# A lab with no deployed backend cannot take entries, so it stays off the nav
+# and out of the sitemap until it can. The page still renders at its URL for
+# review, which is how new pages go up here.
+for _b in BUILDERS:
+    if not _b["live"]:
+        UNLISTED.add(f"/play/{_b['slug']}/")
+if len([b for b in BUILDERS if b["live"]]) < 2:
+    UNLISTED.add("/play/labs/")
 
 # Out of the sitemap and the internal link lists once the contest is over. The
 # URL still works, so anything already shared keeps resolving and the page

@@ -414,48 +414,60 @@
     }
   })();
 
-  /* ============================================================ PIZZA LAB */
+  /* ========================================================= SQUARE PEG LABS */
 
+  /* One handler for the pizza, sandwich, salad and bar benches. The page
+     carries a spec -- which groups it has, how many each may take, which
+     value means "none" -- and this reads it. Nothing here knows what a
+     topping is. */
   (function lab() {
     var form = $("#lab");
-    if (!form) return;
+    var specEl = document.getElementById("lab-spec");
+    if (!form || !specEl) return;
 
-    var max = parseInt(form.getAttribute("data-max"), 10) || 4;
+    var spec;
+    try { spec = JSON.parse(specEl.textContent); } catch (e) { return; }
+    var groups = spec.groups || [];
     var endpoint = form.getAttribute("data-endpoint");
-    var countEl = $("#lab-count");
     var preview = $("#lab-preview");
     var go = $("#lab-go");
     var note = $("#lab-note");
 
-    function chosen() {
-      return $$("input[name=topping]:checked", form).map(function (i) { return i.value; });
+    function picked(g) {
+      if (g.pick === "many") {
+        return $$("input[name=" + g.key + "]:checked", form)
+          .map(function (i) { return i.value; });
+      }
+      var one = $("input[name=" + g.key + "]:checked", form);
+      return one ? [one.value] : [];
     }
 
     function build() {
-      var t = chosen();
-      countEl.textContent = t.length + " of " + max;
-      // Lock the rest once they hit the cap, rather than letting them pick and
-      // then telling them off.
-      $$("input[name=topping]", form).forEach(function (i) {
-        i.disabled = !i.checked && t.length >= max;
-        i.closest(".lab-chip").classList.toggle("is-off", i.disabled);
+      var parts = [];
+      groups.forEach(function (g) {
+        var v = picked(g);
+
+        if (g.pick === "many") {
+          // Lock the rest once they hit the cap, rather than letting them
+          // pick and then telling them off.
+          var countEl = $("[data-count=" + g.key + "]", form);
+          if (countEl) countEl.textContent = v.length + " of " + g.max;
+          $$("input[name=" + g.key + "]", form).forEach(function (i) {
+            i.disabled = !i.checked && v.length >= g.max;
+            i.closest(".lab-chip").classList.toggle("is-off", i.disabled);
+          });
+        }
+
+        v = v.filter(function (x) { return x !== g.silent; });
+        if (!v.length) return;
+        var words = v.map(function (x) { return x.toLowerCase(); }).join(", ");
+        parts.push(g.prefix ? g.prefix + " " + words : words);
       });
 
-      var sauce = $("input[name=sauce]:checked", form);
-      var cheese = $("input[name=cheese]:checked", form);
-      var finish = $("input[name=finish]:checked", form);
       var name = ($("#lab-name").value || "").trim();
-
-      var parts = [];
-      if (sauce && sauce.value.indexOf("No sauce") !== 0) parts.push(sauce.value.toLowerCase());
-      if (cheese) parts.push(cheese.value.toLowerCase());
-      t.forEach(function (x) { parts.push(x.toLowerCase()); });
-
-      var line = parts.join(", ");
-      if (finish && finish.value.indexOf("Nothing") !== 0) line += ", finished with " + finish.value.toLowerCase();
-
-      preview.innerHTML = '<span class="wheel-win-eyebrow">Your pizza</span><b>' +
-        esc(name || "Still needs a name") + "</b><span>" + esc(line) + "</span>";
+      preview.innerHTML = '<span class="wheel-win-eyebrow">Your ' + esc(spec.unit) +
+        '</span><b>' + esc(name || "Still needs a name") + "</b><span>" +
+        esc(parts.join(", ")) + "</span>";
     }
 
     form.addEventListener("change", build);
@@ -464,39 +476,55 @@
     go.addEventListener("click", function () {
       var name = ($("#lab-name").value || "").trim();
       if (!name) { note.textContent = "Give it a name first."; $("#lab-name").focus(); return; }
-      if (!chosen().length) { note.textContent = "Pick at least one topping."; return; }
+
+      // Every group that is not marked optional has to carry something. A
+      // sectioned list -- the bar's sixty bottles -- starts with nothing
+      // checked on purpose, so this is the only thing asking for a base.
+      var missing = null;
+      groups.forEach(function (g) {
+        if (missing || g.optional) return;
+        if (!picked(g).length) missing = g;
+      });
+      if (missing) {
+        note.textContent = "Pick " + (missing.pick === "many" ? "at least one " : "a ") +
+          missing.key + " first.";
+        var first = $("input[name=" + missing.key + "]", form);
+        if (first) first.closest(".lab-set").scrollIntoView({ block: "center", behavior: "smooth" });
+        return;
+      }
+
       // No endpoint yet: the page is finished, the backend is not. Say so
       // plainly rather than failing, and never fake a confirmation.
       if (!endpoint) { note.textContent = "Submissions open when we launch."; return; }
+
+      var body = { name: name, by: ($("#lab-by").value || "").trim() };
+      if (spec.kind) body.kind = spec.kind;
+      groups.forEach(function (g) {
+        var v = picked(g);
+        body[g.field] = g.pick === "many" ? v : (v[0] || "");
+      });
 
       go.disabled = true;
       note.textContent = "Sending…";
       fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name,
-          by: ($("#lab-by").value || "").trim(),
-          sauce: ($("input[name=sauce]:checked", form) || {}).value || "",
-          cheese: ($("input[name=cheese]:checked", form) || {}).value || "",
-          toppings: chosen(),
-          finish: ($("input[name=finish]:checked", form) || {}).value || ""
-        })
+        body: JSON.stringify(body)
       }).then(function (r) {
         if (!r.ok) throw new Error(r.status);
         form.innerHTML = '<div class="lab-done"><span class="wheel-win-eyebrow">Built it</span>' +
           "<b>We got it.</b><span>We will check out your submission and each month our " +
-          "kitchen will pick a new pizza to feature on our monthly LTO menu. Thanks!</span></div>";
-        track("lab_submit", {});
+          "kitchen will pick a new one to feature. Thanks!</span></div>";
+        track("lab_submit", { kind: spec.kind || "pizza-lab" });
       }).catch(function (e) {
         go.disabled = false;
-        // The status matters: a 400 is a pizza the kitchen's list doesn't
+        // The status matters: a 400 is a build the kitchen's list doesn't
         // recognise, which is our bug, not the visitor's. Anything else is the
         // request not landing at all. Saying "try again" to someone whose
-        // pizza will never be accepted just wastes their time.
+        // entry will never be accepted just wastes their time.
         var code = parseInt(e && e.message, 10);
         if (code === 400) {
-          note.textContent = "Something in that build isn't on our list. Try a different topping?";
+          note.textContent = "Something in that build isn't on our list. Try a different pick?";
         } else {
           note.textContent = "That didn't go through. Try again in a moment.";
         }
