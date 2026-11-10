@@ -25,6 +25,10 @@
 -- them keep working.
 -- ===========================================================================
 
+-- All or nothing. Without the transaction the ALTERs commit, a later step
+-- fails, and the table is left half migrated with stale views on top of it.
+begin;
+
 alter table public.lab_entries
   add column if not exists kind  text not null default 'pizza-lab',
   add column if not exists build jsonb;
@@ -61,10 +65,12 @@ end $$;
 -- A cap still belongs in the database, because the database is the last thing
 -- standing if a function is ever deployed with the wrong list. Eight is above
 -- every bench's cap and below anything that is obviously junk.
+alter table public.lab_entries drop constraint if exists lab_entries_toppings_check;
 alter table public.lab_entries
   add constraint lab_entries_toppings_check
   check (toppings is null or array_length(toppings, 1) between 1 and 8);
 
+alter table public.lab_entries drop constraint if exists lab_entries_kind_check;
 alter table public.lab_entries
   add constraint lab_entries_kind_check
   check (kind in ('pizza-lab','pasta-lab','sandwich-lab','salad-lab','bar-lab'));
@@ -95,7 +101,12 @@ create index if not exists lab_entries_kind_idx
 -- quietly bypasses the row-level security on the table underneath: without it
 -- the public anon key can read every submission through the view even though
 -- it is correctly blocked from reading lab_entries directly.
-create or replace view public.lab_inbox with (security_invoker = true) as
+-- CREATE OR REPLACE VIEW cannot drop or rename a column, and both views
+-- change shape here: lab_inbox trades sauce/cheese/toppings/finish for one
+-- build column, lab_pending gains kind. Replacing them in place errors with
+-- "cannot drop columns from view", so they go first.
+drop view if exists public.lab_inbox;
+create view public.lab_inbox with (security_invoker = true) as
   select
     created_at::date                       as submitted,
     initcap(replace(kind, '-lab', ''))     as bench,
@@ -127,10 +138,13 @@ comment on view public.lab_inbox is
 
 revoke all on public.lab_inbox from anon, authenticated;
 
-create or replace view public.lab_pending with (security_invoker = true) as
+drop view if exists public.lab_pending;
+create view public.lab_pending with (security_invoker = true) as
   select id, created_at, kind, name, by_name, build
     from public.lab_entries
    where status = 'pending'
    order by created_at;
 
 revoke all on public.lab_pending from anon, authenticated;
+
+commit;
