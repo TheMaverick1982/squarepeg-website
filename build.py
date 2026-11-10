@@ -709,7 +709,7 @@ MORE_GROUPS = [
     # Reading HALLOWEEN["ends"] means next year's dates bring it back by
     # themselves.
     ("Fun", [("Halloween", "/halloween/", None, HALLOWEEN["ends"]),
-             ("The Pizza Lab", "/play/pizza-lab/"),
+             ("Square Peg Labs", "/play/labs/"),
              ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"),
              ("Date Night", "/date-night/"), ("What Pizza Are You?", "/what-pizza-are-you/"),
              ("Pizza Trivia", "/pizza-trivia/")]),
@@ -729,7 +729,7 @@ DRAWER_EXTRA = []
 DRAWER_GROUPS = [
     ("Eat", [("Menu", "MENU"), ("LTO Menu", "/monthly-specials/"), ("Pairing Guide", "/pairing/"), ("What’s on the Menu", "/our-menu/"), ("Locations", "/locations/"), ("Specials", "/promotions/"), ("Rewards & Deals", "/deals/")]),
     ("Plan", [("Catering", "/catering/"), ("Large Parties", "/large-party-reservations/"), ("Private Events & Classes", "/private-events/"), ("Food Truck", "/food-truck/"), ("Tuesday Fundraisers", "/fundraisers/")]),
-    ("Fun", [("Entertainment", "/entertainment/"), ("The Pizza Lab", "/play/pizza-lab/"), ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Card Bonus", "/gift-card-bonus/", None, GIFT_BOUNCE["buy_to"]), ("Gift Cards", "GIFT")]),
+    ("Fun", [("Entertainment", "/entertainment/"), ("Square Peg Labs", "/play/labs/"), ("The Playground", "/play/"), ("Roll the Dice", "/roll-the-dice/"), ("Gift Card Bonus", "/gift-card-bonus/", None, GIFT_BOUNCE["buy_to"]), ("Gift Cards", "GIFT")]),
     ("Square Peg", [("Our Story", "/about/"), ("Careers", "/careers/"), ("Contact", "/contact/")]),
 ]
 DAY_NAMES = {"Mon": "Monday", "Tue": "Tuesday", "Wed": "Wednesday", "Thu": "Thursday", "Fri": "Friday", "Sat": "Saturday", "Sun": "Sunday"}
@@ -3499,11 +3499,11 @@ T["play"] = """
         <b>The confession booth</b>
         <span>Tick what you&rsquo;ve done. Find out how alone you really are.</span>
       </a>
-      {% if lab_live %}<a class="route" href="{{ u('/play/pizza-lab/') }}">
+      {% if lab_live %}<a class="route" href="{{ u('/play/labs/') }}">
         <span class="eyebrow">Build one</span>
-        <b>The Pizza Lab</b>
-        <span>Invent a pizza from our own ingredients. We put the one we like
-          best on the menu.</span>
+        <b>Square Peg Labs</b>
+        <span>Invent a pizza, a pasta, a sub, a salad or a drink from our own
+          ingredients. We put the ones we like best on the menu.</span>
       </a>{% endif %}
     </div>
   </div>
@@ -3782,24 +3782,32 @@ T["confessions"] = """
 # kitchen has signed off on the ingredient list and agreed to actually run the
 # winner as an LTO. Brian is sharing the URL with them first. Flip LAB_LIVE in
 # data/content.py to put it in the nav, the hub and the sitemap.
-T["lab"] = """
+T["labs"] = """
 <section class="page-head on-dark">
-  {{ img(lab.art, lab.alt, eager=True, cls='bg')|safe }}
+  {{ img('sp-pies-board', 'Square Peg pizzas on the board', eager=True, cls='bg')|safe }}
   <div class="wrap">
-    <h1><span class="eyebrow h1-eyebrow"><span>{{ lab.eyebrow }}</span></span>{{ lab.h1 }}</h1>
-    <p class="lede">{{ lab.lede }}</p>
+    <h1><span class="eyebrow h1-eyebrow"><span>{{ hub.eyebrow }}</span></span>{{ hub.h1 }}</h1>
+    <p class="lede">{{ hub.lede }}</p>
   </div>
 </section>
 
+<!-- One page, five benches. The tab row carries the benches that are live; a
+     bench that is not live is still in the page and still reachable by its own
+     hash (/play/labs/#bar), which is how a new one gets reviewed before it is
+     listed. Panels after the first ship hidden so there is no flash of all
+     five while the page settles. -->
 {% if labs_live|length > 1 %}
-<section class="section">
+<section class="section section--tabrow">
   <div class="wrap">
     <nav class="lab-tabs" aria-label="Square Peg Labs">{% for o in labs_live %}
-      <a class="lab-tab{% if o.slug == lab.slug %} is-on{% endif %}" href="{{ u('/play/' ~ o.slug ~ '/') }}"{% if o.slug == lab.slug %} aria-current="page"{% endif %}>{{ o.short }}</a>{% endfor %}
+      <a class="lab-tab" href="#{{ o.tab }}">{{ o.short }}</a>{% endfor %}
     </nav>
   </div>
 </section>
 {% endif %}
+
+{% for lab in labs_all %}
+<div class="lab-panel" data-tab="{{ lab.tab }}"{% if not loop.first %} hidden{% endif %}>
 
 <section class="section">
   <div class="wrap">
@@ -3826,9 +3834,8 @@ T["lab"] = """
       {% if lab.note %}<p class="note">{{ lab.note }}</p>{% endif %}
     </div>
 
-    <script type="application/json" id="lab-spec">{{ lab_json|safe }}</script>
-
-    <form class="lab lab-grid" id="lab" data-endpoint="{{ lab_post }}" onsubmit="return false">
+    <form class="lab lab-grid" data-bench="{{ lab.slug }}" data-endpoint="{{ lab.post }}" onsubmit="return false">
+      <script type="application/json" class="lab-spec">{{ lab.json|safe }}</script>
       <div class="lab-fields">{% for g in lab.groups %}
       <fieldset class="lab-set">
         <legend>{{ g.legend }}{% if g.pick == 'many' %} <span class="lab-count" data-count="{{ g.key }}">0 of {{ g.max }}</span>{% endif %}</legend>
@@ -3846,19 +3853,19 @@ T["lab"] = """
 
       <fieldset class="lab-set">
         <legend>Name it</legend>
-        <input class="lab-name" id="lab-name" name="name" type="text" maxlength="40"
+        <input class="lab-name" name="name" type="text" maxlength="40"
                placeholder="{{ lab.placeholder }}" autocomplete="off">
         <label class="lab-by"><span>First name and last initial &mdash; how we&rsquo;d credit you on the menu</span>
-          <input id="lab-by" name="by" type="text" maxlength="40" placeholder="Optional" autocomplete="off"></label>
+          <input name="by" type="text" maxlength="40" placeholder="Optional" autocomplete="off"></label>
       </fieldset>
       </div>
 
       <aside class="lab-side">
         <div class="lab-card">
           <span class="lab-card-tag">Limited time special</span>
-          <div class="lab-preview" id="lab-preview" aria-live="polite"></div>
-          <button type="button" class="btn lab-submit" id="lab-go">Submit my {{ lab.unit }}</button>
-          <span class="note" id="lab-note">One entry per person a month.</span>
+          <div class="lab-preview" aria-live="polite"></div>
+          <button type="button" class="btn lab-submit">Submit my {{ lab.unit }}</button>
+          <span class="note lab-note">One entry per person a month.</span>
         </div>
       </aside>
     </form>
@@ -3879,29 +3886,9 @@ T["lab"] = """
     </div>
   </div>
 </section>
-"""
 
-T["labs"] = """
-<section class="page-head on-dark">
-  {{ img('sp-pies-board', 'Square Peg pizzas on the board', eager=True, cls='bg')|safe }}
-  <div class="wrap">
-    <h1><span class="eyebrow h1-eyebrow"><span>{{ hub.eyebrow }}</span></span>{{ hub.h1 }}</h1>
-    <p class="lede">{{ hub.lede }}</p>
-  </div>
-</section>
-
-<section class="section section--paper">
-  <div class="wrap">
-    <div class="cls-grid">{% for o in labs_live %}
-      <div class="cls-card">
-        <span class="eyebrow">{{ o.short }}</span>
-        <h3>{{ o.name }}</h3>
-        <p>{{ o.lede }}</p>
-        <p class="btn-row"><a class="btn btn--sm" href="{{ u('/play/' ~ o.slug ~ '/') }}">{{ icons.arrow|safe }}Open the {{ o.short|lower }} bench</a></p>
-      </div>{% endfor %}
-    </div>
-  </div>
-</section>
+</div>
+{% endfor %}
 
 <section class="section">
   <div class="wrap stack">
@@ -4823,23 +4810,22 @@ def main():
                   "confessions", dict(pagejs="play.js", pct_of=conf_pct),
                   graph(breadcrumbs([("Home", "/"), ("Playground", "/play/"), ("Confession booth", "/play/confessions/")])),
                   "pizza-boxes", "pizza-boxes"))
-    # One page per lab, all from the same template. The Pizza Lab's entry is
-    # unchanged in everything that matters: same path, same title, same lede,
-    # same hero. LAB_LIVE still gates it (see data/content.py); the other
-    # three carry their own live flag and ship unlisted until Brian says go.
-    _labs_live = [b for b in BUILDERS if b["live"]]
-    for _b in BUILDERS:
-        pages.append((f"/play/{_b['slug']}/",
-                      "The Square Peg Pizza Lab" if _b["slug"] == "pizza-lab"
-                      else _b["name"] + " | Square Peg Pizzeria",
-                      _b["lede"], "lab",
-                      dict(pagejs="play.js", lab=_b, labs_live=_labs_live,
-                           lab_json=json.dumps(lab_spec(_b), separators=(",", ":")),
-                           lab_post=SITE["lab_endpoint"] if _b["endpoint"] else ""),
-                      None, _b["art"], _b["art"]))
+    # Every bench on one page. They used to be a page each, which meant a
+    # reload to go from pizza to pasta and five URLs to promote; the tab row
+    # swaps them in place now. The old URLs 301 here (see redirect_map) and
+    # land on the right bench by hash, so anything already shared still works.
+    # LAB_LIVE still gates the whole page (see data/content.py), and a bench
+    # that is not live stays out of the tab row while remaining reachable at
+    # its own hash for review.
+    _labs_all = [dict(b, tab=b["slug"].replace("-lab", ""),
+                      json=json.dumps(lab_spec(b), separators=(",", ":")),
+                      post=SITE["lab_endpoint"] if b["endpoint"] else "")
+                 for b in BUILDERS]
+    _labs_live = [o for o in _labs_all if o["live"]]
     pages.append(("/play/labs/", "Square Peg Labs | Square Peg Pizzeria",
                   LAB_HUB["lede"], "labs",
-                  dict(hub=LAB_HUB, labs_live=_labs_live), None,
+                  dict(pagejs="play.js", hub=LAB_HUB,
+                       labs_all=_labs_all, labs_live=_labs_live), None,
                   "sp-pies-board", "sp-pies-board"))
 
     pages.append(("/thanks/", "Thank You | Square Peg Pizzeria", "Thanks for reaching out to Square Peg Pizzeria.", "simple",
@@ -4954,16 +4940,10 @@ def main():
 UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-night/",
             "/corporate/", "/gift-card-bonus/", "/kids-pizza-class/",
             "/team-night/", "/friendsgiving/", "/veterans-day/"}
+# A bench with no deployed backend cannot take entries, so it stays off the
+# tab row until it can -- that is the `live` flag in data/labs.py, and it is
+# now the only thing it gates, because there is one page rather than five.
 if not LAB_LIVE:
-    UNLISTED.add("/play/pizza-lab/")
-
-# A lab with no deployed backend cannot take entries, so it stays off the nav
-# and out of the sitemap until it can. The page still renders at its URL for
-# review, which is how new pages go up here.
-for _b in BUILDERS:
-    if not _b["live"]:
-        UNLISTED.add(f"/play/{_b['slug']}/")
-if len([b for b in BUILDERS if b["live"]]) < 2:
     UNLISTED.add("/play/labs/")
 
 # Out of the sitemap and the internal link lists once the contest is over. The
@@ -5228,6 +5208,14 @@ def redirect_map():
           # anything under /menu/ we haven't matched above
           ("/menu/*", ORDER_HOST + "/menu"),
           ("/food-trucks", "/food-truck/"),
+          # The labs used to be a page each. One page now, so the old URLs land
+          # on the right bench rather than a 404 -- /play/pizza-lab/ above all,
+          # which is indexed and has been shared.
+          ("/play/pizza-lab", "/play/labs/#pizza"),
+          ("/play/pasta-lab", "/play/labs/#pasta"),
+          ("/play/sandwich-lab", "/play/labs/#sandwich"),
+          ("/play/salad-lab", "/play/labs/#salad"),
+          ("/play/bar-lab", "/play/labs/#bar"),
           ("/reviews", "/about/"), ("/jobs", "/careers/")]
     return m
 

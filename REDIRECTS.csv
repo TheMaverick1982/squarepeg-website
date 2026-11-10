@@ -62,5 +62,10 @@ https://squarepegpizzeria.com/items,https://order.squarepegpizzeria.com/menu,301
 https://squarepegpizzeria.com/items/*,https://order.squarepegpizzeria.com/menu,301
 https://squarepegpizzeria.com/menu/*,https://order.squarepegpizzeria.com/menu,301
 https://squarepegpizzeria.com/food-trucks,https://squarepegpizzeria.com/food-truck/,301
+https://squarepegpizzeria.com/play/pizza-lab,https://squarepegpizzeria.com/play/labs/#pizza,301
+https://squarepegpizzeria.com/play/pasta-lab,https://squarepegpizzeria.com/play/labs/#pasta,301
+https://squarepegpizzeria.com/play/sandwich-lab,https://squarepegpizzeria.com/play/labs/#sandwich,301
+https://squarepegpizzeria.com/play/salad-lab,https://squarepegpizzeria.com/play/labs/#salad,301
+https://squarepegpizzeria.com/play/bar-lab,https://squarepegpizzeria.com/play/labs/#bar,301
 https://squarepegpizzeria.com/reviews,https://squarepegpizzeria.com/about/,301
 https://squarepegpizzeria.com/jobs,https://squarepegpizzeria.com/careers/,301

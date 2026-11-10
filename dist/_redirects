@@ -64,5 +64,10 @@
 /items/*                     https://order.squarepegpizzeria.com/menu                     301
 /menu/*                      https://order.squarepegpizzeria.com/menu                     301
 /food-trucks                 /food-truck/                                                 301
+/play/pizza-lab              /play/labs/#pizza                                            301
+/play/pasta-lab              /play/labs/#pasta                                            301
+/play/sandwich-lab           /play/labs/#sandwich                                         301
+/play/salad-lab              /play/labs/#salad                                            301
+/play/bar-lab                /play/labs/#bar                                              301
 /reviews                     /about/                                                      301
 /jobs                        /careers/                                                    301

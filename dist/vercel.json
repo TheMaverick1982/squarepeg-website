@@ -634,6 +634,56 @@
       "permanent": true
     },
     {
+      "source": "/play/pizza-lab",
+      "destination": "/play/labs/#pizza",
+      "permanent": true
+    },
+    {
+      "source": "/play/pizza-lab/",
+      "destination": "/play/labs/#pizza",
+      "permanent": true
+    },
+    {
+      "source": "/play/pasta-lab",
+      "destination": "/play/labs/#pasta",
+      "permanent": true
+    },
+    {
+      "source": "/play/pasta-lab/",
+      "destination": "/play/labs/#pasta",
+      "permanent": true
+    },
+    {
+      "source": "/play/sandwich-lab",
+      "destination": "/play/labs/#sandwich",
+      "permanent": true
+    },
+    {
+      "source": "/play/sandwich-lab/",
+      "destination": "/play/labs/#sandwich",
+      "permanent": true
+    },
+    {
+      "source": "/play/salad-lab",
+      "destination": "/play/labs/#salad",
+      "permanent": true
+    },
+    {
+      "source": "/play/salad-lab/",
+      "destination": "/play/labs/#salad",
+      "permanent": true
+    },
+    {
+      "source": "/play/bar-lab",
+      "destination": "/play/labs/#bar",
+      "permanent": true
+    },
+    {
+      "source": "/play/bar-lab/",
+      "destination": "/play/labs/#bar",
+      "permanent": true
+    },
+    {
       "source": "/reviews",
       "destination": "/about/",
       "permanent": true

@@ -1823,6 +1823,10 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
 /* ---- Square Peg Labs ------------------------------------------------- */
 /* A row of benches across the top of each lab, and the sub-headings that
    break the bar's sixty-odd bottles into something readable. */
+/* The bench picker sits between the hero and the bench, so it takes a
+   fraction of a section's padding rather than a section's worth twice
+   over -- otherwise there is a screenful of nothing under the tabs. */
+.section--tabrow{padding-block:clamp(22px,3vw,34px) 0;scroll-margin-top:84px}
 .lab-tabs{display:flex;flex-wrap:wrap;gap:8px}
 .lab-tab{display:inline-flex;align-items:center;padding:9px 16px;border-radius:999px;
   border:1px solid var(--line);background:#fff;color:var(--smoke);

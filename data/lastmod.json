@@ -1,43 +1,43 @@
 {
  "/": {
   "date": "2026-11-10",
-  "hash": "3f83847b70033caec5c5ec66eea41a1c"
+  "hash": "4a302e65b96b9413232d584e2fbd3f40"
  },
  "/about/": {
   "date": "2026-11-10",
-  "hash": "8d7fb37cb665c85f8aa74ee54e8b2012"
+  "hash": "507e8bf744bfe5e6613eef311e855db2"
  },
  "/areas-we-serve/": {
   "date": "2026-11-10",
-  "hash": "0ea0dd7ee7435fd47ad574649b21505c"
+  "hash": "cac2b5d27bbab795df13d96a2fd5a669"
  },
  "/careers/": {
   "date": "2026-11-10",
-  "hash": "faed0e0ee4fca50f2412c9a9f52c1797"
+  "hash": "e6afd97e8fbf6f3e5f8f202d4f59fbe2"
  },
  "/catering/": {
   "date": "2026-11-10",
-  "hash": "02c259dc351069a45fb210de080703a6"
+  "hash": "a52299e3a077763d0af1deed3a190428"
  },
  "/contact/": {
   "date": "2026-11-10",
-  "hash": "b3e5ff27c4da1492b219e00567ede6ca"
+  "hash": "df81ee658fa10835c3f2d0459d10e6b0"
  },
  "/date-night/": {
   "date": "2026-11-10",
-  "hash": "ad145e505d96f6608f86fe69db7b45f9"
+  "hash": "4c357f5d4a90bef57015097418fadc63"
  },
  "/deals/": {
   "date": "2026-11-10",
-  "hash": "9e7682cabb1fe60ab78b60068e4f6791"
+  "hash": "64c6d1c943274f9132a50d8da52adb80"
  },
  "/entertainment/": {
   "date": "2026-11-10",
-  "hash": "6cd56249cd9ab50eee96d64d252089d0"
+  "hash": "0cc8387b245ea17a3d1a50d6a13fe957"
  },
  "/food-truck/": {
   "date": "2026-11-10",
-  "hash": "8f3523202da83bec1af0cccda497e0e8"
+  "hash": "7ae6c9abe0eed09a13912e39c7f70041"
  },
  "/fundraiser-night/": {
   "date": "2026-10-09",
@@ -45,11 +45,11 @@
  },
  "/fundraisers/": {
   "date": "2026-11-10",
-  "hash": "62cb9827073efb72ea3584fc1f3a2de7"
+  "hash": "31dd02365ccc2fc4023e16eb981dd568"
  },
  "/game-day/": {
   "date": "2026-11-10",
-  "hash": "a6877878448174b38585152b34b4fbaf"
+  "hash": "145c04ff784e88cadac09db793ca6f59"
  },
  "/halloween/": {
   "date": "2026-10-28",
@@ -57,123 +57,127 @@
  },
  "/large-party-reservations/": {
   "date": "2026-11-10",
-  "hash": "d9f0f5a5047c909160b5aa90259b508a"
+  "hash": "44faffb3a4d67a3844cefdfd03c105fe"
  },
  "/locations/": {
   "date": "2026-11-10",
-  "hash": "7c9b4112f0a14c9f2f660790502fcb39"
+  "hash": "2b2c8e0cf389cabb17e620649cf0fc60"
  },
  "/locations/berlin-ct/": {
   "date": "2026-11-10",
-  "hash": "dd0041ff0c5f86e4903093b9c48e85a6"
+  "hash": "b5fd27c2a9ba9c957d8bfdcd6295b977"
  },
  "/locations/bolton-ct/": {
   "date": "2026-11-10",
-  "hash": "8e2fbcd1d7b837938c3bfcb4ab812c6f"
+  "hash": "bca967f055371ade78883729430e967f"
  },
  "/locations/delray-beach-fl/": {
   "date": "2026-11-10",
-  "hash": "8f0df5004be777cd0cfab0a774916408"
+  "hash": "2f9b4a540c4d71fccddebde5b4f4f6de"
  },
  "/locations/east-hartford-ct/": {
   "date": "2026-11-10",
-  "hash": "480598fcaae4f03dc81261070eb08638"
+  "hash": "aa971d79b5118de9b160b44f5d6f7cd3"
  },
  "/locations/glastonbury-ct/": {
   "date": "2026-11-10",
-  "hash": "59620438da2b2cb58ef8504df60a78c9"
+  "hash": "e82eca31a5402b62a81337630b26a926"
  },
  "/locations/plainville-ct/": {
   "date": "2026-11-10",
-  "hash": "a1e6282c715b440cdff40783a3a95060"
+  "hash": "bb09c730e4d0a3c3f54a1e475b1ac813"
  },
  "/locations/preston-ct/": {
   "date": "2026-11-10",
-  "hash": "24fedf6a365e2eb8189375b41d447a08"
+  "hash": "24851d9ba21450ec93528ccda8adc37b"
  },
  "/locations/shelton-ct/": {
   "date": "2026-11-10",
-  "hash": "4d6d817fe07415c56e7e80ac92c196a8"
+  "hash": "2f21ce54a40e5457b1647fc2c6a4b096"
  },
  "/locations/storrs-ct/": {
   "date": "2026-11-10",
-  "hash": "5eefd300077d0601946ed70d70aaa668"
+  "hash": "288d4e96e1dfd31531275f41e9c94d85"
  },
  "/locations/vernon-ct/": {
   "date": "2026-11-10",
-  "hash": "28969ee3342438e0cb18261a9722fe02"
+  "hash": "dcc99ad891488a2a518d524947783f9f"
  },
  "/monthly-specials/": {
   "date": "2026-11-10",
-  "hash": "48e1da217692dc0fccc56b12479b19bf"
+  "hash": "a38be90f712909f58adbbd86135fcb4e"
  },
  "/our-menu/": {
   "date": "2026-11-10",
-  "hash": "ad5ce2bd56f5dc6c9f3dd6e14e166b73"
+  "hash": "967dcf6ad33fb304e9ab405d908ce218"
  },
  "/pairing/": {
   "date": "2026-11-10",
-  "hash": "e3cc600d8ba2c1359906dfd39263e252"
+  "hash": "f91b66b5d2a2e3ec88f71c67115de0f2"
  },
  "/pizza-calculator/": {
   "date": "2026-11-10",
-  "hash": "1c997044702955647ed57a60693a7565"
+  "hash": "e4a8a5a91f64cd6c7c4b554e954442bb"
  },
  "/pizza-faq/": {
   "date": "2026-11-10",
-  "hash": "898d88c10bb529f6d5e5cf7d2ee100d4"
+  "hash": "3149b2724b3c808a3ccc23b476a0d2b0"
  },
  "/pizza-near-boca-raton/": {
   "date": "2026-11-10",
-  "hash": "c340e5cf3bfe59156d297bd12464f3f1"
+  "hash": "0a34a1b13514b642f9e208dd68561625"
  },
  "/pizza-near-mohegan-sun/": {
   "date": "2026-11-10",
-  "hash": "15c9b9a0bd1ff48066bb448bb7d9d74f"
+  "hash": "a5f50be416b8c059d75ebc61b0407405"
  },
  "/pizza-near-uconn/": {
   "date": "2026-11-10",
-  "hash": "a06fb44109f192379ba33cf3ac5896e4"
+  "hash": "6d3f38a660b8ca3d69bdff4d83692e30"
  },
  "/pizza-trivia/": {
   "date": "2026-11-10",
-  "hash": "7d44993f57a1d6c142abf17905f2abf3"
+  "hash": "5c97aacdc3968d80f90edc69a5d7b3f8"
  },
  "/play/": {
   "date": "2026-11-10",
-  "hash": "cd185769ff41c96ec6933e9cee1a4506"
+  "hash": "8c3413fda6260199f6a9ef081d553c27"
  },
  "/play/confessions/": {
   "date": "2026-11-10",
-  "hash": "7dc06949907bff6ffd44f3e0d606105a"
+  "hash": "e78664ee82d3aa0a6de6c85701fb99b5"
  },
  "/play/debate/": {
   "date": "2026-11-10",
-  "hash": "1bbffb8cf1e49bd9e7b07f9e1821a38e"
+  "hash": "c79a5e774d2e3b82bbc34ef2980287fc"
  },
  "/play/debate/cold-leftover-pizza/": {
   "date": "2026-11-10",
-  "hash": "210d0e1b14c6fe91b247d8b82c2a223d"
+  "hash": "887624fc0b6f1d7be79a2bede68a7d0f"
  },
  "/play/debate/fold-or-flat/": {
   "date": "2026-11-10",
-  "hash": "d5ad79d710ce141260c56e423f0e384b"
+  "hash": "218a29385616d391be684ef8619e22cf"
  },
  "/play/debate/fork-and-knife/": {
   "date": "2026-11-10",
-  "hash": "4323b65a1ac5aed83a6cc7926b9af400"
+  "hash": "d29c73d9fdc39bf7672490c83e8ae1bb"
  },
  "/play/debate/is-a-calzone-a-pizza/": {
   "date": "2026-11-10",
-  "hash": "3425b342487fff53ff4cef39dcd8be45"
+  "hash": "12d821920636e5008cdb402fa1a909e8"
  },
  "/play/debate/pineapple-on-pizza/": {
   "date": "2026-11-10",
-  "hash": "ac8860e37edbca8e3df19bc6acb5a32d"
+  "hash": "274c4237f00a468a8b07162432f9b32e"
  },
  "/play/debate/ranch-with-pizza/": {
   "date": "2026-11-10",
-  "hash": "1b19dc286978a99738740e64f459f603"
+  "hash": "c1e9fd36847245969b9321f4dec0b3c5"
+ },
+ "/play/labs/": {
+  "date": "2026-11-10",
+  "hash": "33cd932e7701500d54287866a1b3ab0b"
  },
  "/play/pizza-lab/": {
   "date": "2026-11-10",
@@ -181,38 +185,38 @@
  },
  "/play/wheel/": {
   "date": "2026-11-10",
-  "hash": "7667cbe6584ce45ab03c354ed643f8e6"
+  "hash": "ee7c5e9a41fb70760f3153667247d931"
  },
  "/privacy/": {
   "date": "2026-11-10",
-  "hash": "7113003f8087940961c3807d950aa2aa"
+  "hash": "4220c446ac8ebf41b0c8cc7b20102889"
  },
  "/private-events/": {
   "date": "2026-11-10",
-  "hash": "c7fac66719b356d28c7d7509fd6d10b3"
+  "hash": "27763c240df8156dbfa1dc5965e0a543"
  },
  "/promotions/": {
   "date": "2026-11-10",
-  "hash": "562c98c8768cd62295853af20371b8c3"
+  "hash": "e2f8690a8e8519985c33b79302d406f1"
  },
  "/roll-the-dice/": {
   "date": "2026-11-10",
-  "hash": "fff20b4500e5a91b382d9cd28b14e5aa"
+  "hash": "becb290e01a80d22aee8dcb21b8caabd"
  },
  "/sms-terms/": {
   "date": "2026-11-10",
-  "hash": "2f8d16da1d04b741c11bb5cb3b7361ac"
+  "hash": "e9e5e14e6ffb13a665b32c1ac2400f7c"
  },
  "/terms/": {
   "date": "2026-11-10",
-  "hash": "25e34b4d85ee73321985a000f2e805f9"
+  "hash": "68cc0552efa00eb22a435dd787acc907"
  },
  "/toys-for-tots/": {
   "date": "2026-11-10",
-  "hash": "85508c624cb7851ed205a09e5111723a"
+  "hash": "f0d08d00a6bd9ef79eeb4d776b1c471b"
  },
  "/what-pizza-are-you/": {
   "date": "2026-11-10",
-  "hash": "790b7f51d511451fedca064817acea3d"
+  "hash": "fbc037b212211d6a2eb9eb5ee3cb6829"
  }
 }
