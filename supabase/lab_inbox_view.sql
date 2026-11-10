@@ -1,7 +1,7 @@
 -- ===========================================================================
 -- The Pizza Lab inbox
 --
--- Run in the SQL editor of the PLAYGROUND project (tsrnpmkipdbtwyrlfbuy).
+-- Run in the SQL editor of the website's own project (ytkwogufrjffcgfpinrf).
 -- Safe to re-run.
 --
 -- The weekly email is the reminder. This is the thing you open when you want

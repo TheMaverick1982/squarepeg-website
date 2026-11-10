@@ -84,7 +84,7 @@ revoke all on public.lab_pending from anon, authenticated;
 -- of the queue — and the service-role key must never go into a workflow file.
 --
 -- Before running, replace BOTH placeholders:
---   <PROJECT>         your project ref, e.g. tsrnpmkipdbtwyrlfbuy
+--   <PROJECT>         the website's project ref: ytkwogufrjffcgfpinrf
 --   <LAB_DIGEST_KEY>  the same long random string you set as the function's
 --                     LAB_DIGEST_KEY secret, so only this schedule can fire it
 

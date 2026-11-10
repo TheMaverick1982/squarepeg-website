@@ -1,7 +1,7 @@
 -- ===========================================================================
 -- Pizza Lab: no public voting
 --
--- Run this in the SQL editor of the Playground project (tsrnpmkipdbtwyrlfbuy).
+-- Run this in the SQL editor of the website's own project (ytkwogufrjffcgfpinrf).
 -- Safe to re-run.
 --
 -- The Lab was built expecting approved entries to be published and voted on,

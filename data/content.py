@@ -68,9 +68,6 @@ SITE = {
     # read correctly — they just don't record anything, which is the right
     # failure mode. See supabase/POLLS_SETUP.sql.
     #
-    # The Playground has its own Supabase project, separate from the one above
-    # (which holds the contact form and its customer submissions). That split
-    # is worth keeping: cast-vote is a public, unauthenticated endpoint, and
     # Everything the website stores lives in the website's own project, the
     # same one as supabase_url above. The polls spent their first weeks in
     # tsrnpmkipdbtwyrlfbuy, which is the Connect app's project — the system
