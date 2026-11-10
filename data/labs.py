@@ -154,7 +154,7 @@ _PASTA_ADD = [
 NONE_FINISH = "Nothing \u2014 leave it alone"
 
 PASTA = _lab(
-    live=True, slug="pasta-lab", placeholder="The Midnight Rigatoni",
+    live=True, endpoint="lab_endpoint", slug="pasta-lab", placeholder="The Midnight Rigatoni",
     name="The Pasta Lab", short="Pasta", unit="pasta",
     h1="The next Square Peg pasta could be yours.",
     lede="Three shapes, four sauces and everything our kitchens keep on the "
@@ -200,7 +200,7 @@ PASTA = _lab(
 
 # ============================================================ THE SANDWICH LAB
 SANDWICH = _lab(
-    live=True, slug="sandwich-lab", placeholder="The Shelton Slammer", name="The Sandwich Lab", short="Sandwich",
+    live=True, endpoint="lab_endpoint", slug="sandwich-lab", placeholder="The Shelton Slammer", name="The Sandwich Lab", short="Sandwich",
     unit="sandwich",
     h1="The next Square Peg sub could be yours.",
     lede="Ten inches of roll or a wrap, and everything our kitchens keep "
@@ -245,7 +245,7 @@ SANDWICH = _lab(
 
 # =============================================================== THE SALAD LAB
 SALAD = _lab(
-    live=True, slug="salad-lab", placeholder="The Green Peg", name="The Salad Lab", short="Salad", unit="salad",
+    live=True, endpoint="lab_endpoint", slug="salad-lab", placeholder="The Green Peg", name="The Salad Lab", short="Salad", unit="salad",
     h1="The next Square Peg salad could be yours.",
     lede="Greens, the good stuff on top, and a dressing that earns its place. "
          "Build it from what our kitchens already keep and give it a name.",
@@ -337,7 +337,7 @@ NONE_FRUIT = "No fruit"
 NONE_RIM = "No rim"
 
 BAR = _lab(
-    live=True, slug="bar-lab", placeholder="The Vernon Sunset", name="The Bar Lab", short="Drink", unit="drink",
+    live=True, endpoint="lab_endpoint", slug="bar-lab", placeholder="The Vernon Sunset", name="The Bar Lab", short="Drink", unit="drink",
     h1="The next Square Peg cocktail could be yours.",
     lede="Everything behind our bar, and a blank glass. Build the drink you "
          "wish we served and give it a name — the one we pick goes on the "
