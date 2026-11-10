@@ -1228,6 +1228,39 @@ EVENTS = {
             "cta": "Sign up",
             "host": "Hosted with Artistry Creative Studio",
         },
+        # The three Shelton nights below sell nothing, so they carry no url and
+        # the card prints no ticket button. Each one hides itself the day after
+        # it happens, like everything else in here.
+        {
+            "title": "The Smooth Sounds of Billy Lopez",
+            "date": "2026-11-14",
+            "announce": "2026-11-10",
+            "blurb": "Three hours of live music in the dining room \u2014 the smooth "
+                     "stuff, played loud enough to enjoy and quiet enough to talk "
+                     "over. Come for dinner and stay for the set.",
+            "meta": ["7\u201310 PM", "Live music", "No ticket needed"],
+        },
+        {
+            # The Saturday after Thanksgiving. Pitched at the parent reading it.
+            "title": "Lunch with Santa",
+            "date": "2026-11-28",
+            "announce": "2026-11-10",
+            "blurb": "Santa is in the dining room from noon until four on the "
+                     "Saturday after Thanksgiving. Kids eat off a $5 menu, and the "
+                     "afternoon happy hour runs right through it. Worth a call "
+                     "ahead if you are bringing a crowd.",
+            "meta": ["12\u20134 PM", "$5 kids menu", "Happy hour 2\u20136 PM"],
+        },
+        {
+            "title": "Customer Appreciation Day",
+            "date": "2026-12-18",
+            "announce": "2026-11-28",
+            "blurb": "A breather one week before Christmas. Two happy hours instead "
+                     "of one \u2014 the usual afternoon run and a late one through "
+                     "to eleven \u2014 as our thank-you for the year.",
+            "meta": ["2\u20136 PM & 8:30\u201311 PM", "Two happy hours",
+                     "No ticket needed"],
+        },
     ],
     "delray-beach-fl": [
         {
