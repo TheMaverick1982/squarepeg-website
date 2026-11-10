@@ -36,12 +36,50 @@ var TABS = {
   'bar-lab': 'Drinks'
 };
 
+/* What each bench asks, in order, so setUpTabs() can lay out all five before
+   a single entry exists. The script does not depend on this being right: a
+   label it has never seen is added as a column when the first build carrying
+   it arrives. It is here so the sheet looks like a sheet on day one.
+   Regenerate with: python3 -c "import sys;sys.path.insert(0,'data');import labs;
+   print({b['slug']:[g['legend'] for g in b['groups']] for b in labs.BUILDERS})" */
+var LABELS = {
+  'pizza-lab': ['Sauce', 'Cheese', 'Toppings', 'Finish'],
+  'pasta-lab': ['Pasta', 'Sauce', 'Protein', 'Add-ins', 'Finish'],
+  'sandwich-lab': ['Roll or wrap', 'Protein', 'Cheese', 'Greens', 'Pile it on', 'Sauce or dressing'],
+  'salad-lab': ['Greens', 'Protein', 'Cheese', 'On top', 'Dressing'],
+  'bar-lab': ['Base', 'Mixer', 'Fruit', 'Garnish', 'Rim'],
+};
+
 // Written by people, never by this script. They sit to the right of the build
 // columns, and a new question on a bench is inserted before them so that a
 // note never ends up against the wrong row.
 var MINE = ['Picked', 'Picked by', 'Ran (month)', 'Notes'];
 var FIRST = ['Date', 'Called', 'Built by'];
 var SYNC = 'Sync';
+
+/**
+ * Run this once, before anything has been submitted, to lay out all five tabs
+ * with their columns. Without it the tabs appear one at a time, as the first
+ * build for each bench lands, which is correct but looks like something is
+ * broken on day one.
+ */
+function setUpTabs() {
+  var book = SpreadsheetApp.getActiveSpreadsheet();
+  Object.keys(TABS).forEach(function (kind) {
+    if (book.getSheetByName(TABS[kind])) return;
+    var sh = book.insertSheet(TABS[kind]);
+    sh.appendRow(['Id'].concat(FIRST, LABELS[kind] || [], MINE));
+    sh.getRange(1, 1, 1, sh.getLastColumn()).setFontWeight('bold');
+    sh.setFrozenRows(1);
+    sh.hideColumns(1);
+    sh.autoResizeColumns(2, sh.getLastColumn() - 1);
+  });
+  // The blank one Google starts every new spreadsheet with.
+  var first = book.getSheetByName('Sheet1');
+  if (first && first.getLastRow() === 0 && book.getSheets().length > 1) {
+    book.deleteSheet(first);
+  }
+}
 
 function pullLabs() {
   var props = PropertiesService.getScriptProperties();
