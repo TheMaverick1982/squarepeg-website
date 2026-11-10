@@ -15,7 +15,8 @@
  *
  * SET IT UP
  *  1. Open the sheet. Extensions > Apps Script. Paste this over Code.gs.
- *  2. Project Settings > Script properties, add two:
+ *  2. Project Settings > Script properties, add two (three if the project is
+ *     standalone rather than opened from the sheet -- see book_() below):
  *       LAB_EXPORT_URL   https://<project>.supabase.co/functions/v1/lab-export
  *       LAB_EXPORT_KEY   the same string you set as LAB_EXPORT_KEY in Supabase
  *     They go here rather than in the code so the key is not in the file, and
@@ -57,6 +58,20 @@ var MINE = ['Picked', 'Picked by', 'Ran (month)', 'Notes'];
 var FIRST = ['Date', 'Called', 'Built by'];
 var SYNC = 'Sync';
 
+/* Normally this script is bound to the sheet (Extensions > Apps Script) and
+   getActiveSpreadsheet() is the sheet it lives in. Google's bootstrap for a
+   bound script goes through script.google.com/accounts, and on an account
+   whose multi-login chain is broken that hop dies with "Sorry, unable to open
+   the file at this time" -- which is where this one ended up. A standalone
+   project opens fine; it just has no sheet of its own, so it is told which one
+   to use with a SHEET_ID script property (the long string in the sheet's URL
+   between /d/ and /edit). Set it and the script is standalone; leave it off
+   and it behaves exactly as a bound script. Same file either way. */
+function book_() {
+  var id = PropertiesService.getScriptProperties().getProperty('SHEET_ID');
+  return id ? SpreadsheetApp.openById(id) : SpreadsheetApp.getActiveSpreadsheet();
+}
+
 /**
  * Run this once, before anything has been submitted, to lay out all five tabs
  * with their columns. Without it the tabs appear one at a time, as the first
@@ -64,7 +79,7 @@ var SYNC = 'Sync';
  * broken on day one.
  */
 function setUpTabs() {
-  var book = SpreadsheetApp.getActiveSpreadsheet();
+  var book = book_();
   Object.keys(TABS).forEach(function (kind) {
     if (book.getSheetByName(TABS[kind])) return;
     var sh = book.insertSheet(TABS[kind]);
@@ -87,7 +102,7 @@ function pullLabs() {
   var key = props.getProperty('LAB_EXPORT_KEY');
   if (!url || !key) throw new Error('Set LAB_EXPORT_URL and LAB_EXPORT_KEY in Script properties.');
 
-  var book = SpreadsheetApp.getActiveSpreadsheet();
+  var book = book_();
   var since = lastSeen_(book);
   var q = url + '?key=' + encodeURIComponent(key) +
           (since ? '&since=' + encodeURIComponent(since) : '');
