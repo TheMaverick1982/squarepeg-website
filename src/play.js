@@ -525,7 +525,7 @@
           // they have found the other benches. Offer them rather than hope.
           var here = form.closest(".lab-panel");
           var mine = here ? here.getAttribute("data-tab") : "";
-          var rest = $$(".lab-tab").filter(function (a) {
+          var rest = $$(".lab-tab", here || document).filter(function (a) {
             return a.getAttribute("href") !== "#" + mine;
           }).map(function (a) {
             return '<a class="lab-tab" href="' + a.getAttribute("href") + '">' +
@@ -590,7 +590,9 @@
       track("lab_bench", { kind: tab });
       // The tab row is above the panel, so land on it rather than leaving the
       // visitor halfway down the bench they just left.
-      var row = $(".lab-tabs");
+      var shown = null;
+      panels.forEach(function (el) { if (!el.hidden) shown = el; });
+      var row = shown && $(".lab-tabs", shown);
       if (row) row.scrollIntoView({ block: "start", behavior: "smooth" });
     });
   })();

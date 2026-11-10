@@ -485,8 +485,7 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 @media (max-width:959px){.two-col>.form{order:-1}}
 .form small{color:var(--smoke)}
 .two-col{display:grid;gap:clamp(32px,5vw,64px);align-items:start}
-@media (min-width:960px){.two-col{grid-template-columns:1fr 1fr}
-  .two-col--three{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(28px,3.4vw,48px)}}
+@media (min-width:960px){.two-col{grid-template-columns:1fr 1fr}}
 .checks{display:grid;gap:10px;margin:0;padding:0;list-style:none}
 .checks li{display:flex;gap:12px;align-items:start;font-weight:600}
 .checks li::before{content:"";width:12px;height:12px;background:var(--ember);flex:none;margin-top:7px}
@@ -1827,7 +1826,7 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
 /* The bench picker sits between the hero and the bench, so it takes a
    fraction of a section's padding rather than a section's worth twice
    over -- otherwise there is a screenful of nothing under the tabs. */
-.section--tabrow{padding-block:clamp(26px,3.4vw,40px);scroll-margin-top:84px}
+.section--tabrow{padding-block:clamp(26px,3.4vw,40px) 0;scroll-margin-top:84px}
 /* The picker has to read as a choice. A bare row of pills under a hero reads
    as page furniture and gets skipped -- people took the page for the Pizza
    Lab with some tabs on it. */

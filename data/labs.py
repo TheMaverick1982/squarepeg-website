@@ -45,13 +45,6 @@ HUB = {
     "lede": "Five benches, five things you can design out of what is actually "
             "in our kitchens and behind our bar. We read every entry, and the "
             "ones we pick go on the menu with your name beside them.",
-    "intro_h2": "No vote.",
-    "intro": [
-        "Nothing here is a contest. Nothing you build gets posted for other "
-        "people to pick over or vote on.",
-        "Everything on every list is something we already stock. That is the "
-        "whole constraint — build the best thing you can out of it.",
-    ],
 }
 
 # --------------------------------------------------------------- shared lists

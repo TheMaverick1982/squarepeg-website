@@ -55,6 +55,7 @@ var LABELS = {
 // columns, and a new question on a bench is inserted before them so that a
 // note never ends up against the wrong row.
 var MINE = ['Picked', 'Picked by', 'Ran (month)', 'Notes'];
+var PICKED = 'Picked';
 var FIRST = ['Date', 'Called', 'Built by'];
 var SYNC = 'Sync';
 
@@ -89,6 +90,7 @@ function setUpTabs() {
     sh.hideColumns(1);
     sh.autoResizeColumns(2, sh.getLastColumn() - 1);
   });
+  installEditTrigger_();
   // The blank one Google starts every new spreadsheet with.
   var first = book.getSheetByName('Sheet1');
   if (first && first.getLastRow() === 0 && book.getSheets().length > 1) {
@@ -186,9 +188,14 @@ function writeTab_(book, kind, entries) {
   });
   if (!rows.length) return;
 
-  sh.getRange(sh.getLastRow() + 1, 1, rows.length, head.length).setValues(rows);
+  var at = sh.getLastRow() + 1;
+  sh.getRange(at, 1, rows.length, head.length).setValues(rows);
   sh.getRange(2, head.indexOf('Date') + 1, sh.getLastRow() - 1, 1)
     .setNumberFormat('ddd d mmm yyyy');
+  // A real tickbox, not the word "yes". One click, and onLabEdit drops the row
+  // to the bottom so the top of the tab is only ever what still needs reading.
+  var pick = head.indexOf(PICKED);
+  if (pick !== -1) sh.getRange(at, pick + 1, rows.length, 1).insertCheckboxes();
   sh.autoResizeColumns(2, head.length - 1);
 }
 
@@ -214,4 +221,42 @@ function setLastSeen_(book, iso) {
   // pull asks the function for a `since` it cannot use.
   sh.getRange('B1').setNumberFormat('@').setValue(iso);
   sh.getRange('B2').setValue(new Date());
+}
+
+/* Ticking Picked sinks the row to the bottom of its tab, so the top of each
+   bench is always just the builds nobody has ruled on yet.
+
+   This has to be an INSTALLABLE trigger. A simple onEdit() only runs in a
+   script bound to the sheet, and this one is standalone (see book_()), so
+   nothing would ever fire. Installed once by setUpTabs, and re-running that
+   will not add a second one. */
+function installEditTrigger_() {
+  var already = ScriptApp.getProjectTriggers().some(function (t) {
+    return t.getHandlerFunction() === 'onLabEdit';
+  });
+  if (already) return;
+  ScriptApp.newTrigger('onLabEdit').forSpreadsheet(book_().getId()).onEdit().create();
+}
+
+function onLabEdit(e) {
+  try {
+    var sh = e.range.getSheet();
+    var mine = Object.keys(TABS).map(function (k) { return TABS[k]; });
+    if (mine.indexOf(sh.getName()) === -1) return;
+
+    var row = e.range.getRow();
+    if (row < 2) return;
+    var head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+    var col = head.indexOf(PICKED) + 1;
+    if (!col || e.range.getColumn() !== col) return;
+    if (sh.getRange(row, col).getValue() !== true) return;   // unticking leaves it put
+
+    var last = sh.getLastRow();
+    if (row >= last) return;
+    sh.moveRows(sh.getRange(row + ':' + row), last + 1);
+  } catch (err) {
+    // An edit handler that throws shows the editor a red banner on an
+    // unrelated keystroke. Log it and let them get on with it.
+    console.log('[labs] onLabEdit: ' + err);
+  }
 }

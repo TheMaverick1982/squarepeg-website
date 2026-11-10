@@ -3796,21 +3796,6 @@ T["labs"] = """
      hash (/play/labs/#bar), which is how a new one gets reviewed before it is
      listed. Panels after the first ship hidden so there is no flash of all
      five while the page settles. -->
-{% if labs_live|length > 1 %}
-<section class="section section--tabrow section--paper">
-  <div class="wrap">
-    <div class="lab-pick">
-      <span class="eyebrow">{{ labs_live|length }} benches, not one</span>
-      <p>{{ labs_live|map(attribute='short')|list|join(', ') }} &mdash; every one of them is a
-        thing you can put on our menu. Pick a bench.</p>
-    </div>
-    <nav class="lab-tabs" aria-label="Square Peg Labs">{% for o in labs_live %}
-      <a class="lab-tab" href="#{{ o.tab }}">{{ o.short }}</a>{% endfor %}
-    </nav>
-  </div>
-</section>
-{% endif %}
-
 {% for lab in labs_all %}
 <div class="lab-panel" data-tab="{{ lab.tab }}"{% if not loop.first %} hidden{% endif %}>
 
@@ -3826,6 +3811,21 @@ T["labs"] = """
     </ol>
   </div>
 </section>
+
+{% if labs_live|length > 1 %}
+<section class="section section--tabrow section--paper">
+  <div class="wrap">
+    <div class="lab-pick">
+      <span class="eyebrow">{{ labs_live|length }} benches, not one</span>
+      <p>{{ labs_live|map(attribute='short')|list|join(', ') }} &mdash; every one of them is a
+        thing you can put on our menu. Pick a bench.</p>
+    </div>
+    <nav class="lab-tabs" aria-label="Square Peg Labs">{% for o in labs_live %}
+      <a class="lab-tab" href="#{{ o.tab }}">{{ o.short }}</a>{% endfor %}
+    </nav>
+  </div>
+</section>
+{% endif %}
 
 <section class="section section--paper">
   <div class="wrap">
@@ -3878,16 +3878,8 @@ T["labs"] = """
   </div>
 </section>
 
-<!-- How it works used to sit alone in a section of its own under this row,
-     which left a column of text against half a screen of nothing. It is the
-     same for every bench, so it rides along here as the first column. -->
 <section class="section">
-  <div class="wrap two-col two-col--three">
-    <div class="stack">
-      <span class="eyebrow">How it works</span>
-      <h2>{{ hub.intro_h2 }}</h2>
-      {% for para in hub.intro %}<p class="prose">{{ para }}</p>{% endfor %}
-    </div>
+  <div class="wrap two-col">
     <div class="stack">
       <span class="eyebrow">The rules</span>
       <h2>Short list.</h2>
@@ -3895,7 +3887,7 @@ T["labs"] = """
     </div>
     <div class="stack">
       <span class="eyebrow">What happens next</span>
-      <h2>We read them.</h2>
+      <h2>Then we go and read them.</h2>
       {% for para in lab.next %}<p class="prose">{{ para }}</p>{% endfor %}
     </div>
   </div>
