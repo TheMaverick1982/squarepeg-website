@@ -485,7 +485,8 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
 @media (max-width:959px){.two-col>.form{order:-1}}
 .form small{color:var(--smoke)}
 .two-col{display:grid;gap:clamp(32px,5vw,64px);align-items:start}
-@media (min-width:960px){.two-col{grid-template-columns:1fr 1fr}}
+@media (min-width:960px){.two-col{grid-template-columns:1fr 1fr}
+  .two-col--three{grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(28px,3.4vw,48px)}}
 .checks{display:grid;gap:10px;margin:0;padding:0;list-style:none}
 .checks li{display:flex;gap:12px;align-items:start;font-weight:600}
 .checks li::before{content:"";width:12px;height:12px;background:var(--ember);flex:none;margin-top:7px}

@@ -3872,8 +3872,16 @@ T["labs"] = """
   </div>
 </section>
 
+<!-- How it works used to sit alone in a section of its own under this row,
+     which left a column of text against half a screen of nothing. It is the
+     same for every bench, so it rides along here as the first column. -->
 <section class="section">
-  <div class="wrap two-col">
+  <div class="wrap two-col two-col--three">
+    <div class="stack">
+      <span class="eyebrow">How it works</span>
+      <h2>{{ hub.intro_h2 }}</h2>
+      {% for para in hub.intro %}<p class="prose">{{ para }}</p>{% endfor %}
+    </div>
     <div class="stack">
       <span class="eyebrow">The rules</span>
       <h2>Short list.</h2>
@@ -3881,7 +3889,7 @@ T["labs"] = """
     </div>
     <div class="stack">
       <span class="eyebrow">What happens next</span>
-      <h2>Then we go and read them.</h2>
+      <h2>We read them.</h2>
       {% for para in lab.next %}<p class="prose">{{ para }}</p>{% endfor %}
     </div>
   </div>
@@ -3889,13 +3897,6 @@ T["labs"] = """
 
 </div>
 {% endfor %}
-
-<section class="section">
-  <div class="wrap stack">
-    <span class="eyebrow">How it works</span>
-    {% for para in hub.intro %}<p class="prose">{{ para }}</p>{% endfor %}
-  </div>
-</section>
 """
 
 T["halloween"] = """
