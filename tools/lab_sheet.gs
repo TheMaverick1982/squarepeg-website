@@ -21,7 +21,9 @@
  *       LAB_EXPORT_KEY   the same string you set as LAB_EXPORT_KEY in Supabase
  *     They go here rather than in the code so the key is not in the file, and
  *     not in anyone's screenshot of it.
- *  3. Run `pullLabs` once by hand and approve the permission prompt.
+ *  3. Run `setUpTabs`, then `pullLabs`, approving the permission prompt.
+ *     setUpTabs is safe to re-run: it adds whatever is missing, including
+ *     the edit trigger and tickboxes on rows pulled before it existed.
  *  4. Triggers (the clock icon) > Add trigger > pullLabs > Time-driven >
  *     Day timer > whatever hour suits. Hourly is fine too; it is a small call.
  *
@@ -82,20 +84,43 @@ function book_() {
 function setUpTabs() {
   var book = book_();
   Object.keys(TABS).forEach(function (kind) {
-    if (book.getSheetByName(TABS[kind])) return;
-    var sh = book.insertSheet(TABS[kind]);
-    sh.appendRow(['Id'].concat(FIRST, LABELS[kind] || [], MINE));
-    sh.getRange(1, 1, 1, sh.getLastColumn()).setFontWeight('bold');
-    sh.setFrozenRows(1);
-    sh.hideColumns(1);
-    sh.autoResizeColumns(2, sh.getLastColumn() - 1);
+    var sh = book.getSheetByName(TABS[kind]);
+    if (!sh) {
+      sh = book.insertSheet(TABS[kind]);
+      sh.appendRow(['Id'].concat(FIRST, LABELS[kind] || [], MINE));
+      sh.getRange(1, 1, 1, sh.getLastColumn()).setFontWeight('bold');
+      sh.setFrozenRows(1);
+      sh.hideColumns(1);
+      sh.autoResizeColumns(2, sh.getLastColumn() - 1);
+    }
+    // Rows pulled before the tickbox existed have an empty text cell where the
+    // box should be. Re-running this is how they get one, so everything below
+    // is safe on a tab that is already set up.
+    ensurePicked_(sh);
   });
+  // Sync is bookkeeping, not a bench: it belongs after them, wherever it
+  // happened to get created.
+  var sync = book.getSheetByName(SYNC);
+  if (sync) {
+    book.setActiveSheet(sync);
+    book.moveActiveSheet(book.getSheets().length);
+    var first = book.getSheetByName(TABS[Object.keys(TABS)[0]]);
+    if (first) book.setActiveSheet(first);
+  }
   installEditTrigger_();
   // The blank one Google starts every new spreadsheet with.
   var first = book.getSheetByName('Sheet1');
   if (first && first.getLastRow() === 0 && book.getSheets().length > 1) {
     book.deleteSheet(first);
   }
+}
+
+function ensurePicked_(sh) {
+  var head = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  var col = head.indexOf(PICKED) + 1;
+  var n = sh.getLastRow() - 1;
+  if (!col || n < 1) return;
+  sh.getRange(2, col, n, 1).insertCheckboxes();
 }
 
 function pullLabs() {
