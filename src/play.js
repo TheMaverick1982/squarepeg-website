@@ -520,9 +520,23 @@
           body: JSON.stringify(body)
         }).then(function (r) {
           if (!r.ok) throw new Error(r.status);
+          // Someone who has just built one is the likeliest person on the site
+          // to build another, and this is the only moment we know for certain
+          // they have found the other benches. Offer them rather than hope.
+          var here = form.closest(".lab-panel");
+          var mine = here ? here.getAttribute("data-tab") : "";
+          var rest = $$(".lab-tab").filter(function (a) {
+            return a.getAttribute("href") !== "#" + mine;
+          }).map(function (a) {
+            return '<a class="lab-tab" href="' + a.getAttribute("href") + '">' +
+              esc((a.textContent || "").trim()) + "</a>";
+          }).join("");
           form.innerHTML = '<div class="lab-done"><span class="wheel-win-eyebrow">Built it</span>' +
             "<b>We got it.</b><span>We will check out your submission and each month our " +
-            "kitchen will pick a new one to feature. Thanks!</span></div>";
+            "kitchen will pick a new one to feature. Thanks!</span>" +
+            (rest ? '<span class="lab-again">Now build one of these</span>' +
+                    '<nav class="lab-tabs">' + rest + "</nav>" : "") +
+            "</div>";
           track("lab_submit", { kind: spec.kind || "pizza-lab" });
         }).catch(function (e) {
           go.disabled = false;

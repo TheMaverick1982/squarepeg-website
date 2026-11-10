@@ -3797,8 +3797,13 @@ T["labs"] = """
      listed. Panels after the first ship hidden so there is no flash of all
      five while the page settles. -->
 {% if labs_live|length > 1 %}
-<section class="section section--tabrow">
+<section class="section section--tabrow section--paper">
   <div class="wrap">
+    <div class="lab-pick">
+      <span class="eyebrow">{{ labs_live|length }} benches, not one</span>
+      <p>{{ labs_live|map(attribute='short')|list|join(', ') }} &mdash; every one of them is a
+        thing you can put on our menu. Pick a bench.</p>
+    </div>
     <nav class="lab-tabs" aria-label="Square Peg Labs">{% for o in labs_live %}
       <a class="lab-tab" href="#{{ o.tab }}">{{ o.short }}</a>{% endfor %}
     </nav>
