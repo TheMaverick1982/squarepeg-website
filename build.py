@@ -3835,7 +3835,7 @@ T["lab"] = """
         {%- if g.sections %}{% for sub, opts in g.sections %}
         <p class="lab-sub">{{ sub }}</p>
         <div class="lab-chips">{% for x in opts %}
-          <label class="lab-chip"><input type="radio" name="{{ g.key }}" value="{{ x }}"><span>{{ x }}</span></label>{% endfor %}
+          <label class="lab-chip"><input type="{{ 'checkbox' if g.pick == 'many' else 'radio' }}" name="{{ g.key }}" value="{{ x }}"{% if g.default and x == g.default %} checked{% endif %}><span>{{ x }}</span></label>{% endfor %}
         </div>{% endfor %}
         {%- else %}
         <div class="lab-chips">{% for x in g.options %}

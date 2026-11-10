@@ -42,7 +42,7 @@ HUB = {
     "slug": "labs",
     "eyebrow": "Square Peg Labs",
     "h1": "You build it. We put it on the menu.",
-    "lede": "Four benches, four things you can design out of what is actually "
+    "lede": "Five benches, five things you can design out of what is actually "
             "in our kitchens and behind our bar. We read every entry, and the "
             "ones we pick go on the menu with your name beside them.",
     "intro": [
@@ -123,6 +123,81 @@ PIZZA = _lab(
     art="margherita-board",
     alt="A wood-fired pizza on the board at Square Peg")
 
+# =============================================================== THE PASTA LAB
+# Brian's list, 11.10.26. Three judgement calls, all of them visible here
+# rather than buried:
+#
+#   * His add-ins had "roasted peppers" and "Roasted Red Peppers" in the same
+#     list. A radio or checkbox group cannot carry the same thing twice under
+#     two spellings, and the line would not know which one an entry meant, so
+#     it is one chip.
+#   * Parmesan, chili oil and red pepper flakes were in BOTH the add-ins and
+#     the finishes. They are finishes -- they go on at the pass -- so that is
+#     the only group they appear in. Otherwise a build reads "...chili oil,
+#     finished with chili oil", which is not a thing anyone would order.
+#   * The add-ins run to nineteen chips, half of them cheese, so they are
+#     sectioned the way the bar's bottles are.
+#
+# Nothing is pre-checked on the shape, the sauce or the protein. Whatever is
+# checked when the page loads is what every half-interested visitor sends, and
+# a pasta entry is worth nothing if it only tells us that spaghetti was first.
+_PASTA_ADD = [
+    ("From the kitchen",
+     ["Arugula", "Basil", "Black olives", "Roasted fennel",
+      "Caramelized onions", "Fig jam", "Garlic", "Hot cherry peppers",
+      "Mushrooms", "Red onion", "Roasted red peppers", "Tomatoes"]),
+    ("Cheese",
+     ["Ricotta", "Fontina", "Fresh mozzarella", "Shredded mozzarella",
+      "Goat cheese"]),
+]
+
+NONE_FINISH = "Nothing \u2014 leave it alone"
+
+PASTA = _lab(
+    slug="pasta-lab", placeholder="The Midnight Rigatoni",
+    name="The Pasta Lab", short="Pasta", unit="pasta",
+    h1="The next Square Peg pasta could be yours.",
+    lede="Three shapes, four sauces and everything our kitchens keep on the "
+         "line. Build the plate you would actually order and give it a name.",
+    groups=[
+        {"key": "base", "legend": "Pasta", "pick": "one", "required": True,
+         "options": ["Spaghetti", "Rigatoni", "Gluten-free penne"]},
+        {"key": "sauce", "legend": "Sauce", "pick": "one", "required": True,
+         "options": ["Marinara", "Bolognese", "Parm cream", "Olive oil"]},
+        {"key": "protein", "legend": "Protein", "pick": "one", "required": True,
+         "options": ["Roasted chicken", "Fried chicken", "Meatballs",
+                     "Sausage", "Salmon", "Prosciutto", "Bacon", "Pepperoni",
+                     "Anchovies", NONE_PROTEIN],
+         "silent": NONE_PROTEIN},
+        {"key": "topping", "legend": "Add-ins", "pick": "many", "max": 4,
+         "optional": True, "sections": _PASTA_ADD},
+        {"key": "finish", "legend": "Finish", "pick": "one",
+         "prefix": "finished with",
+         "options": ["Parmesan", "Hot honey", "Chili oil", "Balsamic glaze",
+                     "Red pepper flakes", NONE_FINISH],
+         "default": NONE_FINISH, "silent": NONE_FINISH},
+    ],
+    how=[
+        ("lab_build", "Build it",
+         "Pick a shape, a sauce, a protein, up to four add-ins and a finish. "
+         "Everything on the list is something our kitchens already stock."),
+        ("lab_name", "Name it",
+         "This is the part people remember. Keep it clean \u2014 a person "
+         "reads every entry."),
+        ("lab_win", "It goes on the menu",
+         "The one we choose runs as a special across all ten Square Pegs, "
+         "credited to whoever built it."),
+    ],
+    rules=["Up to four add-ins. Past that the sauce stops being the point.",
+           "One entry per person a month, so everyone gets a fair shot."],
+    nxt=["Entries come straight to our kitchen team.",
+         "We go through them and pick the one we most want to make. It runs "
+         "as a special at all ten Square Pegs.",
+         "If we picked yours, you\u2019ll see it on the menu with your first "
+         "name and last initial beside it."],
+    art="lto-eggplant",
+    alt="Eggplant fries with marinara at Square Peg")
+
 # ============================================================ THE SANDWICH LAB
 SANDWICH = _lab(
     slug="sandwich-lab", placeholder="The Shelton Slammer", name="The Sandwich Lab", short="Sandwich",
@@ -165,7 +240,7 @@ SANDWICH = _lab(
          "as a special at all ten Square Pegs.",
          "If we picked yours, you’ll see it on the menu with your first "
          "name and last initial beside it."],
-    art="catering-spread",
+    art="catering-table",
     alt="A spread of food on the table at Square Peg")
 
 # =============================================================== THE SALAD LAB
@@ -309,7 +384,7 @@ BAR = _lab(
     alt="Cocktails on the bar at Square Peg")
 
 # Order matters: it is the order of the cards on the hub and of the tabs.
-BUILDERS = [PIZZA, SANDWICH, SALAD, BAR]
+BUILDERS = [PIZZA, PASTA, SANDWICH, SALAD, BAR]
 BY_SLUG = {b["slug"]: b for b in BUILDERS}
 
 

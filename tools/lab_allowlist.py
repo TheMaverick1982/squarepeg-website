@@ -15,7 +15,6 @@ Run from the site root.
 """
 import json
 import sys
-import textwrap
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "data"))
@@ -39,16 +38,24 @@ def main():
             continue
         print('  "%s": {' % b["slug"])
         for field, pick, mx, opts in fields(b):
-            body = ", ".join(json.dumps(o, ensure_ascii=False) for o in opts)
-            line = '    %s: [%s],' % (json.dumps(field), body)
+            items = [json.dumps(o, ensure_ascii=False) for o in opts]
+            line = '    %s: [%s],' % (json.dumps(field), ", ".join(items))
             if len(line) <= 96:
                 print(line)
-            else:
-                print('    %s: [' % json.dumps(field))
-                for w in textwrap.wrap(body, 88, initial_indent="      ",
-                                       subsequent_indent="      "):
-                    print(w)
-                print("    ],")
+                continue
+            # Wrap BETWEEN items, never inside one. textwrap breaks on any
+            # space, which splits "Fig jam" across two lines and produces
+            # TypeScript that does not compile.
+            print('    %s: [' % json.dumps(field))
+            row = []
+            for it in items:
+                if row and len("      " + ", ".join(row + [it])) > 92:
+                    print("      " + ", ".join(row) + ",")
+                    row = []
+                row.append(it)
+            if row:
+                print("      " + ", ".join(row))
+            print("    ],")
         print("  },")
     print("};")
     print()
