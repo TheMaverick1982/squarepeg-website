@@ -3923,9 +3923,6 @@ T["partners"] = """
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Partners</span></nav>
     <h1><span class="eyebrow h1-eyebrow"><span>Local partners</span></span>The people down the road from us.</h1>
-    <p class="lede">Every Square Peg pairs up with a couple of nearby businesses. No money changes
-      hands either way: their promo runs on our screens, we turn up in front of their people, and
-      both of us get in front of a few hundred neighbours we would not have reached on our own.</p>
   </div>
 </section>
 
