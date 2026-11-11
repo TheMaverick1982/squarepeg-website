@@ -3954,22 +3954,39 @@ T["partners"] = """
   </div>
 </section>
 
-<section class="section">
+<section class="section" id="join">
   <div class="wrap two-col">
     <div class="stack">
-      <span class="eyebrow">How it works</span>
-      <h2>Two each, no invoices.</h2>
-      <p class="prose">Each restaurant partners with up to two nearby businesses that do not
-        compete with us. We run their promotion on the screens in our dining room; they put us
-        in front of their own customers. Nobody bills anybody.</p>
-    </div>
-    <div class="stack">
       <span class="eyebrow">Run a business near one of ours?</span>
-      <h2>Come and talk to us.</h2>
-      <p class="prose">Ask for the manager at the Square Peg nearest you, or send us a note and
-        we will pass it to the right store.</p>
-      <p class="btn-row"><a class="btn" href="{{ u('/contact/') }}">{{ icons.arrow|safe }}Get in touch</a></p>
+      <h2>Let&rsquo;s trade.</h2>
+      <p class="prose">Tell us where you are and what you do. It goes straight to the person who
+        sets these up, not to a general inbox.</p>
     </div>
+    {# Same pipeline as the contact form -- same table, same notifier. The topic
+       is fixed in a hidden field so these land on Brian's desk through
+       BY_TOPIC rather than needing a second form and a second address. No
+       address is printed on the page: it would be scraped inside a week. #}
+    <form class="form" name="contact" method="POST" action="{{ u('/thanks/') }}" data-supabase="contact_messages" netlify-honeypot="company_website">
+      <input type="hidden" name="form-name" value="contact">
+      <div class="hp" aria-hidden="true"><label>Leave this field empty<input name="company_website" type="text" tabindex="-1" autocomplete="off"></label></div>
+      <input type="hidden" name="form_loaded" value="">
+      <input type="hidden" name="event_type" value="Cross-promotion partner">
+      <h2>Cross-promote with us</h2>
+      <div class="field-row field-row--pair">
+        <div class="field"><label for="pt-first">First name</label><input id="pt-first" name="first_name" autocomplete="given-name" maxlength="80" required></div>
+        <div class="field"><label for="pt-last">Last name</label><input id="pt-last" name="last_name" autocomplete="family-name" maxlength="80"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="pt-email">Email</label><input id="pt-email" type="email" name="email" autocomplete="email" required></div>
+        <div class="field"><label for="pt-phone">Phone</label><input id="pt-phone" type="tel" name="phone" autocomplete="tel"></div>
+      </div>
+      <div class="field"><label for="pt-loc">Which Square Peg are you near?</label><select id="pt-loc" name="location" required><option value="">Choose&hellip;</option>{% for l in locs %}<option value="{{ l.name }}">{{ l.name }}</option>{% endfor %}</select></div>
+      <div class="field"><label for="pt-notes">Your business</label><textarea id="pt-notes" name="notes" maxlength="3000" required placeholder="What you do, your website, and what you could put in front of your customers."></textarea></div>
+      {% if site.turnstile_site_key and not preview %}<div class="cf-turnstile" data-sitekey="{{ site.turnstile_site_key }}" data-theme="light" data-size="flexible"></div>
+      <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endif %}
+      <button class="btn btn--block" type="submit" data-track="lead_submit" data-src="partners">Send it over</button>
+      <small>Two partners per restaurant, so we do not take everyone &mdash; but we read every one.</small>
+    </form>
   </div>
 </section>
 """

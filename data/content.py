@@ -1047,6 +1047,10 @@ CONTACT_TOPICS = [
     "General question", "Feedback about a visit", "Catering", "Large party reservation", "Food truck",
     "Kids pizza-making class", "Team night",
     "Fundraiser", "Gift cards", "Rewards / app help", "Jobs", "Media or partnership",
+    # Routed to Brian in notify-contact's BY_TOPIC. The form at the foot of
+    # /partners/ sends this same value in a hidden field, so both doors lead
+    # to the same place.
+    "Cross-promotion partner",
 ]
 
 # ---------------------------------------------------------------------------
