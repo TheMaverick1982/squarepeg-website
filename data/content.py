@@ -1290,6 +1290,58 @@ EVENTS = {
 #
 #   (ISO date, what it is, time)
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Local partners — the cross-promotion program. Two per location, no money
+# either way: we run their promo on our screens, they put us in front of their
+# people. The website end of it is a real link out to them from /partners/ and
+# a logo strip at the bottom of their store's page.
+#
+# `logo` names a file in assets/img-src (partner-<slug>.webp or .png). Leave it
+# out, or drop the file in later, and the card sets the name in type instead --
+# which looks deliberate rather than broken, so a partner can go live the day
+# they are agreed rather than the day their artwork turns up.
+#
+# `blurb` is for /partners/ only. The store page is logos and nothing else.
+PARTNERS = {
+    "delray-beach-fl": [
+        {
+            "name": "German Auto World",
+            "url": "https://germanautoworld.com/",
+            "logo": "partner-german-auto-world",
+            "what": "German car repair & restoration",
+            "where": "Delray Beach, FL",
+            "blurb": "Family-owned German car repair and restoration, and more than "
+                     "twenty years of it. An authorized Bosch service center, with a "
+                     "36-point inspection that comes with the estimate.",
+        },
+        {
+            # Boca Raton rather than Delray itself -- about fifteen minutes down
+            # Federal Highway, and they deliver into Delray.
+            "name": "Exceptional Flowers & Gifts",
+            "url": "https://exceptionalflowersgifts.net/",
+            "logo": "partner-exceptional-flowers",
+            "what": "Florist",
+            "where": "Boca Raton, FL",
+            "blurb": "A family-run florist going since 1992. Arrangements, plants and "
+                     "gifts, with same-day delivery across Boca Raton and Highland "
+                     "Beach.",
+        },
+    ],
+    "glastonbury-ct": [
+        {
+            "name": "Pride Sports League",
+            "url": "https://joinpridesports.com/",
+            "logo": "partner-pride-sports",
+            "what": "Recreational sports leagues",
+            "where": "Connecticut",
+            "blurb": "Connecticut\u2019s recreational multi-sport league for the "
+                     "LGBTQ+ community and allies, run as a program of Third Place "
+                     "Social with Circle Care Center. Leagues and social nights built "
+                     "around turning up and meeting people.",
+        },
+    ],
+}
+
 ENT_DATES = {
     "delray-beach-fl": [
         ("2026-10-03", "Karaoke with Trish", "6–10pm"),

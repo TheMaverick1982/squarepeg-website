@@ -57,9 +57,9 @@ STEPS = [
      "the order is in. To-go: ask at pickup, or on the phone before they arrive.",
      "Your weekly loyalty report. Come to the call with the numbers."),
     ("Local outreach, on foot",
-     "Walk into local businesses and organisations with tokens, bounceback cards, "
+     "Walk into local businesses and organizations with tokens, bounceback cards, "
      "flyers and pizza. Every new contact and follow-up note goes into Wingman.",
-     "Toast comp report for your tokens — keep a record of which colour went to "
+     "Toast comp report for your tokens — keep a record of which color went to "
      "which business — and for bouncebacks. Plus what you entered in Wingman."),
     ("Emails & follow-ups",
      "Work the leads and contacts you already have: past catering customers, "

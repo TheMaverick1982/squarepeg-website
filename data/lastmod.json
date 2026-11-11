@@ -64,44 +64,44 @@
   "hash": "2b2c8e0cf389cabb17e620649cf0fc60"
  },
  "/locations/berlin-ct/": {
-  "date": "2026-11-10",
-  "hash": "b5fd27c2a9ba9c957d8bfdcd6295b977"
+  "date": "2026-11-11",
+  "hash": "82e44bd6cbabe59858f10738677d449e"
  },
  "/locations/bolton-ct/": {
-  "date": "2026-11-10",
-  "hash": "bca967f055371ade78883729430e967f"
+  "date": "2026-11-11",
+  "hash": "72ea7414026d49fb9b5963d43c399020"
  },
  "/locations/delray-beach-fl/": {
-  "date": "2026-11-10",
-  "hash": "2f9b4a540c4d71fccddebde5b4f4f6de"
+  "date": "2026-11-11",
+  "hash": "8d9606a72ae2a3e94d896de57a64cbe3"
  },
  "/locations/east-hartford-ct/": {
-  "date": "2026-11-10",
-  "hash": "aa971d79b5118de9b160b44f5d6f7cd3"
+  "date": "2026-11-11",
+  "hash": "fc84060089418bd00c93e35a3b08b105"
  },
  "/locations/glastonbury-ct/": {
-  "date": "2026-11-10",
-  "hash": "e82eca31a5402b62a81337630b26a926"
+  "date": "2026-11-11",
+  "hash": "cf4eef579cc2e86bf4540b2a3ed40cad"
  },
  "/locations/plainville-ct/": {
-  "date": "2026-11-10",
-  "hash": "bb09c730e4d0a3c3f54a1e475b1ac813"
+  "date": "2026-11-11",
+  "hash": "70f37b68b1f834efdac4d8c12eee0eeb"
  },
  "/locations/preston-ct/": {
-  "date": "2026-11-10",
-  "hash": "24851d9ba21450ec93528ccda8adc37b"
+  "date": "2026-11-11",
+  "hash": "330843f4459cb47442658ac359114209"
  },
  "/locations/shelton-ct/": {
-  "date": "2026-11-10",
-  "hash": "c408621ff4bbdfb42009581573a86d42"
+  "date": "2026-11-11",
+  "hash": "91063bfff8581139ed31225654e6fe11"
  },
  "/locations/storrs-ct/": {
-  "date": "2026-11-10",
-  "hash": "288d4e96e1dfd31531275f41e9c94d85"
+  "date": "2026-11-11",
+  "hash": "a51fb7089227eecfc870bd1e5f877e10"
  },
  "/locations/vernon-ct/": {
-  "date": "2026-11-10",
-  "hash": "dcc99ad891488a2a518d524947783f9f"
+  "date": "2026-11-11",
+  "hash": "2615901d9fb60042189909f288a110cf"
  },
  "/monthly-specials/": {
   "date": "2026-11-10",
@@ -114,6 +114,10 @@
  "/pairing/": {
   "date": "2026-11-10",
   "hash": "f91b66b5d2a2e3ec88f71c67115de0f2"
+ },
+ "/partners/": {
+  "date": "2026-11-11",
+  "hash": "2ec83ab4a7287d3234bf46d43da5e8ba"
  },
  "/pizza-calculator/": {
   "date": "2026-11-10",

@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, FRIENDSGIVING, VETERANS, PROMOS, MENU, GAME_DAY, EVENTS, HUSKY_CONTEST, ENT_DATES, LTO, LTO_MONTHS, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
+from content import PARTNERS, HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, FRIENDSGIVING, VETERANS, PROMOS, MENU, GAME_DAY, EVENTS, HUSKY_CONTEST, ENT_DATES, LTO, LTO_MONTHS, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 from labs import BUILDERS, HUB as LAB_HUB, spec as lab_spec  # noqa: E402
 
@@ -482,6 +482,12 @@ def logo_img(sizes, width, widths=(160, 280, 360, 480), cls="", lazy=False, alt=
     out.append(f'<img{c} src="{fallback}" width="{width}" height="{h}" alt="{html.escape(alt)}"{ld}>')
     out.append("</picture>")
     return "".join(out)
+
+
+def has_img(name):
+    """Is there really an image by this name? IMG_META is filled by the image
+    build, so this is only true once the file exists in assets/img-src."""
+    return bool(name) and name in IMG_META
 
 
 def img_url(name, width=1200):
@@ -1474,6 +1480,20 @@ T["location"] = """
     <div class="faq">{% for q, a in faqs %}<details><summary>{{ q }}</summary><p>{{ a }}</p></details>{% endfor %}</div>
   </div>
 </section>
+
+{% if partners %}
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><span class="eyebrow">In the neighborhood</span><h2>Our {{ l.city }} partners</h2></div>
+    <div class="pt-strip">{% for p in partners %}
+      <a class="pt-logo" href="{{ p.url }}" rel="noopener"{{ ext|safe }} data-track="partner_click" data-src="{{ l.slug }}" aria-label="{{ p.name }} — opens their website">
+        {% if has_img(p.logo) %}{{ img(p.logo, p.name, sizes='220px')|safe }}{% else %}<span class="pt-wordmark">{{ p.name }}</span>{% endif %}
+      </a>{% endfor %}
+    </div>
+    <p class="btn-row"><a class="btn btn--sm btn--line" href="{{ u('/partners/') }}">{{ icons.arrow|safe }}All our local partners</a></p>
+  </div>
+</section>
+{% endif %}
 
 <section class="section section--dark on-dark">
   <div class="wrap">
@@ -3897,6 +3917,66 @@ T["labs"] = """
 {% endfor %}
 """
 
+T["partners"] = """
+<section class="page-head on-dark">
+  {{ img('sp-hero-board', 'Square Peg pizzas on the board', eager=True, cls='bg')|safe }}
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ u('/') }}">Home</a><span aria-hidden="true">/</span><span>Partners</span></nav>
+    <h1><span class="eyebrow h1-eyebrow"><span>Local partners</span></span>The people down the road from us.</h1>
+    <p class="lede">Every Square Peg pairs up with a couple of nearby businesses. No money changes
+      hands either way: their promo runs on our screens, we turn up in front of their people, and
+      both of us get in front of a few hundred neighbours we would not have reached on our own.</p>
+  </div>
+</section>
+
+<section class="section section--paper">
+  <div class="wrap">
+    {% for l in locs %}{% if pt.get(l.slug) %}
+    <div class="pt-block">
+      <div class="section-head">
+        <span class="eyebrow">{{ l.city }}, {{ l.state }}</span>
+        <h2>Square Peg {{ l.short or l.name }}</h2>
+      </div>
+      <div class="pt-grid">{% for p in pt[l.slug] %}
+        <article class="pt-card">
+          {# With no logo file yet the tile would just repeat the heading under
+             it, so the card drops the tile rather than saying the name twice.
+             The strip on the store page keeps its wordmark tile -- there is no
+             heading there to repeat. #}
+          {% if has_img(p.logo) %}<a class="pt-card-logo" href="{{ p.url }}" rel="noopener"{{ ext|safe }} data-track="partner_click" data-src="{{ l.slug }}-partners" aria-label="{{ p.name }} — opens their website">{{ img(p.logo, p.name, sizes='260px')|safe }}</a>{% endif %}
+          <div class="pt-card-body">
+            <h3>{{ p.name }}</h3>
+            <p class="note">{{ p.what }} · {{ p.where }}</p>
+            <p class="prose">{{ p.blurb }}</p>
+            <p class="btn-row"><a class="link-arrow" href="{{ p.url }}" rel="noopener"{{ ext|safe }} data-track="partner_click" data-src="{{ l.slug }}-partners">Visit {{ p.name }} →</a></p>
+          </div>
+        </article>{% endfor %}
+      </div>
+    </div>
+    {% endif %}{% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap two-col">
+    <div class="stack">
+      <span class="eyebrow">How it works</span>
+      <h2>Two each, no invoices.</h2>
+      <p class="prose">Each restaurant partners with up to two nearby businesses that do not
+        compete with us. We run their promotion on the screens in our dining room; they put us
+        in front of their own customers. Nobody bills anybody.</p>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Run a business near one of ours?</span>
+      <h2>Come and talk to us.</h2>
+      <p class="prose">Ask for the manager at the Square Peg nearest you, or send us a note and
+        we will pass it to the right store.</p>
+      <p class="btn-row"><a class="btn" href="{{ u('/contact/') }}">{{ icons.arrow|safe }}Get in touch</a></p>
+    </div>
+  </div>
+</section>
+"""
+
 T["halloween"] = """
 <section class="page-head on-dark hw-head">
   {{ img('oven-fire', 'Pizza in the wood-fired oven at Square Peg', eager=True, cls='bg')|safe }}
@@ -4549,7 +4629,7 @@ def main():
         site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in MORE_GROUPS], deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
-        ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, hwart=HW_ART, lunch_where=lunch_windows(),
+        has_img=has_img, ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, hwart=HW_ART, lunch_where=lunch_windows(),
         event_types=["Catering pickup", "Food truck", "Party at the restaurant", "Corporate / office", "School or team event", "Wedding or large event"],
         pagejs="", pagejsv=playjsv, play=PLAY, wheels=WHEELS, debates=DEBATES, conf=CONFESSIONS,
         lab=LAB, lab_live=LAB_LIVE, tft=TFT, app_perks=APP_PERKS, tallies=TALLIES,
@@ -4576,7 +4656,7 @@ def main():
         oven = "wood-fired " if l.get("wood", True) else ""
         desc = f"Italian restaurant and {oven}pizza at {l['street']}, {l['city']}, {l['state']}: pasta, chicken parm, wings and kids' meals. Hours, {l['phone']}, order online."
         pages.append((f"/locations/{l['slug']}/", title, desc, "location",
-                      dict(l=l, lm=loc_menu(l), hh=happy_hour(l), rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs, events=location_events(l), ent_dates=ent_dated(l),
+                      dict(l=l, lm=loc_menu(l), hh=happy_hour(l), rows=hours_rows(l), specials=special_rows(l), near=others, faqs=faqs, events=location_events(l), ent_dates=ent_dated(l), partners=PARTNERS.get(l['slug'], []),
                            local_page=next((t for t in TOWN_PAGES if t["store"] == l["slug"]), None)), schema, l["photo"], l["photo"]))
 
     menu_schema = {"@type": "Menu", "@id": abs_url("/our-menu/#menu"), "name": "Square Peg Pizzeria menu", "url": abs_url("/our-menu/"),
@@ -4826,6 +4906,12 @@ def main():
                   dict(pagejs="play.js", hub=LAB_HUB,
                        labs_all=_labs_all, labs_live=_labs_live), None,
                   "sp-pies-board", "sp-pies-board"))
+
+    pages.append(("/partners/", "Local Partners | Square Peg Pizzeria",
+                  "The nearby businesses each Square Peg Pizzeria partners with — we promote "
+                  "them on our screens, they put us in front of their people, and no money "
+                  "changes hands either way.", "partners",
+                  dict(pt=PARTNERS), None, "sp-hero-board", "sp-hero-board"))
 
     pages.append(("/thanks/", "Thank You | Square Peg Pizzeria", "Thanks for reaching out to Square Peg Pizzeria.", "simple",
                   dict(eyebrow="Request received", h1="Thank you!", lede="We got your request and will get back to you within one business day. While you wait, there’s pizza.", prose=""), None, None, None))
