@@ -48,10 +48,10 @@ RED = HexColor("#D50117")
 INK = HexColor("#1A1614")
 GREY = HexColor("#6F6761")
 PALE = HexColor("#CDE0D6")
+PALE_RED = HexColor("#FFD2D6")
 
 OFFER = "10% OFF"
 OFFER_SUB = "YOUR WHOLE CHECK"
-PARTNER = "Exceptional Flowers & Gifts"
 STORE = "Square Peg Delray Beach"
 STREET = "4957 W Atlantic Ave, Delray Beach, FL 33445"
 PHONE = "(561) 566-8828"
@@ -119,28 +119,29 @@ def qr_img(data, px=600):
 
 
 def front(c):
-    c.setFillColor(CREAM)
+    c.setFillColor(RED)
     c.rect(0, 0, W, H, fill=1, stroke=0)          # colour runs to the bleed
 
     # The dashed rule says "coupon" before anyone reads a word -- the same cue
     # the clip-out boxes use on the 8.5x11 promo flyer.
-    c.setStrokeColor(RED)
+    c.setStrokeColor(CREAM)
     c.setLineWidth(1)
     c.setDash(3, 2.4)
     c.rect(BLEED + 7, BLEED + 7, TRIM_W - 14, TRIM_H - 14, fill=0, stroke=1)
     c.setDash()
 
     cx = W / 2
-    logo(c, LOGO_DARK, cx, H - BLEED - SAFE - 24, 22, "c")
+    logo(c, pale_mark(), cx, H - BLEED - SAFE - 24, 22, "c")
 
     c.setFont("D", 54)
-    c.setFillColor(RED)
+    c.setFillColor(CREAM)
     c.drawString(cx - pdfmetrics.stringWidth(OFFER, "D", 54) / 2, H / 2 - 12, OFFER)
 
-    wide(c, OFFER_SUB, cx, H / 2 - 26, "B", 9, 2.2, GREEN, "c")
+    wide(c, OFFER_SUB, cx, H / 2 - 26, "B", 9, 2.2, PALE_RED, "c")
 
-    wide(c, "DINE IN  ·  " + STORE.upper(), cx, BLEED + SAFE + 13, "B", 6.6, 1.4, INK, "c")
-    wide(c, "COMPLIMENTS OF " + PARTNER.upper(), cx, BLEED + SAFE + 3, "M", 5.6, 1.1, GREY, "c")
+    # No partner name anywhere on it: one print run serves every partner, and
+    # a card that names one of them cannot be handed to the next.
+    wide(c, "DINE IN  ·  " + STORE.upper(), cx, BLEED + SAFE + 7, "B", 6.6, 1.4, CREAM, "c")
 
 
 def back(c):
@@ -199,7 +200,7 @@ def build(name, draw):
 
 if __name__ == "__main__":
     OUT.mkdir(exist_ok=True)
-    build("exceptional-flowers-front", front)
-    build("exceptional-flowers-back", back)
+    build("delray-front", front)
+    build("delray-back", back)
     print("   trim %.0f x %.0f pt, bleed %.1f pt, page %.0f x %.0f pt"
           % (TRIM_W, TRIM_H, BLEED, W, H))
