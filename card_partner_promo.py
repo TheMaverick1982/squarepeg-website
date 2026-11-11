@@ -114,38 +114,38 @@ def qr_img(data, px=600):
                       box_size=10, border=1)
     q.add_data(data)
     q.make(fit=True)
-    img = q.make_image(fill_color="#13503C", back_color="#FBF6EC").convert("RGB")
+    img = q.make_image(fill_color="#8E0710", back_color="#FBF6EC").convert("RGB")
     return img.resize((px, px)), q.modules_count
 
 
 def front(c):
-    c.setFillColor(RED)
+    c.setFillColor(CREAM)
     c.rect(0, 0, W, H, fill=1, stroke=0)          # colour runs to the bleed
 
     # The dashed rule says "coupon" before anyone reads a word -- the same cue
     # the clip-out boxes use on the 8.5x11 promo flyer.
-    c.setStrokeColor(CREAM)
+    c.setStrokeColor(RED)
     c.setLineWidth(1)
     c.setDash(3, 2.4)
     c.rect(BLEED + 7, BLEED + 7, TRIM_W - 14, TRIM_H - 14, fill=0, stroke=1)
     c.setDash()
 
     cx = W / 2
-    logo(c, pale_mark(), cx, H - BLEED - SAFE - 24, 22, "c")
+    logo(c, LOGO_DARK, cx, H - BLEED - SAFE - 24, 22, "c")
 
     c.setFont("D", 54)
-    c.setFillColor(CREAM)
+    c.setFillColor(RED)
     c.drawString(cx - pdfmetrics.stringWidth(OFFER, "D", 54) / 2, H / 2 - 12, OFFER)
 
-    wide(c, OFFER_SUB, cx, H / 2 - 26, "B", 9, 2.2, PALE_RED, "c")
+    wide(c, OFFER_SUB, cx, H / 2 - 26, "B", 9, 2.2, GREEN, "c")
 
     # No partner name anywhere on it: one print run serves every partner, and
     # a card that names one of them cannot be handed to the next.
-    wide(c, "DINE IN  ·  " + STORE.upper(), cx, BLEED + SAFE + 7, "B", 6.6, 1.4, CREAM, "c")
+    wide(c, "DINE IN  ·  " + STORE.upper(), cx, BLEED + SAFE + 7, "B", 6.6, 1.4, INK, "c")
 
 
 def back(c):
-    c.setFillColor(GREEN)
+    c.setFillColor(RED)
     c.rect(0, 0, W, H, fill=1, stroke=0)
 
     left = BLEED + SAFE + 4
@@ -161,7 +161,7 @@ def back(c):
     c.drawString(left, y - 1, PHONE)
 
     c.setFont("R", 4.9)
-    c.setFillColor(PALE)
+    c.setFillColor(PALE_RED)
     ty = BLEED + SAFE + 16
     for ln in wrap(TERMS, "R", 4.9, TRIM_W - 2 * SAFE - 76):
         c.drawString(left, ty, ln)
@@ -179,7 +179,7 @@ def back(c):
     mm = (qs / modules) * 25.4 / 72
     assert mm >= 0.40, f"QR module is {mm:.2f}mm — too small to scan reliably"
     # clear of the tile, which overhangs the code by 4pt
-    wide(c, "FIND US", qx + qs / 2, qy - 12, "B", 5.2, 1.1, PALE, "c")
+    wide(c, "FIND US", qx + qs / 2, qy - 12, "B", 5.2, 1.1, PALE_RED, "c")
 
 
 def build(name, draw):
