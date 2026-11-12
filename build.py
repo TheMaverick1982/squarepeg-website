@@ -2768,7 +2768,7 @@ GAME_DEAL_BAND = """
         </ul>
         <p class="note">{{ gdeal.deck }} {{ gdeal.fine }}</p>
       </div>
-      <div class="tb-price"><b>{{ gdeal.price }}</b><span>all three</span></div>
+      <div class="tb-price"><b>{{ gdeal.price }}</b><span>both</span></div>
     </div>
   </div>
 </section>{% endif %}

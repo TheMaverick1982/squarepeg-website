@@ -49,7 +49,7 @@ DECK = "The only 13 anybody has ever been happy about."
 # The deal itself, in two lines so each one can carry its own icon. This is
 # the part people are actually buying, so it is set large and in red -- it
 # should be the second thing read, after the number.
-WHAT = ["Small cheese pizza + 1 topping", "and a fountain drink"]
+WHAT = ["Small cheese pizza", "and a fountain drink"]
 FINE = "Dine-in only, during trivia and bingo."
 
 
@@ -229,7 +229,7 @@ def tv(c):
     box = price(c, x + 160, 104, 126)
 
     c.setFont("M", 30); c.setFillColor(SMOKE)
-    c.drawString(x + 160 + box / 2 + 34, 182, "all three, together")
+    c.drawString(x + 160 + box / 2 + 34, 182, "both, together")
     c.drawString(x + 160 + box / 2 + 34, 140, FINE)
 
     logo(c, LOGO_DARK, TW - 110, TH - 182, 96, anchor="r")
