@@ -2751,7 +2751,21 @@ GAME_DEAL_BAND = """
       <div class="tb-copy">
         <span class="eyebrow">{{ gdeal.eyebrow }}</span>
         <h2>{{ gdeal.head }}</h2>
-        <p class="tb-what">{{ gdeal.what }}</p>
+        <ul class="tb-what">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M12 22 L1 6 C5 1.5 19 1.5 23 6 Z"/>
+            <path fill="none" stroke="#f4f2f0" stroke-width="1.7" stroke-linecap="round" d="M3 5.6 C6.5 2.2 17.5 2.2 21 5.6"/>
+            <circle cx="8.2" cy="10.6" r="2.1" fill="#f4f2f0"/>
+            <circle cx="15.3" cy="10.1" r="1.9" fill="#f4f2f0"/>
+            <circle cx="11.8" cy="15.3" r="1.7" fill="#f4f2f0"/>
+          </svg>{{ gdeal.what[0] }}</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M13.2 5 L16.2 1"/>
+            <path fill="currentColor" d="M5.5 7 L18.5 7 L16.6 22 L7.4 22 Z"/>
+            <rect x="4.3" y="3.9" width="15.4" height="3.1" fill="currentColor"/>
+            <path fill="none" stroke="#f4f2f0" stroke-width="1.1" d="M5.7 6.5 L18.3 6.5"/>
+          </svg>{{ gdeal.what[1] }}</li>
+        </ul>
         <p class="note">{{ gdeal.deck }} {{ gdeal.fine }}</p>
       </div>
       <div class="tb-price"><b>{{ gdeal.price }}</b><span>all three</span></div>

@@ -1386,7 +1386,9 @@ GAME_DEAL = {
     "eyebrow": "Trivia & bingo nights",
     "head": "The answer is 13.",
     "deck": "The only 13 anybody has ever been happy about.",
-    "what": "A small cheese pizza, one topping of your choice, and a fountain drink.",
+    # Two lines, each with its own icon, exactly as the TV slide and the
+    # table card set them. Same words in all three places or none.
+    "what": ["Small cheese pizza + 1 topping", "and a fountain drink"],
     "fine": "Dine-in only, during trivia and bingo.",
 }
 
