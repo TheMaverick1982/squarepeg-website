@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import PARTNERS, HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, FRIENDSGIVING, VETERANS, PROMOS, MENU, GAME_DAY, EVENTS, HUSKY_CONTEST, ENT_DATES, LTO, LTO_MONTHS, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
+from content import GAME_DEAL, GAME_DEAL_SLUGS, PARTNERS, HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, FRIENDSGIVING, VETERANS, PROMOS, MENU, GAME_DAY, EVENTS, HUSKY_CONTEST, ENT_DATES, LTO, LTO_MONTHS, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 from labs import BUILDERS, HUB as LAB_HUB, spec as lab_spec  # noqa: E402
 
@@ -1364,6 +1364,7 @@ T["location"] = """
     </div>{% endif %}
   </div>
 </section>{% endif %}
+{% if l.slug in gdeal_slugs %}__GAME_DEAL_BAND__{% endif %}
 {% if hh %}<section class="section hh" id="happy-hour" aria-label="Happy hour menu at Square Peg {{ l.short or l.name }}">
   <div class="wrap">
     {% if hh.starts %}<p class="hh-soon" data-season-to="{{ hh.starts_eve }}" hidden><b>Starts {{ hh.starts_long }}</b> &mdash; our new happy hour menu in {{ l.city }}.</p>{% endif %}
@@ -2739,6 +2740,26 @@ T["game_day"] = """
 </div>
 """
 
+# The trivia-and-bingo deal, in one place. It appears on the entertainment
+# page and on every location page that runs a game, and a band written twice
+# is a band that will say two different prices by March.
+GAME_DEAL_BAND = """
+{% if gdeal %}<section class="section tb-band" aria-label="Trivia and bingo deal">
+  <div class="wrap">
+    <div class="tb">
+      <div class="tb-ball" aria-hidden="true"><span>{{ gdeal.number }}</span></div>
+      <div class="tb-copy">
+        <span class="eyebrow">{{ gdeal.eyebrow }}</span>
+        <h2>{{ gdeal.head }}</h2>
+        <p class="tb-what">{{ gdeal.what }}</p>
+        <p class="note">{{ gdeal.deck }} {{ gdeal.fine }}</p>
+      </div>
+      <div class="tb-price"><b>{{ gdeal.price }}</b><span>all three</span></div>
+    </div>
+  </div>
+</section>{% endif %}
+"""
+
 T["entertainment"] = """
 <section class="page-head on-dark">
   {{ img('friends-holiday', 'Friends enjoying a night out at Square Peg', eager=True, cls='bg')|safe }}
@@ -2750,6 +2771,7 @@ T["entertainment"] = """
     <div class="btn-row"><a class="btn" href="#lineup">See the weekly lineup</a><a class="btn btn--ghost" href="{{ u('/large-party-reservations/') }}">Reserve for a group</a></div>
   </div>
 </section>
+__GAME_DEAL_BAND__
 {% if events_all %}<section class="section ev-band" id="tickets" data-season-from="2000-01-01" data-season-to="{{ events_all[-1].date }}" hidden>
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Coming up</span><h2>Special events</h2></div>
@@ -4478,6 +4500,11 @@ def lunch_windows():
     return out
 
 
+for _k, _v in T.items():
+    if "__GAME_DEAL_BAND__" in _v:
+        T[_k] = _v.replace("__GAME_DEAL_BAND__", GAME_DEAL_BAND)
+
+
 def loc_menu(l):
     pastas = l.get("pastas") or PASTA_NAMES
     words = [("eggplant parm" if p == "The Bella Parmigiana" else p.lower()) for p in pastas]
@@ -4648,7 +4675,7 @@ def main():
 
     base_ctx = dict(
         u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in DRAWER_GROUPS], gcb=GIFT_BOUNCE, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, hc=HUSKY_CONTEST, fg=FRIENDSGIVING, vd=VETERANS, vd_art=VD_ART, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, pizza_art=PIZZA_ART, sports_art=SPORTS_ART, nav=NAV,
-        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), locs=LOCATIONS, regions=REGIONS, more_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in MORE_GROUPS], deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
+        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), gdeal=GAME_DEAL, gdeal_slugs=GAME_DEAL_SLUGS, locs=LOCATIONS, regions=REGIONS, more_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in MORE_GROUPS], deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         has_img=has_img, ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, hwart=HW_ART, lunch_where=lunch_windows(),

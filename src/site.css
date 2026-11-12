@@ -1873,3 +1873,26 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
 .pt-card-body h3{margin:0 0 6px;font:800 clamp(19px,2vw,23px)/1.2 var(--body);color:var(--char)}
 .pt-card-body .note{margin:0 0 10px}
 .pt-card-body .prose{margin:0 0 14px}
+
+/* The trivia and bingo deal. (gd- is Game Day; this one is tb-.) The whole
+   idea is that the price and the number called are the same, so the number is
+   the artwork: a bingo ball, big enough to read before the words do. Paper
+   ground and two inks, to match the table card it is printed on. */
+.tb-band{background:var(--paper)}
+.tb{display:flex;align-items:center;gap:clamp(20px,3vw,38px);flex-wrap:wrap}
+.tb-ball{flex:0 0 auto;position:relative;width:clamp(96px,13vw,138px);
+  aspect-ratio:1;border-radius:50%;background:var(--ember);display:grid;place-items:center}
+.tb-ball::after{content:"";position:absolute;inset:11%;border-radius:50%;
+  border:3px solid rgba(255,255,255,.28)}
+.tb-ball span{position:relative;font-family:var(--display);font-weight:900;
+  font-size:clamp(48px,7vw,70px);line-height:1;color:var(--white)}
+.tb-copy{flex:1 1 300px;min-width:0}
+.tb-copy h2{margin:7px 0 9px}
+.tb-what{margin:0 0 5px;font-weight:600}
+.tb-copy .note{margin:0}
+.tb-price{flex:0 0 auto;display:grid;justify-items:center;gap:3px;
+  background:var(--char);color:var(--paper);padding:15px 24px 13px}
+.tb-price b{font-family:var(--display);font-weight:900;line-height:1;
+  font-size:clamp(42px,6vw,58px)}
+.tb-price span{font:700 11px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;
+  color:#b2a79f}

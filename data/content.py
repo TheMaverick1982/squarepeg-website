@@ -1374,6 +1374,25 @@ ENT_DATES = {
 #             page up to the day before, then disappears on its own. Drop the key
 #             once the menu has been running a while.
 #   groups  — (heading, blurb, [(item, price, detail)]) under "drinks" and "food"
+
+# The $13 deal that runs during trivia and bingo. One generic offer rather
+# than ten, so there is nothing per-store to keep in step -- but which stores
+# SHOW it is derived from ENTERTAINMENT rather than typed, so a location that
+# picks up bingo gets the deal on its page the same day, and one that drops
+# trivia stops advertising a deal its floor is not running.
+GAME_DEAL = {
+    "number": "13",
+    "price": "$13",
+    "eyebrow": "Trivia & bingo nights",
+    "head": "The answer is 13.",
+    "deck": "The only 13 anybody has ever been happy about.",
+    "what": "A small cheese pizza, one topping of your choice, and a fountain drink.",
+    "fine": "Dine-in only, during trivia and bingo.",
+}
+
+GAME_DEAL_SLUGS = [slug for slug, rows in ENTERTAINMENT.items()
+                   if any("Trivia" in r[1] or "Bingo" in r[1] for r in rows)]
+
 HAPPY_HOUR = {
     "delray-beach-fl": {
         "tagline": "Why limit happy to an hour?",
