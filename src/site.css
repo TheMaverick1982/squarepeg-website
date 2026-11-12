@@ -1446,8 +1446,12 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
   background:var(--white);color:var(--ink)}
 .lab-by{display:block;margin-top:14px}
 .lab-by span{display:block;font-size:14px;color:var(--smoke);margin-bottom:6px}
-.lab-by input{width:100%;max-width:420px;padding:11px 13px;border:1px solid var(--line);
-  border-radius:10px;font:400 16px/1 var(--body);background:var(--white);color:var(--ink)}
+.lab-by input,.lab-by select{width:100%;max-width:420px;padding:11px 13px;
+  border:1px solid var(--line);border-radius:10px;font:400 16px/1 var(--body);
+  background:var(--white);color:var(--ink)}
+.lab-by select{appearance:none;min-height:46px;padding-right:38px;
+  background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23655d57' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 13px center}
+.lab-hint{margin:-4px 0 10px;font:400 13px/1.45 var(--body);color:var(--smoke);max-width:46ch}
 .lab-preview{padding:20px 22px;border-radius:14px;background:var(--paper);border:1px solid var(--line)}
 .lab-preview b{display:block;font-family:var(--display);font-weight:800;line-height:1.02;
   font-size:clamp(26px,3.6vw,36px);margin:4px 0 8px}

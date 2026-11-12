@@ -20,10 +20,16 @@
 //           LAB_DIGEST_TO    optional; comma-separated. Defaults to the list below.
 //           LAB_DIGEST_KEY   a long random string, sent as ?key= by the schedule,
 //                            so nobody can trigger the mail by hitting the URL
-//           LAB_SHEET_URL    optional; the Google Sheet, linked at the bottom
+//           LAB_SHEET_URL    optional; overrides the Google Sheet linked below
 //
 // Schedule: the pg_cron block in supabase/LAB_DIGEST_SCHEDULE.sql.
 import { createClient } from "npm:@supabase/supabase-js@2";
+
+// The master spreadsheet, linked from every digest so the week's builds and
+// the full back catalogue arrive together. A LAB_SHEET_URL secret overrides it
+// without a redeploy, which is the way to move the sheet.
+const DEFAULT_SHEET =
+  "https://docs.google.com/spreadsheets/d/1ZQ9LMarSe1SnsmiGSkU0eP49mu1j4-HzRfrGhVGT7Hc/edit";
 
 const DEFAULT_TO = [
   "brian@brianhardy.com",
@@ -156,7 +162,7 @@ Deno.serve(async (req) => {
   const n = entries.length;
   const tally = kinds.map((k) => `${by[k].length} ${(BENCH_NAMES[k] ?? k).toLowerCase()}`).join(", ");
   const subject = `Square Peg Labs: ${n} new ${n === 1 ? "build" : "builds"} this week`;
-  const sheet = (Deno.env.get("LAB_SHEET_URL") ?? "").trim();
+  const sheet = (Deno.env.get("LAB_SHEET_URL") || DEFAULT_SHEET).trim();
 
   const sections = kinds.map((k) => `
       <div style="font:700 12px/1 Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#1a1614;border-top:3px solid #1a1614;padding:22px 0 2px;margin-top:10px">
@@ -179,6 +185,7 @@ Deno.serve(async (req) => {
         menu and behind the bar, so any one of them is something the line can
         actually put up.
       </p>
+      ${sheet ? `<p style="margin:14px 0 0"><a href="${esc(sheet)}" style="display:inline-block;font:700 13px/1 Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:#b5121b;padding:12px 18px;text-decoration:none">Open the Labs spreadsheet</a></p>` : ""}
       ${sections}
       <p style="font:400 14px/1.55 Arial,sans-serif;color:#655d57;margin:22px 0 0">
         This is the last seven days only. Every build ever sent is in

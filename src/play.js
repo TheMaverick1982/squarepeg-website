@@ -440,6 +440,7 @@
       var note = $(".lab-note", form);
       var nameEl = $("input[name=name]", form);
       var byEl = $("input[name=by]", form);
+      var locEl = $("select[name=location]", form);
 
       function picked(g) {
         if (g.pick === "many") {
@@ -506,6 +507,7 @@
         if (!endpoint) { note.textContent = "Submissions open when we launch."; return; }
 
         var body = { name: name, by: (byEl.value || "").trim() };
+        if (locEl && locEl.value) body.location = locEl.value;
         if (spec.kind) body.kind = spec.kind;
         groups.forEach(function (g) {
           var v = picked(g);

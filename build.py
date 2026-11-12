@@ -3865,6 +3865,9 @@ T["labs"] = """
       <div class="lab-fields">{% for g in lab.groups %}
       <fieldset class="lab-set">
         <legend>{{ g.legend }}{% if g.pick == 'many' %} <span class="lab-count" data-count="{{ g.key }}">0 of {{ g.max }}</span>{% endif %}</legend>
+        {%- if g.hint %}
+        <p class="lab-hint">{{ g.hint }}</p>
+        {%- endif %}
         {%- if g.sections %}{% for sub, opts in g.sections %}
         <p class="lab-sub">{{ sub }}</p>
         <div class="lab-chips">{% for x in opts %}
@@ -3883,6 +3886,11 @@ T["labs"] = """
                placeholder="{{ lab.placeholder }}" autocomplete="off">
         <label class="lab-by"><span>First name and last initial &mdash; how we&rsquo;d credit you on the menu</span>
           <input name="by" type="text" maxlength="40" placeholder="Optional" autocomplete="off"></label>
+        <label class="lab-by"><span>Your home Square Peg &mdash; the one you eat at most</span>
+          <select name="location">
+            <option value="">Pick one (optional)</option>{% for l in locs %}
+            <option value="{{ l.name }}">{{ l.name }}</option>{% endfor %}
+          </select></label>
       </fieldset>
       </div>
 

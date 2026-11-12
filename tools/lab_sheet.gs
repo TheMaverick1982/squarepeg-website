@@ -4,9 +4,10 @@
  * Pulls every new build out of Supabase and files it on its own tab: Pizzas,
  * Pastas, Sandwiches, Salads, Drinks. One row per entry. The columns on each
  * tab come from that bench's own questions, so the Drinks tab has Base, Mixer,
- * Fruit, Garnish and Rim and the Pizzas tab has Sauce, Cheese, Toppings and
- * Finish -- which means you can sort the Pizzas tab by topping and the Drinks
- * tab by base, which you could not do if they shared one sheet.
+ * Fruitful flavoring, Garnish and Rim while the Pizzas tab has Sauce, Cheese,
+ * Toppings and Finish -- which means you can sort the Pizzas tab by topping
+ * and the Drinks tab by base, which you could not do if they shared one sheet.
+ * Every tab also carries Home store, the Square Peg the guest said they eat at.
  *
  * It only ever appends. A row that is already here is never rewritten,
  * reordered or removed, so Picked, Picked by, Ran and Notes stay with the
@@ -46,11 +47,11 @@ var TABS = {
    Regenerate with: python3 -c "import sys;sys.path.insert(0,'data');import labs;
    print({b['slug']:[g['legend'] for g in b['groups']] for b in labs.BUILDERS})" */
 var LABELS = {
-  'pizza-lab': ['Sauce', 'Cheese', 'Toppings', 'Finish'],
-  'pasta-lab': ['Pasta', 'Sauce', 'Protein', 'Add-ins', 'Finish'],
-  'sandwich-lab': ['Roll or wrap', 'Protein', 'Cheese', 'Greens', 'Pile it on', 'Sauce or dressing'],
-  'salad-lab': ['Greens', 'Protein', 'Cheese', 'On top', 'Dressing'],
-  'bar-lab': ['Base', 'Mixer', 'Fruit', 'Garnish', 'Rim'],
+  'pizza-lab': ['Sauce', 'Cheese', 'Toppings', 'Finish', 'Home store'],
+  'pasta-lab': ['Pasta', 'Sauce', 'Protein', 'Add-ins', 'Finish', 'Home store'],
+  'sandwich-lab': ['Roll or wrap', 'Protein', 'Cheese', 'Greens', 'Pile it on', 'Sauce or dressing', 'Home store'],
+  'salad-lab': ['Greens', 'Protein', 'Cheese', 'On top', 'Dressing', 'Home store'],
+  'bar-lab': ['Base', 'Mixer', 'Fruitful flavoring', 'Garnish', 'Rim', 'Home store'],
 };
 
 // Written by people, never by this script. They sit to the right of the build

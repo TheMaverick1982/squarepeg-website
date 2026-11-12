@@ -326,7 +326,7 @@ _MIXERS = ["Cranberry juice", "Orange juice", "Apple juice", "Pineapple juice",
            "Red Bull"]
 
 NONE_MIXER = "Straight up — no mixer"
-NONE_FRUIT = "No fruit"
+NONE_FRUIT = "No flavoring"
 NONE_RIM = "No rim"
 
 BAR = _lab(
@@ -339,7 +339,9 @@ BAR = _lab(
         {"key": "base", "legend": "Base", "pick": "one", "sections": _SPIRITS},
         {"key": "mixer", "legend": "Mixer", "pick": "one", "required": True,
          "options": _MIXERS + [NONE_MIXER], "silent": NONE_MIXER},
-        {"key": "fruit", "legend": "Fruit", "pick": "one",
+        {"key": "fruit", "legend": "Fruitful flavoring", "pick": "one",
+         "hint": "Flavorings from Fruitful, not fresh fruit \u2014 "
+                 "and they contain alcohol.",
          "options": ["Strawberry", "Raspberry", "Watermelon", "Passion fruit",
                      "Dragon fruit", "Coconut", "Jalapeño", NONE_FRUIT],
          "default": NONE_FRUIT, "silent": NONE_FRUIT},
@@ -371,8 +373,9 @@ BAR = _lab(
          "on the cocktail list at all ten Square Pegs.",
          "If we picked yours, you’ll see it there with your first name "
          "and last initial beside it."],
-    note="21+. The fruit purees vary a little by location — if the one "
-         "you picked isn’t in that night, the bar will say so.",
+    note="21+ — every build on this bench has alcohol in it, the Fruitful "
+         "flavorings included. The flavoring list varies a little by location: "
+         "if the one you picked isn’t in that night, the bar will say so.",
     art="sp-drinks",
     alt="Cocktails on the bar at Square Peg")
 
