@@ -3836,9 +3836,9 @@ T["labs"] = """
 <section class="section section--tabrow section--paper">
   <div class="wrap">
     <div class="lab-pick">
-      <span class="eyebrow">{{ labs_live|length }} benches, not one</span>
+      <span class="eyebrow">{{ labs_live|length }} of them, not one</span>
       <p>{{ labs_live|map(attribute='short')|list|join(', ') }} &mdash; every one of them is a
-        thing you can put on our menu. Pick a bench.</p>
+        thing you can put on our menu. Take your pick.</p>
     </div>
     <nav class="lab-tabs" aria-label="Square Peg Labs">{% for o in labs_live %}
       <a class="lab-tab" href="#{{ o.tab }}">{{ o.short }}</a>{% endfor %}
@@ -3857,7 +3857,7 @@ T["labs"] = """
       <p>Everything on these lists is something we already stock, so the one we
         pick is a {{ lab.unit }} we can actually make on a Friday night.</p>
       {% if lab.note %}<p class="note">{{ lab.note }}</p>{% endif %}
-      {% if not lab.post %}<p class="note">Build one now &mdash; this bench opens for submissions shortly, and the lists are final.</p>{% endif %}
+      {% if not lab.post %}<p class="note">Build one now &mdash; this one opens for submissions shortly, and the lists are final.</p>{% endif %}
     </div>
 
     <form class="lab lab-grid" data-bench="{{ lab.slug }}" data-endpoint="{{ lab.post }}" onsubmit="return false">
@@ -4924,7 +4924,7 @@ def main():
                  for b in BUILDERS]
     _labs_live = [o for o in _labs_all if o["live"]]
     pages.append(("/play/labs/", "Square Peg Labs | Square Peg Pizzeria",
-                  LAB_HUB["lede"], "labs",
+                  LAB_HUB["meta"], "labs",
                   dict(pagejs="play.js", hub=LAB_HUB,
                        labs_all=_labs_all, labs_live=_labs_live), None,
                   "sp-pies-board", "sp-pies-board"))

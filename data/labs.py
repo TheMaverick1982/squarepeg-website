@@ -42,9 +42,11 @@ HUB = {
     "slug": "labs",
     "eyebrow": "Square Peg Labs",
     "h1": "You build it. We put it on the menu.",
-    "lede": "Five benches, five things you can design out of what is actually "
-            "in our kitchens and behind our bar. We read every entry, and the "
-            "ones we pick go on the menu with your name beside them.",
+    "lede": "Create one. Or all five.",
+    "meta": "Build your own pizza, pasta, sandwich, salad or cocktail at Square "
+            "Peg Pizzeria, out of what is actually in our kitchens and behind "
+            "our bar. We read every entry, and the ones we pick go on the menu "
+            "with your name beside them.",
 }
 
 # --------------------------------------------------------------- shared lists
@@ -373,7 +375,7 @@ BAR = _lab(
          "on the cocktail list at all ten Square Pegs.",
          "If we picked yours, you’ll see it there with your first name "
          "and last initial beside it."],
-    note="21+ — every build on this bench has alcohol in it, the Fruitful "
+    note="21+ — every build here has alcohol in it, the Fruitful "
          "flavorings included. The flavoring list varies a little by location: "
          "if the one you picked isn’t in that night, the bar will say so.",
     art="sp-drinks",
