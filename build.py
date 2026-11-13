@@ -19,7 +19,7 @@ from PIL import Image
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT / "data"))
 from town_pages import TOWN_PAGES  # noqa
-from content import EVENTS_STRIP, GAME_DEAL, GAME_DEAL_SLUGS, PARTNERS, HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, FRIENDSGIVING, VETERANS, PROMOS, MENU, GAME_DAY, EVENTS, HUSKY_CONTEST, ENT_DATES, LTO, LTO_MONTHS, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
+from content import EVENTS_BAND, GAME_DEAL, GAME_DEAL_SLUGS, PARTNERS, HALLOWEEN, HAPPY_HOUR, DEALS, TOAST_ON_SUBDOMAIN, TOAST_SUBDOMAIN, TOAST_MAIN_DOMAIN, TOAST_HOST, TOAST_PATHS, SITE, LOCATIONS, REGIONS, DEAL, POINTS, APP_PERKS, SIGNATURES, REVIEWS, FUNDRAISER_FAQ, FUNDRAISER_NIGHT, CATERING_FAQ, CATERING, TRUCK, TRUCK_FAQ, EVENT_ROUTES, DAYS, SMS_TERMS, DICE, EMBEDS, LARGE_PARTY_FAQ, CONTACT_TOPICS, PIZZA_CLASS, TEAM_NIGHT, GIFT_BOUNCE, CORPORATE_SWITCH, CORPORATE_EVENTS, CORPORATE_EVENTS_FAQ, CORPORATE_GIFTS, CORPORATE_GIFTS_FAQ, ENTERTAINMENT, FRIENDSGIVING, VETERANS, PROMOS, MENU, GAME_DAY, EVENTS, HUSKY_CONTEST, ENT_DATES, LTO, LTO_MONTHS, PAIRING, LINKS, CALC, PIZZA_FAQ, PIZZA_TRIVIA, QUIZ, DATE_NIGHT, LAB_LIVE, TFT  # noqa
 from play import CONFESSIONS, DEBATES, LAB, PLAY, WHEELS  # noqa: E402
 from labs import BUILDERS, HUB as LAB_HUB, spec as lab_spec  # noqa: E402
 
@@ -1051,22 +1051,30 @@ T["home"] = """
   <a class="btn btn--sm" href="{{ u('/game-day/') }}" data-track="game_day_click" data-src="home-strip">See game day specials</a>
 </div></aside>
 
-<aside class="ev-strip" aria-label="Catering, parties and private events"><div class="wrap">
-  <div class="ev-strip-copy">
-    <span class="ev-strip-tag">Book it</span>
-    <!-- Two lines, one slot. The holiday line runs through the season and then
-         takes itself down, leaving the evergreen one -- the same date gating
-         the game day strip above uses, so nothing has to be edited in January. -->
-    <p data-season-from="{{ ev_strip.from }}" data-season-to="{{ ev_strip.to }}" hidden>
-      <strong>{{ ev_strip.holiday_head }}</strong> <span>{{ ev_strip.holiday_sub }}</span></p>
-    <p data-season-from="{{ ev_strip.from }}" data-season-to="{{ ev_strip.to }}" data-season-invert>
-      <strong>{{ ev_strip.head }}</strong> <span>{{ ev_strip.sub }}</span></p>
+{% macro ev_band(b, gate) -%}
+<aside class="ev-band" aria-label="Catering, parties and private events"
+       data-season-from="{{ ev.from }}" data-season-to="{{ ev.to }}"{{ gate|safe }}>
+  {{ img(b.art, '', cls='bg')|safe }}
+  <div class="wrap ev-inner">
+    <div class="ev-copy">
+      <span class="ev-tag">{{ b.tag }}</span>
+      <h2>{{ b.head }}<em>{{ b.head_em }}</em></h2>
+      <p>{{ b.blurb }}</p>
+      <div class="btn-row">
+        <a class="btn btn--flame btn--sm" href="{{ u('/catering/') }}" data-track="catering_click" data-src="home-events-band">Plan catering</a>
+        <a class="btn btn--ghost btn--sm" href="{{ u('/private-events/') }}" data-track="events_click" data-src="home-events-band">Host an event</a>
+      </div>
+    </div>
+    {{ img('catering-table', 'A table of wood-fired pizzas on stands, ready for a party', sizes='(min-width:760px) 360px, 300px', cls='ev-shot')|safe }}
   </div>
-  <div class="ev-strip-actions">
-    <a class="btn btn--flame btn--sm" href="{{ u('/catering/') }}" data-track="catering_click" data-src="home-events-strip">Plan catering</a>
-    <a class="btn btn--ghost btn--sm" href="{{ u('/private-events/') }}" data-track="events_click" data-src="home-events-strip">Host an event</a>
-  </div>
-</div></aside>
+</aside>
+{%- endmacro %}
+<!-- Two bands, one slot: the holiday one is hidden outside its dates and the
+     evergreen one is hidden inside them, so exactly one is ever on screen.
+     Checked in the browser every load, which is why nothing here needs
+     editing on 1 January. -->
+{{ ev_band(ev.holiday, ' hidden') }}
+{{ ev_band(ev.evergreen, ' data-season-invert') }}
 
 <aside class="loyalty-strip" aria-label="Square Peg Rewards"><div class="wrap">
   <div class="loyalty-copy">
@@ -4706,7 +4714,7 @@ def main():
 
     base_ctx = dict(
         u=url, tel=tel, order=order_url, hero_picture=hero_picture, drawer_extra=DRAWER_EXTRA, drawer_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in DRAWER_GROUPS], gcb=GIFT_BOUNCE, more=MORE, review=review_url, gd=GAME_DAY, gd_locs=[l for l in LOCATIONS if l.get('bar', True)], st_locs=[l for l in LOCATIONS if l.get('sunday_ticket')], ent=ENTERTAINMENT, hc=HUSKY_CONTEST, fg=FRIENDSGIVING, vd=VETERANS, vd_art=VD_ART, ent_from=ent_from, ent_dates_all={l['slug']: ent_dated(l) for l in LOCATIONS if ENT_DATES.get(l['slug'])}, events_all=sorted(([dict(e, loc=l) for l in LOCATIONS for e in location_events(l)]), key=lambda e: e['date']), events_by_slug={l['slug']: location_events(l) for l in LOCATIONS if EVENTS.get(l['slug'])}, ent_slugs=[l['slug'] for l in LOCATIONS if ENTERTAINMENT.get(l['slug']) or ENT_DATES.get(l['slug']) or EVENTS.get(l['slug'])],  ent_count=["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"][len(ENTERTAINMENT)], day_names=DAY_NAMES, promos=PROMOS, loc_by_slug={l["slug"]: l for l in LOCATIONS}, embeds=EMBEDS, contact_topics=CONTACT_TOPICS, season=CORP_SEASON, today=TODAY, ce=CORPORATE_EVENTS, cg=CORPORATE_GIFTS, maps=maps_url, embed=maps_embed, img=img, icons=ICONS, pizza_art=PIZZA_ART, sports_art=SPORTS_ART, nav=NAV,
-        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), ev_strip=EVENTS_STRIP, gdeal=GAME_DEAL, gdeal_slugs=GAME_DEAL_SLUGS, locs=LOCATIONS, regions=REGIONS, more_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in MORE_GROUPS], deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
+        site=dict(SITE, toast_account=TOAST_HOST + SITE["toast_account_path"]), ev=EVENTS_BAND, gdeal=GAME_DEAL, gdeal_slugs=GAME_DEAL_SLUGS, locs=LOCATIONS, regions=REGIONS, more_groups=[(g, [(tuple(i) + (None, None))[:4] for i in items]) for g, items in MORE_GROUPS], deal=DEAL, deals=DEALS, pairing=PAIRING, links_rows=[(tuple(r) + (None, None))[:6] for r in LINKS], calc=CALC, faq_groups=PIZZA_FAQ, trivia=PIZZA_TRIVIA, quiz=QUIZ, datenight=DATE_NIGHT, points=POINTS, perks=APP_PERKS,
         sigs=SIGNATURES, reviews=REVIEWS, preview=PREVIEW, logo_img=logo_img, css=css, jsv=jsv, locs_json=locs_json, cfg_json=cfg_json,
         year=date.today().year, analytics=analytics, ent_json=json.dumps({l["slug"]: {"name": l.get("short") or l["name"], "url": url(f"/locations/{l['slug']}/"), "events": ENTERTAINMENT.get(l["slug"], []), "dates": ENT_DATES.get(l["slug"], [])} for l in LOCATIONS if ENTERTAINMENT.get(l["slug"]) or ENT_DATES.get(l["slug"])}, separators=(",", ":")), logo_ratio=logo_ratio, imgbase="img/" if PREVIEW else "/img/",
         has_img=has_img, ext=' target="_blank"' if PREVIEW else "", staging=STAGING, band=band, town_count=TOWN_COUNT, pasta_items=dict((k, v) for _, k, v in MENU["sections"])["pasta"], join_and=join_and, hh_group=hh_group, hwart=HW_ART, lunch_where=lunch_windows(),

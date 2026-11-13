@@ -1380,19 +1380,36 @@ ENT_DATES = {
 # SHOW it is derived from ENTERTAINMENT rather than typed, so a location that
 # picks up bingo gets the deal on its page the same day, and one that drops
 # trivia stops advertising a deal its floor is not running.\n
-# The strip on the home page between Game Day and Rewards, pushing the three
-# things people book us for. One slot, two lines: the holiday one runs through
-# the season and then takes itself down, which is why there is nothing here to
-# remember to change in January.
-EVENTS_STRIP = {
+# The band on the home page between Game Day and Rewards, pushing the three
+# things people book us for. Built like the gift card band rather than like
+# the thin strips either side of it, because it has to interrupt rather than
+# join the queue.
+#
+# Two of them, one slot. The holiday one runs through the season and then
+# takes itself down; the evergreen one is hidden until it does. Which means
+# there is nothing here to remember to change in January.
+EVENTS_BAND = {
     "from": "2026-11-01",
     "to": "2026-12-31",
-    "holiday_head": "Holiday parties are booking now.",
-    "holiday_sub": "Office lunches, team dinners and the whole room.",
-    "head": "You host. We\u2019ll handle the pizza.",
-    "sub": "Catering, big groups and private events at all ten.",
+    "holiday": {
+        "art": "holiday-band",
+        "tag": "November & December",
+        "head": "Holiday parties are",
+        "head_em": "booking now.",
+        "blurb": "Office lunches, team dinners, the whole room. Tell us the "
+                 "date and the headcount \u2014 we will handle the rest.",
+    },
+    "evergreen": {
+        # A banner-shaped shot rather than a portrait one: a face this big
+        # behind the type fights the inset photo beside it.
+        "art": "pizza-strip",
+        "tag": "Catering \u00b7 Big groups \u00b7 Private events",
+        "head": "You host.",
+        "head_em": "We\u2019ll handle the pizza.",
+        "blurb": "Birthdays, team dinners, reunions and the food truck. "
+                 "At any of our ten, or wherever you are.",
+    },
 }
-
 
 GAME_DEAL = {
     "number": "13",
