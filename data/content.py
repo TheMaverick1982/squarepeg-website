@@ -1379,7 +1379,21 @@ ENT_DATES = {
 # than ten, so there is nothing per-store to keep in step -- but which stores
 # SHOW it is derived from ENTERTAINMENT rather than typed, so a location that
 # picks up bingo gets the deal on its page the same day, and one that drops
-# trivia stops advertising a deal its floor is not running.
+# trivia stops advertising a deal its floor is not running.\n
+# The strip on the home page between Game Day and Rewards, pushing the three
+# things people book us for. One slot, two lines: the holiday one runs through
+# the season and then takes itself down, which is why there is nothing here to
+# remember to change in January.
+EVENTS_STRIP = {
+    "from": "2026-11-01",
+    "to": "2026-12-31",
+    "holiday_head": "Holiday parties are booking now.",
+    "holiday_sub": "Office lunches, team dinners and the whole room.",
+    "head": "You host. We\u2019ll handle the pizza.",
+    "sub": "Catering, big groups and private events at all ten.",
+}
+
+
 GAME_DEAL = {
     "number": "13",
     "price": "$13",

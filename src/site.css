@@ -1899,3 +1899,19 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
   font-size:clamp(42px,6vw,58px)}
 .tb-price span{font:700 11px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;
   color:#b2a79f}
+
+/* The catering / parties / private events strip, between Game Day and
+   Rewards on the home page. Built on the same bones as those two so the three
+   read as one stack rather than three designs. Flame rule under it, because
+   the two either side are red and charcoal and this one has to separate. */
+.ev-strip{background:var(--oven);color:#fff;border-bottom:1px solid var(--line-dark)}
+.ev-strip .wrap{display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:12px 24px;padding-block:14px}
+.ev-strip-copy{display:flex;align-items:center;gap:12px;flex:1 1 320px;min-width:0}
+.ev-strip-tag{flex:none;font-size:12px;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;background:var(--flame);color:var(--char);
+  padding:5px 9px;border-radius:3px}
+.ev-strip p{margin:0;font-size:15px;line-height:1.4}
+.ev-strip p span{color:#c9c0b9}
+.ev-strip-actions{display:flex;flex-wrap:wrap;gap:8px}
+@media (max-width:600px){.ev-strip p span{display:block}}
