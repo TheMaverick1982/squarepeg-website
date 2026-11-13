@@ -1078,8 +1078,16 @@ T["home"] = """
 
 <aside class="loyalty-strip" aria-label="Square Peg Rewards"><div class="wrap">
   <div class="loyalty-copy">
-    <span class="loyalty-tag">Rewards</span>
-    <p><strong>Join Square Peg Rewards. It's free.</strong> <span>$5 welcome reward, points every visit and members-only deals.</span></p>
+    <!-- The $5 leads, because it is the only part of this a stranger has a
+         reason to care about. "Welcome reward" was the vaguer way of saying
+         the same thing; new members get $5 off their first order. -->
+    <span class="loyalty-mark" aria-hidden="true">$5</span>
+    <div class="loyalty-words">
+      <span class="loyalty-tag">Square Peg Rewards</span>
+      <p><strong>$5 off your first order.</strong>
+        <span>Joining is free. Points every visit, members-only deals, and the
+          reward comes off when your loyalty is applied &mdash; no app to open at the counter.</span></p>
+    </div>
   </div>
   <div class="loyalty-actions">
     <a class="btn btn--flame btn--sm" href="{{ site.app_link }}" rel="noopener" data-track="app_click" data-src="home-loyalty">Get the app</a>

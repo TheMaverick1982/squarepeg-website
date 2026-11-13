@@ -168,11 +168,20 @@ body.menu-open .mbar{display:none}
 .ribbon a{font-weight:800}
 /* ---------- Loyalty strip (home, under the deal ribbon) ---------- */
 .loyalty-strip{background:var(--char);color:#fff;border-bottom:4px solid var(--ember)}
-.loyalty-strip .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding-block:14px}
-.loyalty-copy{display:flex;align-items:center;gap:14px;min-width:0;flex:1 1 420px}
-.loyalty-tag{flex:none;background:var(--ember);color:#fff;font:900 13px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;padding:7px 10px}
-.loyalty-copy p{margin:0;font-size:15px;line-height:1.4;color:rgba(255,255,255,.86)}
-.loyalty-copy strong{color:#fff;font-weight:800}
+.loyalty-strip .wrap{display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:14px 28px;padding-block:clamp(18px,2.4vw,30px)}
+.loyalty-copy{display:flex;align-items:center;gap:clamp(14px,2vw,22px);min-width:0;flex:1 1 440px}
+/* The offer as a stamp. Signing up is the ask, but $5 is the reason, and at a
+   glance a number reads before a sentence does. */
+.loyalty-mark{flex:none;display:grid;place-items:center;background:var(--ember);color:#fff;
+  font-family:var(--display);font-weight:900;font-size:clamp(30px,3.6vw,42px);line-height:1;
+  padding:10px 14px 7px}
+.loyalty-words{min-width:0;display:grid;gap:5px}
+.loyalty-tag{justify-self:start;font:800 11px/1 var(--body);letter-spacing:.15em;
+  text-transform:uppercase;color:var(--flame)}
+.loyalty-copy p{margin:0;font-size:15px;line-height:1.45;color:rgba(255,255,255,.82)}
+.loyalty-copy strong{display:block;color:#fff;font-family:var(--display);font-weight:900;
+  font-size:clamp(23px,2.9vw,34px);line-height:1.02;margin-bottom:3px}
 .loyalty-actions{display:flex;gap:10px;flex-wrap:wrap}
 @media (max-width:640px){
   .loyalty-copy{flex-basis:100%;align-items:flex-start}
