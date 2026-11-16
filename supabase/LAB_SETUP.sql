@@ -76,7 +76,7 @@ revoke all on public.lab_pending from anon, authenticated;
 -- WEEKLY DIGEST — run this after deploying the lab-digest Edge Function
 -- ===========================================================================
 --
--- Emails everything waiting for review to plainville@squarepegpizzeria.com
+-- Emails everything waiting for review to the DEFAULT_TO list in lab-digest
 -- every Monday at 9am Eastern, so nobody has to remember to check the queue.
 --
 -- This is scheduled inside Supabase rather than as a GitHub Action because

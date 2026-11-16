@@ -33,7 +33,8 @@ const DEFAULT_SHEET =
 
 const DEFAULT_TO = [
   "brian@brianhardy.com",
-  "plainville@squarepegpizzeria.com",
+  "hr@squarepegpizzeria.com",
+  "brandonkparker1998@gmail.com",
   "ehartford@squarepegpizzeria.com",
   "catering@squarepegpizzeria.com",
   "maffefinancial@hotmail.com",
