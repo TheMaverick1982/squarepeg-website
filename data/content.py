@@ -1412,6 +1412,10 @@ EVENTS_BAND = {
 }
 
 GAME_DEAL = {
+    # Off the site until the deal is approved. Flip to True and rebuild to
+    # bring the band back on the entertainment page and every location that
+    # runs trivia or bingo; nothing else has to change.
+    "live": False,
     "number": "13",
     "price": "$13",
     "eyebrow": "Trivia & bingo nights",

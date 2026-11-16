@@ -2777,7 +2777,7 @@ T["game_day"] = """
 # page and on every location page that runs a game, and a band written twice
 # is a band that will say two different prices by March.
 GAME_DEAL_BAND = """
-{% if gdeal %}<section class="section tb-band" aria-label="Trivia and bingo deal">
+{% if gdeal.live %}<section class="section tb-band" aria-label="Trivia and bingo deal">
   <div class="wrap">
     <div class="tb">
       <div class="tb-ball" aria-hidden="true"><span>{{ gdeal.number }}</span></div>
