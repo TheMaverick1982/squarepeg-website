@@ -129,7 +129,13 @@ def apply_google_hours():
         if not g or not g.get("hours") or set(g["hours"]) != set(DAYS):
             continue
         l["hours"] = {d: (tuple(g["hours"][d]) if g["hours"][d] else None) for d in DAYS}
-        l["special"] = {k: (list(v) if v else None) for k, v in sorted(g.get("special", {}).items()) if k >= TODAY}
+        # Merge, never replace. The holidays typed into content.py are the
+        # base; Google wins for any date it actually reports. Google's Places
+        # API only exposes special days 7 days out, so a straight replace
+        # would wipe Christmas off the page for all of November.
+        l["special"] = {**(l.get("special") or {}),
+                        **{k: (list(v) if v else None)
+                           for k, v in sorted(g.get("special", {}).items()) if k >= TODAY}}
         l["hours_source"] = "google"
         n += 1
     return n

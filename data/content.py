@@ -582,6 +582,38 @@ DEALS = [
 _today = _dt.date.today().isoformat()
 DEAL = next((d for d in DEALS if d["starts"] <= _today <= d["expires"]), DEALS[-1])
 
+# ---------------------------------------------------------------- holidays
+# Closed days and early closes that apply to EVERY location. `special_rows()`
+# in build.py drops a date once it is past, so these take themselves off the
+# site the day after, the same way every other dated thing here does. To add a
+# year, add the dates -- nothing else has to change.
+#
+# Hours are supposed to come from Google (scripts/sync_google_hours.py, run
+# nightly by .github/workflows/sync-hours.yml), which is why the location pages
+# can say "Hours update daily from our Google listing". They do not: every
+# place ID in data/google_places.json is still an empty string, so that script
+# has never produced data/hours_google.json and `hours_source` is "site"
+# everywhere. Even once it works, Google's Places API only exposes special days
+# SEVEN DAYS out, so it could never carry Christmas in November. These dates
+# are typed here on purpose and `apply_google_hours()` merges over them rather
+# than replacing them.
+HOLIDAYS_CLOSED = [
+    "2026-11-26",   # Thanksgiving
+    "2026-12-25",   # Christmas Day
+]
+HOLIDAYS_EARLY = {
+    "2026-12-24": "20:00",   # Christmas Eve: close at 8pm
+}
+
+for _loc in LOCATIONS:
+    _special = {_iso: None for _iso in HOLIDAYS_CLOSED}
+    for _iso, _close in HOLIDAYS_EARLY.items():
+        _normal = _loc["hours"].get(_dt.date.fromisoformat(_iso).strftime("%a"))
+        # An early close only means anything if the store opens that day at all.
+        if _normal:
+            _special[_iso] = (_normal[0], _close)
+    _loc["special"] = dict(sorted(_special.items()))
+
 POINTS = [
     (100, "Free cookie"), (200, "$5 off"), (300, "Free appetizer", "excludes wings"),
     (350, "Any pasta dish"), (400, "Any small pizza"), (500, "Large specialty pizza"),
