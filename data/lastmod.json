@@ -145,43 +145,43 @@
  },
  "/play/": {
   "date": "2026-11-17",
-  "hash": "061d0cd141e095885ff268702a5b5c34"
+  "hash": "d3aaf9a030ad185ddd120eed62d01db0"
  },
  "/play/confessions/": {
   "date": "2026-11-17",
-  "hash": "8fa79ddb6b77cadab00a737d8ec3d11a"
+  "hash": "daf85131e6369257e119b07572afa5b1"
  },
  "/play/debate/": {
   "date": "2026-11-17",
-  "hash": "1f4c4b24db6517a4365b43da03b66c9d"
+  "hash": "5d6474f6c620a04d858baa74b7b02cf1"
  },
  "/play/debate/cold-leftover-pizza/": {
   "date": "2026-11-17",
-  "hash": "1a723416270d4b4982eaaa5aa04c0008"
+  "hash": "fc58c02859c1fb37aaab97cf6f66c0c3"
  },
  "/play/debate/fold-or-flat/": {
   "date": "2026-11-17",
-  "hash": "e6adbb8d08017557e1ce9e998c2f66ea"
+  "hash": "e57a6123ecdfd4f71b46d51d147db232"
  },
  "/play/debate/fork-and-knife/": {
   "date": "2026-11-17",
-  "hash": "8e43d459d52ed43eaa1e24a917711942"
+  "hash": "a87b58ac4a4df61bfe3e01d5a6fd8df5"
  },
  "/play/debate/is-a-calzone-a-pizza/": {
   "date": "2026-11-17",
-  "hash": "6b79cfef2b6d92d80f008a7a213a9ce4"
+  "hash": "cc302b6b72e10f6b8d43e162d4e4ded6"
  },
  "/play/debate/pineapple-on-pizza/": {
   "date": "2026-11-17",
-  "hash": "212c6c55af4218ebdd488c941ec478e5"
+  "hash": "7f2fa735febe11008f9153618424e07d"
  },
  "/play/debate/ranch-with-pizza/": {
   "date": "2026-11-17",
-  "hash": "8d317cddba4909518dd01a1015085cf0"
+  "hash": "e6f03170daa5791c57d2c9ddb7400a5a"
  },
  "/play/labs/": {
   "date": "2026-11-17",
-  "hash": "7ff820d8f8687c9426d67504897ca630"
+  "hash": "4645f3c8ff7a8bd10d3518697fd72b2e"
  },
  "/play/pizza-lab/": {
   "date": "2026-11-10",
@@ -189,7 +189,7 @@
  },
  "/play/wheel/": {
   "date": "2026-11-17",
-  "hash": "d01312f0df5607644238914c17c24ae8"
+  "hash": "628cb768d90a821dcb3540960df5decf"
  },
  "/privacy/": {
   "date": "2026-11-17",

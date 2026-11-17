@@ -3959,8 +3959,15 @@ T["labs"] = """
         <legend>Name it</legend>
         <input class="lab-name" name="name" type="text" maxlength="40"
                placeholder="{{ lab.placeholder }}" autocomplete="off">
-        <label class="lab-by"><span>First name and last initial &mdash; how we&rsquo;d credit you on the menu</span>
-          <input name="by" type="text" maxlength="40" placeholder="Optional" autocomplete="off"></label>
+        {#- Name and email are required now. The whole promise is that we
+            invite the winner in, and an entry nobody can be reached on is an
+            entry that cannot be picked. The reason sits in the label, not in
+            fine print underneath, because that is where it gets read. -#}
+        <label class="lab-by"><span>Your name &mdash; how we&rsquo;d credit you on the menu</span>
+          <input name="by" type="text" maxlength="40" placeholder="Sarah M." autocomplete="name" required></label>
+        <label class="lab-by"><span>Your email &mdash; so we can tell you if we pick it</span>
+          <input name="email" type="email" maxlength="120" placeholder="you@example.com" autocomplete="email" inputmode="email" required></label>
+        <p class="lab-hint lab-hint--under">We only use your email to tell you about your entry. Nothing else.</p>
         <label class="lab-by"><span>Your home Square Peg &mdash; the one you eat at most</span>
           <select name="location">
             <option value="">Pick one (optional)</option>{% for l in locs %}

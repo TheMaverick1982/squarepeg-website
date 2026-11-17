@@ -292,6 +292,20 @@ Deno.serve(async (req) => {
 
   const name = str(b.name, 40);
   const by = str(b.by, 40);
+
+  // Name and email are required. The page promises the winner an invitation,
+  // and an entry nobody can be reached on is an entry that cannot be picked.
+  // Checked here as well as on the page because the page is not the only thing
+  // that can POST here.
+  const email = str(b.email, 120).toLowerCase();
+  if (!by) {
+    return new Response(JSON.stringify({ error: "we need a name to credit it to" }),
+      { status: 400, headers });
+  }
+  if (!/^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(email)) {
+    return new Response(JSON.stringify({ error: "we need an email to tell you if we pick it" }),
+      { status: 400, headers });
+  }
   const build = name ? readBuild(bench, b as Record<string, unknown>) : null;
   if (!build) {
     return new Response(
@@ -306,6 +320,13 @@ Deno.serve(async (req) => {
   // the build so every downstream reader picks it up with no change at all.
   const place = str(b.location, 60);
   if (place && PLACES.has(place)) build.push({ label: "Home store", value: place });
+
+  // The email rides in `build` for the same reason "Home store" does: every
+  // downstream reader -- the weekly digest and the Google Sheet -- renders
+  // whatever labels it is handed, and the sheet adds a column the first time
+  // it meets a new one. So this needs no migration, no lab-export change and
+  // no edit to the Apps Script.
+  build.push({ label: "Email", value: email });
 
   // status defaults to 'pending' in the schema and is deliberately not settable
   // from here. It is only ever changed by hand, and only to keep the inbox

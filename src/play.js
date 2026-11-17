@@ -440,6 +440,7 @@
       var note = $(".lab-note", form);
       var nameEl = $("input[name=name]", form);
       var byEl = $("input[name=by]", form);
+      var mailEl = $("input[name=email]", form);
       var locEl = $("select[name=location]", form);
 
       function picked(g) {
@@ -486,6 +487,17 @@
         var name = (nameEl.value || "").trim();
         if (!name) { note.textContent = "Give it a name first."; nameEl.focus(); return; }
 
+        // Checked here rather than left to the browser because the submit is a
+        // button, not a form submit -- `required` alone would never fire.
+        var by = (byEl.value || "").trim();
+        if (!by) { note.textContent = "Add your name so we can credit it."; byEl.focus(); return; }
+        var mail = mailEl ? (mailEl.value || "").trim() : "";
+        if (!/^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(mail)) {
+          note.textContent = "Add an email so we can tell you if we pick it.";
+          if (mailEl) mailEl.focus();
+          return;
+        }
+
         // Every group that is not marked optional has to carry something. A
         // sectioned list -- the bar's sixty bottles -- starts with nothing
         // checked on purpose, so this is the only thing asking for a base.
@@ -506,7 +518,7 @@
         // plainly rather than failing, and never fake a confirmation.
         if (!endpoint) { note.textContent = "Submissions open when we launch."; return; }
 
-        var body = { name: name, by: (byEl.value || "").trim() };
+        var body = { name: name, by: by, email: mail };
         if (locEl && locEl.value) body.location = locEl.value;
         if (spec.kind) body.kind = spec.kind;
         groups.forEach(function (g) {

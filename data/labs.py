@@ -80,13 +80,22 @@ NONE_PROTEIN = "No protein — keep it vegetarian"
 NONE_GREENS = "No greens"
 
 
+# Every bench closes on the same promise, so it is written once here and
+# appended in _lab() rather than typed into five `next` lists that would drift
+# apart the first time the wording changed. This is also why the form asks for
+# an email at all -- without one there is nobody to invite.
+INVITE = ("If yours is the one, we will email you an invitation to come in and "
+          "try it. Your creation is on us when you do \u2014 just the dish, "
+          "the rest of the night is yours.")
+
+
 def _lab(slug, name, short, unit, h1, lede, groups, how, rules, nxt,
          placeholder, live=False, endpoint=None, note=None,
          art="margherita-board",
          alt="A wood-fired pizza on the board at Square Peg"):
     return {"slug": slug, "name": name, "short": short, "unit": unit,
             "eyebrow": name, "h1": h1, "lede": lede, "groups": groups,
-            "how": how, "rules": rules, "next": nxt, "live": live,
+            "how": how, "rules": rules, "next": list(nxt) + [INVITE], "live": live,
             "endpoint": endpoint, "note": note, "art": art, "alt": alt,
             "placeholder": placeholder}
 
