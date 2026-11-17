@@ -1282,8 +1282,7 @@ EVENTS = {
                      "tent, poured alongside wines from Caymus Vineyards. We will "
                      "be there handing out our pizza \u2014 come find our table and "
                      "say hi.",
-            "meta": ["6:00\u20138:00 PM", "Hospitality tent",
-                     "Wines by Caymus Vineyards", "Stop by our table"],
+            "meta": ["6:00\u20138:00 PM"],
             "url": "https://www.delraybeachopen.com/en/serve-and-savor",
             "cta": "Get tickets",
             "host": "Part of the Delray Beach Open Food & Wine Series",
