@@ -1852,6 +1852,15 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
    as page furniture and gets skipped -- people took the page for the Pizza
    Lab with some tabs on it. */
 .lab-pick{margin-bottom:16px}
+/* The prize band, directly above the builder. Red rather than another paper
+   section because it has to stop the eye between picking a lab and filling in
+   a form -- that is the whole reason it was moved up here. */
+.lab-prize{background:var(--ember);color:var(--white);padding-block:clamp(26px,3.6vw,40px)}
+.lab-prize .eyebrow{color:#ffd7d9}
+.lab-prize h2{margin:8px 0 0;max-width:20ch;color:var(--white);
+  font:900 clamp(30px,4.4vw,52px)/.96 var(--display);letter-spacing:.004em;text-transform:uppercase}
+.lab-prize p{margin:14px 0 0;max-width:58ch;color:#ffe6e8;
+  font:500 clamp(15px,1.5vw,18px)/1.55 var(--body)}
 .lab-pick p{margin:7px 0 0;max-width:62ch;font:600 clamp(16px,1.5vw,19px)/1.5 var(--body);color:var(--ink)}
 .lab-tabs{display:flex;flex-wrap:wrap;gap:8px}
 .lab-tab{display:inline-flex;align-items:center;padding:12px 22px;border-radius:999px;

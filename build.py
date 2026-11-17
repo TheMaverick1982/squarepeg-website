@@ -3922,6 +3922,20 @@ T["labs"] = """
 </section>
 {% endif %}
 
+<!-- The prize, between the picker and the builder. It used to live only in
+     "What happens next", below the form, where someone deciding whether the
+     form is worth filling in had already scrolled past it. The reason to
+     build one belongs ABOVE the thing you are asking them to build. -->
+<section class="section lab-prize">
+  <div class="wrap">
+    <span class="eyebrow">If we pick yours</span>
+    <h2>It goes on the menu. Then you come down and try it on us.</h2>
+    <p>We&rsquo;ll email you an invitation to come in and eat your own creation &mdash;
+      just the dish, the rest of the night is yours. Your first name and last initial
+      run beside it on the menu at all ten Square Pegs, for the whole month.</p>
+  </div>
+</section>
+
 <section class="section section--paper">
   <div class="wrap">
     <div class="section-head">
