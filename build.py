@@ -2819,7 +2819,7 @@ T["entertainment"] = """
   </div>
 </section>
 __GAME_DEAL_BAND__
-{% if events_all %}<section class="section ev-band" id="tickets" data-season-from="2000-01-01" data-season-to="{{ events_all[-1].date }}" hidden>
+{% if events_all %}<section class="section tix-band" id="tickets" data-season-from="2000-01-01" data-season-to="{{ events_all[-1].date }}" hidden>
   <div class="wrap">
     <div class="section-head"><span class="eyebrow">Coming up</span><h2>Special events</h2></div>
     <div class="ev-grid">{% for e in events_all %}<article class="ev-card" data-season-from="{{ e.announce }}" data-season-to="{{ e.date }}" hidden>

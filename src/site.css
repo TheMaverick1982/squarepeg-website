@@ -822,7 +822,12 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
   color:var(--char);background:var(--flame);padding:2px 7px;border-radius:3px;margin-left:4px;white-space:nowrap}
 
 /* ---------- Ticketed events on the entertainment page ---------- */
-.ev-band{padding-block:clamp(28px,4vw,44px)}
+/* `tix-band`, not `ev-band`: the catering/parties band further down this
+   file owns `.ev-band` and paints it dark with white text. These cards are
+   white, so sharing the name turned every title white-on-white. The clash
+   sat unnoticed for months because this section hides itself once its last
+   event has passed, and it had been hidden. */
+.tix-band{padding-block:clamp(28px,4vw,44px)}
 .ev-grid{display:grid;gap:14px;grid-template-columns:1fr}
 @media (min-width:760px){.ev-grid{grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}}
 .ev-card{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;background:var(--white);
