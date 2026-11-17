@@ -4005,7 +4005,9 @@ T["partners"] = """
 
 <section class="section section--paper">
   <div class="wrap">
-    {% for l in locs %}{% if pt.get(l.slug) %}
+    {# Alphabetical by town, so a new partner lands in the right place on its
+       own rather than wherever its location happens to sit in LOCATIONS. #}
+    {% for l in locs|sort(attribute='city') %}{% if pt.get(l.slug) %}
     <div class="pt-block">
       <div class="section-head">
         <span class="eyebrow">{{ l.city }}, {{ l.state }}</span>
