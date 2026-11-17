@@ -1436,6 +1436,14 @@ dialog.sheet::backdrop{background:rgba(10,8,7,.72)}
    this silently did nothing the first time. */
 @media (min-width:1040px){
   .lab-grid{grid-template-columns:minmax(0,1fr) 370px;gap:48px}
+  /* `.lab-grid{align-items:start}` shrinks this column to the height of the
+     card, and a sticky element can only travel inside its own parent's box --
+     so with a parent the same height as the card there was nowhere to travel
+     and position:sticky did nothing at all. Stretching the column to the full
+     row height is what actually makes it stick. Without this the submit button
+     sits up at the top right and scrolls away the moment you start building,
+     which is the whole reason it is here. */
+  .lab-side{align-self:stretch;min-width:0}
   .lab-card{position:sticky;top:96px}
 }
 
