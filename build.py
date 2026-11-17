@@ -3930,9 +3930,6 @@ T["labs"] = """
   <div class="wrap">
     <span class="eyebrow">If we pick yours</span>
     <h2>It goes on the menu. Then you come down and try it on us.</h2>
-    <p>We&rsquo;ll email you an invitation to come in and eat your own creation &mdash;
-      just the dish, the rest of the night is yours. Your first name and last initial
-      run beside it on the menu at all ten Square Pegs, for the whole month.</p>
   </div>
 </section>
 
