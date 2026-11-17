@@ -1352,7 +1352,7 @@ T["location"] = """
         <span class="mo">{{ e.mon }}</span><b>{{ e.day }}</b><span class="dow">{{ e.weekday }}</span>
       </div>
       <div class="loc-event-body">
-        <span class="eyebrow">{{ 'Ticketed event' if e.url else 'Event' }} · {{ l.city }}</span>
+        <span class="eyebrow">{{ e.kicker or ('Ticketed event' if e.url else 'Event') }} · {{ l.city }}</span>
         <h2>{{ e.title }}</h2>
         <p>{{ e.blurb }}</p>
         <ul class="loc-event-meta">{% for m in e.meta %}<li>{{ m }}</li>{% endfor %}</ul>
@@ -1360,7 +1360,7 @@ T["location"] = """
       </div>
       <div class="loc-event-cta">
         {% if e.url %}<a class="btn" href="{{ e.url }}" rel="noopener"{{ ext|safe }} data-track="event_ticket_click" data-src="{{ l.slug }}">{{ e.cta or 'Get tickets' }}</a>{% endif %}
-        <span class="note">{{ e.long_date }} · Square Peg {{ l.short or l.name }}</span>
+        <span class="note">{{ e.long_date }} · {{ e.venue or ('Square Peg ' ~ (l.short or l.name)) }}</span>
       </div>
     </article>
   </div>

@@ -1268,6 +1268,27 @@ EVENTS = {
     ],
     "delray-beach-fl": [
         {
+            # An away night rather than one of ours: we are a table in the
+            # Delray Beach Open's hospitality tent, not the host. `venue` and
+            # `kicker` say so, so the card does not read as "come to the
+            # restaurant". It takes itself down the day after, like the rest.
+            "title": "Serve & Savor: A Taste of Italy",
+            "date": "2027-02-20",
+            "announce": "2026-11-17",
+            "kicker": "We\u2019re out and about",
+            "venue": "Delray Beach Open \u2014 hospitality tent",
+            "blurb": "An evening of Italy without leaving Delray. Bites from some "
+                     "of the area\u2019s best kitchens in the Open\u2019s hospitality "
+                     "tent, poured alongside wines from Caymus Vineyards. We will "
+                     "be there handing out our pizza \u2014 come find our table and "
+                     "say hi.",
+            "meta": ["6:00\u20138:00 PM", "Hospitality tent",
+                     "Wines by Caymus Vineyards", "Stop by our table"],
+            "url": "https://www.delraybeachopen.com/en/serve-and-savor",
+            "cta": "Get tickets",
+            "host": "Part of the Delray Beach Open Food & Wine Series",
+        },
+        {
             # Our own class, ticketed through Eventbrite -- not the $20
             # ten-child private booking the /kids-pizza-class/ page covers.
             # This one is an open session anybody can buy a single seat for.
@@ -1319,6 +1340,17 @@ PARTNERS = {
                      "36-point inspection that comes with the estimate.",
         },
         {
+            "name": "Delray Beach Open Food & Wine Series",
+            "url": "https://www.delraybeachopen.com/en/food-and-wine",
+            "logo": "partner-dbo-food-wine",
+            "what": "Food & wine events",
+            "where": "Delray Beach, FL",
+            "blurb": "The tasting series that runs alongside the Delray Beach "
+                     "Open \u2014 hospitality-tent evenings built around food from "
+                     "local kitchens and pours from the tournament\u2019s wine "
+                     "partners. We bring the pizza.",
+        },
+        {
             # Boca Raton rather than Delray itself -- about fifteen minutes down
             # Federal Highway, and they deliver into Delray.
             "name": "Exceptional Flowers & Gifts",
@@ -1329,6 +1361,20 @@ PARTNERS = {
             "blurb": "A family-run florist going since 1992. Arrangements, plants and "
                      "gifts, with same-day delivery across Boca Raton and Highland "
                      "Beach.",
+        },
+    ],
+    "preston-ct": [
+        {
+            "name": "Fleming\u2019s Feed",
+            "url": "https://flemingsfeed.com/",
+            "logo": "partner-flemings-feed",
+            "what": "Feed, farm & pet supply",
+            "where": "Preston, CT",
+            "blurb": "A feed and farm store that has been locally owned and run for "
+                     "over forty years. Hay, grain and bedding, pet and wild bird "
+                     "supplies, a garden center, firewood and pellets \u2014 with "
+                     "curbside pickup and delivery from both the Preston and "
+                     "Stonington stores.",
         },
     ],
     "glastonbury-ct": [
