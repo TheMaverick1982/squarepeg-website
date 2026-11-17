@@ -37,7 +37,7 @@ const BENCHES: Record<string, Bench> = {
     unit: "pizza",
     groups: [
       { key: "sauce", field: "sauce", label: "Sauce", pick: "one", max: 0, optional: false,
-        options: ["House-made red sauce", "Parm Cream sauce"] },
+        options: ["House-made red sauce", "Parm Cream sauce", "Vodka sauce"] },
       { key: "cheese", field: "cheese", label: "Cheese", pick: "one", max: 0, optional: false,
         options: [
           "Shredded mozzarella", "Fresh mozzarella", "Parmesan", "Ricotta", "Goat cheese",

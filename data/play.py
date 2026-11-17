@@ -320,10 +320,11 @@ LAB = {
     # from memory or from an older menu — the entire point of the builder is
     # that whatever someone sends us is a pizza the line can actually make.
     #
-    # The two sauces are the two the menu names: RED PIES are house-made red
-    # sauce, WHITE PIES are Parm Cream. There is no third base. (The earlier
-    # list offered vodka sauce and pesto, which are a pasta sauce and a thing
-    # we don't stock.)
+    # RED PIES are house-made red sauce, WHITE PIES are Parm Cream. Vodka
+    # sauce is the third, added Nov 2026 at Brian's request. It was taken out
+    # once before as "a pasta sauce" -- that was wrong: the kitchens run it on
+    # a pie already (November's limited-time special is the chicken vodka pie).
+    # Leave it in. Pesto stays out; we genuinely don't stock it.
     #
     # The toppings are exactly the PILE IT ON list — "add toppings to any pie,
     # round or Detroit-style" — which is the only list on the menu that says
@@ -340,7 +341,7 @@ LAB = {
     # on the Sausage & Broccolini starter and the eggplant sub. Balsamic glaze
     # was dropped: it's on the quesadilla, never on a pie.
     # ======================================================================
-    "sauce": ["House-made red sauce", "Parm Cream sauce"],
+    "sauce": ["House-made red sauce", "Parm Cream sauce", "Vodka sauce"],
     "cheese": ["Shredded mozzarella", "Fresh mozzarella", "Parmesan", "Ricotta",
                "Goat cheese", "Fontina", "Bleu cheese crumbles", "Vegan cheese"],
     # Meats first, then veggies, in the menu's own order.

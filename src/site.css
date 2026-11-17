@@ -1871,6 +1871,8 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
 .lab-prize h2{margin:8px 0 0;max-width:20ch;color:var(--white);
   font:900 clamp(30px,4.4vw,52px)/.96 var(--display);letter-spacing:.004em;text-transform:uppercase}
 .lab-prize h2{max-width:24ch}
+.lab-prize-note{margin:14px 0 0;max-width:52ch;color:rgba(255,255,255,.9);
+  font:500 clamp(13px,1.2vw,15px)/1.5 var(--body)}
 .lab-pick p{margin:7px 0 0;max-width:62ch;font:600 clamp(16px,1.5vw,19px)/1.5 var(--body);color:var(--ink)}
 .lab-tabs{display:flex;flex-wrap:wrap;gap:8px}
 .lab-tab{display:inline-flex;align-items:center;padding:12px 22px;border-radius:999px;

@@ -3930,6 +3930,11 @@ T["labs"] = """
   <div class="wrap">
     <span class="eyebrow">If we pick yours</span>
     <h2>It goes on the menu. Then you come down and try it on us.</h2>
+    {#- The Drink lab builds cocktails, and a free drink is not ours to give.
+        Said here, on the band that makes the promise, rather than buried in
+        the rules where someone could reasonably miss it. -#}
+    <p class="lab-prize-note">We can&rsquo;t give away alcohol, so the free item is food only.
+      A winning drink still goes on the menu.</p>
   </div>
 </section>
 
