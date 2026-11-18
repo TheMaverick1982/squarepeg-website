@@ -1387,15 +1387,18 @@ PARTNERS = {
             # Highway, but they trade into Delray as "Exceptional Flowers of
             # Delray" and deliver here same day, which is the only thing a
             # reader on this page is deciding on.
-            "name": "Exceptional Flowers & Gifts",
-            "url": "https://exceptionalflowersgifts.net/",
-            "logo": "partner-exceptional-flowers",
+            "name": "Exceptional Flowers of Delray",
+            "url": "https://exceptionalflowersofdelray.com/",
+            # New slug rather than new bytes under the old name: /img/* is served
+            # immutable, so a replaced file keeps serving the old picture out of
+            # caches. The brand changed name anyway, so the slug follows it.
+            "logo": "partner-exceptional-flowers-delray",
             "what": "Florist",
             "where": "Delray Beach, FL",
-            "blurb": "A family-run florist going since 1992. Arrangements, bouquets "
-                     "and plants, plus gift baskets, wine and champagne and gourmet "
-                     "chocolate truffles. Same-day delivery to Delray Beach and the "
-                     "surrounding areas.",
+            "blurb": "Locally designed arrangements, plants and orchids, gift "
+                     "baskets, wine and champagne, chocolates and flower "
+                     "subscriptions. Open and delivering seven days a week, with "
+                     "same-day delivery across Delray Beach.",
             # `offer` and `code` are optional on any partner and render as their
             # own block on the card. First one we have run; the shape is here so
             # the next partner offer is a data change, not a template change.

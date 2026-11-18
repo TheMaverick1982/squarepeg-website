@@ -1,4 +1,4 @@
-"""TV slide — Exceptional Flowers & Gifts, the Delray partner offer.
+"""TV slide — Exceptional Flowers of Delray, the Delray partner offer.
 
 Deliberately NOT built like the other slides. The in-store ones are dark
 grounds and big red type; the Serve & Savor one is confetti. A florist's
@@ -26,7 +26,7 @@ from reportlab.lib.colors import HexColor
 
 ROOT = Path(__file__).parent
 FONTS = ROOT / "src" / "fonts-ttf"
-PARTNER_LOGO = ROOT / "assets" / "img-src" / "partner-exceptional-flowers.png"
+PARTNER_LOGO = ROOT / "assets" / "img-src" / "partner-exceptional-flowers-delray.png"
 SP_LOGO = ROOT / "src" / "brand" / "logo-src.png"
 OUT = ROOT / "Claude outputs"
 
@@ -48,7 +48,7 @@ PALE = HexColor("#F0F6E4")
 
 W, H = 1920, 1080
 PANEL = 600                      # right-hand green column
-URL = "https://exceptionalflowersgifts.net/?utm_source=tv&utm_medium=qr"
+URL = "https://exceptionalflowersofdelray.com/?utm_source=tv&utm_medium=qr"
 CODE = "SQUAREPEG10"
 
 
@@ -127,7 +127,7 @@ def draw():
     c.drawImage(ImageReader(img), qx, qy, side, side)
 
     tracked_centered(c, "SCAN TO ORDER", "B", 34, pcx, qy - 92, 3.4, WHITE)
-    centered(c, "exceptionalflowersgifts.net", "R", 25, pcx, qy - 130, HexColor("#BFD3B4"))
+    centered(c, "exceptionalflowersofdelray.com", "R", 23, pcx, qy - 130, HexColor("#BFD3B4"))
 
     # delivery promise, the one fact that makes it usable tonight
     c.setFillColor(GREEN)
@@ -165,14 +165,14 @@ def draw():
     tracked(c, CODE, "B", 58, x + 34, by + 30, 2.5, DEEP)
 
     # what they actually sell, kept to the things worth scanning for
-    blurb = ("Fresh flowers, bouquets and plants, gift baskets, wine and champagne, "
-             "gourmet chocolate truffles and more.")
+    blurb = ("Locally designed arrangements, plants and orchids, gift baskets, "
+             "wine and champagne, chocolates and flower subscriptions.")
     c.setFont("R", 29)
     ty = by - 62
     for line in wrap(c, blurb, "R", 29, col)[:3]:
         left(c, line, "R", 29, x, ty, GREY); ty -= 42
 
-    c.setTitle("Exceptional Flowers & Gifts — 10% off for Square Peg customers")
+    c.setTitle("Exceptional Flowers of Delray — 10% off for Square Peg customers")
     c.showPage(); c.save()
     return modules, side
 
