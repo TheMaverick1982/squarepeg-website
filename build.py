@@ -4053,6 +4053,10 @@ T["partners"] = """
             <h3>{{ p.name }}</h3>
             <p class="note">{{ p.what }} · {{ p.where }}</p>
             <p class="prose">{{ p.blurb }}</p>
+            {# Optional on every partner. A perk the reader can actually use is
+               worth more than another line of description, so it gets its own
+               block rather than a clause at the end of the blurb. #}
+            {% if p.offer %}<p class="pt-offer"><b>{{ p.offer }}</b>{% if p.code %}<span>Use code <code>{{ p.code }}</code> at checkout</span>{% endif %}</p>{% endif %}
             <p class="btn-row"><a class="link-arrow" href="{{ p.url }}" rel="noopener"{{ ext|safe }} data-track="partner_click" data-src="{{ l.slug }}-partners">Visit {{ p.name }} →</a></p>
           </div>
         </article>{% endfor %}

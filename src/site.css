@@ -1911,6 +1911,14 @@ a.route-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,
 .pt-card-body h3{margin:0 0 6px;font:800 clamp(19px,2vw,23px)/1.2 var(--body);color:var(--char)}
 .pt-card-body .note{margin:0 0 10px}
 .pt-card-body .prose{margin:0 0 14px}
+/* A partner perk. Dashed like the coupon cards elsewhere on the site, so it
+   reads as something to use rather than more description. */
+.pt-offer{margin:0 0 14px;padding:12px 14px;border:2px dashed var(--basil);
+  border-radius:10px;background:var(--basil-bg)}
+.pt-offer b{display:block;font:800 16px/1.3 var(--body);color:var(--basil)}
+.pt-offer span{display:block;margin-top:4px;font:500 14px/1.4 var(--body);color:var(--char)}
+.pt-offer code{font:800 14px/1 var(--body);letter-spacing:.06em;background:#fff;
+  border:1px solid rgba(20,108,58,.3);border-radius:4px;padding:3px 7px}
 
 /* The trivia and bingo deal. (gd- is Game Day; this one is tb-.) The whole
    idea is that the price and the number called are the same, so the number is

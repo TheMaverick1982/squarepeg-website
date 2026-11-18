@@ -1389,9 +1389,15 @@ PARTNERS = {
             "logo": "partner-exceptional-flowers",
             "what": "Florist",
             "where": "Boca Raton, FL",
-            "blurb": "A family-run florist going since 1992. Arrangements, plants and "
-                     "gifts, with same-day delivery across Boca Raton and Highland "
-                     "Beach.",
+            "blurb": "A family-run florist going since 1992. Arrangements, bouquets "
+                     "and plants, plus gift baskets, wine and champagne and gourmet "
+                     "chocolate truffles. Same-day delivery to Delray Beach and the "
+                     "surrounding areas.",
+            # `offer` and `code` are optional on any partner and render as their
+            # own block on the card. First one we have run; the shape is here so
+            # the next partner offer is a data change, not a template change.
+            "offer": "10% off for Square Peg customers",
+            "code": "SQUAREPEG10",
         },
     ],
     "preston-ct": [
