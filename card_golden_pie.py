@@ -187,10 +187,21 @@ def front(c):
     wide(c, "GOOD FOR ONE SMALL CHEESE PIZZA", cx, by + 5.6, "B", 7.0, 1.5,
          HexColor("#EBD68A"), "c")
 
-    c.setFont("M", 7.8); c.setFillColor(HexColor("#4A3B0C"))
-    c.drawCentredString(cx, by - 13, "Bring it back on your next visit. On us.")
+    foot_size = 7.8
+    foot_base = by - 13
+    c.setFont("M", foot_size); c.setFillColor(HexColor("#4A3B0C"))
+    c.drawCentredString(cx, foot_base, "Bring it back on your next visit. On us.")
 
-    logo(c, mark("#141110"), cx, BLEED + SAFE + 4, 14, "c")
+    # The mark is centred in the space left between the bottom of that line and
+    # the inner frame rule, rather than pinned at a fixed offset from the trim.
+    # Expressed this way the air above and below it stays equal on its own if
+    # the bar above ever moves, instead of needing re-nudging by eye.
+    inner_rule = BLEED + 8.5
+    foot_bottom = foot_base - foot_size * 0.22        # descender depth
+    logo_h = 19                                        # was 14
+    gap = (foot_bottom - inner_rule - logo_h) / 2
+    logo(c, mark("#141110"), cx, inner_rule + gap, logo_h, "c")
+    print("   logo %.0fpt, %.1fpt of air above and below" % (logo_h, gap))
 
 
 def back(c):
