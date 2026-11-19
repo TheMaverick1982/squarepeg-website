@@ -1593,6 +1593,78 @@ T["booking_form"] = """{% set e = embeds.get(embed_key) %}{% if e %}<div class="
 # Thank-you first, offer second, in that order on the page. Reversing them
 # turns a day about service into a day about a coupon.
 # ---------------------------------------------------------------------------
+
+# The Golden Pie page. Deliberately NOT the house section rhythm -- this is a
+# hunt, and a page that looks like the catering page would make it feel like
+# paperwork.
+#
+# Nothing here states how often a card is placed. Brian's call, and the right
+# one: a published cadence is a promise the stores would be held to on the week
+# somebody forgets, and "you might find one" costs nothing to keep. Gold ground, a ticket drawn in CSS rather than shipped as an
+# image, oversized numerals, and a marquee that is the only moving thing on
+# the site. The rules live at the bottom because the card's QR is labelled
+# THE RULES and lands here.
+T["golden_pie"] = """
+<section class="gp-hero">
+  <div class="wrap">
+    <span class="gp-kicker">Hidden in plain sight</span>
+    <h1>The Golden&nbsp;Pie</h1>
+    <p class="gp-lede">Next time you are in a Square Peg, keep your eyes open. There
+      are gold cards hidden in our dining rooms. Find one and your next small cheese
+      pizza is on us.</p>
+    <div class="gp-ticket" aria-label="The Golden Pie card">
+      <span class="gp-t-top">&#9733; THE GOLDEN PIE &#9733;</span>
+      <b>YOU FOUND IT.</b>
+      <span class="gp-t-bar">GOOD FOR ONE SMALL CHEESE PIZZA</span>
+      <span class="gp-t-foot">Bring it back on your next visit. On us.</span>
+    </div>
+  </div>
+</section>
+
+<div class="gp-marquee" aria-hidden="true"><div class="gp-track">
+  {% for i in range(8) %}<span>FIND IT</span><i>&#9733;</i><span>EAT FREE</span><i>&#9733;</i>{% endfor %}
+</div></div>
+
+<section class="section gp-how">
+  <div class="wrap">
+    <div class="gp-steps">
+      <article><em>1</em><h2>We hide one</h2>
+        <p>A gold card goes somewhere in the dining room. Not the kitchen, not behind
+          the counter. Somewhere you could actually find it.</p></article>
+      <article><em>2</em><h2>You find it</h2>
+        <p>No digging through other people&rsquo;s tables, and no asking our team for
+          hints &mdash; they are under strict instructions to be useless about this.</p></article>
+      <article><em>3</em><h2>You eat free</h2>
+        <p>Hand the card over on your next visit. One small cheese pizza, on the house,
+          at any of our ten Square Pegs.</p></article>
+    </div>
+    <p class="gp-nudge">Found one? <b>Keep it.</b> It is only good on a future visit &mdash;
+      which is rather the point.</p>
+  </div>
+</section>
+
+<section class="section gp-rules" id="rules">
+  <div class="wrap">
+    <div class="gp-rulecard">
+      <span class="eyebrow">The rules</span>
+      <h2>Short, as ever.</h2>
+      <ul>
+        <li>One per customer.</li>
+        <li>Good for one 12-inch small cheese pizza on a future visit. No substitutions.</li>
+        <li>Hand over the physical card. Photocopies and photos of it do not count.</li>
+        <li>Not valid with any other offer, discount or loyalty reward.</li>
+        <li>No cash value. Not transferable. Not for resale.</li>
+        <li><b>No purchase necessary</b> to find a card or to claim it.</li>
+        <li>Good at any Square Peg Pizzeria. Use by the date printed on the card.</li>
+        <li>Employees and their immediate family are not eligible.</li>
+        <li>We may end the promotion at any time.</li>
+      </ul>
+      <p class="btn-row"><a class="btn" href="{{ u('/locations/') }}">Find your Square Peg</a></p>
+    </div>
+  </div>
+</section>
+"""
+
 T["veterans"] = """{% macro feature(p, a, cap) %}<figure class="feature-photo">{{ img(p, a, sizes='(min-width:960px) 540px, 100vw')|safe }}{% if cap %}<figcaption>{{ cap }}</figcaption>{% endif %}</figure>{% endmacro %}
 <div data-season-to="{{ vd.date }}"{{ ' hidden' if today > vd.date }}>
 
@@ -4965,6 +5037,12 @@ def main():
                   "lto", dict(lto=LTO, ltos=LTO_MONTHS),
                   graph(breadcrumbs([("Home", "/"), ("Monthly specials", "/monthly-specials/")])),
                   LTO["hero"], LTO["hero"]))
+    pages.append(("/golden-pie/", "The Golden Pie | Square Peg Pizzeria",
+                  "There are gold cards hidden in Square Peg dining rooms. Find one "
+                  "and your next small cheese pizza is on us. Here are the rules.",
+                  "golden_pie", {},
+                  graph(breadcrumbs([("Home", "/"), ("The Golden Pie", "/golden-pie/")])),
+                  "table-spread", "table-spread"))
     pages.append(("/veterans-day/", "Veterans Day: Free Lunch | Square Peg Pizzeria",
                   f"Thank you for your service. On {VETERANS['long']}, 2026, Square Peg "
                   f"Pizzeria gives veterans and active-duty service members "
@@ -5155,7 +5233,11 @@ def main():
 #     one group, at one location, on one night.
 UNLISTED = {"/thanks/", "/what-you-did/", "/evidence/", "/links/", "/fundraiser-night/",
             "/corporate/", "/gift-card-bonus/", "/kids-pizza-class/",
-            "/team-night/", "/friendsgiving/", "/veterans-day/"}
+            "/team-night/", "/friendsgiving/", "/veterans-day/",
+            # Not ready to go live: the card has to be printed and placed first,
+            # and a page promising a hunt that is not running yet is worse than
+            # no page. Remove from this set to launch it.
+            "/golden-pie/"}
 # A bench with no deployed backend cannot take entries, so it stays off the
 # tab row until it can -- that is the `live` flag in data/labs.py, and it is
 # now the only thing it gates, because there is one page rather than five.
