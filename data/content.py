@@ -1354,11 +1354,20 @@ EVENTS = {
                      "paint the ocean, the sand and a boat on the water, then carry the "
                      "canvas home the same night. No experience needed and nothing to "
                      "bring: every brush, paint and canvas is on the table, and a glass "
-                     "of wine comes with the seat.",
+                     "of wine comes with the seat. Reserve your spot with Audrey through "
+                     "Venmo, or call us on (561) 566-8828 and we\u2019ll get you "
+                     "on the list.",
             "meta": ["6\u20138 PM", "$45 per person", "Wine & all materials included",
                      "Canvas to take home"],
-            "url": "tel:+15615668828",
-            "cta": "Call to register",
+            # Pay straight to Audrey: venmo.com/u/<handle> is her public profile
+            # and opens a "pay this person" flow, so a seat can be booked from
+            # the page without putting her mobile number on it. Checked 23 Nov
+            # 2026 -- the profile resolves and shows her name and photo.
+            #
+            # Venmo is not everyone's, so the blurb keeps the restaurant's
+            # number as the fallback rather than leaving those people stuck.
+            "url": "https://venmo.com/u/Audrey-Weiss",
+            "cta": "Reserve your seat",
             "host": "Hosted with Audrey Weiss",
         },
     ],
