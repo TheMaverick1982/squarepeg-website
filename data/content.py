@@ -1334,6 +1334,33 @@ EVENTS = {
                    "tickets-2004131833263?aff=oddtdtcreator",
             "cta": "Get tickets",
         },
+        {
+            # Dec 8 2026 is a Tuesday -- checked; the flyer names no weekday.
+            #
+            # Audrey Weiss runs the class and takes registration and payment on
+            # her own side, by Zelle or Venmo, so there is no ticket URL. Her
+            # mobile number and Venmo handle are on the printed flyer and on the
+            # TV slide, but deliberately NOT here: a third party's personal
+            # mobile on a public page is exactly the thing that gets scraped.
+            # The card sends people to the restaurant and Delray passes them on.
+            #
+            # The canvases are Audrey's own designs, so the blurb describes the
+            # class rather than reproducing her artwork anywhere on the site.
+            "title": "Holiday Art Class",
+            "date": "2026-12-08",
+            "announce": "2026-11-23",
+            "kicker": "Registration required",
+            "blurb": "A step-by-step canvas class with a Florida holiday twist \u2014 "
+                     "paint the ocean, the sand and a boat on the water, then carry the "
+                     "canvas home the same night. No experience needed and nothing to "
+                     "bring: every brush, paint and canvas is on the table, and a glass "
+                     "of wine comes with the seat.",
+            "meta": ["6\u20138 PM", "$45 per person", "Wine & all materials included",
+                     "Canvas to take home"],
+            "url": "tel:+15615668828",
+            "cta": "Call to register",
+            "host": "Hosted with Audrey Weiss",
+        },
     ],
 }
 
